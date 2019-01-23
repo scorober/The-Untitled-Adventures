@@ -1,5 +1,6 @@
 var AM = new AssetManager()
 
+
 function Animation(
     spriteSheet,
     frameWidth,
@@ -69,7 +70,94 @@ Background.prototype.draw = function() {
     this.ctx.drawImage(this.spritesheet, this.x, this.y)
 }
 
-Background.prototype.update = function() {}
+Background.prototype.update = function() { }
+
+function Level(
+    // rows,
+    // cols, 
+    tSize,
+    setLength,
+    tileAtlas
+) {
+   this.rows = 20
+   this.cols =  20
+   this.tileAtlas = tileAtlas
+   this.tSize = tSize
+   this.setLength = setLength
+   this.tiles = [7,7,7,5,5,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,  
+                4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,  
+                4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,  
+                4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,  
+                4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,  
+                4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,  
+                4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,  
+                4,4,4,4,4,4,5,4,4,4,4,4,4,4,4,4,4,4,4,4,  
+                4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4, 
+                4,4,4,4,4,4,10,4,4,4,4,4,4,4,4,4,4,4,4,4,
+                4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
+                4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
+                4,4,4,4,4,4,12,4,4,4,4,4,4,4,4,4,4,4,4,4,
+                4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
+                4,4,4,4,4,4,4,34,4,4,4,4,4,4,4,4,4,4,4,4,
+                4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
+                4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
+                4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
+                4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
+                4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
+                4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4]
+
+}
+
+//Get type of tile at pos
+Level.prototype.getTile = function(col, row) {
+    return this.tiles[row * this.cols + col]    
+}
+
+//Draw full map... my x's and y's are all fucked up...
+Level.prototype.drawMap = function(ctx) {
+    for (let r = 0; r < this.rows; r++) {
+        for (let c = 0; c < this.cols; c++) {
+            let tile = this.getTile(r, c);
+            if (tile !== 0) { //or -1? 0 is an index...
+                let tileRow = (tile - 1) % this.setLength
+                console.log(tileRow)
+                ctx.drawImage(
+                    this.tileAtlas,
+                    ((tile - 1) % this.setLength) * this.tSize,
+                    Math.floor((tile - 1) / this.setLength) * this.tSize,
+                    this.tSize, 
+                    this.tSize,
+                    r * this.tSize,  //Placement on canvas
+                    c * this.tSize,
+                    this.tSize,
+                    this.tSize
+                )
+            }
+        }
+    }
+}
+
+
+function Map(game, tileAtlas) {
+    this.level = new Level(64, 16, tileAtlas)
+    this.ctx = game.ctx
+    Entity.call(this, game, 0, 450)
+}
+
+//This is behavior that can be managed by the scene manager
+Map.prototype = new Entity()
+Map.prototype.constructor = Map
+
+//Update map based on camera view and when entering a new level
+Map.prototype.update = function() {
+    Entity.prototype.update.call(this)
+}
+
+Map.prototype.draw = function() {
+    this.level.drawMap(this.ctx)
+    Entity.prototype.draw.call(this)
+    
+}
 
 // inheritance
 function PlayableCharacter(game, spritesheet) {
@@ -182,6 +270,7 @@ AM.queueDownload('./img/mikeschar.png')
 AM.queueDownload('./img/mushroomdude.png')
 AM.queueDownload('./img/runningcat.png')
 AM.queueDownload('./img/background.jpg')
+AM.queueDownload('./img/DungeonColor3@64x64.png')
 
 AM.downloadAll(function() {
     var canvas = document.getElementById('gameWorld')
@@ -191,8 +280,12 @@ AM.downloadAll(function() {
     gameEngine.init(ctx)
     gameEngine.start()
 
+    // gameEngine.addEntity(
+    //     new Background(gameEngine, AM.getAsset('./img/background.jpg'))
+    // )
+
     gameEngine.addEntity(
-        new Background(gameEngine, AM.getAsset('./img/background.jpg'))
+        new Map(gameEngine, AM.getAsset('./img/DungeonColor3@64x64.png'))
     )
 
     gameEngine.addEntity(
