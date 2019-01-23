@@ -9,7 +9,8 @@ AM.queueDownload('./img/RobotUnicorn.png')
 AM.queueDownload('./img/mikeschar.png')
 AM.queueDownload('./img/mushroomdude.png')
 AM.queueDownload('./img/runningcat.png')
-AM.queueDownload('/img/background.jpg')
+AM.queueDownload('./img/background.jpg')
+AM.queueDownload('./img/DungeonColor3@64x64.png')
 
 AM.downloadAll(function () {
     var canvas = document.getElementById('gameWorld')
@@ -19,8 +20,12 @@ AM.downloadAll(function () {
     gameEngine.init(ctx)
     gameEngine.start()
 
+    // gameEngine.addEntity(
+    //     new Background(gameEngine, AM.getAsset('./img/background.jpg'))
+    // )
+
     gameEngine.addEntity(
-        new Background(gameEngine, AM.getAsset('/img/background.jpg'))
+        new Map(gameEngine, AM.getAsset('./img/DungeonColor3@64x64.png'))
     )
 
     gameEngine.addEntity(
