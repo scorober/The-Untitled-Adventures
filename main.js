@@ -15,9 +15,9 @@ AM.queueDownload('./img/DungeonColor3@64x64.png')
 AM.downloadAll(function () {
     var canvas = document.getElementById('gameWorld')
     var ctx = canvas.getContext('2d')
-
     var gameEngine = new GameEngine()
-    gameEngine.init(ctx)
+    var camera = new Camera()
+    gameEngine.init(ctx, camera)
     gameEngine.start()
 
     // gameEngine.addEntity(
@@ -28,9 +28,11 @@ AM.downloadAll(function () {
         new Map(gameEngine, AM.getAsset('./img/DungeonColor3@64x64.png'))
     )
 
-    gameEngine.addEntity(
-        new PlayerCharacter(gameEngine, AM.getAsset('./img/mikeschar.png'))
-    )
+    var player = new PlayerCharacter(gameEngine, AM.getAsset('./img/mikeschar.png'))
+    // gameEngine.camera.follow(player)
+    gameEngine.addEntity(player)
+
+    gameEngine.addEntity(camera)
 
     console.log('All Done!')
 })
