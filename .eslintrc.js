@@ -26,8 +26,5 @@ module.exports = {
             "never"
         ],
         "no-console": "warn"
-    },
-    "globals": {
-        "Image": true
     }
 };

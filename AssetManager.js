@@ -17,7 +17,8 @@ export default class AssetManager {
 
     downloadAll(callback) {
         for (let i = 0; i < this.downloadQueue.length; i += 1) {
-            const img = new Image()
+            const img = document.createElement('img')
+            console.log(img)
             var that = this
 
             var path = this.downloadQueue[i]

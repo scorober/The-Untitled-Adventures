@@ -13,7 +13,7 @@ export default class GameEngine {
             window.oRequestAnimationFrame ||
             window.msRequestAnimationFrame ||
             // eslint-disable-next-line no-unused-vars
-            function (/* function */ callback, /* DOMElement */ element) {
+            function(/* function */ callback, /* DOMElement */ element) {
                 window.setTimeout(callback, 1000 / 60)
             }
     }
@@ -34,13 +34,13 @@ export default class GameEngine {
 
     gameLoop() {
         this.loop()
-        this.requestAnimFrame(this.gameLoop, this.ctx.canvas)
+        window.requestAnimationFrame(this.gameLoop.bind(this), this.ctx.canvas)
     }
 
     startInput() {
         console.log('Starting input')
 
-        var getXandY = function (e) {
+        var getXandY = function(e) {
             var x = e.clientX - that.ctx.canvas.getBoundingClientRect().left
             var y = e.clientY - that.ctx.canvas.getBoundingClientRect().top
 
@@ -58,7 +58,7 @@ export default class GameEngine {
 
         this.ctx.canvas.addEventListener(
             'click',
-            function (e) {
+            function(e) {
                 that.click = getXandY(e)
                 console.log(e)
                 console.log(
@@ -70,7 +70,7 @@ export default class GameEngine {
 
         this.ctx.canvas.addEventListener(
             'contextmenu',
-            function (e) {
+            function(e) {
                 that.click = getXandY(e)
                 console.log(e)
                 console.log(
@@ -83,7 +83,7 @@ export default class GameEngine {
 
         this.ctx.canvas.addEventListener(
             'mousemove',
-            function (e) {
+            function(e) {
                 //console.log(e);
                 that.mouse = getXandY(e)
             },
@@ -92,16 +92,16 @@ export default class GameEngine {
 
         this.ctx.canvas.addEventListener(
             'mousewheel',
-            function (e) {
+            function(e) {
                 console.log(e)
                 that.wheel = e
                 console.log(
                     'Click Event - X,Y ' +
-                    e.clientX +
-                    ', ' +
-                    e.clientY +
-                    ' Delta ' +
-                    e.deltaY
+                        e.clientX +
+                        ', ' +
+                        e.clientY +
+                        ' Delta ' +
+                        e.deltaY
                 )
             },
             false
@@ -109,7 +109,7 @@ export default class GameEngine {
 
         this.ctx.canvas.addEventListener(
             'keydown',
-            function (e) {
+            function(e) {
                 if (
                     e.code == 'ArrowLeft' ||
                     e.code == 'ArrowRight' ||
@@ -129,12 +129,15 @@ export default class GameEngine {
 
         this.ctx.canvas.addEventListener(
             'keypress',
-            function (e) {
+            function(e) {
                 if (e.code === 'KeyD') that.d = true
                 that.chars[e.code] = true
                 console.log(e)
                 console.log(
-                    'Key Pressed Event - Char ' + e.charCode + ' Code ' + e.keyCode
+                    'Key Pressed Event - Char ' +
+                        e.charCode +
+                        ' Code ' +
+                        e.keyCode
                 )
             },
             false
@@ -142,19 +145,20 @@ export default class GameEngine {
 
         this.ctx.canvas.addEventListener(
             'keyup',
-            function (e) {
+            function(e) {
                 if (e.code == that.playerDirection) {
                     that.playerMoving = false
                 }
                 console.log(e)
-                console.log('Key Up Event - Char ' + e.code + ' Code ' + e.keyCode)
+                console.log(
+                    'Key Up Event - Char ' + e.code + ' Code ' + e.keyCode
+                )
             },
             false
         )
 
         console.log('Input started')
     }
-
 
     addEntity(entity) {
         console.log('added entity')
@@ -186,4 +190,3 @@ export default class GameEngine {
         this.draw()
     }
 }
-

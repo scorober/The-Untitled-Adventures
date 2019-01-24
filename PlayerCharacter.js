@@ -1,4 +1,5 @@
 import Entity from './Entity.js'
+import Animation from './Animation.js'
 
 export default class PlayableCharacter extends Entity {
     constructor(game, spritesheet) {
