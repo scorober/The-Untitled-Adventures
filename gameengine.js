@@ -18,8 +18,9 @@ function GameEngine() {
     this.surfaceHeight = null
 }
 
-GameEngine.prototype.init = function(ctx) {
+GameEngine.prototype.init = function(ctx, camera) {
     this.ctx = ctx
+    this.camera = camera
     this.surfaceWidth = this.ctx.canvas.width
     this.surfaceHeight = this.ctx.canvas.height
     this.timer = new Timer()

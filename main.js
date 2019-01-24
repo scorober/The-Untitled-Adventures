@@ -159,6 +159,27 @@ Map.prototype.draw = function() {
     
 }
 
+function Camera() {
+}
+
+Camera.prototype = new Entity()
+Camera.prototype.constructor = Camera
+
+Camera.prototype.follow = function (player, game) {
+    this.ctx = game.ctx
+    this.followed = player
+    this.xView = followed.x - this.ctx.canvas.width / 2
+    this.yView = followed.y - this.ctx.canvas.height / 2
+}
+Camera.prototype.update = function() {
+    this.xView = followed.x - this.ctx.canvas.width / 2
+    this.yView = followed.y - this.ctx.canvas.height / 2
+}
+
+Camera.prototype.draw = function () {
+    //Empty
+}
+
 // inheritance
 function PlayableCharacter(game, spritesheet) {
     let scRate = 0.15
@@ -275,9 +296,9 @@ AM.queueDownload('./img/DungeonColor3@64x64.png')
 AM.downloadAll(function() {
     var canvas = document.getElementById('gameWorld')
     var ctx = canvas.getContext('2d')
-
     var gameEngine = new GameEngine()
-    gameEngine.init(ctx)
+    var camera = new Camera()
+    gameEngine.init(ctx, camera)
     gameEngine.start()
 
     // gameEngine.addEntity(
@@ -288,9 +309,11 @@ AM.downloadAll(function() {
         new Map(gameEngine, AM.getAsset('./img/DungeonColor3@64x64.png'))
     )
 
-    gameEngine.addEntity(
-        new PlayableCharacter(gameEngine, AM.getAsset('./img/mikeschar.png'))
-    )
+    var player = new PlayableCharacter(gameEngine, AM.getAsset('./img/mikeschar.png'))
+    // gameEngine.camera.follow(player)
+    gameEngine.addEntity(player)
+
+    gameEngine.addEntity(camera)
 
     console.log('All Done!')
 })
