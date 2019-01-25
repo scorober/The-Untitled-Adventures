@@ -11,7 +11,10 @@ AM.queueDownload('./img/mikeschar.png')
 AM.queueDownload('./img/mushroomdude.png')
 AM.queueDownload('./img/runningcat.png')
 AM.queueDownload('./img/background.jpg')
+<<<<<<< HEAD
 AM.queueDownload('./img/DungeonColor3@64x64.png')
+=======
+>>>>>>> origin/master
 
 AM.downloadAll(function() {
     var canvas = document.getElementById('gameWorld')
@@ -22,7 +25,11 @@ AM.downloadAll(function() {
     gameEngine.start()
 
     gameEngine.addEntity(
+<<<<<<< HEAD
         new Map(gameEngine, AM.getAsset('./img/DungeonColor3@64x64.png'))
+=======
+        new Background(gameEngine, AM.getAsset('./img/background.jpg'))
+>>>>>>> origin/master
     )
 
     var player = new PlayerCharacter(gameEngine, AM.getAsset('./img/mikeschar.png'))
