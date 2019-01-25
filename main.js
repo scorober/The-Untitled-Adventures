@@ -1,6 +1,10 @@
 import AssetManager from './AssetManager.js'
 import GameEngine from './GameEngine.js'
+<<<<<<< HEAD
 import PlayerCharacter from './PlayerCharacter.js'
+=======
+import PlayableCharacter from './PlayerCharacter.js'
+>>>>>>> 5884533a7e2f366c99b5941d3b289e2f4865545c
 import Map from './Map.js'
 import Camera from './Camera.js'
 
