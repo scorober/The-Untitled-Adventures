@@ -47,11 +47,8 @@ export default class PlayableCharacter extends Entity {
         }
         this.animation = this.animations['st-e']
         this.speed = 100
-<<<<<<< HEAD
         this.game = game
         this.ctx = game.ctx
-=======
->>>>>>> origin/master
 
     }
 
@@ -99,18 +96,6 @@ export default class PlayableCharacter extends Entity {
                 this.animation = this.animations['st-w']
             }
         }
-<<<<<<< HEAD
-=======
-        if (this.x > this.game.ctx.canvas.width + 5) {
-            this.x = -5
-        } else if (this.y > this.game.ctx.canvas.height + 5) {
-            this.y = -5
-        } else if (this.x < -5) {
-            this.x = this.game.ctx.canvas.width + 5
-        } else if (this.y < -5) {
-            this.y = this.game.ctx.canvas.height + 5
-        }
->>>>>>> origin/master
     }
 
     draw() {
@@ -126,10 +111,6 @@ export default class PlayableCharacter extends Entity {
                 this.x -= this.game.clockTick * this.speed
             }
         }
-<<<<<<< HEAD
         this.animation.drawFrame(this.game.clockTick, this.game, this.x, this.y)
-=======
-        this.animation.drawFrame(this.game.clockTick, this.game.ctx, this.x, this.y)
->>>>>>> origin/master
     }
 }
