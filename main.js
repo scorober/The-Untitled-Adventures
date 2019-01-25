@@ -9,7 +9,7 @@ AM.queueDownload('./img/RobotUnicorn.png')
 AM.queueDownload('./img/mikeschar.png')
 AM.queueDownload('./img/mushroomdude.png')
 AM.queueDownload('./img/runningcat.png')
-AM.queueDownload('/img/background.jpg')
+AM.queueDownload('./img/background.jpg')
 
 AM.downloadAll(function () {
     var canvas = document.getElementById('gameWorld')
@@ -20,7 +20,7 @@ AM.downloadAll(function () {
     gameEngine.start()
 
     gameEngine.addEntity(
-        new Background(gameEngine, AM.getAsset('/img/background.jpg'))
+        new Background(gameEngine, AM.getAsset('./img/background.jpg'))
     )
 
     gameEngine.addEntity(

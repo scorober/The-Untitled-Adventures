@@ -47,11 +47,27 @@ export default class PlayableCharacter extends Entity {
         }
         this.animation = this.animations['st-e']
         this.speed = 100
-        this.ctx = game.ctx
 
     }
 
     update() {
+        /** Handle movement */
+        if (this.game.input.downKeys['ArrowLeft']) {
+            this.game.playerDirection = 'ArrowLeft'
+            this.game.playerMoving = true
+        } else if (this.game.input.downKeys['ArrowRight']) {
+            this.game.playerDirection = 'ArrowRight'
+            this.game.playerMoving = true
+        } else if (this.game.input.downKeys['ArrowUp']) {
+            this.game.playerDirection = 'ArrowUp'
+            this.game.playerMoving = true
+        } else if (this.game.input.downKeys['ArrowDown']) {
+            this.game.playerDirection = 'ArrowDown'
+            this.game.playerMoving = true
+        } else {
+            this.game.playerMoving = false
+        }
+
         super.update()
         if (this.game.playerMoving) {
             if (this.game.playerDirection == 'ArrowUp') {
@@ -78,14 +94,14 @@ export default class PlayableCharacter extends Entity {
                 this.animation = this.animations['st-w']
             }
         }
-        if (this.x > this.ctx.canvas.width + 5) {
+        if (this.x > this.game.ctx.canvas.width + 5) {
             this.x = -5
-        } else if (this.y > this.ctx.canvas.height + 5) {
+        } else if (this.y > this.game.ctx.canvas.height + 5) {
             this.y = -5
         } else if (this.x < -5) {
-            this.x = this.ctx.canvas.width + 5
+            this.x = this.game.ctx.canvas.width + 5
         } else if (this.y < -5) {
-            this.y = this.ctx.canvas.height + 5
+            this.y = this.game.ctx.canvas.height + 5
         }
     }
 
@@ -102,6 +118,6 @@ export default class PlayableCharacter extends Entity {
                 this.x -= this.game.clockTick * this.speed
             }
         }
-        this.animation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y)
+        this.animation.drawFrame(this.game.clockTick, this.game.ctx, this.x, this.y)
     }
 }
