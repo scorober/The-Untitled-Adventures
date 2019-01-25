@@ -3,6 +3,7 @@ import Entity from './Entity.js'
 export default class Level extends Entity {
     constructor(game, tSize, setLength, tileAtlas) {
         super(game, 0, 0)
+        this.game = game
         this.rows = 20
         this.cols = 20
         this.tileAtlas = tileAtlas
@@ -49,8 +50,8 @@ export default class Level extends Entity {
                         Math.floor((tile - 1) / this.setLength) * this.tSize,
                         this.tSize,
                         this.tSize,
-                        r * this.tSize,  //Placement on canvas
-                        c * this.tSize,
+                        r * this.tSize - this.game.camera.xView,  //Placement on canvas
+                        c * this.tSize - this.game.camera.yView,
                         this.tSize,
                         this.tSize
                     )

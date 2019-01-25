@@ -3,6 +3,7 @@ import Timer from './Timer.js'
 export default class GameEngine {
     constructor() {
         this.entities = []
+        this.camera = null
         this.ctx = null
         this.surfaceWidth = null
         this.surfaceHeight = null
@@ -35,6 +36,10 @@ export default class GameEngine {
     gameLoop() {
         this.loop()
         window.requestAnimationFrame(this.gameLoop.bind(this), this.ctx.canvas)
+    }
+
+    setCamera(camera) {
+        this.camera = camera
     }
 
     startInput() {
