@@ -40,8 +40,8 @@ export default class Animation {
             yindex, // source from sheet
             this.frameWidth,
             this.frameHeight,
-            x - game.camera.xView,
-            y - game.camera.yView,
+            x - game.CAMERA.xView,
+            y - game.CAMERA.yView,
             this.frameWidth * this.scale,
             this.frameHeight * this.scale
         )
