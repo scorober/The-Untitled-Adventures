@@ -1,10 +1,17 @@
-import Timer from './Timer.js'
-import InputManager from './InputManager.js'
+import Timer from './utils/Timer.js'
+import InputManager from './utils/InputManager.js'
+import SceneManager from './scenemanager.js'
+import Camera from './world/Camera.js'
 
 export default class GameEngine {
     constructor() {
-        this.entities = []
-        this.camera = null
+
+        this.SCENE_MANAGER = null
+        this.INPUT_MANAGER = null
+        this.ASSET_MANAGER = null
+
+        this.CAMERA = null //TODO: define this by scene? Not all scenes will need this and it will probably change between scenes. Otherwise leave it.
+        this.timer = null
         this.ctx = null
         this.surfaceWidth = null
         this.surfaceHeight = null
@@ -18,14 +25,23 @@ export default class GameEngine {
             function(/* function */ callback, /* DOMElement */ element) {
                 window.setTimeout(callback, 1000 / 60)
             }
-        this.input = new InputManager()
+
     }
 
     init(ctx) {
+
+        this.INPUT_MANAGER = new InputManager()
+
+
+
         this.ctx = ctx
         this.surfaceWidth = this.ctx.canvas.width
         this.surfaceHeight = this.ctx.canvas.height
         this.timer = new Timer()
+
+        this.CAMERA = new Camera(this)
+        this.SCENE_MANAGER = new SceneManager(this)
+
         this.startInput()
         console.log('game initialized')
     }
@@ -40,13 +56,9 @@ export default class GameEngine {
         window.requestAnimationFrame(this.gameLoop.bind(this), this.ctx.canvas)
     }
 
-    setCamera(camera) {
-        this.camera = camera
-    }
-
     startInput() {
         console.log('Starting input')
-        this.input.registerEventListeners(this.ctx)
+        this.INPUT_MANAGER.registerEventListeners(this.ctx)
     }
 
     addEntity(entity) {
@@ -57,20 +69,15 @@ export default class GameEngine {
     draw() {
         this.ctx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight)
         this.ctx.save()
-        for (var i = 0; i < this.entities.length; i++) {
-            this.entities[i].draw(this.ctx)
-        }
+        //NOTE: The code below is moved to the scene class, so the scene can render all entities within that scene
+        this.SCENE_MANAGER.draw(this.ctx)
+
         this.ctx.restore()
     }
 
     update() {
-        var entitiesCount = this.entities.length
-
-        for (var i = 0; i < entitiesCount; i++) {
-            var entity = this.entities[i]
-
-            entity.update()
-        }
+        //NOTE: The code below is moved to the scene class, so the scene can render all entities within that scene
+        this.SCENE_MANAGER.update(this.clockTick)
     }
 
     loop() {
@@ -78,4 +85,14 @@ export default class GameEngine {
         this.update()
         this.draw()
     }
+
+    getAsset(path){
+        return this.ASSET_MANAGER.getAsset(path)
+    }
+
+    setCamera(camera) {
+        this.camera = camera
+    }
+
+
 }
