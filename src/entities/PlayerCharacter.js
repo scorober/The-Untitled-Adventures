@@ -1,5 +1,5 @@
 import Entity from './Entity.js'
-import Animation from './Animation.js'
+import Animation from '../utils/Animation.js'
 
 export default class PlayableCharacter extends Entity {
     constructor(game, spritesheet) {
@@ -49,68 +49,58 @@ export default class PlayableCharacter extends Entity {
         this.speed = 100
         this.game = game
         this.ctx = game.ctx
+        this.TICK = 0
 
     }
 
-    update() {
+    update(tick) {
+        super.update(tick)
+        this.TICK = tick
+
         /** Handle movement */
-        if (this.game.input.downKeys['ArrowLeft']) {
-            this.game.playerDirection = 'ArrowLeft'
-            this.game.playerMoving = true
-        } else if (this.game.input.downKeys['ArrowRight']) {
-            this.game.playerDirection = 'ArrowRight'
-            this.game.playerMoving = true
-        } else if (this.game.input.downKeys['ArrowUp']) {
-            this.game.playerDirection = 'ArrowUp'
-            this.game.playerMoving = true
-        } else if (this.game.input.downKeys['ArrowDown']) {
-            this.game.playerDirection = 'ArrowDown'
-            this.game.playerMoving = true
+        if (this.game.INPUT_MANAGER.downKeys['ArrowLeft']) {
+
+            this.playerDirection = 'ArrowLeft' //Why not save the state in the character or the scene instead of the engine?
+            this.playerMoving = true
+            this.animation = this.animations['wc-w']
+            this.x -= this.TICK * this.speed
+
+        } else if (this.game.INPUT_MANAGER.downKeys['ArrowRight']) {
+
+            this.playerDirection = 'ArrowRight'
+            this.playerMoving = true
+            this.animation = this.animations['wc-e']
+            this.x += this.TICK * this.speed
+
+        } else if (this.game.INPUT_MANAGER.downKeys['ArrowUp']) {
+
+            this.playerDirection = 'ArrowUp'
+            this.playerMoving = true
+            this.animation = this.animations['wc-n']
+            this.y -= this.TICK * this.speed
+
+        } else if (this.game.INPUT_MANAGER.downKeys['ArrowDown']) {
+
+            this.playerDirection = 'ArrowDown'
+            this.playerMoving = true
+            this.animation = this.animations['wc-s']
+            this.y += this.TICK * this.speed
+
         } else {
-            this.game.playerMoving = false
+            this.playerMoving = false
         }
 
-        super.update()
-        if (this.game.playerMoving) {
-            if (this.game.playerDirection == 'ArrowUp') {
-                this.animation = this.animations['wc-n']
-                this.y -= this.game.clockTick * this.speed
-            } else if (this.game.playerDirection == 'ArrowRight') {
-                this.animation = this.animations['wc-e']
-                this.x += this.game.clockTick * this.speed
-            } else if (this.game.playerDirection == 'ArrowDown') {
-                this.animation = this.animations['wc-s']
-                this.y += this.game.clockTick * this.speed
-            } else if (this.game.playerDirection == 'ArrowLeft') {
-                this.animation = this.animations['wc-w']
-                this.x -= this.game.clockTick * this.speed
-            }
-        } else {
-            if (this.game.playerDirection == 'ArrowUp') {
-                this.animation = this.animations['st-n']
-            } else if (this.game.playerDirection == 'ArrowRight') {
-                this.animation = this.animations['st-e']
-            } else if (this.game.playerDirection == 'ArrowDown') {
-                this.animation = this.animations['st-s']
-            } else if (this.game.playerDirection == 'ArrowLeft') {
-                this.animation = this.animations['st-w']
-            }
-        }
+
+
+
     }
 
-    draw() {
-        super.draw()
-        if (this.game.playerMovement != '') {
-            if (this.game.playerMovement == 'ArrowUp') {
-                this.y -= this.game.clockTick * this.speed
-            } else if (this.game.playerMovement == 'ArrowRight') {
-                this.x += this.game.clockTick * this.speed
-            } else if (this.game.playerMovement == 'ArrowDown') {
-                this.y += this.game.clockTick * this.speed
-            } else if (this.game.playerMovement == 'ArrowLeft') {
-                this.x -= this.game.clockTick * this.speed
-            }
-        }
-        this.animation.drawFrame(this.game.clockTick, this.game, this.x, this.y)
+    draw(ctx) {
+        super.draw(ctx)
+
+        //ALL OF THE STUFF THAT WAS DONE HERE IS DONE INSIDE UPDATE ALREADY
+
+
+        this.animation.drawFrame(this.TICK, this.game, this.x, this.y)
     }
 }
