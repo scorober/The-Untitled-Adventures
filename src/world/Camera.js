@@ -1,8 +1,10 @@
-import Entity from './Entity.js'
+import Entity from '../entities/Entity.js'
 
 export default class Camera extends Entity {
     constructor(game) {
         super(game, 0, 0)
+        this.xView = 0
+        this.yView = 0 //set these to 0 so they aren't undefined
     }
 
     setFollowedEntity(followedEntity) {
