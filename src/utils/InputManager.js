@@ -43,7 +43,7 @@ export default class InputManager {
         )
 
         this.ctx.canvas.addEventListener('keyup',
-            e => { this.downKeys[e.code] = null },
+            e => { this.downKeys[e.code] = false },
             false
         )
 
