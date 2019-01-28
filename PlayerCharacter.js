@@ -4,6 +4,7 @@ import Animation from './Animation.js'
 export default class PlayableCharacter extends Entity {
     constructor(game, spritesheet) {
         super(game, 0, 450)
+        this.following = false
         let scRate = 0.15
         let thRate = 0.15
         let wcRate = 0.1
@@ -49,27 +50,51 @@ export default class PlayableCharacter extends Entity {
         this.speed = 100
         this.game = game
         this.ctx = game.ctx
+        this.followThis
+        this.goToX
+        this.goToY
+        this. err = 30
 
     }
 
     update() {
         /** Handle movement */
-        if (this.game.input.downKeys['ArrowLeft']) {
-            this.game.playerDirection = 'ArrowLeft'
-            this.game.playerMoving = true
-        } else if (this.game.input.downKeys['ArrowRight']) {
-            this.game.playerDirection = 'ArrowRight'
-            this.game.playerMoving = true
-        } else if (this.game.input.downKeys['ArrowUp']) {
-            this.game.playerDirection = 'ArrowUp'
-            this.game.playerMoving = true
-        } else if (this.game.input.downKeys['ArrowDown']) {
-            this.game.playerDirection = 'ArrowDown'
-            this.game.playerMoving = true
-        } else {
-            this.game.playerMoving = false
-        }
+        if(this.following) {this.follow(this.followThis)
 
+            if(this.x <= this.goToX + this.err && this.x >= this.goToX - this.err) {
+                if(this.y <= this.goToY + this.err && this.y >= this.goToY - this.err) {
+                    this.game.playerMoving = false
+                } else if (this.y < this.goToY){
+                    this.game.playerDirection = 'ArrowDown'
+                    this.game.playerMoving = true
+                } else if (this.y > this.goToY) {
+                    this.game.playerDirection = 'ArrowUp'
+                    this.game.playerMoving = true
+                }
+            } else if(this.x < this.goToX){
+                this.game.playerDirection = 'ArrowRight'
+                this.game.playerMoving = true
+            } else if(this.x > this.goToX){
+                this.game.playerDirection = 'ArrowLeft'
+                this.game.playerMoving = true
+            } 
+        } else {
+            if (this.game.input.downKeys['ArrowLeft']) {
+                this.game.playerDirection = 'ArrowLeft'
+                this.game.playerMoving = true
+            } else if (this.game.input.downKeys['ArrowRight']) {
+                this.game.playerDirection = 'ArrowRight'
+                this.game.playerMoving = true
+            } else if (this.game.input.downKeys['ArrowUp']) {
+                this.game.playerDirection = 'ArrowUp'
+                this.game.playerMoving = true
+            } else if (this.game.input.downKeys['ArrowDown']) {
+                this.game.playerDirection = 'ArrowDown'
+                this.game.playerMoving = true
+            } else {
+                this.game.playerMoving = false
+            }
+        }
         super.update()
         if (this.game.playerMoving) {
             if (this.game.playerDirection == 'ArrowUp') {
@@ -112,5 +137,18 @@ export default class PlayableCharacter extends Entity {
             }
         }
         this.animation.drawFrame(this.game.clockTick, this.game, this.x, this.y)
+    }
+    follow(followThis){
+        this.followThis = followThis
+        this.goTo(this.followThis.x, this.followThis.y)
+        console.log(followThis)
+        
+    }
+
+    goTo(x, y) {
+        this.goToX = x
+        this.goToY = y
+        this.following = true
+
     }
 }

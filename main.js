@@ -3,7 +3,7 @@ import GameEngine from './GameEngine.js'
 import PlayerCharacter from './PlayerCharacter.js'
 import Map from './Map.js'
 import Camera from './Camera.js'
-import Marriott from './Marriott.js';
+import Marriott from './Marriott.js'
 
 let AM = new AssetManager()
 
@@ -33,11 +33,13 @@ AM.downloadAll(function() {
     gameEngine.addEntity(player)
     gameEngine.addEntity(camera)
 
+
     var marriott = new Marriott(gameEngine, AM.getAsset('./img/Marriott.png'))
     // gameEngine.setCamera(camera)
     // gameEngine.camera.setFollowedEntity(player)
     gameEngine.addEntity(marriott)
     // gameEngine.addEntity(camera)
-
+    // marriott.following(player)
+    player.follow(marriott)
     console.log('All Done!')
 })

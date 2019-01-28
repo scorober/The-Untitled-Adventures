@@ -1,4 +1,4 @@
-import Entity from './Entity.js'
+// import Entity from './Entity.js'
 import Animation from './Animation.js'
 import PlayableCharacter from './PlayerCharacter.js'
 
@@ -6,7 +6,8 @@ export default class Marriott extends PlayableCharacter {
     constructor(game, spritesheet) {
         super(game, spritesheet)
         //super(game, 0, 450)
-        this.y += 12
+        this.y = 350
+        this.x = 107
         let wcRate = 0.1
         let sitRate = 0.1
         this.animations = {
@@ -26,7 +27,7 @@ export default class Marriott extends PlayableCharacter {
             'st-e': new Animation(spritesheet, 64, 69, 1, 4, wcRate, 1, true, 2),
         }
         this.animation = this.animations['st-e']
-        this.speed = 10
+        this.speed = 100    
         this.game = game
         this.ctx = game.ctx
 
@@ -35,9 +36,9 @@ export default class Marriott extends PlayableCharacter {
         // console.log(this.game.input.downKeys);
         
         if (this.game.input.downKeys['KeyD']) {
-                this.game.playerDirection = 'KeyD'
-                this.game.playerMoving = false
-                this.animation.elapsedTime = 0
+            this.game.playerDirection = 'KeyD'
+            this.game.playerMoving = false
+            this.animation.elapsedTime = 0
         }
 
         super.update()
@@ -48,7 +49,7 @@ export default class Marriott extends PlayableCharacter {
                 } else {
                     this.animation = this.animations['sit-d']
                     // this.animation.elapsedTime = 0
-                    console.log(this.animation.elapsedTime);
+                    // console.log(this.animation.elapsedTime)
                     
         
                 }
