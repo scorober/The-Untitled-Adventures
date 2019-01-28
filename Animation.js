@@ -27,7 +27,12 @@ export default class Animation {
         this.elapsedTime += tick
         if (this.isDone()) {
             if (this.loop) this.elapsedTime = 0
-        }
+            else this.elapsedTime -= tick
+        } 
+        // else {
+        //   console.log(this.elapsedTime);
+            
+        // }
         var frame = this.currentFrame()
         var xindex = 0
         var yindex = 0
@@ -52,6 +57,6 @@ export default class Animation {
     }
 
     isDone() {
-        return this.elapsedTime >= this.totalTime
+        return this.elapsedTime > this.totalTime
     }
 }
