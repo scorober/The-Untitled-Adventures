@@ -7,7 +7,7 @@ export default class Mage extends Character {
         super(game, 50, 300)
         //Very temporary...
         this.spritesheet = spritesheet
-        this.impRate = 1.3
+        this.impRate =0.25
 
         let atkRate = 0.15
         let idRate = 0.15
@@ -40,7 +40,7 @@ export default class Mage extends Character {
         this.game = game
         this.ctx = game.ctx
         console.log('over and over?')
-
+        this.attack(50, 400)
 
 
 
@@ -72,7 +72,7 @@ export default class Mage extends Character {
     update() {
 
         //TODO get player location
-        this.attack(50, 400)
+       
     }
 
     draw() {

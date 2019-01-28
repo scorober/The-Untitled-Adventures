@@ -1,9 +1,12 @@
 import Entity from './Entity.js'
 import Level from './Level.js'
+// import Dungeon from './generators/dungeon.js'
 
 export default class Map extends Entity {
     //This is behavior that can be managed by the scene manager
     constructor(game, tileAtlas) {
+
+
         super(game, 0, 0)
         this.level = new Level(game, 64, 16, tileAtlas)
     }
