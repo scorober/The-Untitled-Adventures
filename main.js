@@ -35,8 +35,4 @@ AM.downloadAll(function() {
     gameEngine.camera.setFollowedEntity(player)
     gameEngine.addEntity(player)
     gameEngine.addEntity(camera)
-
-
-
-    console.log('All Done!')
 })
