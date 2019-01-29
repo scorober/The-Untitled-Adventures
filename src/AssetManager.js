@@ -1,3 +1,5 @@
+import { CTX_EVENTS } from './utils/Constants.js'
+
 export default class AssetManager {
     constructor() {
         this.successCount = 0
@@ -18,11 +20,11 @@ export default class AssetManager {
         for (let i = 0; i < this.downloadQueue.length; i += 1) {
             const img = document.createElement('img')
             const path = this.downloadQueue[i]
-            img.addEventListener('load', () => {
+            img.addEventListener(CTX_EVENTS.Load, () => {
                 this.successCount++
                 if (this.isDone()) callback()
             })
-            img.addEventListener('error', () => {
+            img.addEventListener(CTX_EVENTS.Error, () => {
                 this.errorCount++
                 if (this.isDone()) callback()
             })

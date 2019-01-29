@@ -1,3 +1,5 @@
+import { CTX_EVENTS } from './utils/Constants.js'
+
 export default class InputManager {
     constructor() {
         this.ctx = null
@@ -13,12 +15,12 @@ export default class InputManager {
     registerEventListeners(ctx) {
         this.ctx = ctx
 
-        this.ctx.canvas.addEventListener('click',
+        this.ctx.canvas.addEventListener(CTX_EVENTS.LeftClick,
             e => { this.lastMouseClickPosition = this.getXandY(e) },
             false
         )
 
-        this.ctx.canvas.addEventListener('contextmenu',
+        this.ctx.canvas.addEventListener(CTX_EVENTS.RightClick,
             e => {
                 this.lastMouseClickPosition = this.getXandY(e)
                 e.preventDefault()
@@ -26,15 +28,15 @@ export default class InputManager {
             false
         )
 
-        this.ctx.canvas.addEventListener('mousemove',
+        this.ctx.canvas.addEventListener(CTX_EVENTS.MouseMove,
             e => { this.mousePosition = this.getXandY(e) },
             false
         )
 
-        this.ctx.canvas.addEventListener('mousewheel',
+        this.ctx.canvas.addEventListener(CTX_EVENTS.MouseWheel,
             e => { this.mouseWheel = e }, false)
 
-        this.ctx.canvas.addEventListener('keydown',
+        this.ctx.canvas.addEventListener(CTX_EVENTS.KeyDown,
             e => {
                 /** e.code cooresponds to strings describing the key like ArrowUp, ArrowDown, KeyE, KeyW, Digit5, e.t.c */
                 this.downKeys[e.code] = true
@@ -42,7 +44,7 @@ export default class InputManager {
             false
         )
 
-        this.ctx.canvas.addEventListener('keyup',
+        this.ctx.canvas.addEventListener(CTX_EVENTS.KeyUp,
             e => { this.downKeys[e.code] = false },
             false
         )
