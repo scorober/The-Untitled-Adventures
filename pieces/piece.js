@@ -1,6 +1,6 @@
-import Array2d from '../utils/array2d';
-import Rectangle from '../utils/rectangle';
-import {iter_adjacent, intersects, array_test, iter_2d, iter_range} from '../utils';
+import Array2d from '../utils/array2d.js';
+import Rectangle from '../utils/rectangle.js';
+import {iter_adjacent, intersects, array_test, iter_2d, iter_range} from '../utils/index.js';
 
 let next_piece_id = 0;
 

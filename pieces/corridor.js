@@ -1,4 +1,4 @@
-import Room from './room';
+import Room from './room.js';
 
 export default class Corridor extends Room {
 

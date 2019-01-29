@@ -1,8 +1,8 @@
-import Generator from './generator';
-import Corridor from '../pieces/corridor';
-import Room from '../pieces/room';
-import {FACING} from '../const';
-import {shift_left, shift_right, shift} from '../utils';
+import Generator from './generator.js'
+import Corridor from '../pieces/corridor.js'
+import Room from '../pieces/room.js'
+import {FACING} from '../const.js'
+import {shift_left, shift_right, shift} from '../utils/index.js'
 
 export default class Dungeon extends Generator {
 

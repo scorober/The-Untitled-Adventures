@@ -1,6 +1,6 @@
 import Character from './Character.js'
 import Animation from './Animation.js'
-import Effect from './Effect.js';
+import Effect from './Effect.js'
 
 export default class Mage extends Character {
     constructor(game, spritesheet) {
@@ -40,7 +40,7 @@ export default class Mage extends Character {
         this.game = game
         this.ctx = game.ctx
         console.log('over and over?')
-        this.attack(50, 400)
+       
 
 
 
@@ -60,7 +60,7 @@ export default class Mage extends Character {
 
             // let anim = new Animation(this.spritesheet, 192, 192, 10, 5, this.impRate, 10, false, i / 5)
 
-            let r = Math.random() * 500
+            let r = Math.random() * 300
             let angle = Math.random()*Math.PI*2
             this.game.addEntity(new Effect(this.game, this.animations[anim], x + Math.cos(angle)*r, y + Math.sin(angle)*r))
         }
@@ -70,13 +70,14 @@ export default class Mage extends Character {
 
 
     update() {
-
+        this.attack(50, 400)
         //TODO get player location
        
     }
 
     draw() {
-        super.draw()
+
         this.animation.drawFrame(this.game.clockTick, this.game, this.x, this.y)
+        super.draw()
     }
 }
