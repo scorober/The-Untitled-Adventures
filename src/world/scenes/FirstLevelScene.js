@@ -1,6 +1,6 @@
 import Scene from './Scene.js'
 import Map from '../Map.js'
-import PlayerCharacter from '../../entities/character/PlayerCharacter.js'
+import PlayerCharacter from '../../entities/characters/PlayerCharacter.js'
 
 export default class FirstLevel extends Scene {
 
