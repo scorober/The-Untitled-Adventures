@@ -1,8 +1,9 @@
 import Generator from './generator.js'
 import Corridor from '../pieces/corridor.js'
 import Room from '../pieces/room.js'
-import {FACING} from '../const.js'
-import {shift_left, shift_right, shift} from '../utils/index.js'
+import {FACING} from '../../utils/const.js'
+import {shift_left, shift_right, shift} from '../../utils/index.js'
+
 
 export default class Dungeon extends Generator {
 
@@ -165,11 +166,8 @@ export default class Dungeon extends Generator {
 
     new_room(key) {
         //spawn next room
-        key = key || this.random.choose(this.room_tags, false);
-
+        key = key || this.random.choose(this.room_tags, false)
         let opts = this.options.rooms[key];
-
-
         let room = new Room({
             size: this.random.vec(opts.min_size, opts.max_size),
             max_exits: opts.max_exits,

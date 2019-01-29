@@ -1,28 +1,29 @@
+/**
+ * This class is modified from the original so that it doesn't depend on the 'random-seed' module.
+ */
+
 export default class Random {
     constructor(seed) {
         this.m = 0x80000000
-        this.a = 651354841
-        this.c = 65235
+        this.a = 651354887
+        this.c = 65269
 
-        this.state = seed ? seed : Math.floor(Math.random * (this.m - 1));
+        this.state = seed ? seed : Math.floor(Math.random() * (this.m - 1))
           
     }
 
     nextInt() {
-        return this.state = (this.a * this.state + this.c) % this.m;
+        return this.state = (this.a * this.state + this.c) % this.m
     }
 
     int(min, max) {
         let rangeSize = max - min
         let rndFloat = this.nextInt() / this.m
         return min + Math.floor(rndFloat * rangeSize)
-    
-        // return this.rng.intBetween(min, max);
     }
 
     float(min=0, max=1) {
         return this.nextInt() / (this.m - 1)
-        // return this.rng.floatBetween(min, max);
     }
 
     vec(min, max){
@@ -32,21 +33,12 @@ export default class Random {
     }
 
     choose(items, remove=false) {
-
         let idx = this.int(0, items.length - 1);
         if (remove) {
             return items.splice(idx, 1)[0];
         } else {
             return items[idx];
         }
-
-
-        // let idx = this.rng.intBetween(0, items.length - 1);
-        // if (remove) {
-        //     return items.splice(idx, 1)[0];
-        // } else {
-        //     return items[idx];
-        // }
     }
 
     maybe(probability) {

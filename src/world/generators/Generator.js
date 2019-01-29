@@ -1,7 +1,7 @@
-import Random from '../utils/random.js'
+import Random from '../../utils/random.js'
 import Piece from '../pieces/piece.js'
-import Rectangle from '../utils/rectangle.js'
-import {FACING_INVERSE} from '../const.js'
+import Rectangle from '../../utils/rectangle.js'
+import {FACING_INVERSE} from '../../utils/const.js'
 
 export default class Generator extends Piece {
 

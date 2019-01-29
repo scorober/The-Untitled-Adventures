@@ -89,4 +89,13 @@ export default class Scene {
     setMap(map) {
         this.map = map
     }
+
+    /**
+     * Generates the map from a dungeon object for this scene.
+     * 
+     * @param  dungeon 
+     */
+    generateMap(dungeon) {
+        this.dungeon = dungeon
+    }
 }
