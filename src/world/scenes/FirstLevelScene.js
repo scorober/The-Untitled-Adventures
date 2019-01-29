@@ -1,10 +1,10 @@
 import Scene from './Scene.js'
 import Map from '../Map.js'
-import PlayerCharacter from '../../entities/PlayerCharacter.js'
+import PlayerCharacter from '../../entities/character/PlayerCharacter.js'
 
-export default class FirstLevel extends Scene{
+export default class FirstLevel extends Scene {
 
-    constructor(game){
+    constructor(game) {
         super(game)
         this.name = 'level1'
         const player = new PlayerCharacter(game, game.getAsset('./assets/img/mikeschar.png'))
@@ -24,7 +24,7 @@ export default class FirstLevel extends Scene{
         this.updateEntities()
     }
 
-    draw(){
+    draw() {
         this.drawMap()
         this.drawEntities()
     }

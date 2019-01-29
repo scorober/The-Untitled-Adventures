@@ -1,7 +1,7 @@
 import Timer from './utils/Timer.js'
-import InputManager from './utils/InputManager.js'
+import InputManager from './InputManager.js'
 import SceneManager from './SceneManager.js'
-import Camera from './world/Camera.js'
+import Camera from './entities/Camera.js'
 
 export default class GameEngine {
     constructor() {

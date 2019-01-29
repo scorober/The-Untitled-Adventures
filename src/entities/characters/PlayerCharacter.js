@@ -1,5 +1,5 @@
-import Entity from './Entity.js'
-import Animation from '../utils/Animation.js'
+import Entity from '../Entity.js'
+import Animation from '../../Animation.js'
 
 export default class PlayableCharacter extends Entity {
     constructor(game, spritesheet) {
@@ -13,7 +13,7 @@ export default class PlayableCharacter extends Entity {
     update() {
         /** Handle movement */
         if (this.game.inputManager.downKeys['ArrowLeft']) {
-            this.playerDirection = 'ArrowLeft' //Why not save the state in the character or the scene instead of the engine?
+            this.playerDirection = 'ArrowLeft' // Why not save the state in the character or the scene instead of the engine?
             this.playerMoving = true
             this.animation = this.animations['wc-w']
             this.x -= this.game.clockTick * this.speed

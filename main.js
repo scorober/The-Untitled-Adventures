@@ -1,4 +1,4 @@
-import AssetManager from './src/utils/AssetManager.js'
+import AssetManager from './src/AssetManager.js'
 import GameEngine from './src/GameEngine.js'
 
 const assetManager = new AssetManager()
