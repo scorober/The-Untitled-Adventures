@@ -6,11 +6,11 @@ export default class Timer {
     }
 
     tick() {
-        var wallCurrent = Date.now()
-        var wallDelta = (wallCurrent - this.wallLastTimestamp) / 1000
+        const wallCurrent = Date.now()
+        const wallDelta = (wallCurrent - this.wallLastTimestamp) / 1000
         this.wallLastTimestamp = wallCurrent
 
-        var gameDelta = Math.min(wallDelta, this.maxStep)
+        const gameDelta = Math.min(wallDelta, this.maxStep)
         this.gameTime += gameDelta
         return gameDelta
     }
