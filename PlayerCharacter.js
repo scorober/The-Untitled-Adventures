@@ -78,7 +78,7 @@ export default class PlayableCharacter extends Entity {
                 this.game.playerDirection = 'ArrowLeft'
                 this.game.playerMoving = true
             } 
-        } else {
+        } else {    
             if (this.game.input.downKeys['ArrowLeft']) {
                 this.game.playerDirection = 'ArrowLeft'
                 this.game.playerMoving = true
