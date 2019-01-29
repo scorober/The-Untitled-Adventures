@@ -7,7 +7,6 @@ export default class AssetManager {
     }
 
     queueDownload(path) {
-        console.log('Queueing ' + path)
         this.downloadQueue.push(path)
     }
 
@@ -18,24 +17,15 @@ export default class AssetManager {
     downloadAll(callback) {
         for (let i = 0; i < this.downloadQueue.length; i += 1) {
             const img = document.createElement('img')
-            console.log(img)
-            var that = this
-
-            var path = this.downloadQueue[i]
-            console.log(path)
-
-            img.addEventListener('load', function () {
-                console.log('Loaded ' + this.src)
-                that.successCount++
-                if (that.isDone()) callback()
+            const path = this.downloadQueue[i]
+            img.addEventListener('load', () => {
+                this.successCount++
+                if (this.isDone()) callback()
             })
-
-            img.addEventListener('error', function () {
-                console.log('Error loading ' + this.src)
-                that.errorCount++
-                if (that.isDone()) callback()
+            img.addEventListener('error', () => {
+                this.errorCount++
+                if (this.isDone()) callback()
             })
-
             img.src = path
             this.cache[path] = img
         }

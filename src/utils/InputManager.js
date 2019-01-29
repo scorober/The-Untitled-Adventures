@@ -46,19 +46,15 @@ export default class InputManager {
             e => { this.downKeys[e.code] = false },
             false
         )
-
-        console.log('Input started')
     }
 
     getXandY(e) {
-        var x = e.clientX - this.ctx.canvas.getBoundingClientRect().left
-        var y = e.clientY - this.ctx.canvas.getBoundingClientRect().top
-
+        let x = e.clientX - this.ctx.canvas.getBoundingClientRect().left
+        let y = e.clientY - this.ctx.canvas.getBoundingClientRect().top
         if (x < 1024) {
             x = Math.floor(x / 32)
             y = Math.floor(y / 32)
         }
-
         return { x: x, y: y }
     }
 }

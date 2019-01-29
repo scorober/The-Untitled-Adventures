@@ -1,22 +1,21 @@
 import AssetManager from './src/utils/AssetManager.js'
 import GameEngine from './src/GameEngine.js'
 
-let AM = new AssetManager()
+const assetManager = new AssetManager()
 
-AM.queueDownload('./assets/img/RobotUnicorn.png')
-AM.queueDownload('./assets/img/mikeschar.png')
-AM.queueDownload('./assets/img/mushroomdude.png')
-AM.queueDownload('./assets/img/runningcat.png')
-AM.queueDownload('./assets/img/background.jpg')
-AM.queueDownload('./assets/img/DungeonColor3@64x64.png')
+assetManager.queueDownload('./assets/img/RobotUnicorn.png')
+assetManager.queueDownload('./assets/img/mikeschar.png')
+assetManager.queueDownload('./assets/img/mushroomdude.png')
+assetManager.queueDownload('./assets/img/runningcat.png')
+assetManager.queueDownload('./assets/img/background.jpg')
+assetManager.queueDownload('./assets/img/DungeonColor3@64x64.png')
 
-AM.downloadAll(function() {
-
-    var canvas = document.getElementById('gameWorld')
-    var ctx = canvas.getContext('2d')
-    var gameEngine = new GameEngine()
-    gameEngine.ASSET_MANAGER = AM
-
+assetManager.downloadAll(function() {
+    const canvas = document.getElementById('gameWorld')
+    const ctx = canvas.getContext('2d')
+    const gameEngine = new GameEngine()
+    gameEngine.assetManager = assetManager
     gameEngine.init(ctx)
     gameEngine.start()
+    console.log('Game started..')
 })

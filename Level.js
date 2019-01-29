@@ -42,7 +42,7 @@ export default class Level extends Entity {
     drawMap() {
         for (let r = 0; r < this.rows; r++) {
             for (let c = 0; c < this.cols; c++) {
-                let tile = this.getTile(r, c)
+                const tile = this.getTile(r, c)
                 if (tile !== 0) { //or -1? 0 is an index...
                     this.game.ctx.drawImage(
                         this.tileAtlas,
