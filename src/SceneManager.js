@@ -1,7 +1,7 @@
 /**
  * Scene manager saves all of the game scenes, and calls the correct one.
  */
-import FirstLevel from './world/scenes/FirstLevelScene.js'
+import FirstLevel from './world/scenes/FirstLevel.js'
 
 export default class SceneManager {
 

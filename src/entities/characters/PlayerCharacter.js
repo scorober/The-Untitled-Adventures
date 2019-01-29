@@ -5,8 +5,6 @@ import Animation from '../../Animation.js'
 export default class PlayableCharacter extends Entity {
     constructor(game, spritesheet) {
         super(game, 0, 450)
-        this.animations = this.getAnimations(spritesheet)
-        this.animation = this.animations[ANIMATIONS.StandEast]
         this.speed = 100
         this.game = game
         this.spellcastingRate = 0.15
@@ -16,6 +14,8 @@ export default class PlayableCharacter extends Entity {
         this.standCycleRate = 0.6
         this.shootingRate = 0.15
         this.deathCycleRate = 0.15
+        this.animations = this.getAnimations(spritesheet)
+        this.animation = this.animations[ANIMATIONS.StandEast]
     }
 
     update() {
