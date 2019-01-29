@@ -6,7 +6,7 @@ export default class PlayableCharacter extends Entity {
         super(game, 0, 450)
         this.animations = this.getAnimations(spritesheet)
         this.animation = this.animations['st-e']
-        this.speed = 100
+        this.speed = 250
         this.game = game
     }
 

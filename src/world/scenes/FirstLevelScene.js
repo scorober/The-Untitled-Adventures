@@ -2,18 +2,24 @@ import Scene from './Scene.js'
 import Map from '../Map.js'
 import PlayerCharacter from '../../entities/characters/PlayerCharacter.js'
 import Dungeon from '../generators/Dungeon.js'
+import Background from '../Background.js'
 
 export default class FirstLevel extends Scene {
 
     constructor(game) {
         super(game)
         this.name = 'level1'
+
+
+
+        // this.addEntity(
+        //     new Background(game, game.getAsset('./assets/img/background.jpg'))
+        // )
         const player = new PlayerCharacter(game, game.getAsset('./assets/img/mikeschar.png'))
         game.camera.setFollowedEntity(player)
-        this.setMap(new Map(game, game.getAsset('./assets/img/DungeonColor3@64x64.png'), 20, 20, 64, 16, TILES))
-        this.addEntity(player)
-        this.addEntity(game.camera)
 
+
+        //Initialize a dungeon with options, possibly move to the scene superclass w/ parameters.
         let dungeon = new Dungeon({
             size: [10000, 7000], 
             // seed: 'abcd', //omit for generated seed
@@ -26,7 +32,7 @@ export default class FirstLevel extends Scene {
                 },
                 any: {
                     min_size: [15, 8],
-                    max_size: [38, 25],
+                    max_size: [19, 25],
                     max_exits: 2
                 }
             },
@@ -40,31 +46,12 @@ export default class FirstLevel extends Scene {
         });
         
         dungeon.generate();
-        dungeon.print(); //outputs wall map to console.log
-        console.log(dungeon.size)
-        // dungeon.size; // [width, heihgt]
-        // dungeon.walls.get([x, y]); //return true if position is wall, false if empty
 
-        for(let piece of dungeon.children) {
-    
-            console.log('Piece position below:::')
-            console.log( piece.position)       //[x, y] position of top left corner of the piece within dungeon
-            console.log(piece.tag)// 'any', 'initial' or any other key of 'rooms' options property
-            console.log(piece.size)//[width, height]
-            // console.log(piece.walls.get([x, y]))  //x, y- local position of piece, returns true if wall, false if empty
-     
-            
-            for (let exit of piece.exits) {
-                let {x, y, dest_piece} = exit; // local position of exit and piece it exits to
-                console.log("GLOBAL LOCATION")
-                console.log(piece.global_pos([x, y])) // [x, y] global pos of the exit
-            }
-        
-            piece.local_pos(dungeon.start_pos); //get local position within the piece of dungeon's global position
-        }
-        
-        dungeon.initial_room; //piece tagged as 'initial'
-        console.log(dungeon.start_pos) //[x, y] center of 'initial' piece 
+        this.setMap(new Map(game, game.getAsset('./assets/img/DungeonColor3@64x64.png'), 64, 16, dungeon))
+        this.addEntity(player)
+        this.addEntity(game.camera)
+
+        dungeon.print(); //outputs wall map to console.log
 
     }
 
@@ -72,6 +59,7 @@ export default class FirstLevel extends Scene {
      * Updates this scene.
      */
     update() {
+        //TODO I see... draw the background here if implemented.
         //NOTE: These two functions were originally done automatically in the super class, but I added them
         //here to reduce confusion, and to allow the order they are updated/rendered to be adjusted.
         this.updateMap()

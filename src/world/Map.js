@@ -1,4 +1,5 @@
 import Entity from '../entities/Entity.js'
+import Dungeon from '../world/generators/Dungeon.js'
 
 
 export default class Map extends Entity {
@@ -6,21 +7,76 @@ export default class Map extends Entity {
      *
      * @param game a reference ot the game object
      * @param tileAtlas the .png/.jpg whatever file
-     * @param rows
-     * @param cols
      * @param tileSize
      * @param setLength
      * @param tiles  a reference to the tile array map thing
      */
-    constructor(game, tileAtlas, rows, cols, tileSize, setLength, tiles) {
+    constructor(game, tileAtlas, tileSize, setLength, dungeon) {
+        
         super(game, 0, 0)
         this.game = game
-        this.rows = rows
-        this.cols = cols
         this.tileAtlas = tileAtlas
         this.tSize = tileSize
         this.setLength = setLength
-        this.tiles = tiles
+        this.dungeon = dungeon
+        this.rows = dungeon.size[1]
+        this.cols = dungeon.size[0]
+        this.tiles = []
+        this.buildMap();
+
+    }
+
+    buildMap()  {
+        let dungeon = this.dungeon
+        // dungeon.size; // [width, heihgt]
+        // dungeon.walls.get([x, y]); //return true if position is wall, false if empty
+
+        
+        let count = 0
+        for(let piece of dungeon.children) {
+            count++
+            console.log('Piece: ' + count + '    start_pos: x ' + piece.position[0] + '  y: ' + piece.position[1] + '    Size: ' + piece.size[0] + ', ' + piece.size[1])
+
+
+            for (let i = piece.position[0]; i < piece.position[0] + piece.size[0]; i++) {
+                for (let j = piece.position[1]; j < piece.position[1] + piece.size[1]; j++) {
+
+                    //Iterates through all points in this room...
+
+                    if (piece.walls.get([i, j])) {
+                        this.tiles[i + (j * dungeon.size[0])] = 89;
+                    } else {
+                        this.tiles[i + (j * dungeon.size[0])] = 18 + count;
+                    }
+
+                    
+                }
+            }
+            
+
+
+
+
+            // console.log('Piece position below:::')
+            // console.log( piece.position)       //[x, y] position of top left corner of the piece within dungeon
+            // console.log(piece.tag)// 'any', 'initial' or any other key of 'rooms' options property
+            // console.log(piece.size)//[width, height]
+            // // console.log(piece.walls.get([x, y]))  //x, y- local position of piece, returns true if wall, false if empty
+     
+            
+            // for (let exit of piece.exits) {
+            //     let {x, y, dest_piece} = exit; // local position of exit and piece it exits to
+            //     console.log("GLOBAL LOCATION")
+            //     console.log(piece.global_pos([x, y])) // [x, y] global pos of the exit
+            // }
+        
+            // piece.local_pos(dungeon.start_pos); //get local position within the piece of dungeon's global position
+        }
+        
+        console.log(this.tiles)
+        // dungeon.initial_room; //piece tagged as 'initial'
+        // console.log(dungeon.start_pos) //[x, y] center of 'initial' piece 
+
     }
 
     /**
@@ -29,7 +85,7 @@ export default class Map extends Entity {
      * @param row
      * @returns {*}
      */
-    getTile(col, row) {
+    getTile(row, col) {
         return this.tiles[row * this.cols + col]
     }
 
@@ -40,7 +96,7 @@ export default class Map extends Entity {
     draw() {
         for(let r = 0; r < this.rows; r++){
             for(let c = 0; c < this.cols; c++){
-                const tile = this.getTile(c, r) //NOTE: When copying this from Level.js, c and r were switched. Was that an error or intentional?
+                const tile = this.getTile(r, c) //NOTE: When copying this from Level.js, c and r were switched. Was that an error or intentional?
                 if(tile){
                     this.game.ctx.drawImage(
                         this.tileAtlas,
