@@ -2,8 +2,6 @@ import Entity from '../entities/Entity.js'
 
 
 export default class Map extends Entity {
-
-
     /**
      *
      * @param game a reference ot the game object
@@ -22,8 +20,7 @@ export default class Map extends Entity {
         this.tileAtlas = tileAtlas
         this.tSize = tileSize
         this.setLength = setLength
-        this.tiles = tiles //TODO: probably should put this into json later.
-        //this.level = new Level(game, 64, 16, tileAtlas)
+        this.tiles = tiles
     }
 
     /**
@@ -37,25 +34,22 @@ export default class Map extends Entity {
     }
 
     //Update map based on camera view and when entering a new level
-    update(tick) {
-        super.update(tick)
+    update() {
     }
 
-    draw(ctx) {
-        super.draw(ctx)
-        //this.level.drawMap(ctx) //this + scene = level
+    draw() {
         for(let r = 0; r < this.rows; r++){
             for(let c = 0; c < this.cols; c++){
-                let tile = this.getTile(c, r) //NOTE: When copying this from Level.js, c and r were switched. Was that an error or intentional?
+                const tile = this.getTile(c, r) //NOTE: When copying this from Level.js, c and r were switched. Was that an error or intentional?
                 if(tile){
-                    ctx.drawImage(
+                    this.game.ctx.drawImage(
                         this.tileAtlas,
                         ((tile-1) % this.setLength * this.tSize),
                         Math.floor((tile-1) / this.setLength) * this.tSize,
                         this.tSize,
                         this.tSize,
-                        r * this.tSize - this.game.CAMERA.xView, //Placement on canvas
-                        c * this.tSize - this.game.CAMERA.yView,
+                        r * this.tSize - this.game.camera.xView, //Placement on canvas
+                        c * this.tSize - this.game.camera.yView,
                         this.tSize,
                         this.tSize
                     )

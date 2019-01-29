@@ -1,16 +1,16 @@
 import Timer from './utils/Timer.js'
-import InputManager from './utils/InputManager.js'
-import SceneManager from './scenemanager.js'
-import Camera from './world/Camera.js'
+import InputManager from './InputManager.js'
+import SceneManager from './SceneManager.js'
+import Camera from './entities/Camera.js'
 
 export default class GameEngine {
     constructor() {
 
-        this.SCENE_MANAGER = null
-        this.INPUT_MANAGER = null
-        this.ASSET_MANAGER = null
+        this.sceneManager = null
+        this.inputManager = null
+        this.assetManager = null
 
-        this.CAMERA = null //TODO: define this by scene? Not all scenes will need this and it will probably change between scenes. Otherwise leave it.
+        this.camera = null //TODO: define this by scene? Not all scenes will need this and it will probably change between scenes. Otherwise leave it.
         this.timer = null
         this.ctx = null
         this.surfaceWidth = null
@@ -29,25 +29,18 @@ export default class GameEngine {
     }
 
     init(ctx) {
-
-        this.INPUT_MANAGER = new InputManager()
-
-
-
+        this.inputManager = new InputManager()
         this.ctx = ctx
         this.surfaceWidth = this.ctx.canvas.width
         this.surfaceHeight = this.ctx.canvas.height
         this.timer = new Timer()
-
-        this.CAMERA = new Camera(this)
-        this.SCENE_MANAGER = new SceneManager(this)
+        this.camera = new Camera(this)
+        this.sceneManager = new SceneManager(this)
 
         this.startInput()
-        console.log('game initialized')
     }
 
     start() {
-        console.log('starting game')
         this.gameLoop()
     }
 
@@ -57,27 +50,22 @@ export default class GameEngine {
     }
 
     startInput() {
-        console.log('Starting input')
-        this.INPUT_MANAGER.registerEventListeners(this.ctx)
+        this.inputManager.registerEventListeners(this.ctx)
     }
 
     addEntity(entity) {
-        console.log('added entity')
         this.entities.push(entity)
     }
 
     draw() {
         this.ctx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight)
         this.ctx.save()
-        //NOTE: The code below is moved to the scene class, so the scene can render all entities within that scene
-        this.SCENE_MANAGER.draw(this.ctx)
-
+        this.sceneManager.draw()
         this.ctx.restore()
     }
 
     update() {
-        //NOTE: The code below is moved to the scene class, so the scene can render all entities within that scene
-        this.SCENE_MANAGER.update(this.clockTick)
+        this.sceneManager.update()
     }
 
     loop() {
@@ -87,7 +75,7 @@ export default class GameEngine {
     }
 
     getAsset(path){
-        return this.ASSET_MANAGER.getAsset(path)
+        return this.assetManager.getAsset(path)
     }
 
     setCamera(camera) {

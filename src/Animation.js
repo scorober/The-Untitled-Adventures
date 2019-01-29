@@ -23,25 +23,24 @@ export default class Animation {
         this.totalTime = frameDuration * frames
     }
 
-    drawFrame(tick, game, x, y) {
-        this.elapsedTime += tick
+    drawFrame(game, x, y) {
+        this.elapsedTime += game.clockTick
         if (this.isDone()) {
             if (this.loop) this.elapsedTime = 0
         }
-        var frame = this.currentFrame()
-        var xindex = 0
-        var yindex = 0
+        const frame = this.currentFrame()
+        let xindex = 0
+        let yindex = 0
         xindex = frame % this.sheetWidth
         yindex = this.frameHeight * (this.row - 1)
-
         game.ctx.drawImage(
             this.spriteSheet,
             xindex * this.frameWidth,
             yindex, // source from sheet
             this.frameWidth,
             this.frameHeight,
-            x - game.CAMERA.xView,
-            y - game.CAMERA.yView,
+            x - game.camera.xView,
+            y - game.camera.yView,
             this.frameWidth * this.scale,
             this.frameHeight * this.scale
         )

@@ -1,26 +1,17 @@
 /**
  * Scene manager saves all of the game scenes, and calls the correct one.
  */
-import FirstLevel from './world/scenes/firstlevel_scene.js'
+import FirstLevel from './world/scenes/FirstLevelScene.js'
 
 export default class SceneManager {
 
 
     constructor(game) {
-        this.GAME = game
-
+        this.game = game
         this.scenes = []
-
-
-        //var scene = new MainMenuScene(game)
-        //this.addScene(scene.name, scene)
-        //this.active = scene
-        //this.addScene('play', new PlayScene(game))
-
-        //add scenes here. Load all from JSON?
-        var scene = new FirstLevel(game)
+        const scene = new FirstLevel(game)
         this.addScene(scene.name, scene)
-        this.ACTIVE_SCENE = scene
+        this.currentScene = scene
     }
 
     /**
@@ -39,27 +30,21 @@ export default class SceneManager {
      * @returns {scene}
      */
     getScene(name) {
-        for (var scene of this.scenes) {
-            if (scene.SceneName === name) {
-                return scene.Scene
-            }
-        }
+        return this.scenes[name]
     }
 
     /**
      * Calls update func for active scene
-     * @param tick amount of time passed since last update.
      */
-    update(tick) {
-        this.ACTIVE_SCENE.update(tick)
+    update() {
+        this.currentScene.update()
     }
 
     /**
      * This function calls the draw function for the active scene
-     * @param ctx = the area being drawn on
      */
-    draw(ctx) {
-        this.ACTIVE_SCENE.draw(ctx)
+    draw() {
+        this.currentScene.draw()
     }
 
     /**
@@ -67,8 +52,8 @@ export default class SceneManager {
      * @param name the name of the scene you want to change to
      */
     change(name){
-        this.ACTIVE_SCENE.exit()  //exit old scene
-        this.ACTIVE_SCENE = this.getScene(name)
-        this.ACTIVE_SCENE.enter() //enter new scene
+        this.currentScene.exit()  //exit old scene
+        this.currentScene = this.getScene(name)
+        this.currentScene.enter() //enter new scene
     }
 }

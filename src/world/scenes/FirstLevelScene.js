@@ -1,45 +1,38 @@
-import Scene from './scene.js'
+import Scene from './Scene.js'
 import Map from '../Map.js'
-import PlayerCharacter from '../../entities/PlayerCharacter.js'
+import PlayerCharacter from '../../entities/characters/PlayerCharacter.js'
 
-export default class FirstLevel extends Scene{
+export default class FirstLevel extends Scene {
 
-    constructor(game){
+    constructor(game) {
         super(game)
         this.name = 'level1'
-
-
-        var player = new PlayerCharacter(game, game.getAsset('./assets/img/mikeschar.png'))
-        game.CAMERA.setFollowedEntity(player)
-
-
-
+        const player = new PlayerCharacter(game, game.getAsset('./assets/img/mikeschar.png'))
+        game.camera.setFollowedEntity(player)
         this.setMap(new Map(game, game.getAsset('./assets/img/DungeonColor3@64x64.png'), 20, 20, 64, 16, TILES))
-
         this.addEntity(player)
-        this.addEntity(game.CAMERA)
+        this.addEntity(game.camera)
     }
 
     /**
      * Updates this scene.
-     *
-     * @param tick
      */
-    update(tick) {
+    update() {
         //NOTE: These two functions were originally done automatically in the super class, but I added them
         //here to reduce confusion, and to allow the order they are updated/rendered to be adjusted.
-        this.updateMap(tick)
-        this.updateEntities(tick)
+        this.updateMap()
+        this.updateEntities()
     }
 
-    draw(ctx){
-        this.drawMap(ctx)
-        this.drawEntities(ctx)
+    draw() {
+        this.drawMap()
+        this.drawEntities()
     }
 
 }
 
-var TILES = [7, 7, 7, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+/** Mock data. Will eventually be generated */
+const TILES = [7, 7, 7, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
     4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
     4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
     4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
