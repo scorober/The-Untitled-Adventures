@@ -1,5 +1,5 @@
-import Piece from './piece.js';
-import {iter_range} from '../../utils/index.js';
+import Piece from './Piece.js';
+import {iter_range} from '../../utils/Index.js';
 
 export default class Room extends Piece {
 

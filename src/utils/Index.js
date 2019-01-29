@@ -1,4 +1,4 @@
-import {FACING_TO_MOD} from './const.js';
+import {FACING_TO_MOD} from './Const.js';
 
 export function iter_adjacent([x, y], cb) {
     cb([x - 1, y]);

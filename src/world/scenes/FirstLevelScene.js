@@ -1,7 +1,7 @@
 import Scene from './Scene.js'
 import Map from '../Map.js'
 import PlayerCharacter from '../../entities/characters/PlayerCharacter.js'
-import Dungeon from '../generators/dungeon.js'
+import Dungeon from '../generators/Dungeon.js'
 
 export default class FirstLevel extends Scene {
 
