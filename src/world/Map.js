@@ -8,11 +8,10 @@ export default class Map extends Entity {
      * @param game a reference ot the game object
      * @param tileAtlas the .png/.jpg whatever file
      * @param tileSize
-     * @param setLength
+     * @param setLength Number of tiles wide
      * @param tiles  a reference to the tile array map thing
      */
     constructor(game, tileAtlas, tileSize, setLength, dungeon) {
-        
         super(game, 0, 0)
         this.game = game
         this.tileAtlas = tileAtlas
@@ -33,34 +32,33 @@ export default class Map extends Entity {
 
         
         let count = 0
-        for(let piece of dungeon.children) {
+        for (let piece of dungeon.children) {
             count++
-            console.log('Piece: ' + count + '    start_pos: x ' + piece.position[0] + '  y: ' + piece.position[1] + '    Size: ' + piece.size[0] + ', ' + piece.size[1])
+            console.log('Piece: ' + count + '    start_pos: x ' + piece.position[0] + '  y: ' + piece.position[1] + '    Size: ' + piece.size[0] + ', ' + piece.size[1] + '   tag:: '+ piece.tag)
 
+            let exits = []                   
+            for (let exit of piece.exits) {
+                console.log(exit)
+                 exits.push(exit)
+            }                         
 
             for (let i = piece.position[0]; i < piece.position[0] + piece.size[0]; i++) {
                 for (let j = piece.position[1]; j < piece.position[1] + piece.size[1]; j++) {
 
-                    //Iterates through all points in this room...
-
                     if (piece.walls.get([i, j])) {
                         this.tiles[i + (j * dungeon.size[0])] = 89;
-                    } else {
+                    } else if (this.tiles[i + (j * dungeon.size[0])] !== 89) {
                         this.tiles[i + (j * dungeon.size[0])] = 18 + count;
                     }
 
                     
                 }
             }
+
             
-
-
-
-
-            // console.log('Piece position below:::')
-            // console.log( piece.position)       //[x, y] position of top left corner of the piece within dungeon
+      
+            // console.log( piece.positio n)       //[x, y] position of top left corner of the piece within dungeon
             // console.log(piece.tag)// 'any', 'initial' or any other key of 'rooms' options property
-            // console.log(piece.size)//[width, height]
             // // console.log(piece.walls.get([x, y]))  //x, y- local position of piece, returns true if wall, false if empty
      
             

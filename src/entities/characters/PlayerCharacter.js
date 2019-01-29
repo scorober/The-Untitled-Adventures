@@ -8,6 +8,8 @@ export default class PlayableCharacter extends Entity {
         this.animation = this.animations['st-e']
         this.speed = 250
         this.game = game
+        this.width = 64 //TODO is 64 a constant?
+        this.height = 64
     }
 
     update() {
