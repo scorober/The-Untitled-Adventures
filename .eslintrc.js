@@ -26,6 +26,11 @@ module.exports = {
             "error",
             "never"
         ],
-        "no-console": "warn"
+        "no-console": "warn",
+        "no-var": "error",
+        "prefer-const": ["error", {
+            "destructuring": "any",
+            "ignoreReadBeforeAssign": false
+        }]
     }
 };
