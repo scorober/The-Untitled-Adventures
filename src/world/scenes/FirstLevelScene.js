@@ -1,6 +1,7 @@
 import Scene from './Scene.js'
 import Map from '../Map.js'
 import PlayerCharacter from '../../entities/characters/PlayerCharacter.js'
+import Marriott from '../../entities/characters/Marriott.js'
 
 export default class FirstLevel extends Scene {
 
@@ -8,9 +9,14 @@ export default class FirstLevel extends Scene {
         super(game)
         this.name = 'level1'
         const player = new PlayerCharacter(game, game.getAsset('./assets/img/mikeschar.png'))
+        const marriott = new Marriott(game, game.getAsset('./assets/img/Marriott.png'))
+        
+    
         game.camera.setFollowedEntity(player)
         this.setMap(new Map(game, game.getAsset('./assets/img/DungeonColor3@64x64.png'), 20, 20, 64, 16, TILES))
         this.addEntity(player)
+        this.addEntity(marriott)
+        marriott.follow(player)
         this.addEntity(game.camera)
     }
 
