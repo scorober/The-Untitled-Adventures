@@ -8,83 +8,37 @@ export default class PlayableCharacter extends Entity {
         this.animation = this.animations['st-e']
         this.speed = 100
         this.game = game
-        this.following = false
-        this.followThis
-        this.goToX
-        this.goToY
-        this. err = 30
     }
 
     update() {
         /** Handle movement */
-        if(this.following) {this.follow(this.followThis)
-
-            if(this.x <= this.goToX + this.err && this.x >= this.goToX - this.err) {
-                if(this.y <= this.goToY + this.err && this.y >= this.goToY - this.err) {
-                    this.game.playerMoving = false
-                } else if (this.y < this.goToY){
-                    this.game.playerDirection = 'ArrowDown'
-                    this.game.playerMoving = true
-                    this.animation = this.animations['wc-s']
-                    this.y += this.game.clockTick * this.speed
-                } else if (this.y > this.goToY) {
-                    this.game.playerDirection = 'ArrowUp'
-                    this.game.playerMoving = true
-                    this.animation = this.animations['wc-n']
-                    this.y -= this.game.clockTick * this.speed
-                }
-            } else if(this.x < this.goToX){
-                this.game.playerDirection = 'ArrowRight'
-                this.game.playerMoving = true
-                this.animation = this.animations['wc-e']
-                this.x += this.game.clockTick * this.speed
-            } else if(this.x > this.goToX){
-                this.game.playerDirection = 'ArrowLeft'
-                this.game.playerMoving = true
-                this.animation = this.animations['wc-w']
-                this.x -= this.game.clockTick * this.speed
-            } 
+        if (this.game.inputManager.downKeys['ArrowLeft']) {
+            this.playerDirection = 'ArrowLeft' // Why not save the state in the character or the scene instead of the engine?
+            this.playerMoving = true
+            this.animation = this.animations['wc-w']
+            this.x -= this.game.clockTick * this.speed
+        } else if (this.game.inputManager.downKeys['ArrowRight']) {
+            this.playerDirection = 'ArrowRight'
+            this.playerMoving = true
+            this.animation = this.animations['wc-e']
+            this.x += this.game.clockTick * this.speed
+        } else if (this.game.inputManager.downKeys['ArrowUp']) {
+            this.playerDirection = 'ArrowUp'
+            this.playerMoving = true
+            this.animation = this.animations['wc-n']
+            this.y -= this.game.clockTick * this.speed
+        } else if (this.game.inputManager.downKeys['ArrowDown']) {
+            this.playerDirection = 'ArrowDown'
+            this.playerMoving = true
+            this.animation = this.animations['wc-s']
+            this.y += this.game.clockTick * this.speed
         } else {
-            if (this.game.inputManager.downKeys['ArrowLeft']) {
-                this.playerDirection = 'ArrowLeft' // Why not save the state in the character or the scene instead of the engine?
-                this.playerMoving = true
-                this.animation = this.animations['wc-w']
-                this.x -= this.game.clockTick * this.speed
-            } else if (this.game.inputManager.downKeys['ArrowRight']) {
-                this.playerDirection = 'ArrowRight'
-                this.playerMoving = true
-                this.animation = this.animations['wc-e']
-                this.x += this.game.clockTick * this.speed
-            } else if (this.game.inputManager.downKeys['ArrowUp']) {
-                this.playerDirection = 'ArrowUp'
-                this.playerMoving = true
-                this.animation = this.animations['wc-n']
-                this.y -= this.game.clockTick * this.speed
-            } else if (this.game.inputManager.downKeys['ArrowDown']) {
-                this.playerDirection = 'ArrowDown'
-                this.playerMoving = true
-                this.animation = this.animations['wc-s']
-                this.y += this.game.clockTick * this.speed
-            } else {
-                this.playerMoving = false
-            }
+            this.playerMoving = false
         }
     }
 
     draw() {
         this.animation.drawFrame(this.game, this.x, this.y)
-    }
-
-    follow(followThis){
-        this.followThis = followThis
-        this.goTo(this.followThis.x, this.followThis.y)
-    }
-
-    goTo(x, y) {
-        this.goToX = x
-        this.goToY = y
-        this.following = true
-
     }
 
     getAnimations(spritesheet) {
