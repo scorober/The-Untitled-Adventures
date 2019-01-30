@@ -13,7 +13,11 @@ export default class Enemy extends Character {
     }
 
 
-    update() {}
+    update() {
+        super.update()
+    }
 
-    draw() {}
+    draw() {
+        super.draw()
+    }
 }

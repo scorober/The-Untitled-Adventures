@@ -27,7 +27,7 @@ export default class Character extends Entity {
         this.followThis
         this.goToX
         this.goToY
-        this. err = 30
+        this. err = 64
         this.states = []
     }
 
