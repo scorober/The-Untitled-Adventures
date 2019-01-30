@@ -34,7 +34,6 @@ export default class Animation {
         let yindex = 0
         xindex = frame % this.sheetWidth
         yindex = this.frameHeight * (this.row - 1)
-        console.log(this.spriteSheet)
         
         game.ctx.drawImage(
             this.spriteSheet,

@@ -78,8 +78,6 @@ export default class PlayableCharacter extends Entity {
     follow(followThis){
         this.followThis = followThis
         this.goTo(this.followThis.x, this.followThis.y)
-        console.log(followThis)
-        
     }
 
     goTo(x, y) {
