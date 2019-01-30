@@ -14,7 +14,7 @@ export default class Marriott extends Npc {
     }
     
     handleMovement() {
-
+        super.handleMovement()
     }
 
     draw() {
