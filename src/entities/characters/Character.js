@@ -12,6 +12,7 @@ export default class Character extends Entity {
         this.game = game
         this.width = 64 //TODO is 64 a constant?
         this.height = 64
+        this.scale = 2
         this.speed = 100
         this.game = game
         this.spellcastingRate = 0.15

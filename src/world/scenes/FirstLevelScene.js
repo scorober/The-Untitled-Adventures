@@ -4,6 +4,7 @@ import PlayerCharacter from '../../entities/characters/PlayerCharacter.js'
 import Dungeon from '../generators/Dungeon.js'
 import Background from '../Background.js'
 import Mage from '../../entities/characters/Mage.js'
+import Marriott from '../../entities/characters/Marriott.js'
 
 export default class FirstLevel extends Scene {
 
@@ -48,6 +49,8 @@ export default class FirstLevel extends Scene {
         this.addEntity(player)
         this.addEntity(game.camera)
         
+        const marriott = new Marriott(game, game.getAsset('./assets/img/Mariott.png'))
+        this.addEntity(marriott)
         const mage = new Mage(game, game.getAsset('./assets/img/mage-full.png'))
         this.addEntity(mage)
 
