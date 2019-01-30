@@ -13,10 +13,9 @@ module.exports = {
             "error",
             4
         ],
-        "linebreak-style": [
-          0  
-            // "error",
-            // "unix"
+        "linebreak-style": [ 
+            "error",
+            "unix"
         ],
         "quotes": [
             "error",
@@ -31,6 +30,9 @@ module.exports = {
         "prefer-const": ["error", {
             "destructuring": "any",
             "ignoreReadBeforeAssign": false
-        }]
+        }],
+        "globals": {
+            "Array": true
+        }
     }
 };

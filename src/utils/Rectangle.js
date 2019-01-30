@@ -37,7 +37,7 @@
  *
  * <h4>Example</h4>
  *
- *      var rect = new createjs.Rectangle(0, 0, 100, 100);
+ *      var rect = new createjs.Rectangle(0, 0, 100, 100)
  *
  * @class Rectangle
  * @param {Number} [x=0] X position.
@@ -46,201 +46,174 @@
  * @param {Number} [height=0] The height of the Rectangle.
  * @constructor
  **/
-function Rectangle(x, y, width, height) {
-    if (Array.isArray(x) && Array.isArray(y)) {
-        [width, height] = y;
-        [x, y] = x;
+export default class Rectangle {
+    constructor(x, y, width, height) {
+        this.x = x
+        this.y = y
+        this.width = width
+        this.height = height
+        if (Array.isArray(x) && Array.isArray(y)) {
+            [width, height] = y
+            [x, y] = x
+        }
+        this.setValues(x, y, width, height)
     }
-    this.setValues(x, y, width, height);
-    
-    
-// public properties:
-    // assigned in the setValues method.
-    /**
-     * X position.
-     * @property x
-     * @type Number
-     **/
+
+
+
+    // public methods:
+    /** 
+     * Sets the specified values on this instance.
+     * @method setValues
+     * @param {Number} [x=0] X position.
+     * @param {Number} [y=0] Y position.
+     * @param {Number} [width=0] The width of the Rectangle.
+     * @param {Number} [height=0] The height of the Rectangle.
+     * @return {Rectangle} This instance. Useful for chaining method calls.
+     * @chainable
+    */
+    setValues(x, y, width, height) {
+        // don't forget to update docs in the constructor if these change:
+        this.x = x || 0
+        this.y = y || 0
+        this.width = width || 0
+        this.height = height || 0
+        return this
+    }
+
+    /** 
+     * Extends the rectangle's bounds to include the described point or rectangle.
+     * @method extend
+     * @param {Number} x X position of the point or rectangle.
+     * @param {Number} y Y position of the point or rectangle.
+     * @param {Number} [width=0] The width of the rectangle.
+     * @param {Number} [height=0] The height of the rectangle.
+     * @return {Rectangle} This instance. Useful for chaining method calls.
+     * @chainable
+    */
+    extend(x, y, width, height) {
+        width = width || 0
+        height = height || 0
+        if (x + width > this.x + this.width) { this.width = x + width - this.x }
+        if (y + height > this.y + this.height) { this.height = y + height - this.y }
+        if (x < this.x) {
+            this.width += this.x - x
+            this.x = x
+        }
+        if (y < this.y) {
+            this.height += this.y - y
+            this.y = y
+        }
+        return this
+    }
+
+    /** 
+     * Adds the specified padding to the rectangle's bounds.
+     * @method pad
+     * @param {Number} top
+     * @param {Number} left
+     * @param {Number} right
+     * @param {Number} bottom
+     * @return {Rectangle} This instance. Useful for chaining method calls.
+     * @chainable
+    */
+    pad(top, left, bottom, right) {
+        this.x -= left
+        this.y -= top
+        this.width += left + right
+        this.height += top + bottom
+        return this
+    }
 
     /**
-     * Y position.
-     * @property y
-     * @type Number
-     **/
+     * Copies all properties from the specified rectangle to this rectangle.
+     * @method copy
+     * @param {Rectangle} rectangle The rectangle to copy properties from.
+     * @return {Rectangle} This rectangle. Useful for chaining method calls.
+     * @chainable
+    */
+    copy(rectangle) {
+        return this.setValues(rectangle.x, rectangle.y, rectangle.width, rectangle.height)
+    }
+
+    /** 
+     * Returns true if this rectangle fully encloses the described point or rectangle.
+     * @method contains
+     * @param {Number} x X position of the point or rectangle.
+     * @param {Number} y Y position of the point or rectangle.
+     * @param {Number} [width=0] The width of the rectangle.
+     * @param {Number} [height=0] The height of the rectangle.
+     * @return {Boolean} True if the described point or rectangle is contained within this rectangle.
+    */
+    contains(x, y, width, height) {
+        width = width || 0
+        height = height || 0
+        return (x >= this.x && x + width <= this.x + this.width && y >= this.y && y + height <= this.y + this.height)
+    }
+
+    /** 
+     * Returns a new rectangle which contains this rectangle and the specified rectangle.
+     * @method union
+     * @param {Rectangle} rect The rectangle to calculate a union with.
+     * @return {Rectangle} A new rectangle describing the union.
+    */
+    union(rect) {
+        return this.clone().extend(rect.x, rect.y, rect.width, rect.height)
+    }
+
+    /** 
+     * Returns a new rectangle which describes the intersection (overlap) of this rectangle and the specified rectangle,
+     * or null if they do not intersect.
+     * @method intersection
+     * @param {Rectangle} rect The rectangle to calculate an intersection with.
+     * @return {Rectangle} A new rectangle describing the intersection or null.
+    */
+    intersection(rect) {
+        let x1 = rect.x
+        let y1 = rect.y
+        let x2 = x1 + rect.width
+        let y2 = y1 + rect.height
+        if (this.x > x1) { x1 = this.x }
+        if (this.y > y1) { y1 = this.y }
+        if (this.x + this.width < x2) { x2 = this.x + this.width }
+        if (this.y + this.height < y2) { y2 = this.y + this.height }
+        return (x2 <= x1 || y2 <= y1) ? null : new Rectangle(x1, y1, x2 - x1, y2 - y1)
+    }
+
+    /** 
+     * Returns true if the specified rectangle intersects (has any overlap) with this rectangle.
+     * @method intersects
+     * @param {Rectangle} rect The rectangle to compare.
+     * @return {Boolean} True if the rectangles intersect.
+    */
+    intersects(rect) {
+        return (rect.x <= this.x + this.width && this.x <= rect.x + rect.width && rect.y <= this.y + this.height && this.y <= rect.y + rect.height)
+    }
+
+    /** 
+     * Returns true if the width or height are equal or less than 0.
+     * @method isEmpty
+     * @return {Boolean} True if the rectangle is empty.
+    */
+    isEmpty() {
+        return this.width <= 0 || this.height <= 0
+    }
 
     /**
-     * Width.
-     * @property width
-     * @type Number
+     * Returns a clone of the Rectangle instance.
+     * @method clone
+     * @return {Rectangle} a clone of the Rectangle instance.
      **/
+    clone() {
+        return new Rectangle(this.x, this.y, this.width, this.height)
+    }
 
     /**
-     * Height.
-     * @property height
-     * @type Number
+     * Returns a string representation of this object.
+     * @method toString
+     * @return {String} a string representation of the instance.
      **/
+    toString() {
+        return '[Rectangle (x="+this.x+" y="+this.y+" width="+this.width+" height="+this.height+")]'
+    }
 }
-var p = Rectangle.prototype;
-
-/**
- * <strong>REMOVED</strong>. Removed in favor of using `MySuperClass_constructor`.
- * See {{#crossLink "Utility Methods/extend"}}{{/crossLink}} and {{#crossLink "Utility Methods/promote"}}{{/crossLink}}
- * for details.
- *
- * There is an inheritance tutorial distributed with EaselJS in /tutorials/Inheritance.
- *
- * @method initialize
- * @protected
- * @deprecated
- */
-// p.initialize = function() {}; // searchable for devs wondering where it is.
-
-
-// public methods:
-/** 
- * Sets the specified values on this instance.
- * @method setValues
- * @param {Number} [x=0] X position.
- * @param {Number} [y=0] Y position.
- * @param {Number} [width=0] The width of the Rectangle.
- * @param {Number} [height=0] The height of the Rectangle.
- * @return {Rectangle} This instance. Useful for chaining method calls.
- * @chainable
-*/
-p.setValues = function(x, y, width, height) {
-    // don't forget to update docs in the constructor if these change:
-    this.x = x||0;
-    this.y = y||0;
-    this.width = width||0;
-    this.height = height||0;
-    return this;
-};
-
-/** 
- * Extends the rectangle's bounds to include the described point or rectangle.
- * @method extend
- * @param {Number} x X position of the point or rectangle.
- * @param {Number} y Y position of the point or rectangle.
- * @param {Number} [width=0] The width of the rectangle.
- * @param {Number} [height=0] The height of the rectangle.
- * @return {Rectangle} This instance. Useful for chaining method calls.
- * @chainable
-*/
-p.extend = function(x, y, width, height) {
-    width = width||0;
-    height = height||0;
-    if (x+width > this.x+this.width) { this.width = x+width-this.x; }
-    if (y+height > this.y+this.height) { this.height = y+height-this.y; }
-    if (x < this.x) { this.width += this.x-x; this.x = x; }
-    if (y < this.y) { this.height += this.y-y; this.y = y; }
-    return this;
-};
-
-/** 
- * Adds the specified padding to the rectangle's bounds.
- * @method pad
- * @param {Number} top
- * @param {Number} left
- * @param {Number} right
- * @param {Number} bottom
- * @return {Rectangle} This instance. Useful for chaining method calls.
- * @chainable
-*/
-p.pad = function(top, left, bottom, right) {
-    this.x -= left;
-    this.y -= top;
-    this.width += left+right;
-    this.height += top+bottom;
-    return this;
-};
-
-/**
- * Copies all properties from the specified rectangle to this rectangle.
- * @method copy
- * @param {Rectangle} rectangle The rectangle to copy properties from.
- * @return {Rectangle} This rectangle. Useful for chaining method calls.
- * @chainable
-*/
-p.copy = function(rectangle) {
-    return this.setValues(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-};
-
-/** 
- * Returns true if this rectangle fully encloses the described point or rectangle.
- * @method contains
- * @param {Number} x X position of the point or rectangle.
- * @param {Number} y Y position of the point or rectangle.
- * @param {Number} [width=0] The width of the rectangle.
- * @param {Number} [height=0] The height of the rectangle.
- * @return {Boolean} True if the described point or rectangle is contained within this rectangle.
-*/
-p.contains = function(x, y, width, height) {
-    width = width||0;
-    height = height||0;
-    return (x >= this.x && x+width <= this.x+this.width && y >= this.y && y+height <= this.y+this.height);
-};
-
-/** 
- * Returns a new rectangle which contains this rectangle and the specified rectangle.
- * @method union
- * @param {Rectangle} rect The rectangle to calculate a union with.
- * @return {Rectangle} A new rectangle describing the union.
-*/
-p.union = function(rect) {
-    return this.clone().extend(rect.x, rect.y, rect.width, rect.height);
-};
-
-/** 
- * Returns a new rectangle which describes the intersection (overlap) of this rectangle and the specified rectangle,
- * or null if they do not intersect.
- * @method intersection
- * @param {Rectangle} rect The rectangle to calculate an intersection with.
- * @return {Rectangle} A new rectangle describing the intersection or null.
-*/
-p.intersection = function(rect) {
-    var x1 = rect.x, y1 = rect.y, x2 = x1+rect.width, y2 = y1+rect.height;
-    if (this.x > x1) { x1 = this.x; }
-    if (this.y > y1) { y1 = this.y; }
-    if (this.x + this.width < x2) { x2 = this.x + this.width; }
-    if (this.y + this.height < y2) { y2 = this.y + this.height; }
-    return (x2 <= x1 || y2 <= y1) ? null : new Rectangle(x1, y1, x2-x1, y2-y1);
-};
-
-/** 
- * Returns true if the specified rectangle intersects (has any overlap) with this rectangle.
- * @method intersects
- * @param {Rectangle} rect The rectangle to compare.
- * @return {Boolean} True if the rectangles intersect.
-*/
-p.intersects = function(rect) {
-    return (rect.x <= this.x+this.width && this.x <= rect.x+rect.width && rect.y <= this.y+this.height && this.y <= rect.y + rect.height);
-};
-
-/** 
- * Returns true if the width or height are equal or less than 0.
- * @method isEmpty
- * @return {Boolean} True if the rectangle is empty.
-*/
-p.isEmpty = function() {
-    return this.width <= 0 || this.height <= 0;
-};
-
-/**
- * Returns a clone of the Rectangle instance.
- * @method clone
- * @return {Rectangle} a clone of the Rectangle instance.
- **/
-p.clone = function() {
-    return new Rectangle(this.x, this.y, this.width, this.height);
-};
-
-/**
- * Returns a string representation of this object.
- * @method toString
- * @return {String} a string representation of the instance.
- **/
-p.toString = function() {
-    return "[Rectangle (x="+this.x+" y="+this.y+" width="+this.width+" height="+this.height+")]";
-};
-
-export default Rectangle;

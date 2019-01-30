@@ -17,31 +17,31 @@ export default class Random {
     }
 
     int(min, max) {
-        let rangeSize = max - min
-        let rndFloat = this.nextInt() / this.m
+        const rangeSize = max - min
+        const rndFloat = this.nextInt() / this.m
         return min + Math.floor(rndFloat * rangeSize)
     }
 
-    float(min=0, max=1) {
+    float() {
         return this.nextInt() / (this.m - 1)
     }
 
     vec(min, max){
-        //min and max are vectors [int, int];
+        //min and max are vectors [int, int]
         //returns [min[0]<=x<=max[0], min[1]<=y<=max[1]]
-        return [this.int(min[0], max[0]), this.int(min[1], max[1])];
+        return [this.int(min[0], max[0]), this.int(min[1], max[1])]
     }
 
     choose(items, remove=false) {
-        let idx = this.int(0, items.length - 1);
+        const idx = this.int(0, items.length - 1)
         if (remove) {
-            return items.splice(idx, 1)[0];
+            return items.splice(idx, 1)[0]
         } else {
-            return items[idx];
+            return items[idx]
         }
     }
 
     maybe(probability) {
-        return this.float() <= probability;
+        return this.float() <= probability
     }
-};
+}
