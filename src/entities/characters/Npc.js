@@ -10,7 +10,11 @@ export default class Npc extends Character {
     }
 
 
-    update() {}
+    update() {
+        super.update()
+    }
 
-    draw() {}
+    draw() {
+        super.draw()
+    }
 }

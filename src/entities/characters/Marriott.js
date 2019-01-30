@@ -7,7 +7,6 @@ export default class Marriott extends Npc {
     constructor(game,spriteSheet, x, y) {
         super(game, spriteSheet, x, y)
         this.sittingRate = 0.1
-        this.height = 69
     }
 
     update() {
@@ -23,6 +22,7 @@ export default class Marriott extends Npc {
     }
 
     getAnimations(spritesheet) {
+        this.height = 69
         const animations = {
             // Walk cycle
             [ANIMATIONS.WalkNorth]: new Animation(spritesheet, this.width, this.height, 9, 1, this.walkCycleRate, 9, true, this.scale),
@@ -39,6 +39,7 @@ export default class Marriott extends Npc {
             [ANIMATIONS.StandSouth]: new Animation(spritesheet, this.width, this.height, 1, 3, this.standCycleRate, 1, true, this.scale),
             [ANIMATIONS.StandEast]: new Animation(spritesheet, this.width, this.height, 1, 4, this.standCycleRate, 1, true, this.scale),
         }
+
         return animations
     }
 

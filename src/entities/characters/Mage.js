@@ -53,6 +53,11 @@ export default class Mage extends Enemy {
     }
 
     getAnimations(spritesheet) {
+        this.height = 192
+        this.width = 192
+        this.attackHight = 192
+        this.attackWidth = 384
+        this.scale = 1
         const animations = {
           
             
@@ -73,6 +78,8 @@ export default class Mage extends Enemy {
             [ANIMATIONS.WalkSouth]: new Animation(spritesheet, this.width, this.height, 8, 9, this.walkCycleRate, 9, true, this.scale),
             [ANIMATIONS.WalkNorth]: new Animation(spritesheet, this.width, this.height, 8, 10, this.walkCycleRate, 9, true, this.scale),
         }
+        console.log(this.width)
+        
         return animations
     }
 }
