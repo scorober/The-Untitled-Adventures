@@ -27,14 +27,12 @@ export default class Animation {
         this.elapsedTime += game.clockTick
         if (this.isDone()) {
             if (this.loop) this.elapsedTime = 0
-            else this.elapsedTime -= game.clockTick
         }
         const frame = this.currentFrame()
         let xindex = 0
         let yindex = 0
         xindex = frame % this.sheetWidth
         yindex = this.frameHeight * (this.row - 1)
-        
         game.ctx.drawImage(
             this.spriteSheet,
             xindex * this.frameWidth,
@@ -53,6 +51,6 @@ export default class Animation {
     }
 
     isDone() {
-        return this.elapsedTime > this.totalTime
+        return this.elapsedTime >= this.totalTime
     }
 }
