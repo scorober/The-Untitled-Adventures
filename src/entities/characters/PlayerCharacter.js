@@ -1,4 +1,4 @@
-import { ANIMATIONS, DIRECTIONS, KEYS } from '../../utils/Constants.js'
+import { ANIMATIONS, STATES, DIRECTIONS, KEYS } from '../../utils/Const.js'
 import Entity from '../Entity.js'
 import Animation from '../../Animation.js'
 
@@ -16,32 +16,42 @@ export default class PlayableCharacter extends Entity {
         this.deathCycleRate = 0.15
         this.animations = this.getAnimations(spritesheet)
         this.animation = this.animations[ANIMATIONS.StandEast]
+        // This should be defined in Character.js
+        this.states = []
     }
 
     update() {
         /** Handle movement */
+        this.handleMovement()
+    }
+
+    handleMovement() {
         if (this.game.inputManager.downKeys[KEYS.ArrowLeft]) {
             this.direction = DIRECTIONS.West // Why not save the state in the character or the scene instead of the engine?
-            this.moving = true
+            this.states[STATES.Moving] = true
             this.animation = this.animations[ANIMATIONS.WalkWest]
             this.x -= this.game.clockTick * this.speed
-        } else if (this.game.inputManager.downKeys[KEYS.ArrowRight]) {
+        }
+        else if (this.game.inputManager.downKeys[KEYS.ArrowRight]) {
             this.direction = DIRECTIONS.East
-            this.moving = true
+            this.states[STATES.Moving] = true
             this.animation = this.animations[ANIMATIONS.WalkEast]
             this.x += this.game.clockTick * this.speed
-        } else if (this.game.inputManager.downKeys[KEYS.ArrowUp]) {
+        }
+        else if (this.game.inputManager.downKeys[KEYS.ArrowUp]) {
             this.direction = DIRECTIONS.North
-            this.moving = true
+            this.states[STATES.Moving] = true
             this.animation = this.animations[ANIMATIONS.WalkNorth]
             this.y -= this.game.clockTick * this.speed
-        } else if (this.game.inputManager.downKeys[KEYS.ArrowDown]) {
+        }
+        else if (this.game.inputManager.downKeys[KEYS.ArrowDown]) {
             this.direction = DIRECTIONS.South
-            this.moving = true
+            this.states[STATES.Moving] = true
             this.animation = this.animations[ANIMATIONS.WalkSouth]
             this.y += this.game.clockTick * this.speed
-        } else {
-            this.moving = false
+        }
+        else {
+            this.states[STATES.Moving] = false
         }
     }
 

@@ -1,4 +1,4 @@
-import { CTX_EVENTS } from './utils/Constants.js'
+import { CTX_EVENTS } from './utils/Const.js'
 
 export default class InputManager {
     constructor() {

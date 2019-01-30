@@ -1,3 +1,17 @@
+export const ASSET_PATHS = {
+    MikesChar: './assets/img/mikeschar.png'
+}
+
+export const STATES = {
+    Moving: Symbol('Moving'),
+    Following: Symbol('Following'),
+    Collidable: Symbol('Collidable'),
+    HasTarget: Symbol('HasTarget'),
+    Frozen: Symbol('Frozen'),
+    RemoveFromWorld: Symbol('RemoveFromWorld'),
+    Aggressive: Symbol('Aggresive')
+}
+
 export const ANIMATIONS = {
     SpellcastNorth: Symbol('spellcastNorth'),
     SpellcastWest: Symbol('spellcastWest'),
