@@ -1,7 +1,7 @@
+import { ANIMATIONS, STATES, DIRECTIONS, KEYS } from '../../utils/Const.js'
 import Animation from '../../Animation.js'
 import Effect from '../Effect.js'
 import Enemy from './Enemy.js'
-import { ANIMATIONS } from '../../utils/Const.js';
 
 export default class Mage extends Enemy {
     constructor(game, spritesheet) {

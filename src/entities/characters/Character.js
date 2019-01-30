@@ -1,5 +1,6 @@
 import { ANIMATIONS, STATES, DIRECTIONS, KEYS } from '../../utils/Const.js'
 import Entity from '../Entity.js'
+import Effect from '../Effect.js'
 import Animation from '../../Animation.js'
 
 export default class Character extends Entity {
