@@ -1,45 +1,22 @@
-import AssetManager from './AssetManager.js'
-import GameEngine from './GameEngine.js'
-import PlayerCharacter from './PlayerCharacter.js'
-import Map from './Map.js'
-import Camera from './Camera.js'
-import Marriott from './Marriott.js'
+import AssetManager from './src/AssetManager.js'
+import GameEngine from './src/GameEngine.js'
 
-let AM = new AssetManager()
+const assetManager = new AssetManager()
 
-AM.queueDownload('./img/RobotUnicorn.png')
-AM.queueDownload('./img/mikeschar.png')
-AM.queueDownload('./img/mushroomdude.png')
-AM.queueDownload('./img/runningcat.png')
-AM.queueDownload('./img/background.jpg')
-AM.queueDownload('./img/DungeonColor3@64x64.png')
-AM.queueDownload('./img/Marriott.png')
+assetManager.queueDownload('./assets/img/RobotUnicorn.png')
+assetManager.queueDownload('./assets/img/mikeschar.png')
+assetManager.queueDownload('./assets/img/mushroomdude.png')
+assetManager.queueDownload('./assets/img/runningcat.png')
+assetManager.queueDownload('./assets/img/background.jpg')
+assetManager.queueDownload('./assets/img/DungeonColor3@64x64.png')
+assetManager.queueDownload('./assets/img/Marriott.png')
 
-AM.downloadAll(function() {
-    var canvas = document.getElementById('gameWorld')
-    var ctx = canvas.getContext('2d')
-    var gameEngine = new GameEngine()
-    let camera = new Camera(gameEngine)
+assetManager.downloadAll(function() {
+    const canvas = document.getElementById('gameWorld')
+    const ctx = canvas.getContext('2d')
+    const gameEngine = new GameEngine()
+    gameEngine.assetManager = assetManager
     gameEngine.init(ctx)
     gameEngine.start()
-
-    gameEngine.addEntity(
-        new Map(gameEngine, AM.getAsset('./img/DungeonColor3@64x64.png'))
-    )
-
-    var player = new PlayerCharacter(gameEngine, AM.getAsset('./img/mikeschar.png'))
-    gameEngine.setCamera(camera)
-    gameEngine.camera.setFollowedEntity(player)
-    gameEngine.addEntity(player)
-    gameEngine.addEntity(camera)
-
-
-    var marriott = new Marriott(gameEngine, AM.getAsset('./img/Marriott.png'))
-    // gameEngine.setCamera(camera)
-    // gameEngine.camera.setFollowedEntity(player)
-    gameEngine.addEntity(marriott)
-    // gameEngine.addEntity(camera)
-    // marriott.following(player)
-    player.follow(marriott)
-    console.log('All Done!')
+    console.log('Game started..')
 })

@@ -6,7 +6,7 @@ export default class Entity {
         this.removeFromWorld = false
     }
 
-    update() { }
+    update() { } // eslint-disable-line no-unused-vars
 
     draw() {
         if (this.game.showOutlines && this.radius) {
@@ -19,19 +19,17 @@ export default class Entity {
     }
 
     rotateAndCache(image, angle) {
-        var offscreenCanvas = document.createElement('canvas')
-        var size = Math.max(image.width, image.height)
+        const offscreenCanvas = document.createElement('canvas')
+        const size = Math.max(image.width, image.height)
         offscreenCanvas.width = size
         offscreenCanvas.height = size
-        var offscreenCtx = offscreenCanvas.getContext('2d')
+        const offscreenCtx = offscreenCanvas.getContext('2d')
         offscreenCtx.save()
         offscreenCtx.translate(size / 2, size / 2)
         offscreenCtx.rotate(angle)
         offscreenCtx.translate(0, 0)
         offscreenCtx.drawImage(image, -(image.width / 2), -(image.height / 2))
         offscreenCtx.restore()
-        //offscreenCtx.strokeStyle = "red";
-        //offscreenCtx.strokeRect(0,0,size,size);
         return offscreenCanvas
     }
 }
