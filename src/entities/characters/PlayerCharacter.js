@@ -1,36 +1,18 @@
 import { ANIMATIONS, STATES, DIRECTIONS, KEYS } from '../../utils/Const.js'
-import Entity from '../Entity.js'
+// import Entity from '../Entity.js'
+import Character from './Character.js'
 import Animation from '../../Animation.js'
 
-export default class PlayableCharacter extends Entity {
+export default class PlayableCharacter extends Character {
     constructor(game, spritesheet) {
-        super(game, 0, 450)
-        this.animations = this.getAnimations(spritesheet)
-        this.animation = this.animations['st-e']
-        this.speed = 250
-        this.game = game
-        this.width = 64 //TODO is 64 a constant?
-        this.height = 64
-        this.speed = 100
-        this.game = game
-        this.spellcastingRate = 0.15
-        this.thrustingRate = 0.15
-        this.walkCycleRate = 0.1
-        this.slashingRate = 0.08
-        this.standCycleRate = 0.6
-        this.shootingRate = 0.15
-        this.deathCycleRate = 0.15
-        this.animations = this.getAnimations(spritesheet)
-        this.animation = this.animations[ANIMATIONS.StandEast]
-        // This should be defined in Character.js
-        this.states = []
+        super(game,spritesheet, 0, 450)
     }
 
     update() {
-        /** Handle movement */
-        this.handleMovement()
+        super.update()
     }
 
+    // overrides character class handleMovement
     handleMovement() {
         if (this.game.inputManager.downKeys[KEYS.ArrowLeft]) {
             this.direction = DIRECTIONS.West // Why not save the state in the character or the scene instead of the engine?
@@ -62,7 +44,7 @@ export default class PlayableCharacter extends Entity {
     }
 
     draw() {
-        this.animation.drawFrame(this.game, this.x, this.y)
+        super.draw()
     }
 
     getAnimations(spritesheet) {

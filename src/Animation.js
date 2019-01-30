@@ -27,6 +27,7 @@ export default class Animation {
         this.elapsedTime += game.clockTick
         if (this.isDone()) {
             if (this.loop) this.elapsedTime = 0
+            else this.elapsedTime -= game.clockTick
         }
         const frame = this.currentFrame()
         let xindex = 0

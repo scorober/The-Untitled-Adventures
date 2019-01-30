@@ -1,45 +1,18 @@
 import Animation from '../../Animation.js'
 import Effect from '../Effect.js'
 import Enemy from './Enemy.js'
+import { ANIMATIONS } from '../../utils/Const.js';
 
 export default class Mage extends Enemy {
     constructor(game, spritesheet) {
-        super(game, 20, 100)
+        super(game, spritesheet, 20, 100)
 
         //Very temporary...
         this.spritesheet = spritesheet
-        this.impRate =0.25
-
-        const atkRate = 0.15
-        const idRate = 0.15
-        const wcRate = 0.1
-        const pwRate = 0.08
-      
-
-        this.animations = {
-          
-            //AttackLeft
-            'at-l': new Animation(spritesheet, 384, 192, 17, 1, atkRate, 17, false, 1),
-            'at-r': new Animation(spritesheet, 384, 192, 17, 2, atkRate, 17, false, 1),
-            //Idle
-            'id-l': new Animation(spritesheet, 192, 192, 10, 3, idRate, 10, true, .8),
-            'id-r': new Animation(spritesheet, 192, 192, 10, 4, idRate, 10, true, 0.8),
-            //Impact
-            'imp-s': new Animation(spritesheet, 192, 192, 10, 5, this.impRate, 10, false, 0.3),
-            'imp-m': new Animation(spritesheet, 192, 192, 10, 5, this.impRate, 10, false, 0.3),
-            'imp-l': new Animation(spritesheet, 192, 192, 10, 5, this.impRate, 10, false, 0.3),
-            //Power-up
-            'pr-l': new Animation(spritesheet, 192, 192, 17, 7, pwRate, 17, false, 1),
-            'pr-r': new Animation(spritesheet, 192, 192, 17, 8, pwRate, 17, false, 1),
-            //Walk
-            'wl-l': new Animation(spritesheet, 192, 192, 9, 9, wcRate, 9, true, 1),
-            'wl-r': new Animation(spritesheet, 192, 192, 9, 10, wcRate, 9, true, 1),
-        }
-        this.animation = this.animations['id-l']
         this.speed = 100
-        this.game = game
-        this.ctx = game.ctx
 
+        // this.impactRate =0.25
+        // this.attackRate = 0.15
     }
 
     attack(x, y) {
@@ -53,8 +26,6 @@ export default class Mage extends Enemy {
             } else if (i % 3 === 1) {
                 anim = 'imp-l'
             }
-
-            // let anim = new Animation(this.spritesheet, 192, 192, 10, 5, this.impRate, 10, false, i / 5)
 
             const r = Math.random() * 300
             const angle = Math.random()*Math.PI*2
@@ -74,5 +45,27 @@ export default class Mage extends Enemy {
 
     draw() {
         this.animation.drawFrame(this.game, this.x, this.y)
+    }
+
+    getAnimations(spritesheet) {
+        const animations = {
+          
+            
+            //AttackLeft
+            [ANIMATIONS.AttackWest]: new Animation(spritesheet, 384, 192, 17, 1, this.attackRate, 17, false, 1),
+            [ANIMATIONS.AttackEast]: new Animation(spritesheet, 384, 192, 17, 2, this.attackRate, 17, false, 1),
+            //Idle
+            [ANIMATIONS.StandWest]: new Animation(spritesheet, 192, 192, 10, 3, this.standCycleRate, 10, true, .8),
+            [ANIMATIONS.StandEast]: new Animation(spritesheet, 192, 192, 10, 4, this.standCycleRate, 10, true, 0.8),
+            //Impact
+            [ANIMATIONS.Impact]: new Animation(spritesheet, 192, 192, 10, 5, this.impactRate, 10, false, 0.3),
+            //Power-up
+            [ANIMATIONS.PowerupWest]: new Animation(spritesheet, 192, 192, 17, 7, this.Powerup, 17, false, 1),
+            [ANIMATIONS.PowerupEast]: new Animation(spritesheet, 192, 192, 17, 8, this.Powerup, 17, false, 1),
+            //Walk
+            [ANIMATIONS.WalkWest]: new Animation(spritesheet, 192, 192, 9, 9, this.walkCycleRate, 9, true, 1),
+            [ANIMATIONS.WalkEast]: new Animation(spritesheet, 192, 192, 9, 10, this.walkCycleRate, 9, true, 1),
+        }
+        return animations
     }
 }
