@@ -1,6 +1,4 @@
 import Entity from '../entities/Entity.js'
-import Dungeon from '../world/generators/Dungeon.js'
-
 
 export default class Map extends Entity {
     /**
@@ -21,7 +19,7 @@ export default class Map extends Entity {
         this.rows = dungeon.size[1]
         this.cols = dungeon.size[0]
         this.tiles = []
-        this.buildMap();
+        this.buildMap()
 
     }
 
@@ -32,12 +30,12 @@ export default class Map extends Entity {
 
         
         let count = 0
-        for (let piece of dungeon.children) {
+        for (const piece of dungeon.children) {
             count++
             console.log('Piece: ' + count + '    start_pos: x ' + piece.position[0] + '  y: ' + piece.position[1] + '    Size: ' + piece.size[0] + ', ' + piece.size[1] + '   tag:: '+ piece.tag)
 
             const exits = []                   
-            for (let exit of piece.exits) {
+            for (const exit of piece.exits) {
                 console.log(exit)
                 exits.push(exit)
             }                         

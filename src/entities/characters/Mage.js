@@ -10,10 +10,10 @@ export default class Mage extends Enemy {
         this.spritesheet = spritesheet
         this.impRate =0.25
 
-        let atkRate = 0.15
-        let idRate = 0.15
-        let wcRate = 0.1
-        let pwRate = 0.08
+        const atkRate = 0.15
+        const idRate = 0.15
+        const wcRate = 0.1
+        const pwRate = 0.08
       
 
         this.animations = {
@@ -56,8 +56,8 @@ export default class Mage extends Enemy {
 
             // let anim = new Animation(this.spritesheet, 192, 192, 10, 5, this.impRate, 10, false, i / 5)
 
-            let r = Math.random() * 300
-            let angle = Math.random()*Math.PI*2
+            const r = Math.random() * 300
+            const angle = Math.random()*Math.PI*2
             this.game.addEntity(new Effect(this.game, this.animations[anim], x + Math.cos(angle)*r, y + Math.sin(angle)*r))
         }
 
