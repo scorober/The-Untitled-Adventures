@@ -5,11 +5,9 @@ import Camera from './entities/Camera.js'
 
 export default class GameEngine {
     constructor() {
-
         this.sceneManager = null
         this.inputManager = null
         this.assetManager = null
-
         this.camera = null //TODO: define this by scene? Not all scenes will need this and it will probably change between scenes. Otherwise leave it.
         this.timer = null
         this.ctx = null
@@ -25,7 +23,6 @@ export default class GameEngine {
             function(/* function */ callback, /* DOMElement */ element) {
                 window.setTimeout(callback, 1000 / 60)
             }
-
     }
 
     init(ctx) {
@@ -36,7 +33,6 @@ export default class GameEngine {
         this.timer = new Timer()
         this.camera = new Camera(this)
         this.sceneManager = new SceneManager(this)
-
         this.startInput()
     }
 

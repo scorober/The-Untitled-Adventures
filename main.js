@@ -1,10 +1,11 @@
 import AssetManager from './src/AssetManager.js'
 import GameEngine from './src/GameEngine.js'
+import { ASSET_PATHS } from './src/utils/Const.js'
 
 const assetManager = new AssetManager()
 
 assetManager.queueDownload('./assets/img/RobotUnicorn.png')
-assetManager.queueDownload('./assets/img/mikeschar.png')
+assetManager.queueDownload(ASSET_PATHS.MikesChar)
 assetManager.queueDownload('./assets/img/mushroomdude.png')
 assetManager.queueDownload('./assets/img/runningcat.png')
 assetManager.queueDownload('./assets/img/background.jpg')
