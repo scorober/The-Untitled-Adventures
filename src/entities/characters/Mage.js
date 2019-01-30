@@ -1,10 +1,11 @@
-import Character from './Character.js'
-import Animation from './Animation.js'
-import Effect from './Effect.js'
+import Animation from '../../Animation.js'
+import Effect from '../Effect.js'
+import Enemy from './Enemy.js'
 
-export default class Mage extends Character {
+export default class Mage extends Enemy {
     constructor(game, spritesheet) {
-        super(game, 50, 300)
+        super(game, 20, 100)
+
         //Very temporary...
         this.spritesheet = spritesheet
         this.impRate =0.25
@@ -16,8 +17,7 @@ export default class Mage extends Character {
       
 
         this.animations = {
-            //TODO fix mage sprite sheet
-            
+          
             //AttackLeft
             'at-l': new Animation(spritesheet, 384, 192, 17, 1, atkRate, 17, false, 1),
             'at-r': new Animation(spritesheet, 384, 192, 17, 2, atkRate, 17, false, 1),
@@ -39,10 +39,6 @@ export default class Mage extends Character {
         this.speed = 100
         this.game = game
         this.ctx = game.ctx
-        console.log('over and over?')
-       
-
-
 
     }
 
@@ -70,14 +66,13 @@ export default class Mage extends Character {
 
 
     update() {
-        this.attack(50, 400)
+
+        //TODO FIX EFFECT ANIMATIONS...
+        // this.attack(50, 400)
         //TODO get player location
-       
     }
 
     draw() {
-
-        this.animation.drawFrame(this.game.clockTick, this.game, this.x, this.y)
-        super.draw()
+        this.animation.drawFrame(this.game, this.x, this.y)
     }
 }

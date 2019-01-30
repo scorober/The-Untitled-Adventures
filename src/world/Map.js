@@ -26,7 +26,7 @@ export default class Map extends Entity {
     }
 
     buildMap()  {
-        let dungeon = this.dungeon
+        const dungeon = this.dungeon
         // dungeon.size; // [width, heihgt]
         // dungeon.walls.get([x, y]); //return true if position is wall, false if empty
 
@@ -36,24 +36,25 @@ export default class Map extends Entity {
             count++
             console.log('Piece: ' + count + '    start_pos: x ' + piece.position[0] + '  y: ' + piece.position[1] + '    Size: ' + piece.size[0] + ', ' + piece.size[1] + '   tag:: '+ piece.tag)
 
-            let exits = []                   
+            const exits = []                   
             for (let exit of piece.exits) {
                 console.log(exit)
-                 exits.push(exit)
+                exits.push(exit)
             }                         
-
+             
             for (let i = piece.position[0]; i < piece.position[0] + piece.size[0]; i++) {
                 for (let j = piece.position[1]; j < piece.position[1] + piece.size[1]; j++) {
 
                     if (piece.walls.get([i, j])) {
-                        this.tiles[i + (j * dungeon.size[0])] = 89;
-                    } else if (this.tiles[i + (j * dungeon.size[0])] !== 89) {
-                        this.tiles[i + (j * dungeon.size[0])] = 18 + count;
+                        this.tiles[i + (j * dungeon.size[0])] = 89
+                    } else if (this.tiles[i + (j * dungeon.size[0])] !==89) {
+                        this.tiles[i + (j * dungeon.size[0])] = 4
                     }
 
                     
                 }
             }
+            
 
             
       

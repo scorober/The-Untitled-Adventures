@@ -1,5 +1,5 @@
-import Entity from "./Entity.js";
-import Animation from "./Animation.js"
+import Entity from './Entity.js'
+import Animation from '../Animation.js'
 
 export default class Effect extends Entity{
     constructor(game, animation, x, y) {

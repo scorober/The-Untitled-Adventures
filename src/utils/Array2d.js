@@ -1,29 +1,29 @@
 export default class Array2d {
 
     constructor(size=[0,0], default_value=null) {
-        this.rows = [];
-        this.size = [];
+        this.rows = []
+        this.size = []
 
         for (let y = 0; y < size[1]; y++) {
-            let row = [];
+            let row = []
             for (let x = 0; x < size[0]; x++) {
-                row.push(default_value);
+                row.push(default_value)
             }
-            this.rows.push(row);
+            this.rows.push(row)
         }
     }
 
     iter(callback, context) {
         for (let y = 0; y < size[1]; y++) {
             for (let x = 0; x < size[0]; x++) {
-                callback.apply(context, [[x, y], this.get([x, y])]);
+                callback.apply(context, [[x, y], this.get([x, y])])
             }
         }
     }
 
     get([x, y]) {
         if (this.rows[y] === undefined) {
-            return undefined;
+            return undefined
         }
         return this.rows[y][x];
     }

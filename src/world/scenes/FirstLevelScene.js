@@ -3,12 +3,13 @@ import Map from '../Map.js'
 import PlayerCharacter from '../../entities/characters/PlayerCharacter.js'
 import Dungeon from '../generators/Dungeon.js'
 import Background from '../Background.js'
+import Mage from '../../entities/characters/Mage.js'
 
 export default class FirstLevel extends Scene {
 
     constructor(game) {
         super(game)
-        this.name = 'level1'
+        this.name = 'level1'    
         
 
         const player = new PlayerCharacter(game, game.getAsset('./assets/img/mikeschar.png'))
@@ -39,15 +40,18 @@ export default class FirstLevel extends Scene {
             interconnects: 1, //extra corridors to connect rooms and make circular paths. not 100% guaranteed
             max_interconnect_length: 10,
             room_count: 10
-        });
+        })
         
-        dungeon.generate();
+        dungeon.generate()
         this.setBackground(new Background(game, game.getAsset('./assets/img/background.jpg')))
         this.setMap(new Map(game, game.getAsset('./assets/img/DungeonColor3@64x64.png'), 64, 16, dungeon))
         this.addEntity(player)
         this.addEntity(game.camera)
+        
+        const mage = new Mage(game, game.getAsset('./assets/img/mage-full.png'))
+        this.addEntity(mage)
 
-        dungeon.print(); //outputs wall map to console.log
+        dungeon.print() //outputs wall map to console.log
         console.log(dungeon.size)
 
     }
