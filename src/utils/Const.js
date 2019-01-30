@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 export const TOP = 0;
 export const RIGHT = 90;
 export const BOTTOM = 180;
@@ -40,7 +39,6 @@ export const FACING_MOD_LEFT = {
     [BOTTOM]: RIGHT,
     [LEFT]: BOTTOM
 };
-=======
 export const ASSET_PATHS = {
     MikesChar: './assets/img/mikeschar.png'
 }
@@ -190,4 +188,3 @@ export const CTX_EVENTS = {
     Load: 'load',
     Error: 'error'
 }
->>>>>>> master
