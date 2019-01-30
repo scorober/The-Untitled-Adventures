@@ -8,6 +8,7 @@ export default class Scene {
         this.ctx = game.ctx
         this.entities = []
         this.map = null
+        this.background = null
         this.timeElapsed = 0
         this.timeBuffer = 0
     }
@@ -44,6 +45,22 @@ export default class Scene {
             this.map.update(tick)
         }
     }
+
+
+    /**
+     * Draws the scene's background.
+     * @param ctx 
+     */
+    drawBackground(ctx) {
+        if (this.background) {
+            if (!ctx) {
+                this.background.draw(this.ctx)
+            } else {
+                this.background.draw(ctx)
+            }
+        }
+    }
+
 
     /**
      * Draw the scene's map
@@ -88,5 +105,23 @@ export default class Scene {
      */
     setMap(map) {
         this.map = map
+    }
+
+    /**
+     * Sets the background for this scene
+     * 
+     * @param background 
+     */
+    setBackground(background) {
+        this.background = background
+    }
+
+    /**
+     * Generates the map from a dungeon object for this scene.
+     * 
+     * @param  dungeon 
+     */
+    generateMap(dungeon) {
+        this.dungeon = dungeon
     }
 }

@@ -51,7 +51,8 @@ export default class FirstLevel extends Scene {
         const mage = new Mage(game, game.getAsset('./assets/img/mage-full.png'))
         this.addEntity(mage)
 
-        //dungeon.print() //outputs wall map to console.log
+        dungeon.print() //outputs wall map to console.log
+        console.log(dungeon.size)
 
     }
 
@@ -73,5 +74,4 @@ export default class FirstLevel extends Scene {
         this.drawMap()
         this.drawEntities()
     }
-
 }

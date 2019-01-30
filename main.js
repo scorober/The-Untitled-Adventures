@@ -10,6 +10,7 @@ assetManager.queueDownload('./assets/img/mushroomdude.png')
 assetManager.queueDownload('./assets/img/runningcat.png')
 assetManager.queueDownload('./assets/img/background.jpg')
 assetManager.queueDownload('./assets/img/DungeonColor3@64x64.png')
+assetManager.queueDownload('./assets/img/mage-full.png')
 
 assetManager.downloadAll(function() {
     const canvas = document.getElementById('gameWorld')

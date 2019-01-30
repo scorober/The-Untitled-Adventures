@@ -31,6 +31,8 @@ export default class Animation {
         const frame = this.currentFrame()
         let xindex = 0
         let yindex = 0
+        // console.log(xindex)
+        // console.log(yindex)
         xindex = frame % this.sheetWidth
         yindex = this.frameHeight * (this.row - 1)
         game.ctx.drawImage(
@@ -39,8 +41,8 @@ export default class Animation {
             yindex, // source from sheet
             this.frameWidth,
             this.frameHeight,
-            x - game.camera.xView,
-            y - game.camera.yView,
+            (x + this.frameWidth / 2) - game.camera.xView,
+            (y + this.frameHeight / 2) - game.camera.yView,
             this.frameWidth * this.scale,
             this.frameHeight * this.scale
         )

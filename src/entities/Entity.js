@@ -4,6 +4,8 @@ export default class Entity {
         this.x = x
         this.y = y
         this.removeFromWorld = false
+        this.width = 0
+        this.height = 0
     }
 
     update() { } // eslint-disable-line no-unused-vars
