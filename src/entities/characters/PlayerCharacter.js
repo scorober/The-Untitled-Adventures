@@ -14,33 +14,28 @@ export default class PlayableCharacter extends Character {
 
     // overrides character class handleMovement
     handleMovement() {
-        if (this.game.inputManager.downKeys[KEYS.ArrowLeft]) {
-            this.direction = DIRECTIONS.West // Why not save the state in the character or the scene instead of the engine?
-            this.states[STATES.Moving] = true
-            this.animation = this.animations[ANIMATIONS.WalkWest]
-            this.x -= this.game.clockTick * this.speed
+        if (!this.following) {
+            if (this.game.inputManager.downKeys[KEYS.ArrowLeft]) {
+                this.direction = DIRECTIONS.West // Why not save the state in the character or the scene instead of the engine?
+                this.states[STATES.Moving] = true
+            }
+            else if (this.game.inputManager.downKeys[KEYS.ArrowRight]) {
+                this.direction = DIRECTIONS.East
+                this.states[STATES.Moving] = true
+            }
+            else if (this.game.inputManager.downKeys[KEYS.ArrowUp]) {
+                this.direction = DIRECTIONS.North
+                this.states[STATES.Moving] = true
+            }
+            else if (this.game.inputManager.downKeys[KEYS.ArrowDown]) {
+                this.direction = DIRECTIONS.South
+                this.states[STATES.Moving] = true
+            }
+            else {
+                this.states[STATES.Moving] = false
+            }
         }
-        else if (this.game.inputManager.downKeys[KEYS.ArrowRight]) {
-            this.direction = DIRECTIONS.East
-            this.states[STATES.Moving] = true
-            this.animation = this.animations[ANIMATIONS.WalkEast]
-            this.x += this.game.clockTick * this.speed
-        }
-        else if (this.game.inputManager.downKeys[KEYS.ArrowUp]) {
-            this.direction = DIRECTIONS.North
-            this.states[STATES.Moving] = true
-            this.animation = this.animations[ANIMATIONS.WalkNorth]
-            this.y -= this.game.clockTick * this.speed
-        }
-        else if (this.game.inputManager.downKeys[KEYS.ArrowDown]) {
-            this.direction = DIRECTIONS.South
-            this.states[STATES.Moving] = true
-            this.animation = this.animations[ANIMATIONS.WalkSouth]
-            this.y += this.game.clockTick * this.speed
-        }
-        else {
-            this.states[STATES.Moving] = false
-        }
+        super.handleMovement()
     }
 
     draw() {

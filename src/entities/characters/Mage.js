@@ -37,7 +37,7 @@ export default class Mage extends Enemy {
 
 
     update() {
-
+        super.update
         //TODO FIX EFFECT ANIMATIONS...
         // this.attack(50, 400)
         //TODO get player location
@@ -65,6 +65,8 @@ export default class Mage extends Enemy {
             //Walk
             [ANIMATIONS.WalkWest]: new Animation(spritesheet, 192, 192, 9, 9, this.walkCycleRate, 9, true, 1),
             [ANIMATIONS.WalkEast]: new Animation(spritesheet, 192, 192, 9, 10, this.walkCycleRate, 9, true, 1),
+            [ANIMATIONS.WalkSouth]: new Animation(spritesheet, 192, 192, 9, 9, this.walkCycleRate, 9, true, 1),
+            [ANIMATIONS.WalkNorth]: new Animation(spritesheet, 192, 192, 9, 10, this.walkCycleRate, 9, true, 1),
         }
         return animations
     }
