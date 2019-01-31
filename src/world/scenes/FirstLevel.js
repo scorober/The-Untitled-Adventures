@@ -4,6 +4,7 @@ import PlayerCharacter from '../../entities/characters/PlayerCharacter.js'
 import Dungeon from '../generators/Dungeon.js'
 import Background from '../Background.js'
 import Mage from '../../entities/characters/Mage.js'
+import Marriott from '../../entities/characters/Marriott.js'
 
 export default class FirstLevel extends Scene {
 
@@ -48,8 +49,16 @@ export default class FirstLevel extends Scene {
         this.addEntity(player)
         this.addEntity(game.camera)
         
+        const marriott = new Marriott(game, game.getAsset('./assets/img/Marriott.png'), 20, 400)
+        this.addEntity(marriott)
+        
         const mage = new Mage(game, game.getAsset('./assets/img/mage-full.png'))
+        mage.follow(marriott)
+        marriott.follow(player)
+        
+
         this.addEntity(mage)
+        
 
         //dungeon.print() //outputs wall map to console.log
 

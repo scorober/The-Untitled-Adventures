@@ -13,7 +13,7 @@ module.exports = {
             "error",
             4
         ],
-        "linebreak-style": [ 
+        "linebreak-style": [
             "error",
             "unix"
         ],

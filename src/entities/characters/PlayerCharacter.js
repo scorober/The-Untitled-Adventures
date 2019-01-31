@@ -1,104 +1,81 @@
 import { ANIMATIONS, STATES, DIRECTIONS, KEYS } from '../../utils/Const.js'
-import Entity from '../Entity.js'
+import Character from './Character.js'
+import Effect from '../Effect.js'
 import Animation from '../../Animation.js'
 
-export default class PlayableCharacter extends Entity {
+export default class PlayableCharacter extends Character {
     constructor(game, spritesheet) {
-        super(game, 0, 450)
-        this.animations = this.getAnimations(spritesheet)
-        this.animation = this.animations['st-e']
-        this.speed = 250
-        this.game = game
-        this.width = 64 //TODO is 64 a constant?
-        this.height = 64
-        this.speed = 100
-        this.game = game
-        this.spellcastingRate = 0.15
-        this.thrustingRate = 0.15
-        this.walkCycleRate = 0.1
-        this.slashingRate = 0.08
-        this.standCycleRate = 0.6
-        this.shootingRate = 0.15
-        this.deathCycleRate = 0.15
-        this.animations = this.getAnimations(spritesheet)
-        this.animation = this.animations[ANIMATIONS.StandEast]
-        // This should be defined in Character.js
-        this.states = []
+        super(game,spritesheet, 0, 450)
     }
 
     update() {
-        /** Handle movement */
-        this.handleMovement()
+        super.update()
     }
 
+    // overrides character class handleMovement
     handleMovement() {
-        if (this.game.inputManager.downKeys[KEYS.ArrowLeft]) {
-            this.direction = DIRECTIONS.West // Why not save the state in the character or the scene instead of the engine?
-            this.states[STATES.Moving] = true
-            this.animation = this.animations[ANIMATIONS.WalkWest]
-            this.x -= this.game.clockTick * this.speed
+        if (!this.following) {
+            if (this.game.inputManager.downKeys[KEYS.ArrowLeft]) {
+                this.direction = DIRECTIONS.West // Why not save the state in the character or the scene instead of the engine?
+                this.states[STATES.Moving] = true
+            }
+            else if (this.game.inputManager.downKeys[KEYS.ArrowRight]) {
+                this.direction = DIRECTIONS.East
+                this.states[STATES.Moving] = true
+            }
+            else if (this.game.inputManager.downKeys[KEYS.ArrowUp]) {
+                this.direction = DIRECTIONS.North
+                this.states[STATES.Moving] = true
+            }
+            else if (this.game.inputManager.downKeys[KEYS.ArrowDown]) {
+                this.direction = DIRECTIONS.South
+                this.states[STATES.Moving] = true
+            }
+            else {
+                this.states[STATES.Moving] = false
+            }
         }
-        else if (this.game.inputManager.downKeys[KEYS.ArrowRight]) {
-            this.direction = DIRECTIONS.East
-            this.states[STATES.Moving] = true
-            this.animation = this.animations[ANIMATIONS.WalkEast]
-            this.x += this.game.clockTick * this.speed
-        }
-        else if (this.game.inputManager.downKeys[KEYS.ArrowUp]) {
-            this.direction = DIRECTIONS.North
-            this.states[STATES.Moving] = true
-            this.animation = this.animations[ANIMATIONS.WalkNorth]
-            this.y -= this.game.clockTick * this.speed
-        }
-        else if (this.game.inputManager.downKeys[KEYS.ArrowDown]) {
-            this.direction = DIRECTIONS.South
-            this.states[STATES.Moving] = true
-            this.animation = this.animations[ANIMATIONS.WalkSouth]
-            this.y += this.game.clockTick * this.speed
-        }
-        else {
-            this.states[STATES.Moving] = false
-        }
+        super.handleMovement()
     }
 
     draw() {
-        this.animation.drawFrame(this.game, this.x, this.y)
+        super.draw()
     }
 
     getAnimations(spritesheet) {
         const animations = {
             // Spellcasting
-            [ANIMATIONS.SpellcastNorth]: new Animation(spritesheet, 64, 64, 7, 1, this.spellcastingRate, 7, true, 2),
-            [ANIMATIONS.SpellcastWest]: new Animation(spritesheet, 64, 64, 7, 2, this.spellcastingRate, 7, true, 2),
-            [ANIMATIONS.SpellcastSouth]: new Animation(spritesheet, 64, 64, 7, 3, this.spellcastingRate, 7, true, 2),
-            [ANIMATIONS.SpellcastEast]: new Animation(spritesheet, 64, 64, 7, 4, this.spellcastingRate, 7, true, 2),
+            [ANIMATIONS.SpellcastNorth]: new Animation(spritesheet, this.width, this.height, 7, 1, this.spellcastingRate, 7, true, this.scale),
+            [ANIMATIONS.SpellcastWest]: new Animation(spritesheet, this.width, this.height, 7, 2, this.spellcastingRate, 7, true, this.scale),
+            [ANIMATIONS.SpellcastSouth]: new Animation(spritesheet, this.width, this.height, 7, 3, this.spellcastingRate, 7, true, this.scale),
+            [ANIMATIONS.SpellcastEast]: new Animation(spritesheet, this.width, this.height, 7, 4, this.spellcastingRate, 7, true, this.scale),
             // Thrusting
-            [ANIMATIONS.ThrustNorth]: new Animation(spritesheet, 64, 64, 8, 5, this.thrustingRate, 8, true, 2),
-            [ANIMATIONS.ThrustWest]: new Animation(spritesheet, 64, 64, 8, 6, this.thrustingRate, 8, true, 2),
-            [ANIMATIONS.ThrustSouth]: new Animation(spritesheet, 64, 64, 8, 7, this.thrustingRate, 8, true, 2),
-            [ANIMATIONS.ThrustEast]: new Animation(spritesheet, 64, 64, 8, 8, this.thrustingRate, 8, true, 2),
+            [ANIMATIONS.ThrustNorth]: new Animation(spritesheet, this.width, this.height, 8, 5, this.thrustingRate, 8, true, this.scale),
+            [ANIMATIONS.ThrustWest]: new Animation(spritesheet, this.width, this.height, 8, 6, this.thrustingRate, 8, true, this.scale),
+            [ANIMATIONS.ThrustSouth]: new Animation(spritesheet, this.width, this.height, 8, 7, this.thrustingRate, 8, true, this.scale),
+            [ANIMATIONS.ThrustEast]: new Animation(spritesheet, this.width, this.height, 8, 8, this.thrustingRate, 8, true, this.scale),
             // Walk cycle
-            [ANIMATIONS.WalkNorth]: new Animation(spritesheet, 64, 64, 9, 9, this.walkCycleRate, 9, true, 2),
-            [ANIMATIONS.WalkWest]: new Animation(spritesheet, 64, 64, 9, 10, this.walkCycleRate, 9, true, 2),
-            [ANIMATIONS.WalkSouth]: new Animation(spritesheet, 64, 64, 9, 11, this.walkCycleRate, 9, true, 2),
-            [ANIMATIONS.WalkEast]: new Animation(spritesheet, 64, 64, 9, 12, this.walkCycleRate, 9, true, 2),
+            [ANIMATIONS.WalkNorth]: new Animation(spritesheet, this.width, this.height, 9, 9, this.walkCycleRate, 9, true, this.scale),
+            [ANIMATIONS.WalkWest]: new Animation(spritesheet, this.width, this.height, 9, 10, this.walkCycleRate, 9, true, this.scale),
+            [ANIMATIONS.WalkSouth]: new Animation(spritesheet, this.width, this.height, 9, 11, this.walkCycleRate, 9, true, this.scale),
+            [ANIMATIONS.WalkEast]: new Animation(spritesheet, this.width, this.height, 9, 12, this.walkCycleRate, 9, true, this.scale),
             // Slashing
-            [ANIMATIONS.SlashNorth]: new Animation(spritesheet, 64, 64, 6, 13, this.slashingRate, 6, true, 2),
-            [ANIMATIONS.SlashWest]: new Animation(spritesheet, 64, 64, 6, 14, this.slashingRate, 6, true, 2),
-            [ANIMATIONS.SlashSouth]: new Animation(spritesheet, 64, 64, 6, 15, this.slashingRate, 6, true, 2),
-            [ANIMATIONS.SlashEast]: new Animation(spritesheet, 64, 64, 6, 16, this.slashingRate, 6, true, 2),
+            [ANIMATIONS.SlashNorth]: new Animation(spritesheet, this.width, this.height, 6, 13, this.slashingRate, 6, true, this.scale),
+            [ANIMATIONS.SlashWest]: new Animation(spritesheet, this.width, this.height, 6, 14, this.slashingRate, 6, true, this.scale),
+            [ANIMATIONS.SlashSouth]: new Animation(spritesheet, this.width, this.height, 6, 15, this.slashingRate, 6, true, this.scale),
+            [ANIMATIONS.SlashEast]: new Animation(spritesheet, this.width, this.height, 6, 16, this.slashingRate, 6, true, this.scale),
             // Standing (modified slashing)
-            [ANIMATIONS.StandNorth]: new Animation(spritesheet, 64, 64, 2, 13, this.standCycleRate, 2, true, 2),
-            [ANIMATIONS.StandWest]: new Animation(spritesheet, 64, 64, 2, 14, this.standCycleRate, 2, true, 2),
-            [ANIMATIONS.StandSouth]: new Animation(spritesheet, 64, 64, 2, 15, this.standCycleRate, 2, true, 2),
-            [ANIMATIONS.StandEast]: new Animation(spritesheet, 64, 64, 2, 16, this.standCycleRate, 2, true, 2),
+            [ANIMATIONS.StandNorth]: new Animation(spritesheet, this.width, this.height, 2, 13, this.standCycleRate, 2, true, this.scale),
+            [ANIMATIONS.StandWest]: new Animation(spritesheet, this.width, this.height, 2, 14, this.standCycleRate, 2, true, this.scale),
+            [ANIMATIONS.StandSouth]: new Animation(spritesheet, this.width, this.height, 2, 15, this.standCycleRate, 2, true, this.scale),
+            [ANIMATIONS.StandEast]: new Animation(spritesheet, this.width, this.height, 2, 16, this.standCycleRate, 2, true, this.scale),
             // Shooting
-            [ANIMATIONS.ShootNorth]: new Animation(spritesheet, 64, 64, 13, 17, this.shootingRate, 13, true, 2),
-            [ANIMATIONS.ShootWest]: new Animation(spritesheet, 64, 64, 13, 18, this.shootingRate, 13, true, 2),
-            [ANIMATIONS.ShootSouth]: new Animation(spritesheet, 64, 64, 13, 19, this.shootingRate, 13, true, 2),
-            [ANIMATIONS.ShootEast]: new Animation(spritesheet, 64, 64, 13, 20, this.shootingRate, 13, true, 2),
+            [ANIMATIONS.ShootNorth]: new Animation(spritesheet, this.width, this.height, 13, 17, this.shootingRate, 13, true, this.scale),
+            [ANIMATIONS.ShootWest]: new Animation(spritesheet, this.width, this.height, 13, 18, this.shootingRate, 13, true, this.scale),
+            [ANIMATIONS.ShootSouth]: new Animation(spritesheet, this.width, this.height, 13, 19, this.shootingRate, 13, true, this.scale),
+            [ANIMATIONS.ShootEast]: new Animation(spritesheet, this.width, this.height, 13, 20, this.shootingRate, 13, true, this.scale),
             // Hurt
-            [ANIMATIONS.DeathSouth]: new Animation(spritesheet, 64, 64, 6, 21, this.deathCycleRate, 6, true, 2),
+            [ANIMATIONS.DeathSouth]: new Animation(spritesheet, this.width, this.height, 6, 21, this.deathCycleRate, 6, true, this.scale),
         }
         return animations
     }

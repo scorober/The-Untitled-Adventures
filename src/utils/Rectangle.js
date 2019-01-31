@@ -54,7 +54,7 @@ export default class Rectangle {
         this.height = height
         if (Array.isArray(x) && Array.isArray(y)) {
             [width, height] = y
-            [x, y] = x
+                [x, y] = x
         }
         this.setValues(x, y, width, height)
     }

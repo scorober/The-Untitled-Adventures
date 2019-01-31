@@ -1,13 +1,20 @@
+import { ANIMATIONS, STATES, DIRECTIONS, KEYS } from '../../utils/Const.js'
 import Character from './Character.js'
+import Effect from '../Effect.js'
+import Animation from '../../Animation.js'
 
 export default class Npc extends Character {
-    constructor(game, x, y) {
-        super(game, x, y)
+    constructor(game, spritesheet, x, y) {
+        super(game, spritesheet, x, y)
         this.game = game
     }
 
 
-    update() {}
+    update() {
+        super.update()
+    }
 
-    draw() {}
+    draw() {
+        super.draw()
+    }
 }
