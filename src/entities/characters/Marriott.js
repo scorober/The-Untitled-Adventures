@@ -1,7 +1,7 @@
 import { ANIMATIONS, STATES, DIRECTIONS, KEYS } from '../../utils/Const.js'
 import Effect from '../Effect.js'
 import Animation from '../../Animation.js'
-import Npc from './Npc.js';
+import Npc from './Npc.js'
 
 export default class Marriott extends Npc {
     constructor(game,spriteSheet, x, y) {
@@ -10,7 +10,7 @@ export default class Marriott extends Npc {
     }
 
     update() {
-        super.update();
+        super.update()
     }
     
     handleMovement() {
