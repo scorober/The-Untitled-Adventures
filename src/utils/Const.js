@@ -40,7 +40,8 @@ export const FACING_MOD_LEFT = {
     [LEFT]: BOTTOM
 }
 export const ASSET_PATHS = {
-    MikesChar: './assets/img/mikeschar.png'
+    MikesChar: './assets/img/mikeschar.png',
+    TitleBG: './assets/img/animated_title_bg.png',
 }
 
 export const STATES = {

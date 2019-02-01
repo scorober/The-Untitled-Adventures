@@ -12,7 +12,7 @@ export default class Character extends Entity {
         this.game = game
         this.width = 64 //TODO is 64 a constant?
         this.height = 64
-        this.scale = 2
+        this.scale = 1.5 //1.5 looks way better than 2, ya? Size seems to match up better.
         this.speed = 100
         this.game = game
         this.spellcastingRate = 0.15

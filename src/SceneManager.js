@@ -2,6 +2,7 @@
  * Scene manager saves all of the game scenes, and calls the correct one.
  */
 import FirstLevel from './world/scenes/FirstLevel.js'
+import TitleMenuScene from './world/scenes/TitleMenu.js'
 
 export default class SceneManager {
 
@@ -9,9 +10,11 @@ export default class SceneManager {
     constructor(game) {
         this.game = game
         this.scenes = []
+        const title = new TitleMenuScene(game)
+        this.addScene(title.name, title)
         const scene = new FirstLevel(game)
         this.addScene(scene.name, scene)
-        this.currentScene = scene
+        this.currentScene = title
     }
 
     /**
@@ -27,7 +30,7 @@ export default class SceneManager {
     /**
      * Returns a scene by its name
      * @param name of the scene
-     * @returns {scene}
+     * @returns {Scene}
      */
     getScene(name) {
         return this.scenes[name]
