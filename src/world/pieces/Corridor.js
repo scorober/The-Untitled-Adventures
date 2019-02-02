@@ -1,7 +1,6 @@
 import Room from './Room.js'
 
 export default class Corridor extends Room {
-
     constructor(options) {
         options = Object.assign({}, {
             length: 2,

@@ -26,3 +26,4 @@ export default class Camera extends Entity {
     draw() {
     }
 }
+

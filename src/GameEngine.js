@@ -13,8 +13,12 @@ export default class GameEngine {
         this.ctx = null
         this.surfaceWidth = null
         this.surfaceHeight = null
-        this.requestAnimFrame =
-            window.requestAnimationFrame ||
+        this.requestAnimFrame = this.getPlatformRAF().bind(window)
+    }
+
+    // eslint-disable-next-line complexity
+    getPlatformRAF() {
+        return window.requestAnimationFrame ||
             window.webkitRequestAnimationFrame ||
             window.mozRequestAnimationFrame ||
             window.oRequestAnimationFrame ||
@@ -42,7 +46,7 @@ export default class GameEngine {
 
     gameLoop() {
         this.loop()
-        window.requestAnimationFrame(this.gameLoop.bind(this), this.ctx.canvas)
+        this.requestAnimFrame(this.gameLoop.bind(this), this.ctx.canvas)
     }
 
     startInput() {

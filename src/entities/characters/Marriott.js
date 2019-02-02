@@ -1,46 +1,56 @@
-import { ANIMATIONS, STATES, DIRECTIONS, KEYS } from '../../utils/Const.js'
-import Effect from '../Effect.js'
+import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR } from '../../utils/Const.js'
 import Animation from '../../Animation.js'
 import Npc from './Npc.js'
 
 export default class Marriott extends Npc {
-    constructor(game,spriteSheet, x, y) {
-        super(game, spriteSheet, x, y)
-        this.sittingRate = 0.1
+    constructor(game, spritesheet, x, y) {
+        super(game, x, y)
+        this.scale = 2
+        this.width = 64
+        this.height = 69
+        this.animationRates = this.getDefaultAnimationRates()
+        this.animations = this.getAnimations(spritesheet)
+        this.animation = this.animations[ANIMS.StandEast]
+
+        this.speed = 200
     }
 
     update() {
+        /** Do last */
         super.update()
-    }
-    
-    handleMovement() {
-        super.handleMovement()
     }
 
     draw() {
+        this.animation.drawFrame(this.game, this.x, this.y)
+        /** Do last */
         super.draw()
     }
 
+    getDefaultAnimationRates() {
+        return {
+            [AR.Walk]: 0.1,
+            [AR.Sit]: 0.1,
+            [AR.Stand]: 0.6
+        }
+    }
+
     getAnimations(spritesheet) {
-        this.height = 69
-        const animations = {
+        return {
             // Walk cycle
-            [ANIMATIONS.WalkNorth]: new Animation(spritesheet, this.width, this.height, 9, 1, this.walkCycleRate, 9, true, this.scale),
-            [ANIMATIONS.WalkWest]: new Animation(spritesheet, this.width, this.height, 9, 2, this.walkCycleRate, 9, true, this.scale),
-            [ANIMATIONS.WalkSouth]: new Animation(spritesheet, this.width, this.height, 9, 3, this.walkCycleRate, 9, true, this.scale),
-            [ANIMATIONS.WalkEast]: new Animation(spritesheet, this.width, this.height, 9, 4, this.walkCycleRate, 9, true, this.scale),
+            [ANIMS.WalkNorth]: new Animation(spritesheet, this.width, this.height, 9, 1, this.animationRates[AR.Walk], 9, true, this.scale),
+            [ANIMS.WalkWest]: new Animation(spritesheet, this.width, this.height, 9, 2, this.animationRates[AR.Walk], 9, true, this.scale),
+            [ANIMS.WalkSouth]: new Animation(spritesheet, this.width, this.height, 9, 3, this.animationRates[AR.Walk], 9, true, this.scale),
+            [ANIMS.WalkEast]: new Animation(spritesheet, this.width, this.height, 9, 4, this.animationRates[AR.Walk], 9, true, this.scale),
             // Sitting on desk
-            [ANIMATIONS.SitDown]: new Animation(spritesheet, this.width, this.height, 5, 5, this.sittingRate, 5, false, this.scale),
-            [ANIMATIONS.StandUp]: new Animation(spritesheet, this.width, this.height, 5, 5, this.sittingRate, 5, false, this.scale),
+            [ANIMS.SitDown]: new Animation(spritesheet, this.width, this.height, 5, 5, this.animationRates[AR.Sit], 5, false, this.scale),
+            [ANIMS.StandUp]: new Animation(spritesheet, this.width, this.height, 5, 5, this.animationRates[AR.Sit], 5, false, this.scale),
             
             //standing
-            [ANIMATIONS.StandNorth]: new Animation(spritesheet, this.width, this.height, 1, 1, this.standCycleRate, 1, true, this.scale),
-            [ANIMATIONS.StandWest]: new Animation(spritesheet, this.width, this.height, 1, 2, this.standCycleRate, 1, true, this.scale),
-            [ANIMATIONS.StandSouth]: new Animation(spritesheet, this.width, this.height, 1, 3, this.standCycleRate, 1, true, this.scale),
-            [ANIMATIONS.StandEast]: new Animation(spritesheet, this.width, this.height, 1, 4, this.standCycleRate, 1, true, this.scale),
+            [ANIMS.StandNorth]: new Animation(spritesheet, this.width, this.height, 1, 1, this.animationRates[AR.Stand], 1, true, this.scale),
+            [ANIMS.StandWest]: new Animation(spritesheet, this.width, this.height, 1, 2, this.animationRates[AR.Stand], 1, true, this.scale),
+            [ANIMS.StandSouth]: new Animation(spritesheet, this.width, this.height, 1, 3, this.animationRates[AR.Stand], 1, true, this.scale),
+            [ANIMS.StandEast]: new Animation(spritesheet, this.width, this.height, 1, 4, this.animationRates[AR.Stand], 1, true, this.scale),
         }
-
-        return animations
     }
 
 }

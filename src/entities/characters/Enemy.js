@@ -1,11 +1,11 @@
-import { ANIMATIONS, STATES, DIRECTIONS, KEYS } from '../../utils/Const.js'
-import Effect from '../Effect.js'
 import Character from './Character.js'
-import Animation from '../../Animation.js'
 
 export default class Enemy extends Character {
-    constructor(game, spritesheet, x, y) {
-        super(game, spritesheet, x, y)
+    constructor(game, x, y) {
+        if (new.target == Enemy) {
+            throw new TypeError('Should not construct Enemy directly')
+        }
+        super(game, x, y)
         // this.game = game
         this.attackRate = 0.15
         this.impactRate =0.25

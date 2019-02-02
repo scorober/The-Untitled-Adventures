@@ -1,101 +1,89 @@
-import { ANIMATIONS, STATES, DIRECTIONS, KEYS } from '../../utils/Const.js'
+import { ANIMATIONS, STATES, DIRECTIONS } from '../../utils/Const.js'
 import Entity from '../Entity.js'
-import Effect from '../Effect.js'
-import Animation from '../../Animation.js'
 
 export default class Character extends Entity {
-    constructor(game, spritesheet,x ,y) {
+    constructor(game, x, y) {
+        if (new.target == Character) {
+            throw new TypeError('Should not construct Character directly')
+        }
         super(game, x, y)
-        this.animations = this.getAnimations(spritesheet)
-        this.animation = this.animations['st-e']
-        this.speed = 250
-        this.game = game
-        this.width = 64 //TODO is 64 a constant?
-        this.height = 64
-        this.scale = 2
-        this.speed = 100
-        this.game = game
-        this.spellcastingRate = 0.15
-        this.thrustingRate = 0.15
-        this.walkCycleRate = 0.1
-        this.slashingRate = 0.08
-        this.standCycleRate = 0.6
-        this.shootingRate = 0.15
-        this.deathCycleRate = 0.15
-        this.animations = this.getAnimations(spritesheet)
-        this.animation = this.animations[ANIMATIONS.StandEast]
-        this.following = false
-        this.followThis
-        this.goToX
-        this.goToY
-        this. err = 64
-        this.states = []
+        this.states[STATES.Moving] = false
+        this.states[STATES.Following] = false
+        this.followTarget = false
+        // We can check what class this Character is an isntance of
+        this.childType = new.target
+    }
+
+    setFollowTarget(followTarget) {
+        this.states[STATES.Following] = true
+        this.followTarget = followTarget
     }
 
     update() {
         this.handleMovement()
+        super.update()
     }
 
     draw() {
-        this.animation.drawFrame(this.game, this.x, this.y)
+        super.draw()
     }
 
     handleMovement() {
-        if (this.following) {
-            this.follow(this.followThis)
-            if(this.x <= this.goToX + this.err && this.x >= this.goToX - this.err) {
-                if(this.y <= this.goToY + this.err && this.y >= this.goToY - this.err) {
-                    this.states[STATES.Moving] = false
-                } else if (this.y < this.goToY) {
-                    this.direction = DIRECTIONS.South
-                    this.states[STATES.Moving] = true
-                } else if (this.y > this.goToY) {
-                    this.direction = DIRECTIONS.North
-                    this.states[STATES.Moving] = true
-                }
-            } else if(this.x < this.goToX) {
-                this.direction = DIRECTIONS.East
-                this.states[STATES.Moving] = true
-            } else if(this.x > this.goToX){
-                this.direction = DIRECTIONS.West 
-                this.states[STATES.Moving] = true
-            } 
+        if (this.states[STATES.Following]) {
+            this.handleFollow()
         }
-        if (this.states[STATES.Moving] === true) {
-            if( this.direction === DIRECTIONS.West) {
-                this.animation = this.animations[ANIMATIONS.WalkWest]
-                this.x -= this.game.clockTick * this.speed
-            } else if (this.direction === DIRECTIONS.East) {
-                this.animation = this.animations[ANIMATIONS.WalkEast]
-                this.x += this.game.clockTick * this.speed
-            } else if (this.direction === DIRECTIONS.North) {
-                this.animation = this.animations[ANIMATIONS.WalkNorth]
-                this.y -= this.game.clockTick * this.speed
-            } else {
-                this.animation = this.animations[ANIMATIONS.WalkSouth]
-                this.y += this.game.clockTick * this.speed
-            }
+        if (this.states[STATES.Moving]) {
+            this.moveCharacter()
         } else {
-            // this.animation = this.animations[ANIMATIONS.Stan]
+            this.handleStanding()
         }
     }
 
-    follow(followThis){
-        this.followThis = followThis
-        this.goTo(this.followThis.x, this.followThis.y)
+    handleStanding() {
+        if (this.direction === DIRECTIONS.West) {
+            this.animation = this.animations[ANIMATIONS.StandWest]
+        } else if (this.direction === DIRECTIONS.East) {
+            this.animation = this.animations[ANIMATIONS.StandEast]
+        } else if (this.direction === DIRECTIONS.North) {
+            this.animation = this.animations[ANIMATIONS.StandNorth]
+        } else {
+            this.animation = this.animations[ANIMATIONS.StandSouth]
+        }
     }
 
-    goTo(x, y) {
-        this.goToX = x
-        this.goToY = y
-        this.following = true
-
+    moveCharacter() {
+        if (this.direction === DIRECTIONS.West) {
+            this.animation = this.animations[ANIMATIONS.WalkWest]
+            this.x -= this.game.clockTick * this.speed
+        } else if (this.direction === DIRECTIONS.East) {
+            this.animation = this.animations[ANIMATIONS.WalkEast]
+            this.x += this.game.clockTick * this.speed
+        } else if (this.direction === DIRECTIONS.North) {
+            this.animation = this.animations[ANIMATIONS.WalkNorth]
+            this.y -= this.game.clockTick * this.speed
+        } else {
+            this.animation = this.animations[ANIMATIONS.WalkSouth]
+            this.y += this.game.clockTick * this.speed
+        }
     }
 
-    getAnimations(spritesheet) {
-        const animations = {}
-        return animations
+    handleFollow() {
+        const errY = this.height * this.scale
+        const errX = this.width * this.scale
+        if (this.y < this.followTarget.y - errY) {
+            this.direction = DIRECTIONS.South
+            this.states[STATES.Moving] = true
+        } else if (this.y > this.followTarget.y + errY / 2) {
+            this.direction = DIRECTIONS.North
+            this.states[STATES.Moving] = true
+        } else if (this.x < this.followTarget.x - errX) {
+            this.direction = DIRECTIONS.East
+            this.states[STATES.Moving] = true
+        } else if (this.x > this.followTarget.x + errX / 2) {
+            this.direction = DIRECTIONS.West
+            this.states[STATES.Moving] = true
+        } else {
+            this.states[STATES.Moving] = false
+        }
     }
-
-
 }
