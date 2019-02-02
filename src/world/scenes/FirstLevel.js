@@ -86,6 +86,7 @@ export default class FirstLevel extends Scene {
         //here to reduce confusion, and to allow the order they are updated/rendered to be adjusted.
         this.updateMap()
         this.updateEntities()
+        this.entities.sort((a,b) => a.y - b.y)
     }
 
     /**
