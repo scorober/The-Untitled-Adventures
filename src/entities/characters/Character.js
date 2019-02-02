@@ -2,6 +2,7 @@ import { ANIMATIONS, STATES, DIRECTIONS, KEYS } from '../../utils/Const.js'
 import Entity from '../Entity.js'
 import Effect from '../Effect.js'
 import Animation from '../../Animation.js'
+import Vector from '../../utils/Vector.js'
 
 export default class Character extends Entity {
     constructor(game, spritesheet,x ,y) {
@@ -62,19 +63,38 @@ export default class Character extends Entity {
             } 
         }
         if (this.states[STATES.Moving] === true) {
+
+            //NOTE: Part of handling movement/trymove. Creates a local variable so it doesn't mess with this.x/this.y if movement is blocked
+            var x = this.x
+            var y = this.y
+
             if( this.direction === DIRECTIONS.West) {
                 this.animation = this.animations[ANIMATIONS.WalkWest]
-                this.x -= this.game.clockTick * this.speed
+                // this.x -= this.game.clockTick * this.speed
+                x -= this.game.clockTick * this.speed
+                this.tryMove(x,y)
+
+
             } else if (this.direction === DIRECTIONS.East) {
                 this.animation = this.animations[ANIMATIONS.WalkEast]
-                this.x += this.game.clockTick * this.speed
+                // this.x += this.game.clockTick * this.speed
+                x += this.game.clockTick * this.speed
+                this.tryMove(x,y)
+
             } else if (this.direction === DIRECTIONS.North) {
                 this.animation = this.animations[ANIMATIONS.WalkNorth]
-                this.y -= this.game.clockTick * this.speed
+                //this.y -= this.game.clockTick * this.speed
+                y -= this.game.clockTick * this.speed
+                this.tryMove(x,y)
+
             } else {
                 this.animation = this.animations[ANIMATIONS.WalkSouth]
-                this.y += this.game.clockTick * this.speed
+                //this.y += this.game.clockTick * this.speed
+                y += this.game.clockTick * this.speed
+                this.tryMove(x,y)
+
             }
+
         } else {
             // this.animation = this.animations[ANIMATIONS.Stan]
         }

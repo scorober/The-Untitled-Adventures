@@ -16,3 +16,7 @@ canvas{
 
 }
 
+@font-face {
+    font-family: 'arcade';
+    src: url("./font/ArcadeAlternate.ttf");
+}

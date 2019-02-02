@@ -14,6 +14,9 @@ export default class FirstLevel extends Scene {
         
 
         const player = new PlayerCharacter(game, game.getAsset('./assets/img/mikeschar.png'))
+        player.setCollidable()
+
+
         game.camera.setFollowedEntity(player)
 
 
@@ -49,15 +52,17 @@ export default class FirstLevel extends Scene {
         this.addEntity(player)
         this.addEntity(game.camera)
         
-        const marriott = new Marriott(game, game.getAsset('./assets/img/Marriott.png'), 20, 400)
-        this.addEntity(marriott)
+         const marriott = new Marriott(game, game.getAsset('./assets/img/Marriott.png'), 120, 400)
+         this.addEntity(marriott)
+        marriott.setCollidable()
+
         
-        const mage = new Mage(game, game.getAsset('./assets/img/mage-full.png'))
-        mage.follow(marriott)
-        marriott.follow(player)
+        //const mage = new Mage(game, game.getAsset('./assets/img/mage-full.png'))
+        //mage.follow(marriott)
+        //marriott.follow(player)
         
 
-        this.addEntity(mage)
+        //this.addEntity(mage, true)
         
 
         //dungeon.print() //outputs wall map to console.log

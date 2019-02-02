@@ -35,6 +35,8 @@ export default class Mage extends Enemy {
 
     update() {
         super.update()
+        console.log('remove from world: ',this.removeFromWorld)
+        console.log()
         //TODO FIX EFFECT ANIMATIONS...
         // this.attack(50, 400)
         //TODO get player location

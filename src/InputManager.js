@@ -29,7 +29,7 @@ export default class InputManager {
         )
 
         this.ctx.canvas.addEventListener(CTX_EVENTS.MouseMove,
-            e => { this.mousePosition = this.getXandY(e) },
+            e => { this.mousePosition = this.getXandY(e); /*console.log(e)*/},
             false
         )
 

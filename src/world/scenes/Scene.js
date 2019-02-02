@@ -25,9 +25,14 @@ export default class Scene {
     /**
      * Adds an entity to the scene to be updated and drawn
      * @param entity
+     * @param isCollidable if not null, entity is also added to collidable layer
      */
-    addEntity(entity) {
+    addEntity(entity, isCollidable) {
         this.entities.push(entity)
+
+        if(isCollidable){
+            this.game.sceneManager.addCollidableEntity(entity)
+        }
     }
 
     /**

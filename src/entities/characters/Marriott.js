@@ -12,7 +12,7 @@ export default class Marriott extends Npc {
     update() {
         super.update()
     }
-    
+
     handleMovement() {
         super.handleMovement()
     }

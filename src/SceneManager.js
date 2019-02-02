@@ -3,18 +3,40 @@
  */
 import FirstLevel from './world/scenes/FirstLevel.js'
 import TitleMenuScene from './world/scenes/TitleMenu.js'
+import {HitCircle, CollisionLayer} from './utils/Collision.js'
+
 
 export default class SceneManager {
 
 
     constructor(game) {
         this.game = game
+        this.collisionLayer = null
         this.scenes = []
-        const title = new TitleMenuScene(game)
+        // const title = new TitleMenuScene(game)
+        // this.addScene(title.name, title)
+        // const scene = new FirstLevel(game)
+        // this.addScene(scene.name, scene)
+        //this.currentScene = title
+        this.currentScene = null
+
+    }
+
+    init(){
+
+        this.collisionLayer = new CollisionLayer()
+
+        // this.hitbox1 = new HitCircle(32, 50, 100)
+        // this.hitbox2 = new HitCircle(32, 100, 150)
+        //
+        // this.hitbox1.isBroken(this.hitbox2.x, this.hitbox2.y)
+
+        const title = new TitleMenuScene(this.game) //title scene
+        const scene = new FirstLevel(this.game) //first level
         this.addScene(title.name, title)
-        const scene = new FirstLevel(game)
         this.addScene(scene.name, scene)
-        this.currentScene = title
+
+        this.currentScene = scene
     }
 
     /**
@@ -58,5 +80,15 @@ export default class SceneManager {
         this.currentScene.exit()  //exit old scene
         this.currentScene = this.getScene(name)
         this.currentScene.enter() //enter new scene
+    }
+
+    addCollidableEntity(entity){
+
+        if(null != entity){
+            if(null === entity.hitbox) {
+                //todo: call entity.addCollidableEntity
+            }
+            this.collisionLayer.addCollidable(entity)
+        }
     }
 }

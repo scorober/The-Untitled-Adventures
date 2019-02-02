@@ -33,6 +33,7 @@ export default class GameEngine {
         this.timer = new Timer()
         this.camera = new Camera(this)
         this.sceneManager = new SceneManager(this)
+        this.sceneManager.init()
         this.startInput()
     }
 
