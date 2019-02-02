@@ -1,4 +1,4 @@
-import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR } from '../../utils/Const.js'
+import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR, STATES } from '../../utils/Const.js'
 import Animation from '../../Animation.js'
 import Npc from './Npc.js'
 
@@ -16,14 +16,19 @@ export default class Marriott extends Npc {
     }
 
     update() {
-        /** Do last */
         super.update()
+        if (this.states[STATES.Moving] == false) {
+            this.handleStanding()
+        }
     }
 
     draw() {
         this.animation.drawFrame(this.game, this.x, this.y)
-        /** Do last */
         super.draw()
+    }
+
+    handleStanding() {
+        this.animation = this.animations[ANIMS.SitDown]
     }
 
     getDefaultAnimationRates() {
@@ -44,7 +49,7 @@ export default class Marriott extends Npc {
             // Sitting on desk
             [ANIMS.SitDown]: new Animation(spritesheet, this.width, this.height, 5, 5, this.animationRates[AR.Sit], 5, false, this.scale),
             [ANIMS.StandUp]: new Animation(spritesheet, this.width, this.height, 5, 5, this.animationRates[AR.Sit], 5, false, this.scale),
-            
+
             //standing
             [ANIMS.StandNorth]: new Animation(spritesheet, this.width, this.height, 1, 1, this.animationRates[AR.Stand], 1, true, this.scale),
             [ANIMS.StandWest]: new Animation(spritesheet, this.width, this.height, 1, 2, this.animationRates[AR.Stand], 1, true, this.scale),

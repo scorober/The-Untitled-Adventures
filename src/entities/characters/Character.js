@@ -20,8 +20,8 @@ export default class Character extends Entity {
     }
 
     update() {
-        this.handleMovement()
         super.update()
+        this.handleMovement()
     }
 
     draw() {

@@ -16,10 +16,10 @@ export default class PlayableCharacter extends Character {
     }
 
     update() {
+        super.update()
         if (this.states[STATES.Following] == false) {
             this.getDirectionInput()
         }
-        super.update()
     }
 
     draw() {
