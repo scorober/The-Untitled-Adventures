@@ -15,6 +15,7 @@ export default class SceneManager {
         const scene = new FirstLevel(game)
         this.addScene(scene.name, scene)
         this.currentScene = title
+        //this.currentScene = scene
     }
 
     /**

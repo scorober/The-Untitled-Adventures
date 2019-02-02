@@ -42,6 +42,7 @@ export const FACING_MOD_LEFT = {
 export const ASSET_PATHS = {
     MikesChar: './assets/img/mikeschar.png',
     TitleBG: './assets/img/animated_title_bg.png',
+    SkeletonBase: './assets/img/skeleton_base.png',
 }
 
 export const STATES = {

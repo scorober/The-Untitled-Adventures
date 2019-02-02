@@ -21,3 +21,155 @@ export default class Enemy extends Character {
         super.draw()
     }
 }
+
+export class Skeleton extends Enemy{
+
+    constructor(game, spritesheet){
+        super(game, spritesheet, 50, 150)
+
+        this.spritesheet = spritesheet
+        this.speed = 100
+
+        this.movecycletime = 0
+        this.changeInterval = Math.random(5)+1
+
+        this.states[STATES.Moving] = true
+
+        this.direction = DIRECTIONS.South //todo: switch to const vars
+
+
+
+
+        this.animation = this.animations[ANIMATIONS.WalkSouth]
+    }
+
+    draw(){
+        super.draw()
+        this.animation.drawFrame(this.game, this.x, this.y)
+    }
+
+    update(){
+        super.update()
+        this.movecycletime += this.game.clockTick
+
+        if(this.movecycletime > this.changeInterval){
+            this.movecycletime = 0
+            this.switchDirections()
+
+        }
+        this.goTo(this.x, this.y)
+    }
+
+    switchDirections(){
+        switch(this.direction){
+
+            case DIRECTIONS.South:
+                this.direction = DIRECTIONS.East
+                this.animation = this.animations[ANIMATIONS.WalkEast]
+                break;
+
+            case DIRECTIONS.East:
+                this.direction = DIRECTIONS.North
+                this.animation = this.animations[ANIMATIONS.WalkNorth]
+                break;
+
+            case DIRECTIONS.North:
+                this.direction = DIRECTIONS.West
+                this.animation = this.animations[ANIMATIONS.WalkWest]
+                break;
+
+            case DIRECTIONS.West:
+                this.direction = DIRECTIONS.South
+                this.animation = this.animations[ANIMATIONS.WalkSouth]
+                break;
+
+            case DIRECTIONS.South:
+                this.direction = DIRECTIONS.East
+                this.animation = this.animations[ANIMATIONS.WalkSouth]
+
+
+            default:
+                this.direction = DIRECTIONS.East
+                this.animation = this.animations[ANIMATIONS.WalkEast]
+        }
+    }
+
+    getAnimations(spritesheet) {
+        this.height = 64
+        this.width = 64
+        this.scale = 1
+        const wcRate = 0.1
+        const animations = {
+
+
+            [ANIMATIONS.WalkNorth]: new Animation(spritesheet, this.width, this.height, 9, 1, wcRate, 9, false, this.scale),
+            [ANIMATIONS.WalkWest]: new Animation(spritesheet, this.width, this.height, 9, 2, wcRate, 9, false, this.scale),
+            [ANIMATIONS.WalkSouth]: new Animation(spritesheet, this.width, this.height, 9, 3, wcRate, 9, true, this.scale),
+            [ANIMATIONS.WalkEast]: new Animation(spritesheet, this.width, this.height, 9, 4, wcRate, 9, true, this.scale),
+        };
+        return animations
+    }
+}
+
+export class BabySkeleton extends Skeleton{
+
+    constructor(game, spritesheet){
+        super(game, spritesheet,300, 150)
+
+
+    }
+
+    switchDirections(){
+        switch(this.direction){
+
+            case DIRECTIONS.East:
+                this.direction = DIRECTIONS.East
+                this.animation = this.animations[ANIMATIONS.WalkEast]
+                break;
+
+            case DIRECTIONS.West:
+                this.direction = DIRECTIONS.North
+                this.animation = this.animations[ANIMATIONS.WalkNorth]
+                break;
+
+            case DIRECTIONS.South:
+                this.direction = DIRECTIONS.West
+                this.animation = this.animations[ANIMATIONS.WalkWest]
+                break;
+
+            case DIRECTIONS.North:
+                this.direction = DIRECTIONS.South
+                this.animation = this.animations[ANIMATIONS.WalkSouth]
+                //this.x += this.speed * this.game.clockTick
+                break;
+
+            case DIRECTIONS.South:
+                this.direction = DIRECTIONS.East
+                this.animation = this.animations[ANIMATIONS.WalkSouth]
+            //this.x -= this.speed * this.game.clockTick
+
+            default:
+                this.direction = DIRECTIONS.East
+                this.animation = this.animations[ANIMATIONS.WalkEast]
+        }
+    }
+
+    getAnimations(spritesheet) {
+        this.height = 64
+        this.width = 64
+        this.scale = 0.7
+        const wcRate = 0.1
+        const animations = {
+
+
+            [ANIMATIONS.WalkNorth]: new Animation(spritesheet, this.width, this.height, 9, 1, wcRate, 9, false, this.scale),
+            [ANIMATIONS.WalkWest]: new Animation(spritesheet, this.width, this.height, 9, 2, wcRate, 9, false, this.scale),
+            [ANIMATIONS.WalkSouth]: new Animation(spritesheet, this.width, this.height, 9, 3, wcRate, 9, true, this.scale),
+            [ANIMATIONS.WalkEast]: new Animation(spritesheet, this.width, this.height, 9, 4, wcRate, 9, true, this.scale),
+        };
+        return animations
+    }
+
+
+
+}

@@ -25,9 +25,9 @@ export default class Character extends Entity {
         this.animations = this.getAnimations(spritesheet)
         this.animation = this.animations[ANIMATIONS.StandEast]
         this.following = false
-        this.followThis
-        this.goToX
-        this.goToY
+        this.followThis = false
+        this.goToX = 0
+        this.goToY = 0
         this. err = 64
         this.states = []
     }
@@ -61,6 +61,7 @@ export default class Character extends Entity {
                 this.states[STATES.Moving] = true
             } 
         }
+
         if (this.states[STATES.Moving] === true) {
             if( this.direction === DIRECTIONS.West) {
                 this.animation = this.animations[ANIMATIONS.WalkWest]

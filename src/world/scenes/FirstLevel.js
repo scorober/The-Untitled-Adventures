@@ -5,6 +5,8 @@ import Dungeon from '../generators/Dungeon.js'
 import Background from '../Background.js'
 import Mage from '../../entities/characters/Mage.js'
 import Marriott from '../../entities/characters/Marriott.js'
+import {BabySkeleton, Skeleton} from "../../entities/characters/Enemy.js";
+import {ASSET_PATHS} from "../../utils/Const.js";
 
 export default class FirstLevel extends Scene {
 
@@ -55,10 +57,22 @@ export default class FirstLevel extends Scene {
         const mage = new Mage(game, game.getAsset('./assets/img/mage-full.png'))
         mage.follow(marriott)
         marriott.follow(player)
-        
 
         this.addEntity(mage)
-        
+
+        for(var i = 0; i < 10; i++){
+            const skeleton = new BabySkeleton(game, game.getAsset(ASSET_PATHS.SkeletonBase))
+            this.addEntity(skeleton)
+            skeleton.x = Math.random() * (700 - 100) + 100;
+            skeleton.y = Math.random() * (700 - 100) + 100;
+        }
+
+        for(var i = 0; i < 3; i++){
+            const skeleton = new Skeleton(game, game.getAsset(ASSET_PATHS.SkeletonBase))
+            this.addEntity(skeleton)
+            skeleton.x = Math.random() * (400 - 200) + 200;
+            skeleton.y = Math.random() * (400 - 200) + 200;
+        }
 
         //dungeon.print() //outputs wall map to console.log
 

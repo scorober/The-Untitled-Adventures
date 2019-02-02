@@ -10,6 +10,7 @@ export default class Mage extends Enemy {
         //Very temporary...
         this.spritesheet = spritesheet
         this.speed = 100
+
     }
 
     attack(x, y) {
@@ -49,7 +50,7 @@ export default class Mage extends Enemy {
         this.width = 192
         this.attackHight = 192
         this.attackWidth = 384
-        this.scale = 1
+        this.scale = 0.8
         const animations = {
           
             
@@ -57,8 +58,8 @@ export default class Mage extends Enemy {
             [ANIMATIONS.AttackWest]: new Animation(spritesheet, this.attackWidth, this.attackHight, 17, 1, this.attackRate, 17, false, this.scale),
             [ANIMATIONS.AttackEast]: new Animation(spritesheet, this.attackWidth, this.attackHight, 17, 2, this.attackRate, 17, false, this.scale),
             //Idle
-            [ANIMATIONS.StandWest]: new Animation(spritesheet, this.width, this.height, 10, 3, this.standCycleRate, 10, true, 0.8),
-            [ANIMATIONS.StandEast]: new Animation(spritesheet, this.width, this.height, 10, 4, this.standCycleRate, 10, true, 0.8),
+            [ANIMATIONS.StandWest]: new Animation(spritesheet, this.width, this.height, 10, 3, this.standCycleRate, 10, true, 0.9),
+            [ANIMATIONS.StandEast]: new Animation(spritesheet, this.width, this.height, 10, 4, this.standCycleRate, 10, true, 0.9),
             //Impact
             [ANIMATIONS.Impact]: new Animation(spritesheet, this.width, this.height, 10, 5, this.impactRate, 10, false, 0.3),
             //Power-up
@@ -69,7 +70,7 @@ export default class Mage extends Enemy {
             [ANIMATIONS.WalkEast]: new Animation(spritesheet, this.width, this.height, 8, 10, this.walkCycleRate, 9, true, this.scale),
             [ANIMATIONS.WalkSouth]: new Animation(spritesheet, this.width, this.height, 8, 9, this.walkCycleRate, 9, true, this.scale),
             [ANIMATIONS.WalkNorth]: new Animation(spritesheet, this.width, this.height, 8, 10, this.walkCycleRate, 9, true, this.scale),
-        }
+        };
         return animations
     }
 }
