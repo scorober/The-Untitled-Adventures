@@ -40,7 +40,13 @@ export const FACING_MOD_LEFT = {
     [LEFT]: BOTTOM
 }
 export const ASSET_PATHS = {
-    MikesChar: './assets/img/mikeschar.png'
+    MikesChar: './assets/img/mikeschar.png',
+    TitleBG: './assets/img/animated_title_bg.png',
+    Mariott: './assets/img/Marriott.png',
+    MageFull: './assets/img/mage-full.png',
+    Dungeon1_64x64: './assets/img/DungeonColor3@64x64.png',
+    BG1: './assets/img/background.jpg',
+    Skeleton: './assets/img/skeleton_base.png',
 }
 
 export const STATES = {
