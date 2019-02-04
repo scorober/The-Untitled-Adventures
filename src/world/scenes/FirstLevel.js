@@ -59,8 +59,8 @@ export default class FirstLevel extends Scene {
 
         this.addEntity(mage)
         
-
-        //dungeon.print() //outputs wall map to console.log
+        console.log(dungeon)
+        dungeon.print() //outputs wall map to console.log
 
     }
 
