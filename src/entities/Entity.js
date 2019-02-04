@@ -1,17 +1,31 @@
+import {create_UUID} from '../utils/Random.js'
+import {STATES} from '../utils/Const.js'
+import {HitCircle} from '../utils/Collision.js'
+import Vector from '../utils/Vector.js'
+
 export default class Entity {
-    constructor(game, x, y) {
+    constructor(game, x = 1, y = 1, height = 32, width = 32, size = 32, radius = 16 ) { //default sizes if not passed in.
         this.game = game
         this.x = x
         this.y = y
         this.removeFromWorld = false
-        this.width = 0
-        this.height = 0
+        this.width = width
+        this.height = height
+        this.UUID = 'ENTITY::'+ create_UUID() //UUID for identifying this entity instance.
+        this.states = []
+        this.size = size
+        this.radius = radius
     }
 
-    update() { } // eslint-disable-line no-unused-vars
+    update() {
+        //Update hitbox location of collidable entities
+        if(this.states[STATES.Collidable]){
+            this.hitbox.update(this.x, this.y)
+        }
+    }
 
     draw() {
-        if (this.game.showOutlines && this.radius) {
+        if (this.showOutlines && this.radius) {
             this.game.ctx.beginPath()
             this.game.ctx.strokeStyle = 'green'
             this.game.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
@@ -19,6 +33,62 @@ export default class Entity {
             this.game.ctx.closePath()
         }
     }
+
+    /**
+     * Sets an entities state to be collidable and creates a hitbox from it's dimensions.
+     */
+    setCollidable(){
+        this.states[STATES.Collidable] = true
+        this.hitbox = new HitCircle(this.radius, this.x, this.y)
+    }
+
+    /**
+     * Helper method for moving to check if the x/y coordinate is good.
+     * If there is a collision, x/y is not updated.
+     *
+     * @param x
+     * @param y
+     */
+    tryMove(x,y){
+        if(this.states[STATES.Collidable]){
+
+            const isCollided = this.game.sceneManager.collisionLayer.collides(this, new Vector(x,y))
+
+            if(!isCollided){
+                this.x = x
+                this.y = y
+            }//else, collision happened, don't update x/y
+
+        } else { //not collidable
+            this.x = x
+            this.y = y
+        }
+    }
+
+
+    goTo(x, y) {
+
+        if(this.states[STATES.Collidable]){
+
+            const isCollided = this.game.sceneManager.collisionLayer.collides(this, new Vector(x,y))
+
+            if(!isCollided){
+                this.goToX = x
+                this.goToY = y
+            }//else, collision happened, don't update x/y
+
+        } else { //not collidable
+            this.goToX = x
+            this.goToY = y
+        }
+
+        this.following = true
+
+
+    }
+
+
+
 
     rotateAndCache(image, angle) {
         const offscreenCanvas = document.createElement('canvas')
