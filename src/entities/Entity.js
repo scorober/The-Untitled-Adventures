@@ -11,6 +11,7 @@ export default class Entity {
     update() { } // eslint-disable-line no-unused-vars
 
     draw() {
+        this.game.ctx.fillRect(this.x - this.game.camera.xView, this.y - this.game.camera.yView, 5, 5)
         if (this.game.showOutlines && this.radius) {
             this.game.ctx.beginPath()
             this.game.ctx.strokeStyle = 'green'

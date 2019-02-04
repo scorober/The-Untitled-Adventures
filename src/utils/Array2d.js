@@ -61,10 +61,10 @@ export default class Array2d {
 
     set_square([x, y], [size_x, size_y], val, fill = false) {
         if (!fill) {
-            this.line_h([x, y], size_x - 1, val)
-            this.line_h([x, y + size_y - 1], size_x - 1, val)
-            this.line_v([x, y], size_y - 1, val)
-            this.line_v([x + size_x - 1, y], size_y - 1, val)
+            this.set_horizontal_line([x, y], size_x - 1, val)
+            this.set_horizontal_line([x, y + size_y - 1], size_x - 1, val)
+            this.set_vertical_line([x, y], size_y - 1, val)
+            this.set_vertical_line([x + size_x - 1, y], size_y - 1, val)
         } else {
             for (let dx = 0; dx < size_x; dx++) {
                 for (let dy = 0; dy < size_y; dy++) {

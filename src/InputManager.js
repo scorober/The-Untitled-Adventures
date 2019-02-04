@@ -7,7 +7,11 @@ export default class InputManager {
         // (x, y) coordinate: Current mouse position over the canvas
         this.mousePosition = null
         // (x, y) coordinate: Right clicks, left clicks, all overwrite this value
-        this.lastMouseClickPosition = null
+        this.newLeftClick = false
+        this.lastLeftClickPosition = false
+
+        this.newRightClick = false
+        this.lastRightClickPosition = false
         // (e) Event object: Last mouse wheel event stored here
         this.mouseWheel = null
     }
@@ -16,13 +20,17 @@ export default class InputManager {
         this.ctx = ctx
 
         this.ctx.canvas.addEventListener(CTX_EVENTS.LeftClick,
-            e => { this.lastMouseClickPosition = this.getXandY(e) },
+            e => {
+                this.lastLeftClickPosition = this.getXandY(e)
+                this.newLeftClick = true
+            },
             false
         )
 
         this.ctx.canvas.addEventListener(CTX_EVENTS.RightClick,
             e => {
-                this.lastMouseClickPosition = this.getXandY(e)
+                this.lastRightClickPosition = this.getXandY(e)
+                this.newRightClick = true
                 e.preventDefault()
             },
             false
@@ -51,12 +59,8 @@ export default class InputManager {
     }
 
     getXandY(e) {
-        let x = e.clientX - this.ctx.canvas.getBoundingClientRect().left
-        let y = e.clientY - this.ctx.canvas.getBoundingClientRect().top
-        if (x < 1024) {
-            x = Math.floor(x / 32)
-            y = Math.floor(y / 32)
-        }
+        const x = e.clientX - this.ctx.canvas.getBoundingClientRect().left
+        const y = e.clientY - this.ctx.canvas.getBoundingClientRect().top
         return { x: x, y: y }
     }
 }

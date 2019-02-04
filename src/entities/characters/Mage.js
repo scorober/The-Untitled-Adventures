@@ -16,7 +16,7 @@ export default class Mage extends Enemy {
         this.animation = this.animations['at-l']
 
         //TODO scale when adding entity or as parameter in Effect class.
-        for(let i = 0; i < 5; i++) {
+        for (let i = 0; i < 5; i++) {
             let anim = 'imp-s'
             if (i % 3 === 0) {
                 anim = 'imp-m'
@@ -25,11 +25,11 @@ export default class Mage extends Enemy {
             }
 
             const r = Math.random() * 300
-            const angle = Math.random()*Math.PI*2
-            this.game.addEntity(new Effect(this.game, this.animations[anim], x + Math.cos(angle)*r, y + Math.sin(angle)*r))
+            const angle = Math.random() * Math.PI * 2
+            this.game.addEntity(new Effect(this.game, this.animations[anim], x + Math.cos(angle) * r, y + Math.sin(angle) * r))
         }
 
-       
+
     }
 
 
@@ -51,8 +51,6 @@ export default class Mage extends Enemy {
         this.attackWidth = 384
         this.scale = 1
         const animations = {
-          
-            
             //AttackLeft
             [ANIMATIONS.AttackWest]: new Animation(spritesheet, this.attackWidth, this.attackHight, 17, 1, this.attackRate, 17, false, this.scale),
             [ANIMATIONS.AttackEast]: new Animation(spritesheet, this.attackWidth, this.attackHight, 17, 2, this.attackRate, 17, false, this.scale),

@@ -1,42 +1,70 @@
 import { ANIMATIONS, STATES, DIRECTIONS, KEYS } from '../../utils/Const.js'
 import Character from './Character.js'
-import Effect from '../Effect.js'
 import Animation from '../../Animation.js'
+import AStarPathfinding from '../../utils/AStarPathfinding.js'
 
 export default class PlayableCharacter extends Character {
     constructor(game, spritesheet) {
-        super(game,spritesheet, 0, 450)
+        super(game, spritesheet, 1 * 64, 1 * 64)
+        this.pathfinding = false
+        this.path = false
+        this.speed = 200
     }
 
     update() {
-        super.update()
+        //super.update()
+        this.handleMovement()
     }
 
     // overrides character class handleMovement
+    // Not really, because super.handlemovement is called next, overwriting all changes made here.
     handleMovement() {
         if (!this.following) {
-            if (this.game.inputManager.downKeys[KEYS.ArrowLeft]) {
-                this.direction = DIRECTIONS.West // Why not save the state in the character or the scene instead of the engine?
-                this.states[STATES.Moving] = true
-            }
-            else if (this.game.inputManager.downKeys[KEYS.ArrowRight]) {
-                this.direction = DIRECTIONS.East
-                this.states[STATES.Moving] = true
-            }
-            else if (this.game.inputManager.downKeys[KEYS.ArrowUp]) {
-                this.direction = DIRECTIONS.North
-                this.states[STATES.Moving] = true
-            }
-            else if (this.game.inputManager.downKeys[KEYS.ArrowDown]) {
-                this.direction = DIRECTIONS.South
-                this.states[STATES.Moving] = true
-            }
-            else {
-                this.states[STATES.Moving] = false
+            if (this.game.inputManager.newRightClick) {
+                this.game.inputManager.newRightClick = false
+
+                const cam = this.game.camera
+                const click = this.game.inputManager.lastRightClickPosition
+                const endPos = this.worldToTilePosition({ x: cam.xView + click.x, y: cam.yView + click.y })
+                const startPos = this.worldToTilePosition(this)
+
+                const mapArray = this.game.sceneManager.currentScene.map.getPathfindingArray()
+                const myAstar = new AStarPathfinding(mapArray, [startPos.x, startPos.y], [endPos.x, endPos.y])
+                const result = myAstar.calculatePath()
+                if (result.length > 0) {
+                    this.pathfinding = true
+                    this.states[STATES.Moving] = true
+                    this.path = result
+                }
+
             }
         }
-        super.handleMovement()
+        if (this.pathfinding) {
+            const nextTile = { x: this.path[0][0], y: this.path[0][1] }
+            const tilePosition = this.tileToWorldPosition(nextTile)
+            let dx = tilePosition.x - this.x
+            let dy = tilePosition.y - this.y
+            const length = Math.sqrt(dx * dx + dy * dy)
+            if (length < 15) {
+                if (this.path.length > 1) {
+                    this.path.splice(0, 1)
+
+                } else {
+                    this.x = tilePosition.x
+                    this.y = tilePosition.y
+                }
+            } else {
+                dx = dx / length
+                dy = dy / length
+                dx = dx * this.game.clockTick * this.speed
+                dy = dy * this.game.clockTick * this.speed
+                this.x += dx
+                this.y += dy
+            }
+
+        }
     }
+
 
     draw() {
         super.draw()
@@ -79,4 +107,22 @@ export default class PlayableCharacter extends Character {
         }
         return animations
     }
+
+    tileToWorldPosition(obj) {
+        const tileSize = this.game.sceneManager.currentScene.map.tileSize
+        return {
+            x: obj.x * tileSize,
+            y: obj.y * tileSize
+        }
+    }
+
+    worldToTilePosition(obj) {
+        const tileSize = this.game.sceneManager.currentScene.map.tileSize
+        return {
+            x: Math.floor((obj.x + tileSize / 2) / 64),
+            y: Math.floor((obj.y + tileSize / 2) / 64)
+        }
+    }
+
+
 }

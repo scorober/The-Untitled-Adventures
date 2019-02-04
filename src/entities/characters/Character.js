@@ -33,14 +33,17 @@ export default class Character extends Entity {
     }
 
     update() {
-        this.handleMovement()
+        super.update()
+        // this.handleMovement()
     }
 
     draw() {
         this.animation.drawFrame(this.game, this.x, this.y)
+        super.draw()
     }
 
     handleMovement() {
+        console.log('hello from characters')
         if (this.following) {
             this.follow(this.followThis)
             if(this.x <= this.goToX + this.err && this.x >= this.goToX - this.err) {
