@@ -4,8 +4,8 @@ import Effect from '../Effect.js'
 import Enemy from './Enemy.js'
 
 export default class Mage extends Enemy {
-    constructor(game, spritesheet) {
-        super(game, spritesheet, 20, 100)
+    constructor(game, spritesheet, x=20, y=100) {
+        super(game, spritesheet, x, y)
 
         //Very temporary...
         this.spritesheet = spritesheet
@@ -50,7 +50,7 @@ export default class Mage extends Enemy {
         this.attackHight = 192
         this.attackWidth = 384
         this.scale = 1
-        const animations = {
+        return {
           
             
             //AttackLeft
@@ -70,6 +70,5 @@ export default class Mage extends Enemy {
             [ANIMATIONS.WalkSouth]: new Animation(spritesheet, this.width, this.height, 8, 9, this.walkCycleRate, 9, true, this.scale),
             [ANIMATIONS.WalkNorth]: new Animation(spritesheet, this.width, this.height, 8, 10, this.walkCycleRate, 9, true, this.scale),
         }
-        return animations
     }
 }

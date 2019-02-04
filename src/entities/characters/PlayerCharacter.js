@@ -4,8 +4,8 @@ import Effect from '../Effect.js'
 import Animation from '../../Animation.js'
 
 export default class PlayableCharacter extends Character {
-    constructor(game, spritesheet) {
-        super(game,spritesheet, 0, 450)
+    constructor(game, spritesheet, x= 0, y=450) {
+        super(game,spritesheet, x, y)
     }
 
     update() {
@@ -16,7 +16,7 @@ export default class PlayableCharacter extends Character {
     handleMovement() {
         if (!this.following) {
             if (this.game.inputManager.downKeys[KEYS.ArrowLeft]) {
-                this.direction = DIRECTIONS.West // Why not save the state in the character or the scene instead of the engine?
+                this.direction = DIRECTIONS.West
                 this.states[STATES.Moving] = true
             }
             else if (this.game.inputManager.downKeys[KEYS.ArrowRight]) {

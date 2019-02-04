@@ -2,6 +2,7 @@ import { ANIMATIONS, STATES, DIRECTIONS, KEYS } from '../../utils/Const.js'
 import Entity from '../Entity.js'
 import Effect from '../Effect.js'
 import Animation from '../../Animation.js'
+import Vector from '../../utils/Vector.js'
 
 export default class Character extends Entity {
     constructor(game, spritesheet,x ,y) {
@@ -12,7 +13,7 @@ export default class Character extends Entity {
         this.game = game
         this.width = 64 //TODO is 64 a constant?
         this.height = 64
-        this.scale = 2
+        this.scale = 1
         this.speed = 100
         this.game = game
         this.spellcastingRate = 0.15
@@ -28,15 +29,17 @@ export default class Character extends Entity {
         this.followThis
         this.goToX
         this.goToY
-        this. err = 64
-        this.states = []
+        this.err = 64
+
     }
 
     update() {
+        super.update()
         this.handleMovement()
     }
 
     draw() {
+        super.draw()
         this.animation.drawFrame(this.game, this.x, this.y)
     }
 
@@ -64,16 +67,20 @@ export default class Character extends Entity {
         if (this.states[STATES.Moving] === true) {
             if( this.direction === DIRECTIONS.West) {
                 this.animation = this.animations[ANIMATIONS.WalkWest]
-                this.x -= this.game.clockTick * this.speed
+                this.tryMove(this.x  - this.game.clockTick * this.speed, this.y)
+                //this.x -= this.game.clockTick * this.speed
             } else if (this.direction === DIRECTIONS.East) {
                 this.animation = this.animations[ANIMATIONS.WalkEast]
-                this.x += this.game.clockTick * this.speed
+                this.tryMove(this.x  + this.game.clockTick * this.speed, this.y)
+                //this.x += this.game.clockTick * this.speed
             } else if (this.direction === DIRECTIONS.North) {
                 this.animation = this.animations[ANIMATIONS.WalkNorth]
-                this.y -= this.game.clockTick * this.speed
+                this.tryMove(this.x, this.y - this.game.clockTick * this.speed)
+                //this.y -= this.game.clockTick * this.speed
             } else {
                 this.animation = this.animations[ANIMATIONS.WalkSouth]
-                this.y += this.game.clockTick * this.speed
+                //this.y += this.game.clockTick * this.speed
+                this.tryMove(this.x, this.y + this.game.clockTick * this.speed)
             }
         } else {
             // this.animation = this.animations[ANIMATIONS.Stan]
@@ -83,13 +90,6 @@ export default class Character extends Entity {
     follow(followThis){
         this.followThis = followThis
         this.goTo(this.followThis.x, this.followThis.y)
-    }
-
-    goTo(x, y) {
-        this.goToX = x
-        this.goToY = y
-        this.following = true
-
     }
 
     getAnimations(spritesheet) {
