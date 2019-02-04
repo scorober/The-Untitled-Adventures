@@ -10,6 +10,7 @@ assetManager.queueDownload(ASSET_PATHS.Dungeon1_64x64)
 assetManager.queueDownload(ASSET_PATHS.MageFull)
 assetManager.queueDownload(ASSET_PATHS.Mariott)
 assetManager.queueDownload(ASSET_PATHS.TitleBG)
+assetManager.queueDownload(ASSET_PATHS.Skeleton)
 
 assetManager.downloadAll(function() {
     const canvas = document.getElementById('gameWorld')
