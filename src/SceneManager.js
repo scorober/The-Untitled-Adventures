@@ -2,6 +2,7 @@
  * Scene manager saves all of the game scenes, and calls the correct one.
  */
 import FirstLevel from './world/scenes/FirstLevel.js'
+import {HitCircle, CollisionLayer} from './utils/Collision.js'
 
 export default class SceneManager {
 
@@ -9,7 +10,12 @@ export default class SceneManager {
     constructor(game) {
         this.game = game
         this.scenes = []
-        const scene = new FirstLevel(game)
+        this.currentScene = null
+    }
+
+    init(){
+        this.collisionLayer = new CollisionLayer()
+        const scene = new FirstLevel(this.game)
         this.addScene(scene.name, scene)
         this.currentScene = scene
     }
@@ -55,5 +61,19 @@ export default class SceneManager {
         this.currentScene.exit()  //exit old scene
         this.currentScene = this.getScene(name)
         this.currentScene.enter() //enter new scene
+    }
+
+    /**
+     * Adds an entity to the collidable layer. Checks to ensure it has a hitbox before being added.
+     *
+     * @param entity the entity to be added.
+     */
+    addCollidableEntity(entity){
+        if(null != entity){
+            if(null === entity.hitbox) {
+                entity.hitbox = new HitCircle(entity.radius, entity.x, entity.y)
+            }
+            this.collisionLayer.addCollidable(entity)
+        }
     }
 }
