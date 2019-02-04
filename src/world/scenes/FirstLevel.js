@@ -5,6 +5,9 @@ import Dungeon from '../generators/Dungeon.js'
 import Background from '../Background.js'
 import Mage from '../../entities/characters/Mage.js'
 import Marriott from '../../entities/characters/Marriott.js'
+import {ASSET_PATHS} from '../../utils/Const.js'
+import {Skeleton} from '../../entities/characters/Enemy.js'
+
 
 export default class FirstLevel extends Scene {
 
@@ -13,7 +16,7 @@ export default class FirstLevel extends Scene {
         this.name = 'level1'    
         
 
-        const player = new PlayerCharacter(game, game.getAsset('./assets/img/mikeschar.png'))
+        const player = new PlayerCharacter(game, game.getAsset(ASSET_PATHS.MikesChar), 100, 350)
         game.camera.setFollowedEntity(player)
 
 
@@ -44,21 +47,23 @@ export default class FirstLevel extends Scene {
         })
         
         dungeon.generate()
-        this.setBackground(new Background(game, game.getAsset('./assets/img/background.jpg')))
-        this.setMap(new Map(game, game.getAsset('./assets/img/DungeonColor3@64x64.png'), 64, 16, dungeon))
-        this.addEntity(player)
+        this.setBackground(new Background(game, game.getAsset(ASSET_PATHS.BG1)))
+        this.setMap(new Map(game, game.getAsset(ASSET_PATHS.Dungeon1_64x64), 64, 16, dungeon))
+        this.addCollidableEntity(player)
         this.addEntity(game.camera)
+
+
+        const skelly = new Skeleton(game, game.getAsset(ASSET_PATHS.Skeleton))
+        this.addCollidableEntity(skelly)
         
-        const marriott = new Marriott(game, game.getAsset('./assets/img/Marriott.png'), 20, 400)
-        this.addEntity(marriott)
+        const marriott = new Marriott(game, game.getAsset(ASSET_PATHS.Mariott), 20, 400)
+        this.addCollidableEntity(marriott)
         
-        const mage = new Mage(game, game.getAsset('./assets/img/mage-full.png'))
+        const mage = new Mage(game, game.getAsset(ASSET_PATHS.MageFull), 200, 350)
+        this.addCollidableEntity(mage)
+
         mage.follow(marriott)
         marriott.follow(player)
-        
-
-        this.addEntity(mage)
-        
 
         //dungeon.print() //outputs wall map to console.log
 
