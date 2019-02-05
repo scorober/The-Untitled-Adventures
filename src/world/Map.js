@@ -27,7 +27,6 @@ export default class Map extends Entity {
         this.map = new Array2D(this.dungeon.size, 0) //0 for empty tile
         const dungeon = this.dungeon
         for (const piece of dungeon.children) {
-
             //Fill interior, fix so perimeter isn't repeated.
             this.map.set_square(piece.position, piece.size, 4, true)
             //Fill wall around
@@ -123,6 +122,10 @@ export default class Map extends Entity {
                         this.tileSize,
                         this.tileSize
                     )
+                    //Debug 
+                    // this.game.ctx.font = '11px Arial'
+                    // this.game.ctx.fillStyle = 'white'
+                    // this.game.ctx.fillText('(' + c + ', ' + r + ')', tileX, tileY)
                 }
             }
         }

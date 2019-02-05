@@ -3,8 +3,8 @@ import Animation from '../../Animation.js'
 import Npc from './Npc.js'
 
 export default class Marriott extends Npc {
-    constructor(game, spritesheet, x, y) {
-        super(game, x, y)
+    constructor(game, spritesheet, pos) {
+        super(game, pos)
         this.scale = 2
         this.width = 64
         this.height = 69

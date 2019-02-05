@@ -1,10 +1,10 @@
 import { STATES } from '../utils/Const.js'
 
 export default class Entity {
-    constructor(game, x, y) {
+    constructor(game, pos) {
         this.game = game
-        this.x = x
-        this.y = y
+        this.x = pos.x
+        this.y = pos.y
         this.states = this.getDefaultStates()
     }
 

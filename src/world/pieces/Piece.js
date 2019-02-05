@@ -162,6 +162,7 @@ export default class Piece {
                     row += this.walls.get([x, y]) ? 'x' : ' '
                 }
             }
+            // eslint-disable-next-line no-console
             console.log(row)
         }
     }
