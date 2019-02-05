@@ -14,8 +14,8 @@ export default class Scene {
     }
 
     //Empty methods to prevent errors if inherited classes don't call them//
-    update() { } // eslint-disable-line no-unused-vars
-    draw() { } // eslint-disable-line no-unused-vars
+    update() { }
+    draw() { }
     enter() { }
     exit() { }
 

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Generator from './Generator.js'
 import Corridor from '../pieces/Corridor.js'
 import Room from '../pieces/Room.js'

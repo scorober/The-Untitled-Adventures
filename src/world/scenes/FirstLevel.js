@@ -12,10 +12,8 @@ export default class FirstLevel extends Scene {
         super(game)
         this.name = 'level1'    
         
-
-        const player = new PlayerCharacter(game, game.getAsset('./assets/img/mikeschar.png'))
+        const player = new PlayerCharacter(game, game.getAsset('./assets/img/mikeschar.png'), 200, 200)
         game.camera.setFollowedEntity(player)
-
 
         //Initialize a dungeon with options, possibly move to the scene superclass w/ parameters.
         const dungeon = new Dungeon({
@@ -52,16 +50,11 @@ export default class FirstLevel extends Scene {
         const marriott = new Marriott(game, game.getAsset('./assets/img/Marriott.png'), 20, 400)
         this.addEntity(marriott)
         
-        const mage = new Mage(game, game.getAsset('./assets/img/mage-full.png'))
-        mage.follow(marriott)
-        marriott.follow(player)
+        const mage = new Mage(game, game.getAsset('./assets/img/mage-full.png'), 0, 200)
+        mage.setFollowTarget(marriott)
+        marriott.setFollowTarget(player)
         
-
         this.addEntity(mage)
-        
-
-        //dungeon.print() //outputs wall map to console.log
-
     }
 
     /**

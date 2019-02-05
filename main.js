@@ -20,5 +20,6 @@ assetManager.downloadAll(function() {
     gameEngine.assetManager = assetManager
     gameEngine.init(ctx)
     gameEngine.start()
+    // eslint-disable-next-line no-console
     console.log('Game started..')
 })
