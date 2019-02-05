@@ -23,6 +23,14 @@ export default class Map extends Entity {
         this.buildMap()
     }
 
+    //Buggy, spawns in empty tiles sometimes.
+    getStartPos() {
+        return {
+            x: this.dungeon.start_pos[0] * this.tileSize,
+            y: this.dungeon.start_pos[1] * this.tileSize
+        }
+    }
+
     buildMap() {
         this.map = new Array2D(this.dungeon.size, 0) //0 for empty tile
         const dungeon = this.dungeon
@@ -104,13 +112,13 @@ export default class Map extends Entity {
         const tilesTall = Math.ceil(height / this.tileSize)
 
 
-        for (let r = 0; r < this.rows; r++) {
-            for (let c = 0; c < this.cols; c++) {
+        for (let c = 0; c < this.cols; c++) {
+            for (let r = 0; r < this.rows; r++) {
                 const tileInView = this.tileInView(r, c, centerTile, tilesWide + 2, tilesTall + 2)
-                const tile = this.map.get([r, c])
+                const tile = this.map.get([c, r])
                 if (tile && tileInView) {
-                    const tileX = r * this.tileSize - this.game.camera.xView
-                    const tileY = c * this.tileSize - this.game.camera.yView
+                    const tileX = c * this.tileSize - this.game.camera.xView
+                    const tileY = r * this.tileSize - this.game.camera.yView
                     this.game.ctx.drawImage(
                         this.tileAtlas,
                         ((tile - 1) % this.setLength * this.tileSize),
@@ -131,7 +139,7 @@ export default class Map extends Entity {
         }
     }
 
-    tileInView(r, c, centerTile, tilesWide, tilesTall) {
+    tileInView(c, r, centerTile, tilesWide, tilesTall) {
         return (c > centerTile.y - tilesTall / 2 &&
             c < centerTile.y + tilesTall / 2 &&
             r > centerTile.x - tilesWide / 2 &&
