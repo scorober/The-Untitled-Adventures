@@ -12,7 +12,7 @@ export default class PlayableCharacter extends Character {
     }
 
     update() {
-        //super.update()
+        super.update()
         this.handleMovement()
     }
 
@@ -61,7 +61,6 @@ export default class PlayableCharacter extends Character {
                 this.x += dx
                 this.y += dy
             }
-
         }
     }
 

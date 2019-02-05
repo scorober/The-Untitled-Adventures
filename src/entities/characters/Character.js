@@ -1,7 +1,5 @@
-import { ANIMATIONS, STATES, DIRECTIONS, KEYS } from '../../utils/Const.js'
+import { ANIMATIONS, STATES, DIRECTIONS } from '../../utils/Const.js'
 import Entity from '../Entity.js'
-import Effect from '../Effect.js'
-import Animation from '../../Animation.js'
 
 export default class Character extends Entity {
     constructor(game, spritesheet,x ,y) {
@@ -13,7 +11,7 @@ export default class Character extends Entity {
         this.width = 64 //TODO is 64 a constant?
         this.height = 64
         this.scale = 2
-        this.speed = 300
+        this.speed = 100
         this.game = game
         this.spellcastingRate = 0.15
         this.thrustingRate = 0.15
@@ -33,17 +31,14 @@ export default class Character extends Entity {
     }
 
     update() {
-        super.update()
-        // this.handleMovement()
+        this.handleMovement()
     }
 
     draw() {
         this.animation.drawFrame(this.game, this.x, this.y)
-        super.draw()
     }
 
     handleMovement() {
-        console.log('hello from characters')
         if (this.following) {
             this.follow(this.followThis)
             if(this.x <= this.goToX + this.err && this.x >= this.goToX - this.err) {
