@@ -11,12 +11,11 @@ export default class Effect extends Entity{
     }
 
     update() {
-        // this.removeFromWorld = true
         super.update()
     }
 
     draw() {
-        super.draw()
         this.animation.drawFrame(this.game.clockTick, this.game, this.x, this.y)
+        super.draw()
     }
 }

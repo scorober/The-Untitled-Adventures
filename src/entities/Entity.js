@@ -1,14 +1,14 @@
+import { STATES } from '../utils/Const.js'
+
 export default class Entity {
     constructor(game, x, y) {
         this.game = game
         this.x = x
         this.y = y
-        this.removeFromWorld = false
-        this.width = 0
-        this.height = 0
+        this.states = this.getDefaultStates()
     }
 
-    update() { } // eslint-disable-line no-unused-vars
+    update() { }
 
     draw() {
         if (this.game.showOutlines && this.radius) {
@@ -18,6 +18,19 @@ export default class Entity {
             this.game.ctx.stroke()
             this.game.ctx.closePath()
         }
+    }
+
+    getDefaultStates() {
+        const states = []
+        for (const state of Object.entries(STATES)) {
+            /** `state` comes out as an array, first element being
+             * a string that represents the Symbol, second element 
+             * being the Symbol itself.
+             */
+            const stateSymbol = state[1]
+            states[stateSymbol] = false
+        }
+        return states
     }
 
     rotateAndCache(image, angle) {

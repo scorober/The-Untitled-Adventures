@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Random from '../../utils/Random.js'
 import Piece from '../pieces/Piece.js'
 import Rectangle from '../../utils/Rectangle.js'

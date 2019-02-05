@@ -31,8 +31,6 @@ module.exports = {
             "destructuring": "any",
             "ignoreReadBeforeAssign": false
         }],
-        "globals": {
-            "Array": true
-        }
+        "complexity": ["warn", 5]
     }
 };

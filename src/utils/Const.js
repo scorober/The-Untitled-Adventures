@@ -1,91 +1,79 @@
-export const TOP = 0
-export const RIGHT = 90
-export const BOTTOM = 180
-export const LEFT = 270
 
-export const FACING = [TOP, RIGHT, BOTTOM, LEFT]
-
-export const FACING_TO_STRING = {
-    [TOP]: 'top',
-    [RIGHT]: 'right',
-    [BOTTOM]: 'bottom',
-    [LEFT]: 'left'
-}
-
-export const FACING_TO_MOD = {
-    [TOP]: [0, -1],
-    [RIGHT]: [1, 0],
-    [BOTTOM]: [0, 1],
-    [LEFT]: [-1, 0]
-}
-
-export const FACING_INVERSE = {
-    [TOP]: BOTTOM,
-    [RIGHT]: LEFT,
-    [BOTTOM]: TOP,
-    [LEFT]: RIGHT
-}
-
-export const FACING_MOD_RIGHT = {
-    [TOP]: RIGHT,
-    [RIGHT]: BOTTOM,
-    [BOTTOM]: LEFT,
-    [LEFT]: TOP
-}
-
-export const FACING_MOD_LEFT = {
-    [TOP]: LEFT,
-    [RIGHT]: TOP,
-    [BOTTOM]: RIGHT,
-    [LEFT]: BOTTOM
-}
 export const ASSET_PATHS = {
     MikesChar: './assets/img/mikeschar.png'
 }
 
 export const STATES = {
-    Moving: Symbol('Moving'),
-    Following: Symbol('Following'),
-    Collidable: Symbol('Collidable'),
-    HasTarget: Symbol('HasTarget'),
-    Frozen: Symbol('Frozen'),
-    RemoveFromWorld: Symbol('RemoveFromWorld'),
-    Aggressive: Symbol('Aggresive')
+    Moving: Symbol(),
+    Following: Symbol(),
+    Collidable: Symbol(),
+    HasTarget: Symbol(),
+    Frozen: Symbol(),
+    RemoveFromWorld: Symbol(),
+    Aggressive: Symbol()
 }
 
 export const ANIMATIONS = {
-    SpellcastNorth: Symbol('spellcastNorth'),
-    SpellcastWest: Symbol('spellcastWest'),
-    SpellcastSouth: Symbol('spellcastSouth'),
-    SpellcastEast: Symbol('spellcastEast'),
-    ThrustNorth: Symbol('thrustNorth'),
-    ThrustWest: Symbol('thrustWest'),
-    ThrustSouth: Symbol('thrustSouth'),
-    ThrustEast: Symbol('thrustEast'),
-    WalkNorth: Symbol('walkNorth'),
-    WalkWest: Symbol('walkWest'),
-    WalkSouth: Symbol('walkSouth'),
-    WalkEast: Symbol('walkEast'),
-    SlashNorth: Symbol('slashNorth'),
-    SlashWest: Symbol('slashWest'),
-    SlashSouth: Symbol('slashSouth'),
-    SlashEast: Symbol('slashEast'),
-    StandNorth: Symbol('standNorth'),
-    StandWest: Symbol('standWest'),
-    StandSouth: Symbol('standSouth'),
-    StandEast: Symbol('standEast'),
-    ShootNorth: Symbol('shootNorth'),
-    ShootWest: Symbol('shootWest'),
-    ShootSouth: Symbol('shootSouth'),
-    ShootEast: Symbol('shootEast'),
-    DeathSouth: Symbol('deathSouth')
+    /** PlayerCharacter animations */
+    SpellcastNorth: Symbol(),
+    SpellcastWest: Symbol(),
+    SpellcastSouth: Symbol(),
+    SpellcastEast: Symbol(),
+    ThrustNorth: Symbol(),
+    ThrustWest: Symbol(),
+    ThrustSouth: Symbol(),
+    ThrustEast: Symbol(),
+    WalkNorth: Symbol(),
+    WalkWest: Symbol(),
+    WalkSouth: Symbol(),
+    WalkEast: Symbol(),
+    SlashNorth: Symbol(),
+    SlashWest: Symbol(),
+    SlashSouth: Symbol(),
+    SlashEast: Symbol(),
+    StandNorth: Symbol(),
+    StandWest: Symbol(),
+    StandSouth: Symbol(),
+    StandEast: Symbol(),
+    ShootNorth: Symbol(),
+    ShootWest: Symbol(),
+    ShootSouth: Symbol(),
+    ShootEast: Symbol(),
+    DeathSouth: Symbol(),
+
+    /** Marriott-specific animations */
+    SitDown: Symbol(),
+    StandUp: Symbol(),
+
+    /** Mage-specific animations */
+    Impact: Symbol(),
+    PowerupWest: Symbol(),
+    PowerupEast: Symbol(),
+}
+
+export const ANIMATION_RATES = {
+    /** PlayerCharacter rates */
+    Walk: Symbol(),
+    Stand: Symbol(),
+    Death: Symbol(),
+    Spellcast: Symbol(),
+    Thrust: Symbol(),
+    Slash: Symbol(),
+    Shoot: Symbol(),
+
+    /** Marriott-specific rates */
+    Sit: Symbol(),
+
+    /** Mage-specific rates */
+    Impact: Symbol(),
+    Powerup: Symbol()
 }
 
 export const DIRECTIONS = {
-    North: Symbol('North'),
-    West: Symbol('West'),
-    South: Symbol('South'),
-    East: Symbol('East'),
+    North: Symbol(),
+    West: Symbol(),
+    South: Symbol(),
+    East: Symbol(),
 }
 
 export const KEYS = {
@@ -187,4 +175,46 @@ export const CTX_EVENTS = {
     KeyUp: 'keyup',
     Load: 'load',
     Error: 'error'
+}
+
+export const TOP = 0
+export const RIGHT = 90
+export const BOTTOM = 180
+export const LEFT = 270
+
+export const FACING = [TOP, RIGHT, BOTTOM, LEFT]
+
+export const FACING_TO_STRING = {
+    [TOP]: 'top',
+    [RIGHT]: 'right',
+    [BOTTOM]: 'bottom',
+    [LEFT]: 'left'
+}
+
+export const FACING_TO_MOD = {
+    [TOP]: [0, -1],
+    [RIGHT]: [1, 0],
+    [BOTTOM]: [0, 1],
+    [LEFT]: [-1, 0]
+}
+
+export const FACING_INVERSE = {
+    [TOP]: BOTTOM,
+    [RIGHT]: LEFT,
+    [BOTTOM]: TOP,
+    [LEFT]: RIGHT
+}
+
+export const FACING_MOD_RIGHT = {
+    [TOP]: RIGHT,
+    [RIGHT]: BOTTOM,
+    [BOTTOM]: LEFT,
+    [LEFT]: TOP
+}
+
+export const FACING_MOD_LEFT = {
+    [TOP]: LEFT,
+    [RIGHT]: TOP,
+    [BOTTOM]: RIGHT,
+    [LEFT]: BOTTOM
 }

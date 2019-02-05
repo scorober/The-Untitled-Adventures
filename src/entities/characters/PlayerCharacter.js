@@ -1,82 +1,100 @@
-import { ANIMATIONS, STATES, DIRECTIONS, KEYS } from '../../utils/Const.js'
+import { ANIMATIONS as ANIMS, STATES, DIRECTIONS, KEYS, ANIMATION_RATES as AR } from '../../utils/Const.js'
 import Character from './Character.js'
-import Effect from '../Effect.js'
 import Animation from '../../Animation.js'
 
 export default class PlayableCharacter extends Character {
     constructor(game, spritesheet, pos) {
-        super(game,spritesheet, pos[0], pos[1])
+        super(game, pos[0], pos[1])
+        this.scale = 2
+        this.width = 64
+        this.height = 64
+        this.animationRates = this.getDefaultAnimationRates()
+        this.animations = this.getAnimations(spritesheet)
+        this.animation = this.animations[ANIMS.StandEast]
+
         this.speed = 250
     }
 
     update() {
         super.update()
-    }
-
-    // overrides character class handleMovement
-    handleMovement() {
-        if (!this.following) {
-            if (this.game.inputManager.downKeys[KEYS.ArrowLeft]) {
-                this.direction = DIRECTIONS.West // Why not save the state in the character or the scene instead of the engine?
-                this.states[STATES.Moving] = true
-            }
-            else if (this.game.inputManager.downKeys[KEYS.ArrowRight]) {
-                this.direction = DIRECTIONS.East
-                this.states[STATES.Moving] = true
-            }
-            else if (this.game.inputManager.downKeys[KEYS.ArrowUp]) {
-                this.direction = DIRECTIONS.North
-                this.states[STATES.Moving] = true
-            }
-            else if (this.game.inputManager.downKeys[KEYS.ArrowDown]) {
-                this.direction = DIRECTIONS.South
-                this.states[STATES.Moving] = true
-            }
-            else {
-                this.states[STATES.Moving] = false
-            }
+        if (this.states[STATES.Following] == false) {
+            this.getDirectionInput()
         }
-        super.handleMovement()
     }
 
     draw() {
+        this.animation.drawFrame(this.game, this.x, this.y)
         super.draw()
+    }
+
+    getDirectionInput() {
+        if (this.game.inputManager.downKeys[KEYS.ArrowLeft]) {
+            this.direction = DIRECTIONS.West
+            this.states[STATES.Moving] = true
+        }
+        else if (this.game.inputManager.downKeys[KEYS.ArrowRight]) {
+            this.direction = DIRECTIONS.East
+            this.states[STATES.Moving] = true
+        }
+        else if (this.game.inputManager.downKeys[KEYS.ArrowUp]) {
+            this.direction = DIRECTIONS.North
+            this.states[STATES.Moving] = true
+        }
+        else if (this.game.inputManager.downKeys[KEYS.ArrowDown]) {
+            this.direction = DIRECTIONS.South
+            this.states[STATES.Moving] = true
+        }
+        else {
+            this.states[STATES.Moving] = false
+        }
+    }
+
+    getDefaultAnimationRates() {
+        return {
+            [AR.Walk]: 0.1,
+            [AR.Stand]: 0.6,
+            [AR.Death]: 0.15,
+            [AR.Spellcast]: 0.15,
+            [AR.Thrust]: 0.15,
+            [AR.Slash]: 0.15,
+            [AR.Shoot]: 0.15
+        }
     }
 
     getAnimations(spritesheet) {
         const animations = {
             // Spellcasting
-            [ANIMATIONS.SpellcastNorth]: new Animation(spritesheet, this.width, this.height, 7, 1, this.spellcastingRate, 7, true, this.scale),
-            [ANIMATIONS.SpellcastWest]: new Animation(spritesheet, this.width, this.height, 7, 2, this.spellcastingRate, 7, true, this.scale),
-            [ANIMATIONS.SpellcastSouth]: new Animation(spritesheet, this.width, this.height, 7, 3, this.spellcastingRate, 7, true, this.scale),
-            [ANIMATIONS.SpellcastEast]: new Animation(spritesheet, this.width, this.height, 7, 4, this.spellcastingRate, 7, true, this.scale),
+            [ANIMS.SpellcastNorth]: new Animation(spritesheet, this.width, this.height, 7, 1, this.animationRates[AR.Spellcast], 7, true, this.scale),
+            [ANIMS.SpellcastWest]: new Animation(spritesheet, this.width, this.height, 7, 2, this.animationRates[AR.Spellcast], 7, true, this.scale),
+            [ANIMS.SpellcastSouth]: new Animation(spritesheet, this.width, this.height, 7, 3, this.animationRates[AR.Spellcast], 7, true, this.scale),
+            [ANIMS.SpellcastEast]: new Animation(spritesheet, this.width, this.height, 7, 4, this.animationRates[AR.Spellcast], 7, true, this.scale),
             // Thrusting
-            [ANIMATIONS.ThrustNorth]: new Animation(spritesheet, this.width, this.height, 8, 5, this.thrustingRate, 8, true, this.scale),
-            [ANIMATIONS.ThrustWest]: new Animation(spritesheet, this.width, this.height, 8, 6, this.thrustingRate, 8, true, this.scale),
-            [ANIMATIONS.ThrustSouth]: new Animation(spritesheet, this.width, this.height, 8, 7, this.thrustingRate, 8, true, this.scale),
-            [ANIMATIONS.ThrustEast]: new Animation(spritesheet, this.width, this.height, 8, 8, this.thrustingRate, 8, true, this.scale),
+            [ANIMS.ThrustNorth]: new Animation(spritesheet, this.width, this.height, 8, 5, this.animationRates[AR.Thrust], 8, true, this.scale),
+            [ANIMS.ThrustWest]: new Animation(spritesheet, this.width, this.height, 8, 6, this.animationRates[AR.Thrust], 8, true, this.scale),
+            [ANIMS.ThrustSouth]: new Animation(spritesheet, this.width, this.height, 8, 7, this.animationRates[AR.Thrust], 8, true, this.scale),
+            [ANIMS.ThrustEast]: new Animation(spritesheet, this.width, this.height, 8, 8, this.animationRates[AR.Thrust], 8, true, this.scale),
             // Walk cycle
-            [ANIMATIONS.WalkNorth]: new Animation(spritesheet, this.width, this.height, 9, 9, this.walkCycleRate, 9, true, this.scale),
-            [ANIMATIONS.WalkWest]: new Animation(spritesheet, this.width, this.height, 9, 10, this.walkCycleRate, 9, true, this.scale),
-            [ANIMATIONS.WalkSouth]: new Animation(spritesheet, this.width, this.height, 9, 11, this.walkCycleRate, 9, true, this.scale),
-            [ANIMATIONS.WalkEast]: new Animation(spritesheet, this.width, this.height, 9, 12, this.walkCycleRate, 9, true, this.scale),
+            [ANIMS.WalkNorth]: new Animation(spritesheet, this.width, this.height, 9, 9, this.animationRates[AR.Walk], 9, true, this.scale),
+            [ANIMS.WalkWest]: new Animation(spritesheet, this.width, this.height, 9, 10, this.animationRates[AR.Walk], 9, true, this.scale),
+            [ANIMS.WalkSouth]: new Animation(spritesheet, this.width, this.height, 9, 11, this.animationRates[AR.Walk], 9, true, this.scale),
+            [ANIMS.WalkEast]: new Animation(spritesheet, this.width, this.height, 9, 12, this.animationRates[AR.Walk], 9, true, this.scale),
             // Slashing
-            [ANIMATIONS.SlashNorth]: new Animation(spritesheet, this.width, this.height, 6, 13, this.slashingRate, 6, true, this.scale),
-            [ANIMATIONS.SlashWest]: new Animation(spritesheet, this.width, this.height, 6, 14, this.slashingRate, 6, true, this.scale),
-            [ANIMATIONS.SlashSouth]: new Animation(spritesheet, this.width, this.height, 6, 15, this.slashingRate, 6, true, this.scale),
-            [ANIMATIONS.SlashEast]: new Animation(spritesheet, this.width, this.height, 6, 16, this.slashingRate, 6, true, this.scale),
+            [ANIMS.SlashNorth]: new Animation(spritesheet, this.width, this.height, 6, 13, this.animationRates[AR.Slash], 6, true, this.scale),
+            [ANIMS.SlashWest]: new Animation(spritesheet, this.width, this.height, 6, 14, this.animationRates[AR.Slash], 6, true, this.scale),
+            [ANIMS.SlashSouth]: new Animation(spritesheet, this.width, this.height, 6, 15, this.animationRates[AR.Slash], 6, true, this.scale),
+            [ANIMS.SlashEast]: new Animation(spritesheet, this.width, this.height, 6, 16, this.animationRates[AR.Slash], 6, true, this.scale),
             // Standing (modified slashing)
-            [ANIMATIONS.StandNorth]: new Animation(spritesheet, this.width, this.height, 2, 13, this.standCycleRate, 2, true, this.scale),
-            [ANIMATIONS.StandWest]: new Animation(spritesheet, this.width, this.height, 2, 14, this.standCycleRate, 2, true, this.scale),
-            [ANIMATIONS.StandSouth]: new Animation(spritesheet, this.width, this.height, 2, 15, this.standCycleRate, 2, true, this.scale),
-            [ANIMATIONS.StandEast]: new Animation(spritesheet, this.width, this.height, 2, 16, this.standCycleRate, 2, true, this.scale),
+            [ANIMS.StandNorth]: new Animation(spritesheet, this.width, this.height, 2, 13, this.animationRates[AR.Stand], 2, true, this.scale),
+            [ANIMS.StandWest]: new Animation(spritesheet, this.width, this.height, 2, 14, this.animationRates[AR.Stand], 2, true, this.scale),
+            [ANIMS.StandSouth]: new Animation(spritesheet, this.width, this.height, 2, 15, this.animationRates[AR.Stand], 2, true, this.scale),
+            [ANIMS.StandEast]: new Animation(spritesheet, this.width, this.height, 2, 16, this.animationRates[AR.Stand], 2, true, this.scale),
             // Shooting
-            [ANIMATIONS.ShootNorth]: new Animation(spritesheet, this.width, this.height, 13, 17, this.shootingRate, 13, true, this.scale),
-            [ANIMATIONS.ShootWest]: new Animation(spritesheet, this.width, this.height, 13, 18, this.shootingRate, 13, true, this.scale),
-            [ANIMATIONS.ShootSouth]: new Animation(spritesheet, this.width, this.height, 13, 19, this.shootingRate, 13, true, this.scale),
-            [ANIMATIONS.ShootEast]: new Animation(spritesheet, this.width, this.height, 13, 20, this.shootingRate, 13, true, this.scale),
+            [ANIMS.ShootNorth]: new Animation(spritesheet, this.width, this.height, 13, 17, this.animationRates[AR.Shoot], 13, true, this.scale),
+            [ANIMS.ShootWest]: new Animation(spritesheet, this.width, this.height, 13, 18, this.animationRates[AR.Shoot], 13, true, this.scale),
+            [ANIMS.ShootSouth]: new Animation(spritesheet, this.width, this.height, 13, 19, this.animationRates[AR.Shoot], 13, true, this.scale),
+            [ANIMS.ShootEast]: new Animation(spritesheet, this.width, this.height, 13, 20, this.animationRates[AR.Shoot], 13, true, this.scale),
             // Hurt
-            [ANIMATIONS.DeathSouth]: new Animation(spritesheet, this.width, this.height, 6, 21, this.deathCycleRate, 6, true, this.scale),
+            [ANIMS.DeathSouth]: new Animation(spritesheet, this.width, this.height, 6, 21, this.animationRates[AR.Death], 6, true, this.scale),
         }
         return animations
     }
