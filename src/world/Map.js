@@ -35,33 +35,8 @@ export default class Map extends Entity {
             //TODO get correct values for exits...
             for (const exit of piece.exits) {
                 this.map.set(piece.global_pos(exit[0]), 38)
-                // this.map.set(exit[0], 30)
             }
-
-            //console.log(piece.exits[0])
-            // for (const exit of piece.exits)
-            // this.map.set_vertical_line(piece.position, piece.size[1], 7)          
-            // this.map.set_horizontal_line(piece.position, piece.size[0], 7)
-            // console.log([piece.position[0] + piece.size[0], piece.position[1] + piece.size[1]])
-            // this.map.set_vertical_line([piece.position[0] + piece.size[0], 
-            //     piece.position[1] + piece.size[1]], -piece.size[1], 7)
-
-            // for (const exit of piece.exits) {
-
-            //     // this.map.set(exit.position, 16)
-            // }   
-            // console.log(this.map)                      
-            // for (let i = piece.position[0]; i < piece.position[0] + piece.size[0]; i++) {
-            //     for (let j = piece.position[1]; j < piece.position[1] + piece.size[1]; j++) {
-            //         if (piece.walls.get([i, j])) {
-            //             this.tiles[i + (j * dungeon.size[0])] = 89
-            //         } else if (this.tiles[i + (j * dungeon.size[0])] !==89) {
-            //             this.tiles[i + (j * dungeon.size[0])] = 4
-            //         }
-            //     }
-            // }
         }
-        //console.log(this.map)
     }
 
     /**
@@ -91,15 +66,30 @@ export default class Map extends Entity {
         }
         for (let i = 0; i < array.length; i++) {
             for (let j = 0; j < array[0].length; j++) {
-                if (array[i][j] == 38) {
-                    array[i][j] = 3
-                }
-                if (array[i][j] == 0) {
-                    array[i][j] = 100
-                }
+                array[i][j] = this.mapValueToPathfindingValue(array[i][j])
             }
         }
         return array
+    }
+
+    /**
+     * Values in the map coorespond to tileset tiles.
+     * i.e. 0 is empty, 38 is door, 4 is regular floor.
+     * The pathing algorithm uses a maxWalkable value, so anything above 4 for example
+     * is "unwalkable". This method changes walkable tiles (doors which are 38) to
+     * a lower value that the algorithm deems "walkable".
+     * This is temporary until we have a more robust solution.
+     */
+    mapValueToPathfindingValue(value) {
+        switch (value) {
+            case 38:
+                return 3
+            case 0:
+                return 100
+            default:
+                return value
+        }
+
     }
 
     //Update map based on camera view and when entering a new level

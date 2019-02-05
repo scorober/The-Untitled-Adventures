@@ -5,6 +5,7 @@ export const ASSET_PATHS = {
 
 export const STATES = {
     Moving: Symbol(),
+    Pathfinding: Symbol(),
     Following: Symbol(),
     Collidable: Symbol(),
     HasTarget: Symbol(),

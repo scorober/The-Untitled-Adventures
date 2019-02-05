@@ -1,7 +1,6 @@
 export default class AStarPathfinding {
     constructor(world, pathStart, pathEnd) {
         this.world = world
-        console.log(world)
         this.pathStart = pathStart
         this.pathEnd = pathEnd
 
@@ -19,6 +18,7 @@ export default class AStarPathfinding {
     }
 
     // Path function, executes AStar algorithm operations
+    // eslint-disable-next-line complexity
     calculatePath() {
         // create Nodes from the Start and End x,y coordinates
         const mypathStart = new Node(null, { x: this.pathStart[0], y: this.pathStart[1] }, this.worldWidth)
@@ -89,7 +89,7 @@ export default class AStarPathfinding {
         } // keep iterating until until the Open list is empty
         return result
     }
-
+    // eslint-disable-next-line complexity
     neighbors(x, y) {
         const n = y - 1
         const s = y + 1
@@ -135,6 +135,7 @@ export default class AStarPathfinding {
     // returns every available North East, South East,
     // South West or North West cell - no squeezing through
     // "cracks" between two diagonals
+    // eslint-disable-next-line complexity
     diagonalNeighbours(nPassable, sPassable, ePassable, wPassable, n, s, e, w, result) {
         if (nPassable) {
             if (ePassable && this.canWalkHere(e, n))
@@ -154,6 +155,7 @@ export default class AStarPathfinding {
     // returns every available North East, South East,
     // South West or North West cell including the times that
     // you would be squeezing through a "crack"
+    // eslint-disable-next-line complexity
     diagonalNeighboursFree(nPassable, sPassable, ePassable, wPassable, n, s, e, w, result) {
         nPassable = n > -1
         sPassable = s < this.worldHeight

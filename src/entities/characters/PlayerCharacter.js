@@ -1,4 +1,4 @@
-import { ANIMATIONS as ANIMS, STATES, DIRECTIONS, KEYS, ANIMATION_RATES as AR } from '../../utils/Const.js'
+import { ANIMATIONS as ANIMS, STATES, ANIMATION_RATES as AR, DIRECTIONS } from '../../utils/Const.js'
 import Character from './Character.js'
 import Animation from '../../Animation.js'
 import AStarPathfinding from '../../utils/AStarPathfinding.js'
@@ -15,18 +15,26 @@ export default class PlayableCharacter extends Character {
         this.states[STATES.Pathfinding] = false
         this.path = null
 
-        this.speed = 250
+        this.speed = 190
     }
 
     update() {
-        super.update()
+        //super.update()
         if (this.states[STATES.Following] == false) {
-            this.listenForInput()
-            this.handleMovement()
+            this.getPathfindingInput()
+
+        }
+        if (this.states[STATES.Pathfinding]) {
+            this.handlePathfinding()
         }
     }
 
-    listenForInput() {
+    draw() {
+        this.animation.drawFrame(this.game, this.x, this.y)
+        super.draw()
+    }
+
+    getPathfindingInput() {
         if (this.game.inputManager.newRightClick) {
             this.game.inputManager.newRightClick = false
 
@@ -38,73 +46,81 @@ export default class PlayableCharacter extends Character {
             const pathfindingArray = this.game.sceneManager.currentScene.map.getPathfindingArray()
             const result = new AStarPathfinding(pathfindingArray, [startPos.x, startPos.y], [endPos.x, endPos.y]).calculatePath()
             if (result.length > 0) {
-                this.pathfinding = true
+                this.states[STATES.Pathfinding] = true
                 this.states[STATES.Moving] = true
                 this.path = result
             }
-
         }
     }
 
-    // overrides character class handleMovement
-    // Not really, because super.handlemovement is called next, overwriting all changes made here.
-    handleMovement() {
-        if (this.pathfinding) {
-            const nextTile = { x: this.path[0][0], y: this.path[0][1] }
-            const tilePosition = this.tileToWorldPosition(nextTile)
-            let dx = tilePosition.x - this.x
-            let dy = tilePosition.y - this.y
-            const length = Math.sqrt(dx * dx + dy * dy)
-            if (length < 15) {
-                if (this.path.length > 1) {
-                    this.path.splice(0, 1)
-
-                } else {
-                    this.x = tilePosition.x
-                    this.y = tilePosition.y
-                }
+    handlePathfinding() {
+        const nextTile = { x: this.path[0][0], y: this.path[0][1] }
+        const tilePosition = this.tileToWorldPosition(nextTile)
+        let dx = tilePosition.x - this.x
+        let dy = tilePosition.y - this.y
+        const length = Math.sqrt(dx * dx + dy * dy)
+        if (length < 10) {
+            if (this.path.length > 1) {
+                this.path.splice(0, 1)
             } else {
-                dx = dx / length
-                dy = dy / length
-                dx = dx * this.game.clockTick * this.speed
-                dy = dy * this.game.clockTick * this.speed
-                this.x += dx
-                this.y += dy
+                this.x = tilePosition.x
+                this.y = tilePosition.y
+                this.states[STATES.Pathfinding] = false
+                this.states[STATES.Moving] = false
+                this.setStandingAnimation()
+
+            }
+        } else {
+            dx = dx / length
+            dy = dy / length
+            dx = dx * this.game.clockTick * this.speed
+            dy = dy * this.game.clockTick * this.speed
+            this.setMovingAnimation(dx, dy)
+            this.x += dx
+            this.y += dy
+        }
+
+    }
+
+    setMovingAnimation(dx, dy) {
+        if (Math.abs(dx) > Math.abs(dy)) {
+            if (dx > 0) {
+                this.direction = DIRECTIONS.East
+                this.animation = this.animations[ANIMS.WalkEast]
+            } else {
+                this.direction = DIRECTIONS.West
+                this.animation = this.animations[ANIMS.WalkWest]
+            }
+        } else {
+            if (dy > 0) {
+                this.direction = DIRECTIONS.South
+                this.animation = this.animations[ANIMS.WalkSouth]
+            } else {
+                this.direction = DIRECTIONS.North
+                this.animation = this.animations[ANIMS.WalkNorth]
             }
         }
     }
 
-
-    draw() {
-        this.animation.drawFrame(this.game, this.x, this.y)
-        super.draw()
-    }
-
-    getDirectionInput() {
-        if (this.game.inputManager.downKeys[KEYS.ArrowLeft]) {
-            this.direction = DIRECTIONS.West
-            this.states[STATES.Moving] = true
-        }
-        else if (this.game.inputManager.downKeys[KEYS.ArrowRight]) {
-            this.direction = DIRECTIONS.East
-            this.states[STATES.Moving] = true
-        }
-        else if (this.game.inputManager.downKeys[KEYS.ArrowUp]) {
-            this.direction = DIRECTIONS.North
-            this.states[STATES.Moving] = true
-        }
-        else if (this.game.inputManager.downKeys[KEYS.ArrowDown]) {
-            this.direction = DIRECTIONS.South
-            this.states[STATES.Moving] = true
-        }
-        else {
-            this.states[STATES.Moving] = false
+    setStandingAnimation() {
+        switch (this.direction) {
+            case DIRECTIONS.East:
+                this.animation = this.animations[ANIMS.StandEast]
+                break
+            case DIRECTIONS.West:
+                this.animation = this.animations[ANIMS.StandWest]
+                break
+            case DIRECTIONS.North:
+                this.animation = this.animations[ANIMS.StandNorth]
+                break
+            case DIRECTIONS.South:
+                this.animation = this.animations[ANIMS.StandSouth]
         }
     }
 
     getDefaultAnimationRates() {
         return {
-            [AR.Walk]: 0.1,
+            [AR.Walk]: 0.08,
             [AR.Stand]: 0.6,
             [AR.Death]: 0.15,
             [AR.Spellcast]: 0.15,
