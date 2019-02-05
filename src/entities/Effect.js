@@ -1,6 +1,6 @@
 import Entity from './Entity.js'
 import Animation from '../Animation.js'
-import { SPELLS, ANIMATION_RATES as AR } from '../utils/Const.js';
+import { SPELLS, ANIMATION_RATES as AR } from '../utils/Const.js'
 
 export default class Effect extends Entity{
     constructor(game, spritesheet, pos, spell) {
@@ -21,7 +21,7 @@ export default class Effect extends Entity{
             this.width = 192
             this.height = 192
             this.animation = this.animations[SPELLS.Mage]
-}
+        }
     }
 
     update() {
@@ -47,5 +47,5 @@ export default class Effect extends Entity{
             [SPELLS.Mage]: new Animation(spritesheet, mage, mage, 11, 5, this.animationRates[AR.Impact], 11, false, 1)
         }
         return animations
-}
+    }
 }

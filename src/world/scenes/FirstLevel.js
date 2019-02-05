@@ -6,8 +6,8 @@ import Background from '../Background.js'
 import Mage from '../../entities/characters/Mage.js'
 import Marriott from '../../entities/characters/Marriott.js'
 import { ASSET_PATHS } from '../../utils/Const.js'
-import Robot from '../../entities/characters/Robot.js';
-import Archer from '../../entities/characters/Archer.js';
+import Robot from '../../entities/characters/Robot.js'
+import Archer from '../../entities/characters/Archer.js'
 
 export default class FirstLevel extends Scene {
 

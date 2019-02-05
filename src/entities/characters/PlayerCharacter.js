@@ -56,19 +56,17 @@ export default class PlayableCharacter extends Character {
 
     updateEffectTest() {
         if (this.states[STATES.Cooling]) {
-            console.log('cooling')
-            this.updateCoolDown();
+            this.updateCoolDown()
         }
         if (this.states[STATES.Cooling] === false) {
             if (this.game.inputManager.downKeys[KEYS.KeyW]) {
-                console.log('cooling off!')
                 this.explosion()
             }
             if (this.game.inputManager.downKeys[KEYS.KeyQ]) {
                 
                 this.mage([this.x + 100, this.y + 100])
             } 
-} 
+        } 
     }
 
     mage(pos) {
@@ -87,7 +85,7 @@ export default class PlayableCharacter extends Character {
             const r = this.rng.int(-30, 30)
             const angle = this.rng.float() * Math.PI*2
             const pos = [this.x + this.width + Math.cos(angle) * r, 
-                        this.y + this.height + Math.sin(angle) * r]
+                this.y + this.height + Math.sin(angle) * r]
             this.game.sceneManager.currentScene.addEntity(
                 new Effect(this.game, this.game.getAsset(ASSET_PATHS.Effect32), pos, SPELLS.Explosion)
             )

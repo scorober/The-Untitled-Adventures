@@ -1,6 +1,5 @@
 import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR } from '../../utils/Const.js'
 import Animation from '../../Animation.js'
-import Effect from '../Effect.js'
 import Enemy from './Enemy.js'
 
 export default class Archer extends Enemy {
