@@ -4,8 +4,9 @@ import Effect from '../Effect.js'
 import Animation from '../../Animation.js'
 
 export default class PlayableCharacter extends Character {
-    constructor(game, spritesheet) {
-        super(game,spritesheet, 0, 450)
+    constructor(game, spritesheet, pos) {
+        super(game,spritesheet, pos[0], pos[1])
+        this.speed = 250
     }
 
     update() {

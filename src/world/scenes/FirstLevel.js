@@ -12,55 +12,52 @@ export default class FirstLevel extends Scene {
         super(game)
         this.name = 'level1'    
         
-
-        const player = new PlayerCharacter(game, game.getAsset('./assets/img/mikeschar.png'))
-        game.camera.setFollowedEntity(player)
-
-
         //Initialize a dungeon with options, possibly move to the scene superclass w/ parameters.
         const dungeon = new Dungeon({
             size: [200, 200], 
             // seed: 'abcd', //omit for generated seed
             rooms: {
                 initial: {
-                    min_size: [6, 6],
-                    max_size: [12, 12],
+                    min_size: [8, 8],
+                    max_size: [12, 10],
                     max_exits: 2,
                     position: [0, 0] //OPTIONAL pos of initial room 
                 },
                 any: {
                     min_size: [8, 8],
                     max_size: [15, 15],
-                    max_exits: 3
+                    max_exits: 4
                 }
             },
             max_corridor_length: 6,
-            min_corridor_length: 2,
-            corridor_density: 0.5, //corridors per room
-            symmetric_rooms: false, // exits must be in the center of a wall if true
-            interconnects: 1, //extra corridors to connect rooms and make circular paths. not 100% guaranteed
+            min_corridor_length: 3,
+            corridor_density: 0, //corridors per room, remove corridors? They'll be tagged as such.
+            symmetric_rooms: false, // exits must be in the center of a wall if true. Setting true will make design easier
+            interconnects: 0, //extra corridors to connect rooms and make circular paths. not 100% guaranteed
             max_interconnect_length: 10,
-            room_count: 10
+            room_count: 20
         })
         
         dungeon.generate()
+
+        //Added dungeon.start_pos into constructor put doesn't move player spawn if initial room isn't [0,0]
+        const player = new PlayerCharacter(game, game.getAsset('./assets/img/mikeschar.png'), dungeon.start_pos)
+        game.camera.setFollowedEntity(player)
+
         this.setBackground(new Background(game, game.getAsset('./assets/img/background.jpg')))
         this.setMap(new Map(game, game.getAsset('./assets/img/DungeonColor3@64x64.png'), 64, 16, dungeon))
+
+
+        const marriott = new Marriott(game, game.getAsset('./assets/img/Marriott.png'), 20, 400)
+        marriott.follow(player)
+        const mage = new Mage(game, game.getAsset('./assets/img/mage-full.png'))
+        mage.follow(marriott)
+   
+
         this.addEntity(player)
         this.addEntity(game.camera)
-        
-        // const marriott = new Marriott(game, game.getAsset('./assets/img/Marriott.png'), 20, 400)
-        // this.addEntity(marriott)
-        
-        // const mage = new Mage(game, game.getAsset('./assets/img/mage-full.png'))
-        // mage.follow(marriott)
-        // marriott.follow(player)
-        
-
         this.addEntity(mage)
-        
-
-        //dungeon.print() //outputs wall map to console.log
+        this.addEntity(marriott)
 
     }
 
