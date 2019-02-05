@@ -97,10 +97,19 @@ export default class Map extends Entity {
     }
 
     draw() { //TODO use Array2D.iter()
+        const cam = this.game.camera
+        const width = this.game.ctx.canvas.width
+        const height = this.game.ctx.canvas.height
+        const centerTile = Map.worldToTilePosition({ x: cam.xView + width / 2, y: cam.yView + height / 2 }, this.tileSize)
+        const tilesWide = Math.ceil(width / this.tileSize)
+        const tilesTall = Math.ceil(height / this.tileSize)
+
+
         for (let r = 0; r < this.rows; r++) {
             for (let c = 0; c < this.cols; c++) {
+                const tileInView = this.tileInView(r, c, centerTile, tilesWide + 2, tilesTall + 2)
                 const tile = this.map.get([r, c])
-                if (tile) {
+                if (tile && tileInView) {
                     const tileX = r * this.tileSize - this.game.camera.xView
                     const tileY = c * this.tileSize - this.game.camera.yView
                     this.game.ctx.drawImage(
@@ -116,6 +125,31 @@ export default class Map extends Entity {
                     )
                 }
             }
+        }
+    }
+
+    tileInView(r, c, centerTile, tilesWide, tilesTall) {
+        return (c > centerTile.y - tilesTall / 2 &&
+            c < centerTile.y + tilesTall / 2 &&
+            r > centerTile.x - tilesWide / 2 &&
+            r < centerTile.x + tilesWide / 2)
+    }
+
+    static tileToWorldPosition(obj, tileSize) {
+        return {
+            x: obj.x * tileSize,
+            y: obj.y * tileSize
+        }
+    }
+
+    /**
+     * Converts from world coordinates (measured in pixels starting from the top left of the Map)
+     * to 
+     */
+    static worldToTilePosition(obj, tileSize) {
+        return {
+            x: Math.floor((obj.x + tileSize / 2) / 64),
+            y: Math.floor((obj.y + tileSize / 2) / 64)
         }
     }
 }

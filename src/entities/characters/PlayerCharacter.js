@@ -2,11 +2,12 @@ import { ANIMATIONS as ANIMS, STATES, ANIMATION_RATES as AR, DIRECTIONS } from '
 import Character from './Character.js'
 import Animation from '../../Animation.js'
 import AStarPathfinding from '../../utils/AStarPathfinding.js'
+import Map from '../../world/Map.js'
 
 export default class PlayableCharacter extends Character {
     constructor(game, spritesheet, x, y) {
         super(game, x, y)
-        this.scale = 2
+        this.scale = 1.3
         this.width = 64
         this.height = 64
         this.animationRates = this.getDefaultAnimationRates()
@@ -15,7 +16,7 @@ export default class PlayableCharacter extends Character {
         this.states[STATES.Pathfinding] = false
         this.path = null
 
-        this.speed = 190
+        this.speed = 110
     }
 
     update() {
@@ -40,8 +41,9 @@ export default class PlayableCharacter extends Character {
 
             const cam = this.game.camera
             const click = this.game.inputManager.lastRightClickPosition
-            const endPos = this.worldToTilePosition({ x: cam.xView + click.x, y: cam.yView + click.y })
-            const startPos = this.worldToTilePosition(this)
+            const tileSize = this.game.sceneManager.currentScene.map.tileSize
+            const endPos = Map.worldToTilePosition({ x: cam.xView + click.x, y: cam.yView + click.y }, tileSize)
+            const startPos = Map.worldToTilePosition(this, tileSize)
 
             const pathfindingArray = this.game.sceneManager.currentScene.map.getPathfindingArray()
             const result = new AStarPathfinding(pathfindingArray, [startPos.x, startPos.y], [endPos.x, endPos.y]).calculatePath()
@@ -55,7 +57,7 @@ export default class PlayableCharacter extends Character {
 
     handlePathfinding() {
         const nextTile = { x: this.path[0][0], y: this.path[0][1] }
-        const tilePosition = this.tileToWorldPosition(nextTile)
+        const tilePosition = Map.tileToWorldPosition(nextTile, this.game.sceneManager.currentScene.map.tileSize)
         let dx = tilePosition.x - this.x
         let dy = tilePosition.y - this.y
         const length = Math.sqrt(dx * dx + dy * dy)
@@ -120,7 +122,7 @@ export default class PlayableCharacter extends Character {
 
     getDefaultAnimationRates() {
         return {
-            [AR.Walk]: 0.08,
+            [AR.Walk]: 0.06,
             [AR.Stand]: 0.6,
             [AR.Death]: 0.15,
             [AR.Spellcast]: 0.15,
@@ -168,25 +170,7 @@ export default class PlayableCharacter extends Character {
         return animations
     }
 
-    tileToWorldPosition(obj) {
-        const tileSize = this.game.sceneManager.currentScene.map.tileSize
-        return {
-            x: obj.x * tileSize,
-            y: obj.y * tileSize
-        }
-    }
 
-    /**
-     * Converts from world coordinates (measured in pixels starting from the top left of the Map)
-     * to 
-     */
-    worldToTilePosition(obj) {
-        const tileSize = this.game.sceneManager.currentScene.map.tileSize
-        return {
-            x: Math.floor((obj.x + tileSize / 2) / 64),
-            y: Math.floor((obj.y + tileSize / 2) / 64)
-        }
-    }
 
 
 }

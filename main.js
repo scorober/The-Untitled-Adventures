@@ -13,8 +13,10 @@ assetManager.queueDownload('./assets/img/DungeonColor3@64x64.png')
 assetManager.queueDownload('./assets/img/mage-full.png')
 assetManager.queueDownload('./assets/img/Marriott.png')
 
-assetManager.downloadAll(function() {
+assetManager.downloadAll(function () {
     const canvas = document.getElementById('gameWorld')
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
     const ctx = canvas.getContext('2d')
     const gameEngine = new GameEngine()
     gameEngine.assetManager = assetManager
@@ -22,4 +24,10 @@ assetManager.downloadAll(function() {
     gameEngine.start()
     // eslint-disable-next-line no-console
     console.log('Game started..')
+})
+
+window.addEventListener('resize', () => {
+    const canvas = document.getElementById('gameWorld')
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
 })

@@ -1,6 +1,9 @@
-canvas{
+html, body, div, canvas {
+    margin: 0;
+    padding: 0;
+}
 
-    border: 1px solid brown;
+canvas {
     background: lightskyblue;
     position: fixed;
     -ms-interpolation-mode: nearest-neighbor;
@@ -13,6 +16,5 @@ canvas{
     margin-left: auto;
     margin-right: auto;
     display: block;
-
 }
 

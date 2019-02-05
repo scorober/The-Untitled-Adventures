@@ -15,7 +15,7 @@ export default class Mage extends Enemy {
         this.animations = this.getAnimations(spritesheet)
         this.animation = this.animations[ANIMS.StandEast]
 
-        this.speed = 100
+        this.speed = 60
     }
 
     attack(x, y) {
