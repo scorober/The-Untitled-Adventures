@@ -1,4 +1,5 @@
 import Entity from '../entities/Entity.js'
+import Array2D from '../utils/Array2d.js'
 
 export default class Map extends Entity {
     /**
@@ -19,27 +20,50 @@ export default class Map extends Entity {
         this.rows = dungeon.size[1]
         this.cols = dungeon.size[0]
         this.tiles = []
+      
         this.buildMap()
 
     }
 
     buildMap()  {
+        this.map = new Array2D(this.dungeon.size, 0) //0 for empty tile
         const dungeon = this.dungeon
         for (const piece of dungeon.children) {
-            const exits = []                   
+            
+            //Fill interior, fix so perimeter isn't repeated.
+            this.map.set_square(piece.position, piece.size, 4, true)  
+            //Fill wall around
+            this.map.set_square(piece.position, piece.size, 18)
+
+            //TODO get correct values for exits...
             for (const exit of piece.exits) {
-                exits.push(exit)
-            }                         
-            for (let i = piece.position[0]; i < piece.position[0] + piece.size[0]; i++) {
-                for (let j = piece.position[1]; j < piece.position[1] + piece.size[1]; j++) {
-                    if (piece.walls.get([i, j])) {
-                        this.tiles[i + (j * dungeon.size[0])] = 89
-                    } else if (this.tiles[i + (j * dungeon.size[0])] !==89) {
-                        this.tiles[i + (j * dungeon.size[0])] = 4
-                    }
-                }
+                this.map.set(exit[0], 30)
             }
+
+            console.log(piece.exits[0])
+            // for (const exit of piece.exits)
+            // this.map.set_vertical_line(piece.position, piece.size[1], 7)          
+            // this.map.set_horizontal_line(piece.position, piece.size[0], 7)
+            // console.log([piece.position[0] + piece.size[0], piece.position[1] + piece.size[1]])
+            // this.map.set_vertical_line([piece.position[0] + piece.size[0], 
+            //     piece.position[1] + piece.size[1]], -piece.size[1], 7)
+
+            // for (const exit of piece.exits) {
+             
+            //     // this.map.set(exit.position, 16)
+            // }   
+            // console.log(this.map)                      
+            // for (let i = piece.position[0]; i < piece.position[0] + piece.size[0]; i++) {
+            //     for (let j = piece.position[1]; j < piece.position[1] + piece.size[1]; j++) {
+            //         if (piece.walls.get([i, j])) {
+            //             this.tiles[i + (j * dungeon.size[0])] = 89
+            //         } else if (this.tiles[i + (j * dungeon.size[0])] !==89) {
+            //             this.tiles[i + (j * dungeon.size[0])] = 4
+            //         }
+            //     }
+            // }
         }
+        console.log(this.map)
     }
 
     /**
@@ -56,10 +80,10 @@ export default class Map extends Entity {
     update() {
     }
 
-    draw() {
+    draw() { //TODO use Array2D.iter()
         for(let r = 0; r < this.rows; r++){
             for(let c = 0; c < this.cols; c++){
-                const tile = this.getTile(r, c) //NOTE: When copying this from Level.js, c and r were switched. Was that an error or intentional?
+                const tile = this.map.get([r, c])
                 if(tile){
                     this.game.ctx.drawImage(
                         this.tileAtlas,

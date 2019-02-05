@@ -49,12 +49,12 @@ export default class FirstLevel extends Scene {
         this.addEntity(player)
         this.addEntity(game.camera)
         
-        const marriott = new Marriott(game, game.getAsset('./assets/img/Marriott.png'), 20, 400)
-        this.addEntity(marriott)
+        // const marriott = new Marriott(game, game.getAsset('./assets/img/Marriott.png'), 20, 400)
+        // this.addEntity(marriott)
         
-        const mage = new Mage(game, game.getAsset('./assets/img/mage-full.png'))
-        mage.follow(marriott)
-        marriott.follow(player)
+        // const mage = new Mage(game, game.getAsset('./assets/img/mage-full.png'))
+        // mage.follow(marriott)
+        // marriott.follow(player)
         
 
         this.addEntity(mage)
