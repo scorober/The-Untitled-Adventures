@@ -23,15 +23,19 @@ export default class Map extends Entity {
         this.buildMap()
     }
 
-
-    getStart() {
-        return this.dungeon.start_pos
+    //Buggy, spawns in empty tiles sometimes.
+    getStartPos() {
+        return [this.dungeon.start_pos[0] * this.tSize, 
+                this.dungeon.start_pos[1] * this.tSize]
     }
 
     buildMap()  {
         this.map = new Array2D(this.dungeon.size, 0) //0 for empty tile
         const dungeon = this.dungeon
         for (const piece of dungeon.children) {
+            if (piece.position === [0,0]) {
+                console.log('hmmmmmmmm')
+            }
             //Fill interior, fix so perimeter isn't repeated.
             this.map.set_square(piece.position, piece.size, 4, true)  
             //Fill wall around
@@ -52,8 +56,8 @@ export default class Map extends Entity {
                 const tile = this.map.get([c, r])
                 if(tile){
                     //Debug tile coordinates
-                    const tileX = r * this.tSize - this.game.camera.xView
-                    const tileY = c * this.tSize - this.game.camera.yView
+                    // const tileX = r * this.tSize - this.game.camera.xView
+                    // const tileY = c * this.tSize - this.game.camera.yView
                     this.game.ctx.drawImage(
                         this.tileAtlas,
                         ((tile-1) % this.setLength * this.tSize),
@@ -66,9 +70,9 @@ export default class Map extends Entity {
                         this.tSize
                     )
                     //Debug 
-                    this.game.ctx.font = '11px Arial'
-                    this.game.ctx.fillStyle = 'white'
-                    this.game.ctx.fillText('(' + c + ', ' + r + ')', tileX, tileY)
+                    // this.game.ctx.font = '11px Arial'
+                    // this.game.ctx.fillStyle = 'white'
+                    // this.game.ctx.fillText('(' + c + ', ' + r + ')', tileX, tileY)
                 }
             }
         }

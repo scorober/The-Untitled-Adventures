@@ -1,6 +1,14 @@
 
 export const ASSET_PATHS = {
-    MikesChar: './assets/img/mikeschar.png'
+    MikesChar: './assets/img/mikeschar.png',
+    Mage: './assets/img/mage.png',
+    Archer: './assets/img/archer.png',
+    Robot: './assets/img/robot-full.png',
+    Dungeon: './assets/img/dungeonColor3@64x64.png',
+    Marriott: './assets/img/marriott.png',
+    Teleport: './assets/img/teleport.png',
+    Background: './assets/img/background.jpg',
+    Effect32: './assets/img/effects_y32.png'
 }
 
 export const STATES = {
@@ -10,7 +18,8 @@ export const STATES = {
     HasTarget: Symbol(),
     Frozen: Symbol(),
     RemoveFromWorld: Symbol(),
-    Aggressive: Symbol()
+    Aggressive: Symbol(),
+    Cooling: Symbol
 }
 
 export const ANIMATIONS = {
@@ -64,7 +73,7 @@ export const ANIMATION_RATES = {
     /** Marriott-specific rates */
     Sit: Symbol(),
 
-    /** Mage-specific rates */
+    /** Mob-specific rates */
     Impact: Symbol(),
     Powerup: Symbol()
 }
@@ -74,6 +83,12 @@ export const DIRECTIONS = {
     West: Symbol(),
     South: Symbol(),
     East: Symbol(),
+}
+
+export const SPELLS = {
+    Explosion: Symbol(),
+    Fireball: Symbol(),
+    Mage: Symbol()
 }
 
 export const KEYS = {

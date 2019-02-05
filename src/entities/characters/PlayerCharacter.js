@@ -1,6 +1,8 @@
-import { ANIMATIONS as ANIMS, STATES, DIRECTIONS, KEYS, ANIMATION_RATES as AR } from '../../utils/Const.js'
+import { ANIMATIONS as ANIMS, STATES, DIRECTIONS, KEYS, ANIMATION_RATES as AR, ASSET_PATHS, SPELLS } from '../../utils/Const.js'
 import Character from './Character.js'
 import Animation from '../../Animation.js'
+import Random from '../../utils/Random.js'
+import Effect from '../Effect.js'
 
 export default class PlayableCharacter extends Character {
     constructor(game, spritesheet, pos) {
@@ -11,11 +13,14 @@ export default class PlayableCharacter extends Character {
         this.animationRates = this.getDefaultAnimationRates()
         this.animations = this.getAnimations(spritesheet)
         this.animation = this.animations[ANIMS.StandEast]
-
+        this.states[STATES.Cooling] = false
         this.speed = 250
+        this.rng = new Random()
+        this.coolEnd = 400
     }
 
     update() {
+        this.updateEffectTest()
         super.update()
         if (this.states[STATES.Following] == false) {
             this.getDirectionInput()
@@ -48,6 +53,55 @@ export default class PlayableCharacter extends Character {
             this.states[STATES.Moving] = false
         }
     }
+
+    updateEffectTest() {
+        if (this.states[STATES.Cooling]) {
+            console.log('cooling')
+            this.updateCoolDown();
+        }
+        if (this.states[STATES.Cooling] === false) {
+            if (this.game.inputManager.downKeys[KEYS.KeyW]) {
+                console.log('cooling off!')
+                this.explosion()
+            }
+            if (this.game.inputManager.downKeys[KEYS.KeyQ]) {
+                
+                this.mage([this.x + 100, this.y + 100])
+            } 
+} 
+    }
+
+    mage(pos) {
+        this.coolDown = 0
+        this.states[STATES.Cooling] = true
+        this.game.sceneManager.currentScene.addEntity(
+            new Effect(this.game, this.game.getAsset(ASSET_PATHS.Mage), pos, SPELLS.Mage)
+        )
+
+    }
+
+    explosion() {
+        this.coolDown = 0
+        this.states[STATES.Cooling] = true
+        for (let i = 0; i < 5; i++) {
+            const r = this.rng.int(-30, 30)
+            const angle = this.rng.float() * Math.PI*2
+            const pos = [this.x + this.width + Math.cos(angle) * r, 
+                        this.y + this.height + Math.sin(angle) * r]
+            this.game.sceneManager.currentScene.addEntity(
+                new Effect(this.game, this.game.getAsset(ASSET_PATHS.Effect32), pos, SPELLS.Explosion)
+            )
+        }
+    }
+    
+    updateCoolDown() {
+        if (this.coolDown > this.coolEnd) {
+            this.states[STATES.Cooling] = false
+        } else {
+            this.coolDown += this.game.clockTick *100
+        }
+    }
+
 
     getDefaultAnimationRates() {
         return {

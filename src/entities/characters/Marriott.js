@@ -3,15 +3,14 @@ import Animation from '../../Animation.js'
 import Npc from './Npc.js'
 
 export default class Marriott extends Npc {
-    constructor(game, spritesheet, x, y) {
-        super(game, x, y)
+    constructor(game, spritesheet, pos) {
+        super(game, pos[0], pos[1])
         this.scale = 2
         this.width = 64
         this.height = 69
         this.animationRates = this.getDefaultAnimationRates()
         this.animations = this.getAnimations(spritesheet)
         this.animation = this.animations[ANIMS.StandEast]
-
         this.speed = 200
     }
 

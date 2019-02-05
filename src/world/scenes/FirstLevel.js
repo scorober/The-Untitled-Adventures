@@ -5,6 +5,9 @@ import Dungeon from '../generators/Dungeon.js'
 import Background from '../Background.js'
 import Mage from '../../entities/characters/Mage.js'
 import Marriott from '../../entities/characters/Marriott.js'
+import { ASSET_PATHS } from '../../utils/Const.js'
+import Robot from '../../entities/characters/Robot.js';
+import Archer from '../../entities/characters/Archer.js';
 
 export default class FirstLevel extends Scene {
 
@@ -21,7 +24,7 @@ export default class FirstLevel extends Scene {
                     min_size: [8, 8],
                     max_size: [12, 10],
                     max_exits: 2,
-                    position: [0, 0] //OPTIONAL pos of initial room 
+                    position: [15, 10] //OPTIONAL pos of initial room 
                 },
                 any: {
                     min_size: [8, 8],
@@ -40,24 +43,33 @@ export default class FirstLevel extends Scene {
         
         dungeon.generate()
 
-        //Added dungeon.start_pos into constructor put doesn't move player spawn if initial room isn't [0,0]
-        const player = new PlayerCharacter(game, game.getAsset('./assets/img/mikeschar.png'), dungeon.start_pos)
+
+
+        this.setBackground(new Background(game, game.getAsset(ASSET_PATHS.Background)))
+        this.setMap(new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon))
+
+        const start = this.map.getStartPos()
+        const player = new PlayerCharacter(game, game.getAsset(ASSET_PATHS.MikesChar), start)
         game.camera.setFollowedEntity(player)
 
-        this.setBackground(new Background(game, game.getAsset('./assets/img/background.jpg')))
-        this.setMap(new Map(game, game.getAsset('./assets/img/DungeonColor3@64x64.png'), 64, 16, dungeon))
-
-
-        const marriott = new Marriott(game, game.getAsset('./assets/img/Marriott.png'), 20, 400)
+        const marriott = new Marriott(game, game.getAsset(ASSET_PATHS.Marriott),start)
         marriott.setFollowTarget(player)
-        const mage = new Mage(game, game.getAsset('./assets/img/mage-full.png'), 20, 500)
+
+        const mage = new Mage(game, game.getAsset(ASSET_PATHS.Mage), start)
         mage.setFollowTarget(player)
    
+        const robot0 = new Robot(game, game.getAsset(ASSET_PATHS.Robot), start)
+        robot0.setFollowTarget(mage)
+
+        const archer0 = new Archer(game, game.getAsset(ASSET_PATHS.Archer), start)
+        archer0.setFollowTarget(mage)
 
         this.addEntity(player)
         this.addEntity(game.camera)
         this.addEntity(mage)
         this.addEntity(marriott)
+        this.addEntity(robot0)
+        this.addEntity(archer0)
 
     }
 
