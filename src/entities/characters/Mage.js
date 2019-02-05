@@ -33,6 +33,8 @@ export default class Mage extends Enemy {
             const angle = Math.random() * Math.PI * 2
             this.game.addEntity(new Effect(this.game, this.animations[anim], x + Math.cos(angle) * r, y + Math.sin(angle) * r))
         }
+
+
     }
 
     update() {

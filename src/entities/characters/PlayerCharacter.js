@@ -1,6 +1,7 @@
 import { ANIMATIONS as ANIMS, STATES, DIRECTIONS, KEYS, ANIMATION_RATES as AR } from '../../utils/Const.js'
 import Character from './Character.js'
 import Animation from '../../Animation.js'
+import AStarPathfinding from '../../utils/AStarPathfinding.js'
 
 export default class PlayableCharacter extends Character {
     constructor(game, spritesheet, x, y) {
@@ -11,6 +12,8 @@ export default class PlayableCharacter extends Character {
         this.animationRates = this.getDefaultAnimationRates()
         this.animations = this.getAnimations(spritesheet)
         this.animation = this.animations[ANIMS.StandEast]
+        this.states[STATES.Pathfinding] = false
+        this.path = null
 
         this.speed = 250
     }
@@ -18,9 +21,59 @@ export default class PlayableCharacter extends Character {
     update() {
         super.update()
         if (this.states[STATES.Following] == false) {
-            this.getDirectionInput()
+            this.listenForInput()
+            this.handleMovement()
         }
     }
+
+    listenForInput() {
+        if (this.game.inputManager.newRightClick) {
+            this.game.inputManager.newRightClick = false
+
+            const cam = this.game.camera
+            const click = this.game.inputManager.lastRightClickPosition
+            const endPos = this.worldToTilePosition({ x: cam.xView + click.x, y: cam.yView + click.y })
+            const startPos = this.worldToTilePosition(this)
+
+            const pathfindingArray = this.game.sceneManager.currentScene.map.getPathfindingArray()
+            const result = new AStarPathfinding(pathfindingArray, [startPos.x, startPos.y], [endPos.x, endPos.y]).calculatePath()
+            if (result.length > 0) {
+                this.pathfinding = true
+                this.states[STATES.Moving] = true
+                this.path = result
+            }
+
+        }
+    }
+
+    // overrides character class handleMovement
+    // Not really, because super.handlemovement is called next, overwriting all changes made here.
+    handleMovement() {
+        if (this.pathfinding) {
+            const nextTile = { x: this.path[0][0], y: this.path[0][1] }
+            const tilePosition = this.tileToWorldPosition(nextTile)
+            let dx = tilePosition.x - this.x
+            let dy = tilePosition.y - this.y
+            const length = Math.sqrt(dx * dx + dy * dy)
+            if (length < 15) {
+                if (this.path.length > 1) {
+                    this.path.splice(0, 1)
+
+                } else {
+                    this.x = tilePosition.x
+                    this.y = tilePosition.y
+                }
+            } else {
+                dx = dx / length
+                dy = dy / length
+                dx = dx * this.game.clockTick * this.speed
+                dy = dy * this.game.clockTick * this.speed
+                this.x += dx
+                this.y += dy
+            }
+        }
+    }
+
 
     draw() {
         this.animation.drawFrame(this.game, this.x, this.y)
@@ -98,4 +151,26 @@ export default class PlayableCharacter extends Character {
         }
         return animations
     }
+
+    tileToWorldPosition(obj) {
+        const tileSize = this.game.sceneManager.currentScene.map.tileSize
+        return {
+            x: obj.x * tileSize,
+            y: obj.y * tileSize
+        }
+    }
+
+    /**
+     * Converts from world coordinates (measured in pixels starting from the top left of the Map)
+     * to 
+     */
+    worldToTilePosition(obj) {
+        const tileSize = this.game.sceneManager.currentScene.map.tileSize
+        return {
+            x: Math.floor((obj.x + tileSize / 2) / 64),
+            y: Math.floor((obj.y + tileSize / 2) / 64)
+        }
+    }
+
+
 }
