@@ -114,9 +114,6 @@ export default class Map extends Entity {
                         this.tileSize,
                         this.tileSize
                     )
-                    this.game.ctx.font = '9px Arial'
-                    this.game.ctx.fillStyle = 'white'
-                    this.game.ctx.fillText(tile + ': (' + r + ', ' + c + ')', tileX, tileY)
                 }
             }
         }
