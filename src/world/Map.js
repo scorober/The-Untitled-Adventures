@@ -1,4 +1,5 @@
 import Entity from '../entities/Entity.js'
+import Array2D from '../utils/Array2d.js'
 
 export default class Map extends Entity {
     /**
@@ -20,51 +21,46 @@ export default class Map extends Entity {
         this.cols = dungeon.size[0]
         this.tiles = []
         this.buildMap()
-
     }
 
-    buildMap()  {
-        const dungeon = this.dungeon
-        for (const piece of dungeon.children) {
-            const exits = []                   
-            for (const exit of piece.exits) {
-                exits.push(exit)
-            }                         
-            for (let i = piece.position[0]; i < piece.position[0] + piece.size[0]; i++) {
-                for (let j = piece.position[1]; j < piece.position[1] + piece.size[1]; j++) {
-                    if (piece.walls.get([i, j])) {
-                        this.tiles[i + (j * dungeon.size[0])] = 89
-                    } else if (this.tiles[i + (j * dungeon.size[0])] !==89) {
-                        this.tiles[i + (j * dungeon.size[0])] = 4
-                    }
-                }
-            }
+    //Buggy, spawns in empty tiles sometimes.
+    getStartPos() {
+        return {
+            x: this.dungeon.start_pos[0] * this.tSize,
+            y: this.dungeon.start_pos[1] * this.tSize
         }
     }
 
-    /**
-     *
-     * @param col
-     * @param row
-     * @returns {*}
-     */
-    getTile(row, col) {
-        return this.tiles[row * this.cols + col]
+    buildMap() {
+        this.map = new Array2D(this.dungeon.size, 0) //0 for empty tile
+        const dungeon = this.dungeon
+        for (const piece of dungeon.children) {
+            //Fill interior, fix so perimeter isn't repeated.
+            this.map.set_square(piece.position, piece.size, 4, true)
+            //Fill wall around
+            this.map.set_square(piece.position, piece.size, 18)
+            for (const exit of piece.exits) {
+                this.map.set(piece.global_pos(exit[0]), 67)
+            }
+        }
     }
 
     //Update map based on camera view and when entering a new level
     update() {
     }
 
-    draw() {
-        for(let r = 0; r < this.rows; r++){
-            for(let c = 0; c < this.cols; c++){
-                const tile = this.getTile(r, c) //NOTE: When copying this from Level.js, c and r were switched. Was that an error or intentional?
-                if(tile){
+    draw() { //TODO use Array2D.iter()
+        for (let r = 0; r < this.rows; r++) {
+            for (let c = 0; c < this.cols; c++) {
+                const tile = this.map.get([c, r])
+                if (tile) {
+                    //Debug tile coordinates
+                    // const tileX = r * this.tSize - this.game.camera.xView
+                    // const tileY = c * this.tSize - this.game.camera.yView
                     this.game.ctx.drawImage(
                         this.tileAtlas,
-                        ((tile-1) % this.setLength * this.tSize),
-                        Math.floor((tile-1) / this.setLength) * this.tSize,
+                        ((tile - 1) % this.setLength * this.tSize),
+                        Math.floor((tile - 1) / this.setLength) * this.tSize,
                         this.tSize,
                         this.tSize,
                         r * this.tSize - this.game.camera.xView, //Placement on canvas
@@ -72,6 +68,10 @@ export default class Map extends Entity {
                         this.tSize,
                         this.tSize
                     )
+                    //Debug 
+                    // this.game.ctx.font = '11px Arial'
+                    // this.game.ctx.fillStyle = 'white'
+                    // this.game.ctx.fillText('(' + c + ', ' + r + ')', tileX, tileY)
                 }
             }
         }

@@ -1,11 +1,11 @@
 import Character from './Character.js'
 
 export default class Npc extends Character {
-    constructor(game, spritesheet, x, y) {
+    constructor(game, spritesheet, pos) {
         if (new.target == Npc) {
             throw new TypeError('Should not construct Npc directly')
         }
-        super(game, spritesheet, x, y)
+        super(game, spritesheet, pos)
         this.game = game
     }
 
