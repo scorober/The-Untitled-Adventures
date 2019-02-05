@@ -6,7 +6,8 @@ import Effect from '../Effect.js'
 
 export default class PlayableCharacter extends Character {
     constructor(game, spritesheet, pos) {
-        super(game, pos[0], pos[1])
+        super(game, pos)
+        console.log(pos)
         this.scale = 2
         this.width = 64
         this.height = 64
@@ -73,7 +74,7 @@ export default class PlayableCharacter extends Character {
         this.coolDown = 0
         this.states[STATES.Cooling] = true
         this.game.sceneManager.currentScene.addEntity(
-            new Effect(this.game, this.game.getAsset(ASSET_PATHS.Mage), pos, SPELLS.Mage)
+            new Effect(this.game, this.game.getAsset(ASSET_PATHS.Mage), SPELLS.Mage, pos)
         )
 
     }
@@ -87,7 +88,7 @@ export default class PlayableCharacter extends Character {
             const pos = [this.x + this.width + Math.cos(angle) * r, 
                 this.y + this.height + Math.sin(angle) * r]
             this.game.sceneManager.currentScene.addEntity(
-                new Effect(this.game, this.game.getAsset(ASSET_PATHS.Effect32), pos, SPELLS.Explosion)
+                new Effect(this.game, this.game.getAsset(ASSET_PATHS.Effect32), SPELLS.Explosion, pos)
             )
         }
     }

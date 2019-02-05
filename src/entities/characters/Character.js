@@ -2,11 +2,11 @@ import { ANIMATIONS, STATES, DIRECTIONS } from '../../utils/Const.js'
 import Entity from '../Entity.js'
 
 export default class Character extends Entity {
-    constructor(game, x, y) {
+    constructor(game, pos) {
         if (new.target == Character) {
             throw new TypeError('Should not construct Character directly')
         }
-        super(game, x, y)
+        super(game, pos)
         this.states[STATES.Moving] = false
         this.states[STATES.Following] = false
         this.followTarget = false

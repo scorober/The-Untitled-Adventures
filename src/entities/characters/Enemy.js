@@ -2,11 +2,11 @@ import Character from './Character.js'
 import { ANIMATION_RATES as AR } from '../../utils/Const.js'
 
 export default class Enemy extends Character {
-    constructor(game, x, y) {
+    constructor(game, pos) {
         if (new.target == Enemy) {
             throw new TypeError('Should not construct Enemy directly')
         }
-        super(game, x, y)
+        super(game, pos)
     }
 
     getDefaultAnimationRates() {

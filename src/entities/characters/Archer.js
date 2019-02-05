@@ -4,7 +4,7 @@ import Enemy from './Enemy.js'
 
 export default class Archer extends Enemy {
     constructor(game, spritesheet, pos) {
-        super(game, pos[0], pos[1])
+        super(game, pos)
         this.scale = 0.92
         this.width = 192
         this.height = 192

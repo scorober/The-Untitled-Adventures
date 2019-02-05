@@ -25,16 +25,18 @@ export default class Map extends Entity {
 
     //Buggy, spawns in empty tiles sometimes.
     getStartPos() {
-        return [this.dungeon.start_pos[0] * this.tSize, 
-            this.dungeon.start_pos[1] * this.tSize]
+        return {
+            x: this.dungeon.start_pos[0] * this.tSize,
+            y: this.dungeon.start_pos[1] * this.tSize
+        }
     }
 
-    buildMap()  {
+    buildMap() {
         this.map = new Array2D(this.dungeon.size, 0) //0 for empty tile
         const dungeon = this.dungeon
         for (const piece of dungeon.children) {
             //Fill interior, fix so perimeter isn't repeated.
-            this.map.set_square(piece.position, piece.size, 4, true)  
+            this.map.set_square(piece.position, piece.size, 4, true)
             //Fill wall around
             this.map.set_square(piece.position, piece.size, 18)
             for (const exit of piece.exits) {
@@ -48,17 +50,17 @@ export default class Map extends Entity {
     }
 
     draw() { //TODO use Array2D.iter()
-        for(let r = 0; r < this.rows; r++){
-            for(let c = 0; c < this.cols; c++){
+        for (let r = 0; r < this.rows; r++) {
+            for (let c = 0; c < this.cols; c++) {
                 const tile = this.map.get([c, r])
-                if(tile){
+                if (tile) {
                     //Debug tile coordinates
                     // const tileX = r * this.tSize - this.game.camera.xView
                     // const tileY = c * this.tSize - this.game.camera.yView
                     this.game.ctx.drawImage(
                         this.tileAtlas,
-                        ((tile-1) % this.setLength * this.tSize),
-                        Math.floor((tile-1) / this.setLength) * this.tSize,
+                        ((tile - 1) % this.setLength * this.tSize),
+                        Math.floor((tile - 1) / this.setLength) * this.tSize,
                         this.tSize,
                         this.tSize,
                         r * this.tSize - this.game.camera.xView, //Placement on canvas
