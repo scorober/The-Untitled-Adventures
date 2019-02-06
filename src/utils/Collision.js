@@ -1,46 +1,54 @@
 import Vector from './Vector.js'
 
-export class CollisionLayer{
+export class CollisionLayer {
 
     constructor() {
-
         this.collidables = []
-        this.collidableLayer = [[]] //2d array. Probably don't need after changes...
-
     }
-    addCollidable(e){
 
-        //TODO: Check collidables for UUID to ensure it doesn't exist
+    addCollidable(e) {
+
+        //TODO: Collidable object that contains entity as well as x/y location for easy reference?
         this.collidables.push(e)
 
     }
 
-
-
-    collidesUUID(x,y){
-        if(this.collides(x,y)) {
-            return this.collidableLayer[x][y]
-        }
-    }
-
-    getEntity(x,y){
-        //Use collides func as helper to tell if space is occupied
-        if(this.collides(x,y)){
-            return this.collidables[this.collidableLayer[x][y]]
-        }
-    }
-
+    /**
+     * Returns an array of entities that collide with a given entity
+     * @param entity the entity to check collision for
+     * @returns {*[]}
+     */
     getCollidableArray(entity){
 
-        var hb = entity.hitbox
-
-        if(!hb){return null}
-
-        //Returns a filtered array with all collidables that are within range
         return this.collidables.filter(e =>
-            (e.UUID !== entity.UUID) && (hb.location.distance(e.hitbox.location) <= (hb.radius + e.hitbox.radius)) === true
+            (e.UUID !== entity.UUID) && (entity.location.distance(e.hitbox.location) <= (entity.radius + e.hitbox.radius + 1))
         )
+    }
 
+    /**
+     * Given an entity and a destination, this func will return true or false if there are any collisions.
+     * @param entity the entity to check collision for
+     * @param destination the x,y vector
+     * @returns {boolean}
+     */
+    collides(entity, destination) {
+
+        if (!entity.hitbox) {
+            return null
+        }
+        for (let i = 0; i < this.collidables.length; i++) {
+            const e = this.collidables[i]
+            if (e.UUID !== entity.UUID) {
+                const distance = destination.distance(e.hitbox.location)
+                const rads = entity.hitbox.radius + e.hitbox.radius + 0.5
+                //console.log('distance:', distance)
+                //console.log('rads: ', rads)
+                if (distance <= rads) {
+                    return true
+                }
+            }
+        }
+        return false
     }
 
 }
