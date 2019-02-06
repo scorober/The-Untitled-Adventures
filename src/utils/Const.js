@@ -52,8 +52,10 @@ export const ANIMATIONS = {
     DeathSouth: Symbol(),
 
     /** Marriott-specific animations */
-    SitDown: Symbol(),
-    StandUp: Symbol(),
+    SitDownWest: Symbol(),
+    SitDownEast: Symbol(),
+    StandUpWest: Symbol(),
+    StandUpEast: Symbol(),
 
     /** Mage-specific animations */
     Impact: Symbol(),
