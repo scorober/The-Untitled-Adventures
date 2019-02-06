@@ -5,12 +5,13 @@ import Npc from './Npc.js'
 export default class Marriott extends Npc {
     constructor(game, spritesheet, pos) {
         super(game, pos)
-        this.scale = 2
+        this.scale = 1.3
         this.width = 64
         this.height = 69
         this.animationRates = this.getDefaultAnimationRates()
         this.animations = this.getAnimations(spritesheet)
         this.animation = this.animations[ANIMS.StandEast]
+        this.standingTime = 0
 
         this.speed = 70
     }
@@ -19,6 +20,11 @@ export default class Marriott extends Npc {
         super.update()
         if (this.states[STATES.Moving] == false) {
             this.handleStanding()
+            this.standingTime ++
+            console.log(this.standingTime)
+            
+        } else {
+            this.standingTime = 0
         }
     }
 
@@ -28,7 +34,15 @@ export default class Marriott extends Npc {
     }
 
     handleStanding() {
-        this.animation = this.animations[ANIMS.SitDown]
+        if(this.standingTime > 60 ) {
+            this.animation = this.animations[ANIMS.SitDown]
+        } else {
+            if(this.standingTime === 90) {
+                this.animations[ANIMS.SitDown].elapsedTime = 0
+            }
+            super.handleStanding()
+        }
+        
     }
 
     getDefaultAnimationRates() {
