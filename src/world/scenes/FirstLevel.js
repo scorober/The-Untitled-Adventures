@@ -58,18 +58,11 @@ export default class FirstLevel extends Scene {
         const mage = new Mage(game, game.getAsset(ASSET_PATHS.Mage), start)
         mage.setFollowTarget(player)
    
-        const robot0 = new Robot(game, game.getAsset(ASSET_PATHS.Robot), start)
-        robot0.setFollowTarget(mage)
-
-        const archer0 = new Archer(game, game.getAsset(ASSET_PATHS.Archer), start)
-        archer0.setFollowTarget(mage)
-
         this.addEntity(player)
         this.addEntity(game.camera)
         this.addEntity(mage)
         this.addEntity(marriott)
-        this.addEntity(robot0)
-        this.addEntity(archer0)
+
 
     }
 

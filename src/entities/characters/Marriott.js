@@ -11,7 +11,8 @@ export default class Marriott extends Npc {
         this.animationRates = this.getDefaultAnimationRates()
         this.animations = this.getAnimations(spritesheet)
         this.animation = this.animations[ANIMS.StandEast]
-        this.speed = 200
+
+        this.speed = 70
     }
 
     update() {

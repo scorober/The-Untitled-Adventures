@@ -12,8 +12,8 @@ export default class Camera extends Entity {
     }
 
     follow() {
-        this.xView = this.followedEntity.x - this.game.ctx.canvas.width / 2 + this.followedEntity.width
-        this.yView = this.followedEntity.y - this.game.ctx.canvas.height / 2 + (2 * this.followedEntity.height)
+        this.xView =  Math.max(-64, this.followedEntity.x - this.game.ctx.canvas.width / 2)
+        this.yView =  Math.max(-64, this.followedEntity.y - this.game.ctx.canvas.height / 2)
     }
 
     update() {

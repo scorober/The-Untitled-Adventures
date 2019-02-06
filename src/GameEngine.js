@@ -40,6 +40,13 @@ export default class GameEngine {
         this.startInput()
     }
 
+    resizeCanvas(width, height) {
+        this.ctx.canvas.width = width
+        this.ctx.canvas.height = height
+        this.surfaceWidth = width
+        this.surfaceHeight = height
+    }
+
     start() {
         this.gameLoop()
     }
@@ -58,6 +65,7 @@ export default class GameEngine {
     }
 
     draw() {
+        console.log('rect cler')
         this.ctx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight)
         this.ctx.save()
         this.sceneManager.draw()
