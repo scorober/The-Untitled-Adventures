@@ -11,7 +11,6 @@ export default class Robot extends Enemy {
         this.height = 192
         this.attackHeight = 192
         this.attackWidth = 384
-        this.impactSize = 240
         this.animationRates = this.getDefaultAnimationRates()
         this.animations = this.getAnimations(spritesheet)
         this.animation = this.animations[ANIMS.StandEast]
