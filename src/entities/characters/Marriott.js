@@ -21,11 +21,12 @@ export default class Marriott extends Npc {
         if (this.states[STATES.Moving] == false) {
             this.handleStanding()
             this.standingTime ++
-            console.log(this.standingTime)
             
         } else {
             this.standingTime = 0
+            this.animations[ANIMS.SitDown].elapsedTime = 0
         }
+        
     }
 
     draw() {
@@ -37,9 +38,6 @@ export default class Marriott extends Npc {
         if(this.standingTime > 60 ) {
             this.animation = this.animations[ANIMS.SitDown]
         } else {
-            if(this.standingTime === 90) {
-                this.animations[ANIMS.SitDown].elapsedTime = 0
-            }
             super.handleStanding()
         }
         
