@@ -13,7 +13,8 @@ export default class Marriott extends Npc {
         this.animation = this.animations[ANIMS.StandEast]
         this.standingTime = 0
         this.movingTime = 0
-        
+        this.standingDelay = 60
+        this.SittingDelay = 25
         this.speed = 70
     }
 
@@ -41,7 +42,7 @@ export default class Marriott extends Npc {
     }
 
     handleStanding() {
-        if(this.standingTime > 60 ) {
+        if (this.standingTime > this.standingDelay ) {
             if (this.direction === DIRECTIONS.East || this.direction === DIRECTIONS.South) {
                 this.animation = this.animations[ANIMS.SitDownEast]
             } else {
@@ -53,7 +54,7 @@ export default class Marriott extends Npc {
     }
 
     moveCharacter() {
-        if(this.movingTime < 25 ) {
+        if (this.movingTime < this.SittingDelay ) {
             if (this.animation === this.animations[ANIMS.SitDownEast] || this.animation === this.animations[ANIMS.StandUpEast]) {
                 this.animation = this.animations[ANIMS.StandUpEast]
             } else {
