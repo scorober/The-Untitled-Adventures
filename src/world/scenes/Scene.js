@@ -13,10 +13,20 @@ export default class Scene {
         this.timeBuffer = 0
     }
 
-    //Empty methods to prevent errors if inherited classes don't call them//
-    update() { }
+    /**
+     * Super-most update method for the scene hierarchy.
+     * Currently just updates a timer that tracks how long the current scene is active.
+     */
+    update() {
+        this.timeElapsed += this.game.clockTick
+    }
     draw() { }
-    enter() { }
+
+    /**
+     * Super-most enter method for the scene hierarchy.
+     * Currently just resets the timeElapsed variable to ensure it is reset when scenes change.
+     */
+    enter() { this.timeElapsed = 0 }
     exit() { }
 
     /**
