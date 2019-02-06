@@ -1,5 +1,5 @@
 import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR } from '../../utils/Const.js'
-import Animation from '../../Animation.js'
+import AnimationFactory from '../../AnimationFactory.js'
 import Enemy from './Enemy.js'
 
 export default class Archer extends Enemy {
@@ -26,33 +26,33 @@ export default class Archer extends Enemy {
     }
 
     getAnimations(spritesheet) {
+        const animations = []
+        const animationFactory = new AnimationFactory(spritesheet, this.scale)
+        //Spellcasting
+        animations[ANIMS.SpellcastWest] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Spellcast])
+        animations[ANIMS.SpellcastEast] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Spellcast])
+        //copy of SpellcastWest
+        animations[ANIMS.SpellcastNorth] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Spellcast])
+        //copy of SpellcastEast
+        animations[ANIMS.SpellcastSouth] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Spellcast])
 
-        const animations = {
-            //Spellcasting
-            [ANIMS.SpellcastWest]: new Animation(spritesheet, this.attackWidth, this.attackHeight, 17, 1, this.animationRates[AR.Spellcast], 17, false, this.scale),
-            [ANIMS.SpellcastEast]: new Animation(spritesheet, this.attackWidth, this.attackHeight, 17, 2, this.animationRates[AR.Spellcast], 17, false, this.scale),
-            //copy of SpellcastWest
-            [ANIMS.SpellcastNorth]: new Animation(spritesheet, this.attackWidth, this.attackHeight, 17, 1, this.animationRates[AR.Spellcast], 17, false, this.scale),
-            //copy of SpellcastEast
-            [ANIMS.SpellcastSouth]: new Animation(spritesheet, this.attackWidth, this.attackHeight, 17, 2, this.animationRates[AR.Spellcast], 17, false, this.scale),
+        //Standing
+        animations[ANIMS.StandWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand])
+        animations[ANIMS.StandEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand])
+        animationFactory.rewindFactory(2, 2 * this.height)
+        // copy of stand west
+        animations[ANIMS.StandNorth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand])
+        // copy of stand east
+        animations[ANIMS.StandSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand])
 
-            //Standing
-            [ANIMS.StandWest]: new Animation(spritesheet, this.width, this.height, 8, 3, this.animationRates[AR.Stand], 8, true, this.scale),
-            [ANIMS.StandEast]: new Animation(spritesheet, this.width, this.height, 8, 4, this.animationRates[AR.Stand], 8, true, this.scale),
-            // copy of stand west
-            [ANIMS.StandNorth]: new Animation(spritesheet, this.width, this.height, 8, 3, this.animationRates[AR.Stand], 8, true, this.scale),
-            // copy of stand east
-            [ANIMS.StandSouth]: new Animation(spritesheet, this.width, this.height, 8, 4, this.animationRates[AR.Stand], 8, true, this.scale),
+        //Impact
+        animations[ANIMS.Impact] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Impact], false)
 
-            //Impact
-            [ANIMS.Impact]: new Animation(spritesheet, this.width, this.height, 10, 5, this.animationRates[AR.Impact], 10, false, 0.3),
-            
-            //Walk
-            [ANIMS.WalkWest]: new Animation(spritesheet, this.width, this.height, 8, 6, this.animationRates[AR.Walk], 9, true, this.scale),
-            [ANIMS.WalkEast]: new Animation(spritesheet, this.width, this.height, 8, 7, this.animationRates[AR.Walk], 9, true, this.scale),
-            [ANIMS.WalkSouth]: new Animation(spritesheet, this.width, this.height, 8, 6, this.animationRates[AR.Walk], 9, true, this.scale),
-            [ANIMS.WalkNorth]: new Animation(spritesheet, this.width, this.height, 8, 7, this.animationRates[AR.Walk], 9, true, this.scale),
-        }
+        //Walk
+        animations[ANIMS.WalkWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Walk])
+        animations[ANIMS.WalkEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Walk])
+        animations[ANIMS.WalkSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Walk])
+        animations[ANIMS.WalkNorth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Walk])
         return animations
     }
 }

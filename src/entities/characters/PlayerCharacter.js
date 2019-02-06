@@ -1,13 +1,12 @@
 import { ANIMATIONS as ANIMS, STATES, DIRECTIONS, KEYS, ANIMATION_RATES as AR, ASSET_PATHS, SPELLS } from '../../utils/Const.js'
 import Character from './Character.js'
-import Animation from '../../Animation.js'
 import Random from '../../utils/Random.js'
 import Effect from '../Effect.js'
+import AnimationFactory from '../../AnimationFactory.js';
 
 export default class PlayableCharacter extends Character {
     constructor(game, spritesheet, pos) {
         super(game, pos)
-        console.log(pos)
         this.scale = 2
         this.width = 64
         this.height = 64
@@ -64,10 +63,10 @@ export default class PlayableCharacter extends Character {
                 this.explosion()
             }
             if (this.game.inputManager.downKeys[KEYS.KeyQ]) {
-                
+
                 this.mage([this.x + 100, this.y + 100])
-            } 
-        } 
+            }
+        }
     }
 
     mage(pos) {
@@ -84,20 +83,20 @@ export default class PlayableCharacter extends Character {
         this.states[STATES.Cooling] = true
         for (let i = 0; i < 5; i++) {
             const r = this.rng.int(-30, 30)
-            const angle = this.rng.float() * Math.PI*2
-            const pos = [this.x + this.width + Math.cos(angle) * r, 
-                this.y + this.height + Math.sin(angle) * r]
+            const angle = this.rng.float() * Math.PI * 2
+            const pos = [this.x + this.width + Math.cos(angle) * r,
+            this.y + this.height + Math.sin(angle) * r]
             this.game.sceneManager.currentScene.addEntity(
                 new Effect(this.game, this.game.getAsset(ASSET_PATHS.Effect32), SPELLS.Explosion, pos)
             )
         }
     }
-    
+
     updateCoolDown() {
         if (this.coolDown > this.coolEnd) {
             this.states[STATES.Cooling] = false
         } else {
-            this.coolDown += this.game.clockTick *100
+            this.coolDown += this.game.clockTick * 100
         }
     }
 
@@ -115,40 +114,41 @@ export default class PlayableCharacter extends Character {
     }
 
     getAnimations(spritesheet) {
-        const animations = {
-            // Spellcasting
-            [ANIMS.SpellcastNorth]: new Animation(spritesheet, this.width, this.height, 7, 1, this.animationRates[AR.Spellcast], 7, true, this.scale),
-            [ANIMS.SpellcastWest]: new Animation(spritesheet, this.width, this.height, 7, 2, this.animationRates[AR.Spellcast], 7, true, this.scale),
-            [ANIMS.SpellcastSouth]: new Animation(spritesheet, this.width, this.height, 7, 3, this.animationRates[AR.Spellcast], 7, true, this.scale),
-            [ANIMS.SpellcastEast]: new Animation(spritesheet, this.width, this.height, 7, 4, this.animationRates[AR.Spellcast], 7, true, this.scale),
-            // Thrusting
-            [ANIMS.ThrustNorth]: new Animation(spritesheet, this.width, this.height, 8, 5, this.animationRates[AR.Thrust], 8, true, this.scale),
-            [ANIMS.ThrustWest]: new Animation(spritesheet, this.width, this.height, 8, 6, this.animationRates[AR.Thrust], 8, true, this.scale),
-            [ANIMS.ThrustSouth]: new Animation(spritesheet, this.width, this.height, 8, 7, this.animationRates[AR.Thrust], 8, true, this.scale),
-            [ANIMS.ThrustEast]: new Animation(spritesheet, this.width, this.height, 8, 8, this.animationRates[AR.Thrust], 8, true, this.scale),
-            // Walk cycle
-            [ANIMS.WalkNorth]: new Animation(spritesheet, this.width, this.height, 9, 9, this.animationRates[AR.Walk], 9, true, this.scale),
-            [ANIMS.WalkWest]: new Animation(spritesheet, this.width, this.height, 9, 10, this.animationRates[AR.Walk], 9, true, this.scale),
-            [ANIMS.WalkSouth]: new Animation(spritesheet, this.width, this.height, 9, 11, this.animationRates[AR.Walk], 9, true, this.scale),
-            [ANIMS.WalkEast]: new Animation(spritesheet, this.width, this.height, 9, 12, this.animationRates[AR.Walk], 9, true, this.scale),
-            // Slashing
-            [ANIMS.SlashNorth]: new Animation(spritesheet, this.width, this.height, 6, 13, this.animationRates[AR.Slash], 6, true, this.scale),
-            [ANIMS.SlashWest]: new Animation(spritesheet, this.width, this.height, 6, 14, this.animationRates[AR.Slash], 6, true, this.scale),
-            [ANIMS.SlashSouth]: new Animation(spritesheet, this.width, this.height, 6, 15, this.animationRates[AR.Slash], 6, true, this.scale),
-            [ANIMS.SlashEast]: new Animation(spritesheet, this.width, this.height, 6, 16, this.animationRates[AR.Slash], 6, true, this.scale),
-            // Standing (modified slashing)
-            [ANIMS.StandNorth]: new Animation(spritesheet, this.width, this.height, 2, 13, this.animationRates[AR.Stand], 2, true, this.scale),
-            [ANIMS.StandWest]: new Animation(spritesheet, this.width, this.height, 2, 14, this.animationRates[AR.Stand], 2, true, this.scale),
-            [ANIMS.StandSouth]: new Animation(spritesheet, this.width, this.height, 2, 15, this.animationRates[AR.Stand], 2, true, this.scale),
-            [ANIMS.StandEast]: new Animation(spritesheet, this.width, this.height, 2, 16, this.animationRates[AR.Stand], 2, true, this.scale),
-            // Shooting
-            [ANIMS.ShootNorth]: new Animation(spritesheet, this.width, this.height, 13, 17, this.animationRates[AR.Shoot], 13, true, this.scale),
-            [ANIMS.ShootWest]: new Animation(spritesheet, this.width, this.height, 13, 18, this.animationRates[AR.Shoot], 13, true, this.scale),
-            [ANIMS.ShootSouth]: new Animation(spritesheet, this.width, this.height, 13, 19, this.animationRates[AR.Shoot], 13, true, this.scale),
-            [ANIMS.ShootEast]: new Animation(spritesheet, this.width, this.height, 13, 20, this.animationRates[AR.Shoot], 13, true, this.scale),
-            // Hurt
-            [ANIMS.DeathSouth]: new Animation(spritesheet, this.width, this.height, 6, 21, this.animationRates[AR.Death], 6, true, this.scale),
-        }
+        const animations = []
+        const animationFactory = new AnimationFactory(spritesheet, this.scale)
+        // Spellcasting
+        animations[ANIMS.SpellcastNorth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Spellcast])
+        animations[ANIMS.SpellcastWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Spellcast])
+        animations[ANIMS.SpellcastSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Spellcast])
+        animations[ANIMS.SpellcastEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Spellcast])
+        // Thrusting
+        animations[ANIMS.ThrustNorth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Thrust])
+        animations[ANIMS.ThrustWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Thrust])
+        animations[ANIMS.ThrustSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Thrust])
+        animations[ANIMS.ThrustEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Thrust])
+        // Walk cycle
+        animations[ANIMS.WalkNorth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Walk])
+        animations[ANIMS.WalkWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Walk])
+        animations[ANIMS.WalkSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Walk])
+        animations[ANIMS.WalkEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Walk])
+        // Slashing
+        animations[ANIMS.SlashNorth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Slash])
+        animations[ANIMS.SlashWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Slash])
+        animations[ANIMS.SlashSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Slash])
+        animations[ANIMS.SlashEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Slash])
+        // Standing (modified slashing)
+        animationFactory.rewindFactory(4, 4 * this.height)
+        animations[ANIMS.StandNorth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], true, 2)
+        animations[ANIMS.StandWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], true, 2)
+        animations[ANIMS.StandSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], true, 2)
+        animations[ANIMS.StandEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], true, 2)
+        // Shooting
+        animations[ANIMS.ShootNorth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Shoot])
+        animations[ANIMS.ShootWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Shoot])
+        animations[ANIMS.ShootSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Shoot])
+        animations[ANIMS.ShootEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Shoot])
+        // Hurt
+        animations[ANIMS.DeathSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Death])
         return animations
     }
 }
