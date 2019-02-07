@@ -39,29 +39,10 @@ export default class Map extends Entity {
         this.objectMap = new Array2D(this.dungeon.size, 0)
         const dungeon = this.dungeon
         for (const piece of dungeon.children) {
-            const pos = piece.position
-            const size = piece.size
-            const w = size[0]
-            const h = size[1]
-            const x = pos[0]
-            const y = pos[1]
-            const outerPos = [x + 1, y + 1]
-            const innerPos = [x + 2, y + 2]
-            const outerSize = [w - 2, h - 2]
-            const innerSize = [w - 4, h - 4]
-
-            //Fill interior, fix so perimeter isn't repeated.
-            this.map.set_square(outerPos, outerSize, 4, true)
-            this.map.set_square(outerPos, outerSize, 18)
-            this.map.set_square(innerPos, innerSize, 18)
-            //Fill wall around
+            this.buildWalls(piece)
             this.buildExits(piece)
             this.buildRoom(piece)
         }
-    }
-
-    alterPos(pos, dx, dy) {
-        return [pos[0] + dx, pos[1] + dy]
     }
 
 
@@ -73,6 +54,45 @@ export default class Map extends Entity {
             }
         }
     }
+
+    buildWalls(piece) {
+        const pos = piece.position
+        const size = piece.size
+        const w = size[0]
+        const h = size[1]
+        const x = pos[0]
+        const y = pos[1]
+        const outerPos = [x + 1, y + 1]
+        const innerPos = [x + 2, y + 2]
+        const innerSize = [w - 4, h - 4]
+
+        //Set floor
+        this.map.set_square(innerPos, innerSize, 4, true)
+
+        const posNW = outerPos
+        const posNE = [outerPos[0] + innerSize[0], outerPos[1]]
+        const posSW = [outerPos[0], outerPos[1] + innerSize[1]]
+        const posSE = [outerPos[0] + innerSize[0], outerPos[1] + innerSize[1]]
+
+        //North
+        this.map.set_horizontal_line(this.alterPos(outerPos, 1, 0), innerSize[0] - 1, MI.WallNorth[0][0])
+        this.map.set_horizontal_line(innerPos, innerSize[0] - 1, MI.WallNorth[1][0])
+        //East
+        this.map.set_vertical_line(this.alterPos(posNE, 1, 2), innerSize[1] - 3, MI.WallEast[1])
+        this.map.set_vertical_line(this.alterPos(posNE, 0, 2), innerSize[1] - 3, MI.WallEast[0])
+        //South
+        this.map.set_horizontal_line(this.alterPos(posSW, 2, 0), innerSize[0] - 3, MI.WallSouth[0][0])
+        this.map.set_horizontal_line(this.alterPos(posSW, 2, 1), innerSize[0] - 3, MI.WallSouth[1][0])
+        //West
+        this.map.set_vertical_line(this.alterPos(posNW, 0, 2), innerSize[1] - 3, MI.WallWest[0])
+        this.map.set_vertical_line(this.alterPos(innerPos, 0, 1), innerSize[1] - 3, MI.WallWest[1])
+
+        this.createObject(this.map, posNE, MI.ICornerNE)
+        this.createObject(this.map, posNW, MI.ICornerNW)
+        this.createObject(this.map, posSW, MI.ICornerSW)
+        this.createObject(this.map, posSE, MI.ICornerSE)
+    }
+
 
     buildRoom(piece) {
         const center = piece.global_pos(piece.get_center_pos())
@@ -95,33 +115,37 @@ export default class Map extends Entity {
 
     buildExits(piece) {
         for (const exit of piece.exits) {
+            //Create the floor between rooms
             const exitPos = piece.global_pos(exit[0])
             this.map.set(piece.global_pos(exit[0]), 38)
+            //Create this exit door
             if (exit[1] === TOP || exit[1] === BOTTOM) {
                 const transPos = this.alterPos(exitPos, 0, -2)
                 this.createObject(this.map, transPos, MI.DoorPathV)
-            } else {
+                if (exit[1] === TOP) {
+                    const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, 1)
+                    this.createObject(this.objectMap, doorPos, MI.Door0)
+                } else {
+                    const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, -2)
+                    this.createObject(this.objectMap, doorPos, MI.Door180)
+                }
+            } else {  //East and West
                 const transPos = this.alterPos(exitPos, -2, 0)
                 this.createObject(this.map, transPos, MI.DoorPathH)
-            }
-            
-            if (exit[1] === RIGHT) {
-                const doorPos = this.alterPos(exitPos, 1, -1)
-                this.createObject(this.objectMap, doorPos, MI.Door90)
-            }
-            if (exit[1] === LEFT) {
-                const doorPos = this.alterPos(piece.global_pos(exit[0]), -2, -1)
-                this.createObject(this.objectMap, doorPos, MI.Door270)
-            }
-            if (exit[1] === TOP) {
-                const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, 1)
-                this.createObject(this.objectMap, doorPos, MI.Door0)
-            }
-            if (exit[1] === BOTTOM) {
-                const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, -2)
-                this.createObject(this.objectMap, doorPos, MI.Door180)
+                if (exit[1] === RIGHT) {
+                    const doorPos = this.alterPos(exitPos, 1, -1)
+                    this.createObject(this.objectMap, doorPos, MI.Door90)
+                }
+                if (exit[1] === LEFT) {
+                    const doorPos = this.alterPos(piece.global_pos(exit[0]), -2, -1)
+                    this.createObject(this.objectMap, doorPos, MI.Door270)
+                }
             }
         }
+    }
+
+    alterPos(pos, dx, dy) {
+        return [pos[0] + dx, pos[1] + dy]
     }
 
     getPathfindingArray() {
@@ -224,9 +248,9 @@ export default class Map extends Entity {
                 this.tileSize
             )
             // Debug 
-            this.game.ctx.font = '11px Arial'
-            this.game.ctx.fillStyle = 'white'
-            this.game.ctx.fillText('(' + c + ', ' + r + ')', tileX, tileY)
+            // this.game.ctx.font = '11px Arial'
+            // this.game.ctx.fillStyle = 'white'
+            // this.game.ctx.fillText('(' + c + ', ' + r + ')', tileX, tileY)
         }
     }
 
