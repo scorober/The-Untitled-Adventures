@@ -34,65 +34,30 @@ export default class Map extends Entity {
     buildMap() {
         const rooms = this.dungeon.room_count
         const size = [this.dungeon.size[0] + rooms, this.dungeon.size[1] + rooms]
-        //Counter to move pieces away from each other... breaks corridors?
-        let count = 0
+
         this.map = new Array2D(size, 0) //0 for empty tile
         this.objectMap = new Array2D(this.dungeon.size, 0)
         const dungeon = this.dungeon
         for (const piece of dungeon.children) {
-            console.log(piece)
-            
             const pos = piece.position
             const size = piece.size
             const w = size[0]
             const h = size[1]
-            const x = piece.position[0]
-            const y = piece.position[1]
+            const x = pos[0]
+            const y = pos[1]
             const outerPos = [x + 1, y + 1]
             const innerPos = [x + 2, y + 2]
             const outerSize = [w - 2, h - 2]
             const innerSize = [w - 4, h - 4]
-
-            const floorPos = [x + 1, y + 1]
-            const floorSize = [w - 4, y - 4]
 
             //Fill interior, fix so perimeter isn't repeated.
             this.map.set_square(outerPos, outerSize, 4, true)
             this.map.set_square(outerPos, outerSize, 18)
             this.map.set_square(innerPos, innerSize, 18)
             //Fill wall around
-            // this.map.set_square(piece.position, piece.size, 18) //REAL Wall. buffer between rooms
-            // this.map.set_square([x - 1, y - 1], piece.size, 18)
-            for (const exit of piece.exits) {
-                this.map.set(piece.global_pos(exit[0]), 38)
-                const exitPos = piece.global_pos(exit[0])
-
-                if (exit[1] === RIGHT) {
-                    const doorPos = this.alterPos(exitPos, 1, -1)
-                    this.createObject(this.objectMap, doorPos, MI.Door90)
-                    this.createObject(this.map, doorPos, MI.DoorPrintV)
-                }
-                if (exit[1] === LEFT) {
-                    const doorPos = this.alterPos(piece.global_pos(exit[0]), -2, -1)
-                    this.createObject(this.objectMap, doorPos, MI.Door270)
-                    this.createObject(this.map, doorPos, MI.DoorPrintV)
-                }
-                if (exit[1] === TOP) {
-                    const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, 1)
-                    this.createObject(this.objectMap, doorPos, MI.Door0)
-                    this.createObject(this.map, doorPos, MI.DoorPrintH)
-                }
-                if (exit[1] === BOTTOM) {
-                    const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, -2)
-                    this.createObject(this.objectMap, doorPos, MI.Door180)
-                    this.createObject(this.map, doorPos, MI.DoorPrintH)
-                }
-            }
+            this.buildExits(piece)
             this.buildRoom(piece)
         }
-        console.log(this.map)
-        console.log(this.objectMap)
-
     }
 
     alterPos(pos, dx, dy) {
@@ -125,6 +90,37 @@ export default class Map extends Entity {
                 this.createObject(this.objectMap, center, MI.StairsN)
                 break
 
+        }
+    }
+
+    buildExits(piece) {
+        for (const exit of piece.exits) {
+            const exitPos = piece.global_pos(exit[0])
+            this.map.set(piece.global_pos(exit[0]), 38)
+            if (exit[1] === TOP || exit[1] === BOTTOM) {
+                const transPos = this.alterPos(exitPos, 0, -2)
+                this.createObject(this.map, transPos, MI.DoorPathV)
+            } else {
+                const transPos = this.alterPos(exitPos, -2, 0)
+                this.createObject(this.map, transPos, MI.DoorPathH)
+            }
+            
+            if (exit[1] === RIGHT) {
+                const doorPos = this.alterPos(exitPos, 1, -1)
+                this.createObject(this.objectMap, doorPos, MI.Door90)
+            }
+            if (exit[1] === LEFT) {
+                const doorPos = this.alterPos(piece.global_pos(exit[0]), -2, -1)
+                this.createObject(this.objectMap, doorPos, MI.Door270)
+            }
+            if (exit[1] === TOP) {
+                const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, 1)
+                this.createObject(this.objectMap, doorPos, MI.Door0)
+            }
+            if (exit[1] === BOTTOM) {
+                const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, -2)
+                this.createObject(this.objectMap, doorPos, MI.Door180)
+            }
         }
     }
 
