@@ -65,7 +65,7 @@ export default class GameEngine {
     }
 
     draw() {
-        console.log('rect cler')
+        // console.log('rect cler')
         this.ctx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight)
         this.ctx.save()
         this.sceneManager.draw()

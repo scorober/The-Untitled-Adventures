@@ -16,7 +16,7 @@ export default class PlayableCharacter extends Character {
         this.states[STATES.Pathfinding] = false
         this.path = null
 
-        this.speed = 110
+        this.speed = 250
     }
 
     update() {

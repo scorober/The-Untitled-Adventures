@@ -18,15 +18,15 @@ export default class Dungeon extends Generator {
                     max_exits: 1
                 },
                 any: {
-                    min_size: [2, 2],
-                    max_size: [5, 5],
+                    min_size: [9, 9],
+                    max_size: [9, 9],
                     max_exits: 4
                 }
             },
             max_corridor_length: 6,
             min_corridor_length: 2,
             corridor_density: 0.5, //corridors per room
-            symmetric_rooms: false, // exits must be in the middle of walls
+            symmetric_rooms: true, // exits must be in the middle of walls
             interconnects: 1, //extra corridors to connect rooms and make circular paths. not guaranteed
             max_interconnect_length: 10,
             room_count: 10

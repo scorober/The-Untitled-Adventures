@@ -183,6 +183,36 @@ export const KEYS = {
     NumpadDecimal: 'NumpadDecimal',
 }
 
+export const MAP_ITEMS = {
+    Rug: [[110, 111, 112], [126, 127, 128], [142, 143, 144]],
+    StairsN: [[155, 156, 157], [171, 172, 173]],
+    ShieldN: [[51]],
+    ShieldS: [[67]],
+    ShieldW: [[53]],
+    ShieldE: [[52]],
+    ChestOpen: [[225], [241]],
+    ChestClosed: [[247]],
+    Door90: [[132, 133], [148, 149], [148, 149], [164, 165]],
+    Door270: [[134, 135], [150, 151], [150, 151], [166, 167]],
+    Door90Lock: [[180], [196], [196], [2]],
+    DoorRoofV: [[92], [92], [92], [92]],
+    DoorPrintV: [[4, 4], [4, 4], [4, 4], [4,4]],
+    Door0: [[129, 130, 130, 131], [145, 146, 146, 147]],
+    Door180: [[161, 162, 162, 163], [177, 178, 178, 179]],
+    DoorPrintH: [[4, 4, 4, 4], [4, 4, 4, 4]]
+}
+
+
+export const ROOMS ={
+    Exit: 'exit',
+    Treasure: 'treasure',
+    Spawn: 'spawn',
+    Boss: 'boss',
+    Initial: 'initial',
+
+}
+
+
 export const CTX_EVENTS = {
     LeftClick: 'click',
     RightClick: 'contextmenu',
