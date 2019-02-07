@@ -12,7 +12,10 @@ export const ASSET_PATHS = {
     TitleAnimation: './assets/img/animated_title_bg.png',
     ScottsChar: './assets/img/scotts-char.png',
     Fireball: './assets/img/fireball.png',
-    Skeleton: './assets/img/skeleton_base.png'
+    Skeleton: './assets/img/skeleton_base.png',
+    SwordmanPlayer: './assets/img/sprites/swordman/run_slashing.png',
+    ArcherPlayer: './assets/img/sprites/archer/run_shooting.png',
+    MagePlayer:'./assets/img/sprites/mage/run_attacking.png'
 }
 
 export const STATES = {
