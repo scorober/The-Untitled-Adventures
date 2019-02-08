@@ -74,8 +74,10 @@ export default class Animation {
     }
 
     drawFrame(game, x, y) {
+        console.log(this.loop)
         this.elapsedTime += game.clockTick
         if (this.isDone()) {
+        
             if (this.loop) this.elapsedTime = 0
             else this.elapsedTime -= game.clockTick
         }
