@@ -14,6 +14,13 @@ export default class Animation {
     }
 
     /**
+     * Reverses the animation, so it plays from last frame to first frame
+     */
+    reverse() {
+
+    }
+
+    /**
      * 
      * @param {HTMLImageElement} spritesheet The entire spritesheet for this Entity 
      * @returns {boolean||number} False if sheet is not oversized, integer value number
@@ -39,7 +46,7 @@ export default class Animation {
              * One potential pitfall is if the sprite has a transparent pixel in the center.
              * TODO: Instead, sample a 2x2 area or something.
              */
-            if (this.pixelIsTransparent(sampleCanvas, sampleX, sampleY)) {
+            if (this.pixelsAreTransparent(sampleCanvas, sampleX, sampleY)) {
                 return i
             }
         }
@@ -53,13 +60,17 @@ export default class Animation {
      * @param {number} y The y value of the pixel to sample
      * @returns {boolean} True if the pixel is white or off-canvas, false otherwise
      */
-    pixelIsTransparent(canvas, x, y) {
+    pixelsAreTransparent(canvas, x, y) {
         /** Pixel data is in the form of a 1d array, with [r, g, b, a] for each pixel sampled
          * We're only sampling 1 pixel so it will have 4 elements.
          */
-        const pixelData = canvas.getContext('2d').getImageData(x, y, 1, 1).data
-        /** Check transparency value and return whether it is fully transparent */
-        return pixelData[3] == 0
+        
+        const pixelData = canvas.getContext('2d').getImageData(x - 1, y - 1, 3, 3).data
+        let alphaSum = 0
+        for (let i = 0; i < 9; i++) {
+            alphaSum += pixelData[i * 3 + 3]
+        }
+        return alphaSum == 0
     }
 
     drawFrame(game, x, y) {
