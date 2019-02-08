@@ -1,25 +1,39 @@
-import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR, STATES } from '../../utils/Const.js'
-import Animation from '../../Animation.js'
+import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR, STATES, DIRECTIONS } from '../../utils/Const.js'
 import Npc from './Npc.js'
 import AnimationFactory from '../../AnimationFactory.js'
 
 export default class Marriott extends Npc {
     constructor(game, spritesheet, pos) {
         super(game, pos)
-        this.scale = 2
+        this.scale = 1.3
         this.width = 64
-        this.height = 69
+        this.height = 64
         this.animationRates = this.getDefaultAnimationRates()
         this.animations = this.getAnimations(spritesheet)
         this.animation = this.animations[ANIMS.StandEast]
-        this.speed = 200
+        this.standingTime = 0
+        this.movingTime = 0
+        this.standingDelay = 60
+        this.sittingDelay = 25
+        this.speed = 70
     }
 
     update() {
         super.update()
-        if (this.states[STATES.Moving] == false) {
-            this.handleStanding()
+        if (this.states[STATES.Moving] === false) {
+            this.standingTime ++
+            this.movingTime = 0
+            this.animations[ANIMS.StandUpEast].elapsedTime = 0
+            this.animations[ANIMS.StandUpWest].elapsedTime = 0
+        } else {
+            this.standingTime = 0
+            this.animations[ANIMS.SitDownEast].elapsedTime = 0
+            this.animations[ANIMS.SitDownWest].elapsedTime = 0
         }
+        if (this.states[STATES.Following] === true ){
+            this.movingTime ++
+        }
+        
     }
 
     draw() {
@@ -28,7 +42,27 @@ export default class Marriott extends Npc {
     }
 
     handleStanding() {
-        this.animation = this.animations[ANIMS.SitDown]
+        if (this.standingTime > this.standingDelay ) {
+            if (this.direction === DIRECTIONS.East || this.direction === DIRECTIONS.South) {
+                this.animation = this.animations[ANIMS.SitDownEast]
+            } else {
+                this.animation = this.animations[ANIMS.SitDownWest]
+            }
+        } else {
+            super.handleStanding()
+        }
+    }
+
+    moveCharacter() {
+        if (this.movingTime < this.sittingDelay ) {
+            if (this.animation === this.animations[ANIMS.SitDownEast] || this.animation === this.animations[ANIMS.StandUpEast]) {
+                this.animation = this.animations[ANIMS.StandUpEast]
+            } else {
+                this.animation = this.animations[ANIMS.StandUpWest]
+            }
+        } else {
+            super.moveCharacter()
+        }
     }
 
     getDefaultAnimationRates() {
@@ -55,9 +89,10 @@ export default class Marriott extends Npc {
         animations[ANIMS.StandSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], true, 2)
         animations[ANIMS.StandEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], true, 2)
         // Sitting on desk
-        animations[ANIMS.SitDown] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Sit], false)
-        animationFactory.rewindFactory(1, 1 * this.height)
-        animations[ANIMS.StandUp] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Sit], false).reverse()
+        animations[ANIMS.SitDownEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Sit], false)
+        animations[ANIMS.StandUpEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Sit], false)
+        animations[ANIMS.SitDownWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Sit], false)
+        animations[ANIMS.StandUpWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Sit], false)
 
 
         return animations

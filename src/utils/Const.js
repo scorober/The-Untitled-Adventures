@@ -8,11 +8,13 @@ export const ASSET_PATHS = {
     Marriott: './assets/img/marriott.png',
     Teleport: './assets/img/teleport.png',
     Background: './assets/img/background.jpg',
-    Effect32: './assets/img/effects_y32.png'
+    Effect32: './assets/img/effects_y32.png',
+    TitleAnimation: './assets/img/animated_title_bg.png'
 }
 
 export const STATES = {
     Moving: Symbol(),
+    Pathfinding: Symbol(),
     Following: Symbol(),
     Collidable: Symbol(),
     HasTarget: Symbol(),
@@ -51,8 +53,10 @@ export const ANIMATIONS = {
     DeathSouth: Symbol(),
 
     /** Marriott-specific animations */
-    SitDown: Symbol(),
-    StandUp: Symbol(),
+    SitDownWest: Symbol(),
+    SitDownEast: Symbol(),
+    StandUpWest: Symbol(),
+    StandUpEast: Symbol(),
 
     /** Mage-specific animations */
     Impact: Symbol(),

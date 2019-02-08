@@ -14,13 +14,6 @@ export default class Animation {
     }
 
     /**
-     * Reverses the animation, so it plays from last frame to first frame
-     */
-    reverse() {
-
-    }
-
-    /**
      * 
      * @param {HTMLImageElement} spritesheet The entire spritesheet for this Entity 
      * @returns {boolean||number} False if sheet is not oversized, integer value number
@@ -74,7 +67,7 @@ export default class Animation {
     }
 
     drawFrame(game, x, y) {
-        console.log(this.loop)
+        //console.log(this.loop)
         this.elapsedTime += game.clockTick
         if (this.isDone()) {
         
@@ -90,8 +83,8 @@ export default class Animation {
             startY, // source from sheet
             this.frameWidth,
             this.frameHeight,
-            (x + this.frameWidth / 2) - game.camera.xView,
-            (y + this.frameHeight / 2) - game.camera.yView,
+            (x - (this.frameWidth * this.scale / 2)) - game.camera.xView,
+            (y - (this.frameHeight * this.scale * 0.9)) - game.camera.yView,
             this.frameWidth * this.scale,
             this.frameHeight * this.scale
         )

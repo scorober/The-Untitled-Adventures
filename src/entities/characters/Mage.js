@@ -13,7 +13,7 @@ export default class Mage extends Enemy {
         this.animationRates = this.getDefaultAnimationRates()
         this.animations = this.getAnimations(spritesheet)
         this.animation = this.animations[ANIMS.StandEast]
-        this.speed = 100
+        this.speed = 60
     }
 
     update() {
@@ -24,6 +24,16 @@ export default class Mage extends Enemy {
         this.animation.drawFrame(this.game, this.x, this.y)
         super.draw()
     }
+
+    getDefaultAnimationRates() {
+        return {
+            [AR.Spellcast]: 0.15,
+            [AR.Stand]: 0.6,
+            [AR.Impact]: 0.15,
+            [AR.Powerup]: 0.15,
+            [AR.Walk]: 0.1
+        }
+    }    
 
     getAnimations(spritesheet) {
         const animations = []

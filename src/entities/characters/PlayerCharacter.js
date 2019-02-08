@@ -1,29 +1,33 @@
-import { ANIMATIONS as ANIMS, STATES, DIRECTIONS, KEYS, ANIMATION_RATES as AR, ASSET_PATHS, SPELLS } from '../../utils/Const.js'
+import { ANIMATIONS as ANIMS, STATES, ANIMATION_RATES as AR, DIRECTIONS, ASSET_PATHS, SPELLS, KEYS } from '../../utils/Const.js'
 import Character from './Character.js'
-import Random from '../../utils/Random.js'
-import Effect from '../Effect.js'
-import AnimationFactory from '../../AnimationFactory.js';
+import AStarPathfinding from '../../utils/AStarPathfinding.js'
+import Map from '../../world/Map.js'
+import Effect from '../../entities/Effect.js'
+import AnimationFactory from '../../AnimationFactory.js'
 
 export default class PlayableCharacter extends Character {
-    constructor(game, spritesheet, pos) {
-        super(game, pos)
-        this.scale = 2
+    constructor(game, spritesheet, x, y) {
+        super(game, x, y)
+        this.scale = 1.3
         this.width = 64
         this.height = 64
         this.animationRates = this.getDefaultAnimationRates()
         this.animations = this.getAnimations(spritesheet)
         this.animation = this.animations[ANIMS.StandEast]
-        this.states[STATES.Cooling] = false
-        this.speed = 250
-        this.rng = new Random()
-        this.coolEnd = 400
+        this.states[STATES.Pathfinding] = false
+        this.path = null
+
+        this.speed = 110
     }
 
     update() {
-        this.updateEffectTest()
-        super.update()
+        //super.update()
         if (this.states[STATES.Following] == false) {
-            this.getDirectionInput()
+            this.getPathfindingInput()
+
+        }
+        if (this.states[STATES.Pathfinding]) {
+            this.handlePathfinding()
         }
     }
 
@@ -32,25 +36,88 @@ export default class PlayableCharacter extends Character {
         super.draw()
     }
 
-    getDirectionInput() {
-        if (this.game.inputManager.downKeys[KEYS.ArrowLeft]) {
-            this.direction = DIRECTIONS.West
-            this.states[STATES.Moving] = true
+    getPathfindingInput() {
+        if (this.game.inputManager.newRightClick) {
+            this.game.inputManager.newRightClick = false
+
+            const cam = this.game.camera
+            const click = this.game.inputManager.lastRightClickPosition
+            const tileSize = this.game.sceneManager.currentScene.map.tileSize
+            const endPos = Map.worldToTilePosition({ x: cam.xView + click.x, y: cam.yView + click.y }, tileSize)
+            const startPos = Map.worldToTilePosition(this, tileSize)
+
+            const pathfindingArray = this.game.sceneManager.currentScene.map.getPathfindingArray()
+            const result = new AStarPathfinding(pathfindingArray, [startPos.x, startPos.y], [endPos.x, endPos.y]).calculatePath()
+            if (result.length > 0) {
+                this.states[STATES.Pathfinding] = true
+                this.states[STATES.Moving] = true
+                this.path = result
+            }
         }
-        else if (this.game.inputManager.downKeys[KEYS.ArrowRight]) {
-            this.direction = DIRECTIONS.East
-            this.states[STATES.Moving] = true
+    }
+
+    handlePathfinding() {
+        const nextTile = { x: this.path[0][0], y: this.path[0][1] }
+        const tilePosition = Map.tileToWorldPosition(nextTile, this.game.sceneManager.currentScene.map.tileSize)
+        let dx = tilePosition.x - this.x
+        let dy = tilePosition.y - this.y
+        const length = Math.sqrt(dx * dx + dy * dy)
+        if (length < 10) {
+            if (this.path.length > 1) {
+                this.path.splice(0, 1)
+            } else {
+                this.x = tilePosition.x
+                this.y = tilePosition.y
+                this.states[STATES.Pathfinding] = false
+                this.states[STATES.Moving] = false
+                this.setStandingAnimation()
+
+            }
+        } else {
+            dx = dx / length
+            dy = dy / length
+            dx = dx * this.game.clockTick * this.speed
+            dy = dy * this.game.clockTick * this.speed
+            this.setMovingAnimation(dx, dy)
+            this.x += dx
+            this.y += dy
         }
-        else if (this.game.inputManager.downKeys[KEYS.ArrowUp]) {
-            this.direction = DIRECTIONS.North
-            this.states[STATES.Moving] = true
+
+    }
+
+    setMovingAnimation(dx, dy) {
+        if (Math.abs(dx) > Math.abs(dy)) {
+            if (dx > 0) {
+                this.direction = DIRECTIONS.East
+                this.animation = this.animations[ANIMS.WalkEast]
+            } else {
+                this.direction = DIRECTIONS.West
+                this.animation = this.animations[ANIMS.WalkWest]
+            }
+        } else {
+            if (dy > 0) {
+                this.direction = DIRECTIONS.South
+                this.animation = this.animations[ANIMS.WalkSouth]
+            } else {
+                this.direction = DIRECTIONS.North
+                this.animation = this.animations[ANIMS.WalkNorth]
+            }
         }
-        else if (this.game.inputManager.downKeys[KEYS.ArrowDown]) {
-            this.direction = DIRECTIONS.South
-            this.states[STATES.Moving] = true
-        }
-        else {
-            this.states[STATES.Moving] = false
+    }
+
+    setStandingAnimation() {
+        switch (this.direction) {
+            case DIRECTIONS.East:
+                this.animation = this.animations[ANIMS.StandEast]
+                break
+            case DIRECTIONS.West:
+                this.animation = this.animations[ANIMS.StandWest]
+                break
+            case DIRECTIONS.North:
+                this.animation = this.animations[ANIMS.StandNorth]
+                break
+            case DIRECTIONS.South:
+                this.animation = this.animations[ANIMS.StandSouth]
         }
     }
 
@@ -85,7 +152,7 @@ export default class PlayableCharacter extends Character {
             const r = this.rng.int(-30, 30)
             const angle = this.rng.float() * Math.PI * 2
             const pos = [this.x + this.width + Math.cos(angle) * r,
-            this.y + this.height + Math.sin(angle) * r]
+                this.y + this.height + Math.sin(angle) * r]
             this.game.sceneManager.currentScene.addEntity(
                 new Effect(this.game, this.game.getAsset(ASSET_PATHS.Effect32), SPELLS.Explosion, pos)
             )
@@ -103,7 +170,7 @@ export default class PlayableCharacter extends Character {
 
     getDefaultAnimationRates() {
         return {
-            [AR.Walk]: 0.1,
+            [AR.Walk]: 0.06,
             [AR.Stand]: 0.6,
             [AR.Death]: 0.15,
             [AR.Spellcast]: 0.15,
@@ -151,4 +218,8 @@ export default class PlayableCharacter extends Character {
         animations[ANIMS.DeathSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Death])
         return animations
     }
+
+
+
+
 }

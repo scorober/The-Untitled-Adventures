@@ -40,6 +40,13 @@ export default class GameEngine {
         this.startInput()
     }
 
+    resizeCanvas(width, height) {
+        this.ctx.canvas.width = width
+        this.ctx.canvas.height = height
+        this.surfaceWidth = width
+        this.surfaceHeight = height
+    }
+
     start() {
         this.gameLoop()
     }

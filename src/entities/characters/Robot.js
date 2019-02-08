@@ -27,18 +27,27 @@ export default class Robot extends Enemy {
         super.draw()
     }
 
+    getDefaultAnimationRates() {
+        return {
+            [AR.Slash]: 0.15,
+            [AR.Impact]: 0.1,
+            [AR.Stand]: 0.6,
+            [AR.Walk]: 0.1
+        }
+    }
+
     getAnimations(spritesheet) {
         //The robots impact sprite was too large to be in this uniform spritesheet.
         const animations = []
         const animationFactory = new AnimationFactory(spritesheet, this.scale)
         //Spellcasting
-        animations[ANIMS.SlashWest] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Spellcast])
-        animations[ANIMS.SlashEast] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Spellcast])
+        animations[ANIMS.SlashWest] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Slash])
+        animations[ANIMS.SlashEast] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Slash])
         animationFactory.rewindFactory(2, 2 * this.attackHeight)
         //copy of SlashWest
-        animations[ANIMS.SpellcastNorth] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Spellcast])
+        animations[ANIMS.SlashNorth] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Slash])
         //copy of SpellcastEast
-        animations[ANIMS.SpellcastSouth] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Spellcast])
+        animations[ANIMS.SlashSouth] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Slash])
 
         //Standing
         animations[ANIMS.StandWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand])
@@ -60,7 +69,6 @@ export default class Robot extends Enemy {
 
         //Impact, Robot has a larger impact sprite 240x240
         animations[ANIMS.Impact] = animationFactory.getNextRow(this.impactSize, this.impactSize, this.animationRates[AR.Impact])
-
         return animations
     }
 }

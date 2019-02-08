@@ -25,17 +25,26 @@ export default class Archer extends Enemy {
         super.draw()
     }
 
+    getDefaultAnimationRates() {
+        return {
+            [AR.Shoot]: 0.15,
+            [AR.Impact]: 0.1,
+            [AR.Stand]: 0.6,
+            [AR.Walk]: 0.1
+        }
+    }
+
     getAnimations(spritesheet) {
         const animations = []
         const animationFactory = new AnimationFactory(spritesheet, this.scale)
         // Shooting
-        animations[ANIMS.ShootWest] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Spellcast])
-        animations[ANIMS.ShootEast] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Spellcast])
+        animations[ANIMS.ShootWest] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Shoot])
+        animations[ANIMS.ShootEast] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Shoot])
         animationFactory.rewindFactory(2, 2 * this.attackHeight)
         // Copy of ShootWest
-        animations[ANIMS.ShootNorth] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Spellcast])
+        animations[ANIMS.ShootNorth] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Shoot])
         // Copy of ShootEast
-        animations[ANIMS.ShootSouth] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Spellcast])
+        animations[ANIMS.ShootSouth] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Shoot])
 
         // Standing
         animations[ANIMS.StandWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand])

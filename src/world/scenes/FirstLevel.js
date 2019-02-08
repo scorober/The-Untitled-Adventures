@@ -59,9 +59,9 @@ export default class FirstLevel extends Scene {
         const marriott = new Marriott(game, game.getAsset(ASSET_PATHS.Marriott),start)
 
         marriott.setFollowTarget(player)
-        mage.setFollowTarget(marriott)   
-        robot0.setFollowTarget(mage)
-        archer0.setFollowTarget(robot0)
+        mage.setFollowTarget(player)   
+        robot0.setFollowTarget(player)
+        archer0.setFollowTarget(player)
 
         this.addEntity(player)
         this.addEntity(game.camera)
@@ -69,7 +69,6 @@ export default class FirstLevel extends Scene {
         this.addEntity(marriott)
         this.addEntity(robot0)
         this.addEntity(archer0)
-
     }
 
     /**
@@ -80,6 +79,8 @@ export default class FirstLevel extends Scene {
         //here to reduce confusion, and to allow the order they are updated/rendered to be adjusted.
         this.updateMap()
         this.updateEntities()
+        //Reorders the entities in the correct drawing format
+        this.entities.sort((a,b) => a.y - b.y)
     }
 
     /**
