@@ -26,12 +26,23 @@ export default class Fireball extends Entity {
         this.vector = dir.divideScalar(dir.magnitude)
         console.log(this.vector)
         this.states[STATES.Stage1] = true
+        this.angle = dir.getAngle()
+        const dx = target.x - pos.x
+        let dy = 0
+        if (target.y >= pos.y) {
+            dy = -(target.y - pos.y)
+        } else {
+            dy = pos.y - target.y
+        }
+
+        this.angle = Math.atan(dy, dx)
+        console.log('angle::')
+        console.log(this.angle)
     }
 
     update() {
         if (this.states[STATES.Stage1] === true) {
             if (this.animation.isDone()) {
-                console.log('I\'m done sone')
                 this.animation = this.animations[ANIMS.Projectile]
             }
         }
@@ -40,7 +51,7 @@ export default class Fireball extends Entity {
     }
 
     draw() {
-        this.animation.drawFrame(this.game, this.x, this.y)
+        this.animation.drawFrame(this.game, this.x, this.y, this.angle)
         super.draw()
     }
 

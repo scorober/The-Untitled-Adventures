@@ -110,6 +110,10 @@ export default class Vector {
         return this.x * this.x + this.y * this.y
     }
 
+    getAngle() {
+        return Vector.radian2degrees(Math.atan(this.y, this.x))
+    }
+
     /** static helper methods that can be called by any class. */
     static radian2degrees(radian){
         return radian * degrees
