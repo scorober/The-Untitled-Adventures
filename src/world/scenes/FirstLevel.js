@@ -1,13 +1,9 @@
 import Scene from './Scene.js'
 import Map from '../Map.js'
-import PlayerCharacter from '../../entities/characters/PlayerCharacter.js'
 import Dungeon from '../generators/Dungeon.js'
 import Background from '../Background.js'
-import Mage from '../../entities/characters/Mage.js'
-import Marriott from '../../entities/characters/Marriott.js'
+import Entity from '../../entities/Entity.js'
 import { ASSET_PATHS } from '../../utils/Const.js'
-import Robot from '../../entities/characters/Robot.js'
-import Archer from '../../entities/characters/Archer.js'
 
 export default class FirstLevel extends Scene {
 
@@ -47,28 +43,14 @@ export default class FirstLevel extends Scene {
 
         this.setBackground(new Background(game, game.getAsset(ASSET_PATHS.Background)))
         this.setMap(new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon))
-
         const start = this.map.getStartPos()
-        const player = new PlayerCharacter(game, game.getAsset(ASSET_PATHS.MikesChar), start)
+
+        const player = new Entity(game, game.getAsset(ASSET_PATHS.MikesChar), start)
+        player.addComponent(new AnimationComponent(game.getAsset(ASSET_PATHS.MikesChar)))
+
         game.camera.setFollowedEntity(player)
-
-
-        const archer0 = new Archer(game, game.getAsset(ASSET_PATHS.Archer), start)
-        const robot0 = new Robot(game, game.getAsset(ASSET_PATHS.Robot), start)
-        const mage = new Mage(game, game.getAsset(ASSET_PATHS.Mage), start)
-        const marriott = new Marriott(game, game.getAsset(ASSET_PATHS.Marriott),start)
-
-        marriott.setFollowTarget(player)
-        mage.setFollowTarget(player)   
-        robot0.setFollowTarget(player)
-        archer0.setFollowTarget(player)
-
         this.addEntity(player)
         this.addEntity(game.camera)
-        this.addEntity(mage)
-        this.addEntity(marriott)
-        this.addEntity(robot0)
-        this.addEntity(archer0)
     }
 
     /**
