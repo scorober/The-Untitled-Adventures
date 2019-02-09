@@ -1,6 +1,6 @@
 
 export const ASSET_PATHS = {
-    MikesChar: './assets/img/mikeschar.png',
+    MikesChar: './assets/img/goldenknight.png',
     Mage: './assets/img/mage.png',
     Archer: './assets/img/archer.png',
     Robot: './assets/img/robot-full.png',
@@ -51,6 +51,10 @@ export const ANIMATIONS = {
     ShootSouth: Symbol(),
     ShootEast: Symbol(),
     DeathSouth: Symbol(),
+    OversizeNorth: Symbol(),
+    OversizeWest: Symbol(),
+    OversizeSouth: Symbol(),
+    OversizeEast: Symbol(),
 
     /** Marriott-specific animations */
     SitDownWest: Symbol(),
@@ -73,6 +77,8 @@ export const ANIMATION_RATES = {
     Thrust: Symbol(),
     Slash: Symbol(),
     Shoot: Symbol(),
+    OversizeSlash: Symbol(),
+    OversizeThrust: Symbol(),
 
     /** Marriott-specific rates */
     Sit: Symbol(),

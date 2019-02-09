@@ -24,14 +24,21 @@ export default class AnimationFactory {
      *                                      which should be included in this animation
      * @returns The animation on the next row, or false if no more rows of sprites exist.
      */
-    getNextRow(frameWidth, frameHeight, rate, loop = true, maxFrames = false) {
+    getNextRow(frameWidth, frameHeight, rate, options = {}) {
+        const defaults = {
+            loop: true,
+            maxFrames: false,
+            yOffset: 0
+        }
+        options = Object.assign({}, defaults, options)
         if (this.startY + frameHeight <= this.spritesheet.height) {
-            const animation = new Animation(this.spritesheet, frameWidth, frameHeight, this.startY, rate, loop, this.scale, maxFrames)
+            const animation = new Animation(this.spritesheet, frameWidth, frameHeight, this.startY, options.yOffset, rate, options.loop, this.scale, options.maxFrames)
             this.startY += frameHeight
             this.row += 1
             return animation
         } else {
-            console.error('getNextRow has reached the bottom of the spritesheet and cannot access another row.')
+            // eslint-disable-next-line no-console
+            //console.error('getNextRow has reached the bottom of the spritesheet and cannot access another row.')
             return false
         }
     }

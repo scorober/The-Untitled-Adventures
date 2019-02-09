@@ -1,5 +1,5 @@
 import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR } from '../../utils/Const.js'
-import Enemy from './Enemy.js'
+import Enemy from '../Enemy.js'
 import AnimationFactory from '../../AnimationFactory.js'
 
 export default class Mage extends Enemy {

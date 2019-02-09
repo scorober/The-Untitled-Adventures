@@ -1,22 +1,22 @@
-
 export default class Animation {
-    constructor(spritesheet, frameWidth, frameHeight, startY, frameDuration, loop, scale, maxFrames = false) {
+    constructor(spritesheet, frameWidth, frameHeight, startY, yOffset, frameDuration, loop, scale, maxFrames = false) {
         this.spritesheet = spritesheet
         this.frameWidth = frameWidth
         this.frameHeight = frameHeight
         this.startY = startY
+        this.yOffset = yOffset
         this.frameDuration = frameDuration
         this.frames = maxFrames ? maxFrames : this.countSpriteRowColumns(this.spritesheet, this.startY, this.frameWidth, this.frameHeight)
         this.loop = loop
         this.scale = scale
         this.elapsedTime = 0
-        this.totalTime = frameDuration * frames
+        this.totalTime = this.frameDuration * this.frames
     }
 
     /**
      * 
      * @param {HTMLImageElement} spritesheet The entire spritesheet for this Entity 
-     * @returns {boolean||number} False if sheet is not oversized, integer value number
+     * @returns {booleannumber} False if sheet is not oversized, integer value number
      *          of columns with oversized sprites if oversized
      */
     countSpriteRowColumns(spritesheet, startY, frameWidth, frameHeight) {
@@ -67,7 +67,6 @@ export default class Animation {
     }
 
     drawFrame(game, x, y) {
-        //console.log(this.loop)
         this.elapsedTime += game.clockTick
         if (this.isDone()) {
         
@@ -84,7 +83,7 @@ export default class Animation {
             this.frameWidth,
             this.frameHeight,
             (x - (this.frameWidth * this.scale / 2)) - game.camera.xView,
-            (y - (this.frameHeight * this.scale * 0.9)) - game.camera.yView,
+            (y - (this.frameHeight * this.scale)) + this.yOffset - game.camera.yView,
             this.frameWidth * this.scale,
             this.frameHeight * this.scale
         )

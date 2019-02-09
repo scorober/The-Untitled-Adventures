@@ -1,6 +1,6 @@
 
 import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR } from '../../utils/Const.js'
-import Enemy from './Enemy.js'
+import Enemy from '../Enemy.js'
 import AnimationFactory from '../../AnimationFactory.js'
 
 export default class Robot extends Enemy {
@@ -68,7 +68,7 @@ export default class Robot extends Enemy {
         animations[ANIMS.WalkNorth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Walk])
 
         //Impact, Robot has a larger impact sprite 240x240
-        animations[ANIMS.Impact] = animationFactory.getNextRow(this.impactSize, this.impactSize, this.animationRates[AR.Impact])
+        animations[ANIMS.Impact] = animationFactory.getNextRow(this.impactSize, this.impactSize, this.animationRates[AR.Impact], { loop: false })
         return animations
     }
 }

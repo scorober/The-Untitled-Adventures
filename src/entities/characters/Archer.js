@@ -1,6 +1,6 @@
 import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR } from '../../utils/Const.js'
 import AnimationFactory from '../../AnimationFactory.js'
-import Enemy from './Enemy.js'
+import Enemy from '../Enemy.js'
 
 export default class Archer extends Enemy {
     constructor(game, spritesheet, pos) {
@@ -56,7 +56,7 @@ export default class Archer extends Enemy {
         animations[ANIMS.StandSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand])
 
         // Impact
-        animations[ANIMS.Impact] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Impact], false)
+        animations[ANIMS.Impact] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Impact], { loop: false })
 
         // Walking
         animations[ANIMS.WalkWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Walk])

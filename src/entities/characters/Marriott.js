@@ -1,5 +1,5 @@
 import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR, STATES, DIRECTIONS } from '../../utils/Const.js'
-import Npc from './Npc.js'
+import Npc from '../Npc.js'
 import AnimationFactory from '../../AnimationFactory.js'
 
 export default class Marriott extends Npc {
@@ -21,7 +21,7 @@ export default class Marriott extends Npc {
     update() {
         super.update()
         if (this.states[STATES.Moving] === false) {
-            this.standingTime ++
+            this.standingTime++
             this.movingTime = 0
             this.animations[ANIMS.StandUpEast].elapsedTime = 0
             this.animations[ANIMS.StandUpWest].elapsedTime = 0
@@ -30,10 +30,10 @@ export default class Marriott extends Npc {
             this.animations[ANIMS.SitDownEast].elapsedTime = 0
             this.animations[ANIMS.SitDownWest].elapsedTime = 0
         }
-        if (this.states[STATES.Following] === true ){
-            this.movingTime ++
+        if (this.states[STATES.Following] === true) {
+            this.movingTime++
         }
-        
+
     }
 
     draw() {
@@ -42,7 +42,7 @@ export default class Marriott extends Npc {
     }
 
     handleStanding() {
-        if (this.standingTime > this.standingDelay ) {
+        if (this.standingTime > this.standingDelay) {
             if (this.direction === DIRECTIONS.East || this.direction === DIRECTIONS.South) {
                 this.animation = this.animations[ANIMS.SitDownEast]
             } else {
@@ -54,7 +54,7 @@ export default class Marriott extends Npc {
     }
 
     moveCharacter() {
-        if (this.movingTime < this.sittingDelay ) {
+        if (this.movingTime < this.sittingDelay) {
             if (this.animation === this.animations[ANIMS.SitDownEast] || this.animation === this.animations[ANIMS.StandUpEast]) {
                 this.animation = this.animations[ANIMS.StandUpEast]
             } else {
@@ -84,16 +84,15 @@ export default class Marriott extends Npc {
         animations[ANIMS.WalkEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Walk])
         animationFactory.rewindFactory(4, 4 * this.height)
         //standing
-        animations[ANIMS.StandNorth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], true, 2)
-        animations[ANIMS.StandWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], true, 2)
-        animations[ANIMS.StandSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], true, 2)
-        animations[ANIMS.StandEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], true, 2)
+        animations[ANIMS.StandNorth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], { maxFrames: 2 })
+        animations[ANIMS.StandWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], { maxFrames: 2 })
+        animations[ANIMS.StandSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], { maxFrames: 2 })
+        animations[ANIMS.StandEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], { maxFrames: 2 })
         // Sitting on desk
-        animations[ANIMS.SitDownEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Sit], false)
-        animations[ANIMS.StandUpEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Sit], false)
-        animations[ANIMS.SitDownWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Sit], false)
-        animations[ANIMS.StandUpWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Sit], false)
-
+        animations[ANIMS.SitDownEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Sit], { loop: false })
+        animations[ANIMS.StandUpEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Sit], { loop: false })
+        animations[ANIMS.SitDownWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Sit], { loop: false })
+        animations[ANIMS.StandUpWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Sit], { loop: false })
 
         return animations
     }

@@ -1,5 +1,4 @@
 import Character from './Character.js'
-import { ANIMATION_RATES as AR } from '../../utils/Const.js'
 
 export default class Enemy extends Character {
     constructor(game, pos) {

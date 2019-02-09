@@ -1,5 +1,5 @@
 import { ANIMATIONS as ANIMS, STATES, ANIMATION_RATES as AR, DIRECTIONS, ASSET_PATHS, SPELLS, KEYS } from '../../utils/Const.js'
-import Character from './Character.js'
+import Character from '../Character.js'
 import AStarPathfinding from '../../utils/AStarPathfinding.js'
 import Map from '../../world/Map.js'
 import Effect from '../../entities/Effect.js'
@@ -11,8 +11,14 @@ export default class PlayableCharacter extends Character {
         this.scale = 1.3
         this.width = 64
         this.height = 64
+        this.oversizeWidth = 192
+        this.oversizeHeight = 192
+        this.oversizeOffset = 85
         this.animationRates = this.getDefaultAnimationRates()
         this.animations = this.getAnimations(spritesheet)
+        if (this.animations[ANIMS.OversizeNorth] != false) {
+            this.oversize = true
+        }
         this.animation = this.animations[ANIMS.StandEast]
         this.states[STATES.Pathfinding] = false
         this.path = null
@@ -28,6 +34,9 @@ export default class PlayableCharacter extends Character {
         }
         if (this.states[STATES.Pathfinding]) {
             this.handlePathfinding()
+        }
+        if (this.game.inputManager.downKeys[KEYS.KeyD] && this.oversize) {
+            this.animation = this.animations[ANIMS.OversizeEast]
         }
     }
 
@@ -176,7 +185,8 @@ export default class PlayableCharacter extends Character {
             [AR.Spellcast]: 0.15,
             [AR.Thrust]: 0.15,
             [AR.Slash]: 0.15,
-            [AR.Shoot]: 0.15
+            [AR.Shoot]: 0.15,
+            [AR.Oversize]: 0.1
         }
     }
 
@@ -205,10 +215,10 @@ export default class PlayableCharacter extends Character {
         animations[ANIMS.SlashEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Slash])
         // Standing (modified slashing)
         animationFactory.rewindFactory(4, 4 * this.height)
-        animations[ANIMS.StandNorth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], true, 2)
-        animations[ANIMS.StandWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], true, 2)
-        animations[ANIMS.StandSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], true, 2)
-        animations[ANIMS.StandEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], true, 2)
+        animations[ANIMS.StandNorth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], { maxFrames: 2 })
+        animations[ANIMS.StandWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], { maxFrames: 2 })
+        animations[ANIMS.StandSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], { maxFrames: 2 })
+        animations[ANIMS.StandEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand], { maxFrames: 2 })
         // Shooting
         animations[ANIMS.ShootNorth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Shoot])
         animations[ANIMS.ShootWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Shoot])
@@ -216,6 +226,11 @@ export default class PlayableCharacter extends Character {
         animations[ANIMS.ShootEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Shoot])
         // Hurt
         animations[ANIMS.DeathSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Death])
+        // Oversized animations
+        animations[ANIMS.OversizeNorth] = animationFactory.getNextRow(this.oversizeWidth, this.oversizeHeight, this.animationRates[AR.Oversize], { yOffset: this.oversizeOffset })
+        animations[ANIMS.OversizeWest] = animationFactory.getNextRow(this.oversizeWidth, this.oversizeHeight, this.animationRates[AR.Oversize], { yOffset: this.oversizeOffset })
+        animations[ANIMS.OversizeSouth] = animationFactory.getNextRow(this.oversizeWidth, this.oversizeHeight, this.animationRates[AR.Oversize], { yOffset: this.oversizeOffset })
+        animations[ANIMS.OversizeEast] = animationFactory.getNextRow(this.oversizeWidth, this.oversizeHeight, this.animationRates[AR.Oversize], { yOffset: this.oversizeOffset })
         return animations
     }
 
