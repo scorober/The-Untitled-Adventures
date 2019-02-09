@@ -119,6 +119,7 @@ export default class Vector {
         return radian * degrees
     }
 
+
     static degrees2radian(deg){
         return deg / degrees
     }
@@ -127,6 +128,22 @@ export default class Vector {
     static vectorLength(v = this){
         return Math.sqrt(v.lengthSq())
     }
+
+    /**
+     * Gets the angle between two points relative to the canvas grid.
+     * @param {*} pos 
+     * @param {*} target 
+     */
+    static getAngle(pos, target) {
+        let theta = Math.atan2(-(pos.y - target.y), -(pos.x - target.x))
+        if (theta < 0) {
+            theta += Math.PI * 2
+        }
+        theta += (1/4) * Math.PI * 2
+        return theta
+    }
+
+
 
 
 

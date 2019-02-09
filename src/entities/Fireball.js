@@ -9,41 +9,24 @@ import Vector from '../utils/Vector.js'
 export default class Fireball extends Entity {
     constructor(game, spritesheet, pos, target) {
         super(game, pos)
-        console.log(pos)
-        console.log(target)
-        this.posX = pos.x
-        this.posY = pos.y
-        this.targetX = target.x
-        this.targetY = target.y
         this.animationRates = this.getDefaultAnimationRates()
         this.animations = this.getAnimations(spritesheet)
         this.scale = 1
         this.animation = this.animations[ANIMS.Start]
         this.speed = 250
-        this.dx = this.targetX - this.posX
-        this.dy = this.targetY - this.posY
-        // if (this.targetY < this.posY) {
-        //     this.dy = this.targetY - this.posY
-        // } else {
-        //     this.dy = this.posY - this.targetY
-        // }
-        console.log(this.dy)
-        console.log(this.dx)
-        console.log(Math.atan(this.dy / this.dx))
 
         const dir = new Vector(target.x - pos.x, target.y - pos.y)
-        console.log(dir)
-        dir.divideScalar(dir.magnitude)
+        dir.divideScalar(dir.magnitude) //Why do I need this twice? Normalization is wrong...
         this.vector = dir.divideScalar(dir.magnitude)
-        console.log(this.vector)
         this.states[STATES.Stage1] = true
-        this.angle = dir.getAngle()
+        this.angle = Vector.getAngle(pos, target)
     }
 
     update() {
         if (this.states[STATES.Stage1] === true) {
             if (this.animation.isDone()) {
                 this.animation = this.animations[ANIMS.Projectile]
+                this.states[STATES.Stage2] = true
             }
         }
         this.x = this.x + this.vector.x * this.speed
@@ -52,7 +35,7 @@ export default class Fireball extends Entity {
 
     draw() {
         
-        this.animation.drawFrame(this.game, this.x, this.y, Math.atan(this.dy / this.dx))
+        this.animation.drawFrame(this.game, this.x, this.y, this.angle)
         super.draw()
     }
 
