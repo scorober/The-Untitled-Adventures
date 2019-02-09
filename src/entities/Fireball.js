@@ -11,6 +11,8 @@ export default class Fireball extends Entity {
         super(game, pos)
         console.log(pos)
         console.log(target)
+        this.posX = pos.x
+        this.posY = pos.y
         this.targetX = target.x
         this.targetY = target.y
         this.animationRates = this.getDefaultAnimationRates()
@@ -18,26 +20,24 @@ export default class Fireball extends Entity {
         this.scale = 1
         this.animation = this.animations[ANIMS.Start]
         this.speed = 250
-        
-        //Get a normalized distance vector
+        this.dx = this.targetX - this.posX
+        this.dy = this.targetY - this.posY
+        // if (this.targetY < this.posY) {
+        //     this.dy = this.targetY - this.posY
+        // } else {
+        //     this.dy = this.posY - this.targetY
+        // }
+        console.log(this.dy)
+        console.log(this.dx)
+        console.log(Math.atan(this.dy / this.dx))
+
         const dir = new Vector(target.x - pos.x, target.y - pos.y)
         console.log(dir)
-        console.log(dir.divideScalar(dir.magnitude) )
+        dir.divideScalar(dir.magnitude)
         this.vector = dir.divideScalar(dir.magnitude)
         console.log(this.vector)
         this.states[STATES.Stage1] = true
         this.angle = dir.getAngle()
-        const dx = target.x - pos.x
-        let dy = 0
-        if (target.y >= pos.y) {
-            dy = -(target.y - pos.y)
-        } else {
-            dy = pos.y - target.y
-        }
-
-        this.angle = Math.atan(dy, dx)
-        console.log('angle::')
-        console.log(this.angle)
     }
 
     update() {
@@ -51,7 +51,8 @@ export default class Fireball extends Entity {
     }
 
     draw() {
-        this.animation.drawFrame(this.game, this.x, this.y, this.angle)
+        
+        this.animation.drawFrame(this.game, this.x, this.y, Math.atan(this.dy / this.dx))
         super.draw()
     }
 

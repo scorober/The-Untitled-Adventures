@@ -76,17 +76,8 @@ export default class Animation {
         const startX = (frame % this.frames) * this.frameWidth
         const startY = this.startY
 
-
         const offscreenCanvas = document.createElement('canvas')
         const size = Math.max(this.frameWidth * this.scale, this.frameHeight * this.scale)
-        let xOffset = 0;
-        let yOffset = 0;
-    
-        if ((this.frameWidth * this.scale) > (this.frameHeight * this.scale)){
-          yOffset = (this.frameWidth * this.scale) - (this.frameHeight * this.scale);
-        } else if ((this.frameWidth * this.scale) < (this.frameHeight * this.scale)) {
-          xOffset = (this.frameHeight * this.scale) - (this.frameWidth * this.scale);
-        }
 
         offscreenCanvas.width = size
         offscreenCanvas.height = size
@@ -110,8 +101,6 @@ export default class Animation {
             this.frameHeight * this.scale
         )
 
-        //Test
-
         offscreenCtx.save()
         offscreenCtx.translate(size / 2, size / 2)
         offscreenCtx.rotate(angle)
@@ -121,17 +110,6 @@ export default class Animation {
         thirdCtx.clearRect(0,0, size, size)
         game.ctx.drawImage(offscreenCanvas,  (x - (this.frameWidth * this.scale / 2)) - game.camera.xView,(y - (this.frameHeight * this.scale)) + this.yOffset - game.camera.yView)
 
-        // game.ctx.drawImage(
-        //     this.spritesheet,
-        //     startX,
-        //     startY, // source from sheet
-        //     this.frameWidth,
-        //     this.frameHeight,
-        //     (x - (this.frameWidth * this.scale / 2)) - game.camera.xView,
-        //     (y - (this.frameHeight * this.scale)) + this.yOffset - game.camera.yView,
-        //     this.frameWidth * this.scale,
-        //     this.frameHeight * this.scale
-        // )
     }
 
     currentFrame() {

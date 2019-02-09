@@ -68,8 +68,8 @@ export default class Vector {
     }
 
     divideScalar (s) {
-        this.x /= Math.floor(s)
-        this.y /= Math.floor(s)
+        this.x /= s
+        this.y /= s
         return this
     }
 
