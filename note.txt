@@ -1,2 +1,0 @@
-\[(.*)\]: new Animation\(spritesheet, (.*), (.*), \d*, \d*, (.*), \d*, .*, .*\),
-animations[$1] = animationFactory.getNextRow($2, $3, $4)

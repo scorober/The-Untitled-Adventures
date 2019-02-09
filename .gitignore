@@ -2,8 +2,4 @@ node_modules/
 package-lock.json
 _config.yml
 .prettierrc
-<<<<<<< HEAD
-notes.txt
-=======
 .idea/
->>>>>>> master
