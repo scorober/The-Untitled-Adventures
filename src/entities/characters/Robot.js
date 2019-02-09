@@ -1,7 +1,7 @@
 
 import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR } from '../../utils/Const.js'
-import Animation from '../../Animation.js'
-import Enemy from './Enemy.js'
+import Enemy from '../Enemy.js'
+import AnimationFactory from '../../AnimationFactory.js'
 
 export default class Robot extends Enemy {
     constructor(game, spritesheet, pos) {
@@ -11,6 +11,7 @@ export default class Robot extends Enemy {
         this.height = 192
         this.attackHeight = 192
         this.attackWidth = 384
+        this.impactSize = 240
         this.animationRates = this.getDefaultAnimationRates()
         this.animations = this.getAnimations(spritesheet)
         this.animation = this.animations[ANIMS.StandEast]
@@ -26,34 +27,48 @@ export default class Robot extends Enemy {
         super.draw()
     }
 
+    getDefaultAnimationRates() {
+        return {
+            [AR.Slash]: 0.15,
+            [AR.Impact]: 0.1,
+            [AR.Stand]: 0.6,
+            [AR.Walk]: 0.1
+        }
+    }
+
     getAnimations(spritesheet) {
         //The robots impact sprite was too large to be in this uniform spritesheet.
-        const animations = {
-            //Spellcasting
-            [ANIMS.SpellcastWest]: new Animation(spritesheet, this.attackWidth, this.attackHeight, 17, 1, this.animationRates[AR.Spellcast], 17, false, this.scale),
-            [ANIMS.SpellcastEast]: new Animation(spritesheet, this.attackWidth, this.attackHeight, 17, 2, this.animationRates[AR.Spellcast], 17, false, this.scale),
-            //copy of SpellcastWest
-            [ANIMS.SpellcastNorth]: new Animation(spritesheet, this.attackWidth, this.attackHeight, 17, 1, this.animationRates[AR.Spellcast], 17, false, this.scale),
-            //copy of SpellcastEast
-            [ANIMS.SpellcastSouth]: new Animation(spritesheet, this.attackWidth, this.attackHeight, 17, 2, this.animationRates[AR.Spellcast], 17, false, this.scale),
-            
-            //Standing
-            [ANIMS.StandWest]: new Animation(spritesheet, this.width, this.height, 10, 3, this.animationRates[AR.Stand], 10, true, this.scale),
-            [ANIMS.StandEast]: new Animation(spritesheet, this.width, this.height, 10, 4, this.animationRates[AR.Stand], 10, true, this.scale),
-            // copy of stand west
-            [ANIMS.StandNorth]: new Animation(spritesheet, this.width, this.height, 10, 3, this.animationRates[AR.Stand], 10, true, this.scale),
-            // copy of stand east
-            [ANIMS.StandSouth]: new Animation(spritesheet, this.width, this.height, 10, 4, this.animationRates[AR.Stand], 10, true, this.scale),
-            
-            //Walk
-            [ANIMS.WalkWest]: new Animation(spritesheet, this.width, this.height, 9, 5, this.animationRates[AR.Walk], 9, true, this.scale),
-            [ANIMS.WalkEast]: new Animation(spritesheet, this.width, this.height, 9, 6, this.animationRates[AR.Walk], 9, true, this.scale),
-            [ANIMS.WalkSouth]: new Animation(spritesheet, this.width, this.height, 9, 5, this.animationRates[AR.Walk], 9, true, this.scale),
-            [ANIMS.WalkNorth]: new Animation(spritesheet, this.width, this.height, 9, 6, this.animationRates[AR.Walk], 9, true, this.scale),
+        const animations = []
+        const animationFactory = new AnimationFactory(spritesheet, this.scale)
+        //Spellcasting
+        animations[ANIMS.SlashWest] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Slash])
+        animations[ANIMS.SlashEast] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Slash])
+        animationFactory.rewindFactory(2, 2 * this.attackHeight)
+        //copy of SlashWest
+        animations[ANIMS.SlashNorth] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Slash])
+        //copy of SpellcastEast
+        animations[ANIMS.SlashSouth] = animationFactory.getNextRow(this.attackWidth, this.attackHeight, this.animationRates[AR.Slash])
 
-            //Impact, Robot has a larger impact sprite 240x240
-            [ANIMS.Impact]: new Animation(spritesheet, this.impactSize, this.impactSize, 8, 7, this.animationRates[AR.Impact], 8, false, this.scale),
-        }
+        //Standing
+        animations[ANIMS.StandWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand])
+        animations[ANIMS.StandEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand])
+        animationFactory.rewindFactory(2, 2 * this.height)
+        // copy of stand west
+        animations[ANIMS.StandNorth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand])
+        // copy of stand east
+        animations[ANIMS.StandSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Stand])
+
+        //Walk
+        animations[ANIMS.WalkWest] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Walk])
+        animations[ANIMS.WalkEast] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Walk])
+        animationFactory.rewindFactory(2, 2 * this.height)
+        // Copy of WalkWest
+        animations[ANIMS.WalkSouth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Walk])
+        // Copy of WalkEast
+        animations[ANIMS.WalkNorth] = animationFactory.getNextRow(this.width, this.height, this.animationRates[AR.Walk])
+
+        //Impact, Robot has a larger impact sprite 240x240
+        animations[ANIMS.Impact] = animationFactory.getNextRow(this.impactSize, this.impactSize, this.animationRates[AR.Impact], { loop: false })
         return animations
     }
 }

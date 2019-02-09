@@ -1,5 +1,5 @@
-import { ANIMATIONS, STATES, DIRECTIONS } from '../../utils/Const.js'
-import Entity from '../Entity.js'
+import { ANIMATIONS, STATES, DIRECTIONS } from '../utils/Const.js'
+import Entity from './Entity.js'
 
 export default class Character extends Entity {
     constructor(game, pos) {
