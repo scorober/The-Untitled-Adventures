@@ -9,7 +9,9 @@ export const ASSET_PATHS = {
     Teleport: './assets/img/teleport.png',
     Background: './assets/img/background.jpg',
     Effect32: './assets/img/effects_y32.png',
-    TitleAnimation: './assets/img/animated_title_bg.png'
+    TitleAnimation: './assets/img/animated_title_bg.png',
+    ScottsChar: './assets/img/scotts-char.png',
+    Fireball: './assets/img/fireball.png'
 }
 
 export const STATES = {
@@ -21,7 +23,11 @@ export const STATES = {
     Frozen: Symbol(),
     RemoveFromWorld: Symbol(),
     Aggressive: Symbol(),
-    Cooling: Symbol
+    Cooling: Symbol(),
+    Stage1: Symbol(),
+    Stage2: Symbol()
+
+
 }
 
 export const ANIMATIONS = {
@@ -63,9 +69,15 @@ export const ANIMATIONS = {
     StandUpEast: Symbol(),
 
     /** Mage-specific animations */
-    Impact: Symbol(),
     PowerupWest: Symbol(),
     PowerupEast: Symbol(),
+
+    /** Spell/effect specific animations. */
+    Fire: Symbol(),
+    Projectile: Symbol(),
+    Impact: Symbol(),
+    Boost: Symbol(),
+    Projectile: Symbol()
 }
 
 export const ANIMATION_RATES = {

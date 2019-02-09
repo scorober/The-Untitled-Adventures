@@ -73,7 +73,7 @@ export default class FirstLevel extends Scene {
         this.setMap(new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon))
 
         const start = this.map.getStartPos()
-        const player = new PlayerCharacter(game, game.getAsset(ASSET_PATHS.MikesChar), start)
+        const player = new PlayerCharacter(game, game.getAsset(ASSET_PATHS.ScottsChar), start)
         game.camera.setFollowedEntity(player)
 
 

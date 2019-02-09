@@ -69,9 +69,8 @@ export default class Animation {
     drawFrame(game, x, y) {
         this.elapsedTime += game.clockTick
         if (this.isDone()) {
-        
             if (this.loop) this.elapsedTime = 0
-            else this.elapsedTime -= game.clockTick
+            // else this.elapsedTime -= game.clockTick
         }
         const frame = this.currentFrame()
         const startX = (frame % this.frames) * this.frameWidth

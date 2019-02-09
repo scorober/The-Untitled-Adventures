@@ -67,6 +67,12 @@ export default class Vector {
         return this
     }
 
+    divideScalar (s) {
+        this.x /= Math.floor(s)
+        this.y /= Math.floor(s)
+        return this
+    }
+
     subtractScalar (scalar) {
         this.x -= scalar
         this.y -= scalar

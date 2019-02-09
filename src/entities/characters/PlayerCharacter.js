@@ -4,6 +4,7 @@ import AStarPathfinding from '../../utils/AStarPathfinding.js'
 import Map from '../../world/Map.js'
 import Effect from '../../entities/Effect.js'
 import AnimationFactory from '../../AnimationFactory.js'
+import Fireball from '../Fireball.js'
 
 export default class PlayableCharacter extends Character {
     constructor(game, spritesheet, x, y) {
@@ -29,6 +30,7 @@ export default class PlayableCharacter extends Character {
     update() {
         //super.update()
         if (this.states[STATES.Following] == false) {
+            this.getCombatInput()
             this.getPathfindingInput()
 
         }
@@ -43,6 +45,15 @@ export default class PlayableCharacter extends Character {
     draw() {
         this.animation.drawFrame(this.game, this.x, this.y)
         super.draw()
+    }
+
+    getCombatInput() {
+        if (this.game.inputManager.newLeftClick) {
+            this.game.inputManager.newLeftClick = false
+            const cam = this.game.camera
+            const click = this.game.inputManager.lastLeftClickPosition
+            this.game.sceneManager.currentScene.addEntity(new Fireball(this.game, this.game.getAsset(ASSET_PATHS.Fireball), { x: this.x, y : this.y }, { x: cam.xView + click.x, y: cam.yView + click.y }))
+        }
     }
 
     getPathfindingInput() {
