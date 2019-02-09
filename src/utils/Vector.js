@@ -110,15 +110,31 @@ export default class Vector {
         return this.x * this.x + this.y * this.y
     }
 
-    getAngle() {
-        return Vector.radian2degrees(Math.atan(this.y, this.x))
+    /**
+     * If the absolute vector axis is greater than `max`, multiplies the axis by `factor`
+     *
+     * ### Examples:
+     *     var vec = new Victor(100, 50);
+     *
+     *     vec.limit(80, 0.9);
+     *     vec.toString();
+     *     // => x:90, y:50
+     *
+     * @param {Number} max The maximum value for both x and y axis
+     * @param {Number} factor Factor by which the axis are to be multiplied with
+     * @return {Vector} `this` for chaining capabilities
+     * @api public
+     */
+    limit(max, factor) {
+        if (Math.abs(this.x) > max){ this.x *= factor }
+        if (Math.abs(this.y) > max){ this.y *= factor }
+        return this
     }
 
     /** static helper methods that can be called by any class. */
     static radian2degrees(radian){
         return radian * degrees
     }
-
 
     static degrees2radian(deg){
         return deg / degrees
@@ -142,11 +158,5 @@ export default class Vector {
         theta += (1/4) * Math.PI * 2
         return theta
     }
-
-
-
-
-
-
 }
 const degrees = 180 / Math.PI

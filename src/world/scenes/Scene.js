@@ -38,6 +38,16 @@ export default class Scene {
     }
 
     /**
+     * Adds an a collidable entity to the game. Works in place of addEntity.
+     * @param entity
+     */
+    addCollidableEntity(entity){
+        this.addEntity(entity)
+        entity.setCollidable()
+        this.game.sceneManager.addCollidableEntity(entity)
+    }
+
+    /**
      * Remove an entity from scene so it is no longer updated or drawn
      * @param entitiy
      */
@@ -91,10 +101,14 @@ export default class Scene {
      */
     updateEntities() {
         const entitiesCount = this.entities.length
+        if(entitiesCount){
+            this.entities.sort((a,b) => a.y - b.y)
+        }
         for (let i = 0; i < entitiesCount; i++) {
             const entity = this.entities[i]
             entity.update()
         }
+
     }
 
     /**

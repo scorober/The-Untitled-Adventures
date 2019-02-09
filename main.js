@@ -16,6 +16,7 @@ assetManager.queueDownload(ASSET_PATHS.Effect32)
 assetManager.queueDownload(ASSET_PATHS.TitleAnimation)
 assetManager.queueDownload(ASSET_PATHS.ScottsChar)
 assetManager.queueDownload(ASSET_PATHS.Fireball)
+assetManager.queueDownload(ASSET_PATHS.Skeleton)
 
 assetManager.downloadAll(function () {
     const canvas = document.getElementById('gameWorld')

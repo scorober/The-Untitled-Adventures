@@ -11,7 +11,8 @@ export const ASSET_PATHS = {
     Effect32: './assets/img/effects_y32.png',
     TitleAnimation: './assets/img/animated_title_bg.png',
     ScottsChar: './assets/img/scotts-char.png',
-    Fireball: './assets/img/fireball.png'
+    Fireball: './assets/img/fireball.png',
+    Skeleton: './assets/img/skeleton_base.png'
 }
 
 export const STATES = {

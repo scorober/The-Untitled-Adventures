@@ -68,7 +68,6 @@ export default class FirstLevel extends Scene {
         dungeon.generate()
 
 
-
         this.setBackground(new Background(game, game.getAsset(ASSET_PATHS.Background)))
         this.setMap(new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon))
 
