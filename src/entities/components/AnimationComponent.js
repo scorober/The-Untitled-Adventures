@@ -28,15 +28,15 @@ export default class AnimationComponent extends Component {
 
     /**
      * Parses the animation data and returns a collection of Animations
-     * @param {Object} animationConfig The animation configuration object for this character
+     * @param {Object} config The animation configuration object for this character
      */
-    getAnimations(animationConfig) {
+    getAnimations(config) {
         const animations = []
-        const spritesheet = this.entity.game.getAsset(animationConfig.Spritesheet)
-        const animationFactory = new AnimationFactory(spritesheet, animationConfig.Scale)
+        const spritesheet = this.entity.game.getAsset(config.Spritesheet)
+        const animationFactory = new AnimationFactory(spritesheet, config.Width, config.Height, config.Scale)
         // Create an animation for each property in AnimationData
-        for (const symbolKey of Object.getOwnPropertySymbols(animationConfig.AnimationData)) {
-            const anim = animationConfig.AnimationData[symbolKey]
+        for (const symbolKey of Object.getOwnPropertySymbols(config.AnimationData)) {
+            const anim = config.AnimationData[symbolKey]
             // If this animation datum has these properties then it's a derivative animation
             // from the frames of a different animation and we need to move back to that row.
             if (anim.hasOwnProperty('goBackRows') && anim.hasOwnProperty('goBackHeight')) {
@@ -49,7 +49,7 @@ export default class AnimationComponent extends Component {
                     return animations
                 }
             }
-            animations[symbolKey] = animationFactory.getNextRow(anim.width, anim.height, animationConfig.AnimationRates[anim.rate], anim.options)
+            animations[symbolKey] = animationFactory.getNextRow(config.AnimationRates[anim.rate], anim.options)
         }
         return animations
     }

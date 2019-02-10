@@ -6,10 +6,11 @@ export default class AnimationFactory {
      * @param {HTMLImageElement} spritesheet The entire spritesheet for this Entity
      * @param {number} scale The scale at which to draw the sprites
      */
-    constructor(spritesheet, scale = 1) {
+    constructor(spritesheet, height, width, scale = 1) {
         this.spritesheet = spritesheet
         this.scale = scale
-
+        this.height = height
+        this.width = width
         this.startY = 0
         this.row = 1
     }
@@ -24,16 +25,18 @@ export default class AnimationFactory {
      *                                      which should be included in this animation
      * @returns The animation on the next row, or false if no more rows of sprites exist.
      */
-    getNextRow(frameWidth, frameHeight, rate, options = {}) {
+    getNextRow(rate, options = {}) {
         const defaults = {
             loop: true,
             maxFrames: false,
             yOffset: 0
         }
         options = Object.assign({}, defaults, options)
-        if (this.startY + frameHeight <= this.spritesheet.height) {
-            const animation = new Animation(this.spritesheet, frameWidth, frameHeight, this.startY, options.yOffset, rate, options.loop, this.scale, options.maxFrames)
-            this.startY += frameHeight
+        const width = options.width ? options.width : this.width
+        const height = options.height ? options.height : this.height
+        if (this.startY + width <= this.spritesheet.height) {
+            const animation = new Animation(this.spritesheet, width, height, this.startY, options.yOffset, rate, options.loop, this.scale, options.maxFrames)
+            this.startY += height
             this.row += 1
             return animation
         } else {
