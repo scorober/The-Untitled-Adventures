@@ -5,15 +5,21 @@ import Background from '../Background.js'
 import Entity from '../../entities/Entity.js'
 import { ASSET_PATHS } from '../../utils/Const.js'
 
+import AnimationComponent from '../../entities/components/AnimationComponent.js'
+import PlayerCharacterData from '../../entities/characters/PlayerCharacterDefaultData.js'
+import MovementComponent from '../../entities/components/MovementComponent.js'
+import PlayerInputComponent from '../../entities/components/PlayerInputComponent.js'
+
+
 export default class FirstLevel extends Scene {
 
     constructor(game) {
         super(game)
-        this.name = 'level1'    
-        
+        this.name = 'level1'
+
         //Initialize a dungeon with options, possibly move to the scene superclass w/ parameters.
         const dungeon = new Dungeon({
-            size: [200, 200], 
+            size: [200, 200],
             // seed: 'abcd', //omit for generated seed
             rooms: {
                 initial: {
@@ -36,7 +42,7 @@ export default class FirstLevel extends Scene {
             max_interconnect_length: 10,
             room_count: 20
         })
-        
+
         dungeon.generate()
 
 
@@ -45,11 +51,13 @@ export default class FirstLevel extends Scene {
         this.setMap(new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon))
         const start = this.map.getStartPos()
 
-        const player = new Entity(game, game.getAsset(ASSET_PATHS.MikesChar), start)
-        player.addComponent(new AnimationComponent(game.getAsset(ASSET_PATHS.MikesChar)))
+        const playerCharacter = new Entity(game, start)
+        playerCharacter.addComponent(new AnimationComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
+        playerCharacter.addComponent(new MovementComponent(playerCharacter))
+        playerCharacter.addComponent(new PlayerInputComponent(playerCharacter))
 
-        game.camera.setFollowedEntity(player)
-        this.addEntity(player)
+        game.camera.setFollowedEntity(playerCharacter)
+        this.addEntity(playerCharacter)
         this.addEntity(game.camera)
     }
 
@@ -62,7 +70,7 @@ export default class FirstLevel extends Scene {
         this.updateMap()
         this.updateEntities()
         //Reorders the entities in the correct drawing format
-        this.entities.sort((a,b) => a.y - b.y)
+        this.entities.sort((a, b) => a.y - b.y)
     }
 
     /**

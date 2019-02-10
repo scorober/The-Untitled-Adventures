@@ -63,4 +63,13 @@ export default class InputManager {
         const y = e.clientY - this.ctx.canvas.getBoundingClientRect().top
         return { x: x, y: y }
     }
+
+    hasRightClick() {
+        return this.newRightClick
+    }
+
+    getRightClick() {
+        this.newRightClick = false
+        return this.lastRightClickPosition
+    }
 }

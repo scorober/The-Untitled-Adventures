@@ -3,7 +3,7 @@ import Entity from './Entity.js'
 
 export default class Character extends Entity {
     constructor(game, pos) {
-        if (new.target == Character) {
+        if (new.target === Character) {
             throw new TypeError('Should not construct Character directly')
         }
         super(game, pos)

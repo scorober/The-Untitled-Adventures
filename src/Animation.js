@@ -63,7 +63,7 @@ export default class Animation {
         for (let i = 0; i < 9; i++) {
             alphaSum += pixelData[i * 3 + 3]
         }
-        return alphaSum == 0
+        return alphaSum === 0
     }
 
     drawFrame(game, x, y) {

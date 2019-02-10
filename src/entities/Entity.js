@@ -6,10 +6,21 @@ export default class Entity {
         this.x = pos.x
         this.y = pos.y
         this.states = this.getDefaultStates()
+        this.components = []
     }
 
-    update() { }
+    /**
+     * Calls update on each of the Entity's components.
+     */
+    update() {
+        this.components.forEach((component) => {
+            component.update()
+        })
+    }
 
+    /**
+     * Calls draw on each of the Entity's components
+     */
     draw() {
         this.game.ctx.fillRect(this.x - this.game.camera.xView, this.y - this.game.camera.yView, 5, 5)
         if (this.game.showOutlines && this.radius) {
@@ -19,7 +30,35 @@ export default class Entity {
             this.game.ctx.stroke()
             this.game.ctx.closePath()
         }
+        this.components.forEach((component) => {
+            component.draw()
+        })
     }
+
+    /**
+     * Adds a component to this Entity
+     * @param {Component} component The component to add to this Entity
+     */
+    addComponent(component) {
+        this.components.forEach((existingComponent) => {
+            if (component instanceof existingComponent.componentType) {
+                console.error('A ' + component.componentType + ' already exists')
+            }
+        })
+        this.components.push(component)
+    }
+
+    /**
+     * 
+     * @param {Class} componentType The component type to get
+     */
+    getComponent(componentType) {
+        this.components.forEach((component) => {
+            const equal = component instanceof componentType
+            if (equal) return component
+        })
+    }
+
 
     getDefaultStates() {
         const states = []
