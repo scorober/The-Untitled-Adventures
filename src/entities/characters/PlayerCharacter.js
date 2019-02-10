@@ -5,6 +5,7 @@ import Map from '../../world/Map.js'
 import Effect from '../../entities/Effect.js'
 import AnimationFactory from '../../AnimationFactory.js'
 import Fireball from '../Fireball.js'
+import Vector from '../../utils/Vector.js';
 
 export default class PlayableCharacter extends Character {
     constructor(game, spritesheet, x, y) {
@@ -23,7 +24,7 @@ export default class PlayableCharacter extends Character {
         this.animation = this.animations[ANIMS.StandEast]
         this.states[STATES.Pathfinding] = false
         this.path = null
-
+        this.v = new Vector(x, y)
         this.speed = 250
     }
 
@@ -40,6 +41,8 @@ export default class PlayableCharacter extends Character {
         if (this.game.inputManager.downKeys[KEYS.KeyD] && this.oversize) {
             this.animation = this.animations[ANIMS.OversizeEast]
         }
+        //TODO temporary remove!!
+        this.v = new Vector(this.x, this.y)
     }
 
     draw() {

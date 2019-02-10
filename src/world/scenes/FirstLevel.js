@@ -64,6 +64,7 @@ export default class FirstLevel extends Scene {
         const start = this.map.getStartPos()
         const player = new PlayerCharacter(game, game.getAsset(ASSET_PATHS.ScottsChar), start)
         game.camera.setFollowedEntity(player)
+        this.setPlayer(player)
 
         const archer0 = new Archer(game, game.getAsset(ASSET_PATHS.Archer), start)
         const robot0 = new Robot(game, game.getAsset(ASSET_PATHS.Robot), start)

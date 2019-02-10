@@ -138,6 +138,14 @@ export default class Scene {
         this.map = map
     }
 
+    getPlayer() {
+        return this.player
+    }
+
+    setPlayer(player) {
+        this.player = player
+    }
+
     /**
      * Sets the background for this scene
      * 
