@@ -5,7 +5,6 @@
 export default class Scene {
     constructor(game) {
         this.game = game
-        this.ctx = game.ctx
         this.entities = []
         this.map = null
         this.background = null
@@ -38,11 +37,21 @@ export default class Scene {
     }
 
     /**
+     * Adds an a collidable entity to the game. Works in place of addEntity.
+     * @param entity
+     */
+    addCollidableEntity(entity){
+        this.addEntity(entity)
+        entity.setCollidable()
+        this.game.sceneManager.addCollidableEntity(entity)
+    }
+
+    /**
      * Remove an entity from scene so it is no longer updated or drawn
      * @param entitiy
      */
-    removeEntitiy(entitiy) {
-        this.entities.pop(entitiy)
+    removeEntity(index) {
+        this.entities.splice(index, 1)
     }
 
     /**
@@ -74,15 +83,10 @@ export default class Scene {
 
     /**
      * Draw the scene's map
-     * @param ctx
      */
-    drawMap(ctx) {
+    drawMap() {
         if (this.map && this.map.update) {
-            if (!ctx) {
-                this.map.draw(this.ctx)
-            } else {
-                this.map.draw(ctx)
-            }
+            this.map.draw(this.game.ctx)
         }
     }
 
@@ -91,10 +95,20 @@ export default class Scene {
      */
     updateEntities() {
         const entitiesCount = this.entities.length
+        if(entitiesCount){
+            this.entities.sort((a,b) => a.y - b.y)
+        }
         for (let i = 0; i < entitiesCount; i++) {
             const entity = this.entities[i]
-            entity.update()
+            if (entity) { //Removed entities are still in array and being called on??
+                if (entity.removeFromWorld === true) {
+                    this.removeEntity(i)
+                } else {
+                    entity.update()
+                }
+            }
         }
+
     }
 
     /**
@@ -115,6 +129,14 @@ export default class Scene {
      */
     setMap(map) {
         this.map = map
+    }
+
+    getPlayer() {
+        return this.player
+    }
+
+    setPlayer(player) {
+        this.player = player
     }
 
     /**

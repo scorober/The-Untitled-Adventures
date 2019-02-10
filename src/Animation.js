@@ -66,27 +66,50 @@ export default class Animation {
         return alphaSum === 0
     }
 
-    drawFrame(game, x, y) {
+    drawFrame(game, x, y, angle) {
         this.elapsedTime += game.clockTick
         if (this.isDone()) {
-        
             if (this.loop) this.elapsedTime = 0
-            else this.elapsedTime -= game.clockTick
+            // else this.elapsedTime -= game.clockTick
         }
         const frame = this.currentFrame()
         const startX = (frame % this.frames) * this.frameWidth
         const startY = this.startY
-        game.ctx.drawImage(
+
+        const offscreenCanvas = document.createElement('canvas')
+        const size = Math.max(this.frameWidth * this.scale, this.frameHeight * this.scale)
+
+        offscreenCanvas.width = size
+        offscreenCanvas.height = size
+        const offscreenCtx = offscreenCanvas.getContext('2d')
+
+        const thirdCanvas = document.createElement('canvas')
+        thirdCanvas.width = size
+        thirdCanvas.height = size
+        const thirdCtx = thirdCanvas.getContext('2d')
+
+            
+        thirdCtx.drawImage(
             this.spritesheet,
-            startX,
-            startY, // source from sheet
-            this.frameWidth,
+            startX, 
+            startY,
+            this.frameWidth, 
             this.frameHeight,
-            (x - (this.frameWidth * this.scale / 2)) - game.camera.xView,
-            (y - (this.frameHeight * this.scale)) + this.yOffset - game.camera.yView,
+            0, 
+            0,
             this.frameWidth * this.scale,
             this.frameHeight * this.scale
         )
+
+        offscreenCtx.save()
+        offscreenCtx.translate(size / 2, size / 2)
+        offscreenCtx.rotate(angle)
+        offscreenCtx.translate(0, 0)
+        offscreenCtx.drawImage(thirdCanvas, - (this.frameWidth * this.scale / 2), - (this.frameHeight * this.scale / 2))
+        offscreenCtx.restore()
+        thirdCtx.clearRect(0,0, size, size)
+        game.ctx.drawImage(offscreenCanvas,  (x - (this.frameWidth * this.scale / 2)) - game.camera.xView,(y - (this.frameHeight * this.scale)) + this.yOffset - game.camera.yView)
+
     }
 
     currentFrame() {

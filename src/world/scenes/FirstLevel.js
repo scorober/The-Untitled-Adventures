@@ -16,38 +16,53 @@ export default class FirstLevel extends Scene {
 
     constructor(game) {
         super(game)
-        this.name = 'level1'
-
+        this.name = 'level1'    
         //Initialize a dungeon with options, possibly move to the scene superclass w/ parameters.
         const dungeon = new Dungeon({
-            size: [200, 200],
+            size: [2000, 2000],
             // seed: 'abcd', //omit for generated seed
             rooms: {
                 initial: {
-                    min_size: [8, 8],
-                    max_size: [12, 10],
-                    max_exits: 2,
-                    position: [15, 10] //OPTIONAL pos of initial room 
+                    min_size: [10, 10], //Floor size
+                    max_size: [10, 10],
+                    max_exits: 4,
+                    position: [100, 100] //OPTIONAL pos of initial room 
                 },
                 any: {
-                    min_size: [8, 8],
+                    min_size: [10, 10],
                     max_size: [15, 15],
                     max_exits: 4
+                },
+                spawn: {
+                    min_size: [15, 15],
+                    max_size: [25, 25],
+                    max_exits: 4
+                },
+                exit: {
+                    min_size: [15, 15],
+                    max_size: [20, 20],
+                    max_exits: 1
+                },
+                treasure: {
+                    min_size: [12, 12],
+                    max_size: [21, 12],
+                    max_exits: 3
                 }
             },
-            max_corridor_length: 6,
-            min_corridor_length: 3,
+            max_corridor_length: 15,
+            min_corridor_length: 15,
             corridor_density: 0, //corridors per room, remove corridors? They'll be tagged as such.
-            symmetric_rooms: false, // exits must be in the center of a wall if true. Setting true will make design easier
-            interconnects: 0, //extra corridors to connect rooms and make circular paths. not 100% guaranteed
+            symmetric_rooms: true, // exits must be in the center of a wall if true. Setting true will make design easier
+            interconnects: 1, //extra corridors to connect rooms and make circular paths. not 100% guaranteed
             max_interconnect_length: 10,
-            room_count: 20
+            room_count: 10
         })
 
         dungeon.generate()
 
         this.setBackground(new Background(game, game.getAsset(ASSET_PATHS.Background)))
-        this.setMap(new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon))
+        this.setMap(new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon, this))
+
         const start = this.map.getStartPos()
 
         const playerCharacter = new Entity(game, start)
@@ -61,6 +76,7 @@ export default class FirstLevel extends Scene {
         //const mage = new Entity(game, start)
         //mage.addComponent(new AnimationComponent(mage, )) // Need to make MageData
 
+        this.setPlayer(playerCharacter)
         game.camera.setFollowedEntity(playerCharacter)
         this.addEntity(playerCharacter)
         this.addEntity(game.camera)
@@ -74,8 +90,8 @@ export default class FirstLevel extends Scene {
         //here to reduce confusion, and to allow the order they are updated/rendered to be adjusted.
         this.updateMap()
         this.updateEntities()
-        //Reorders the entities in the correct drawing format
-        this.entities.sort((a, b) => a.y - b.y)
+        // //Reorders the entities in the correct drawing format
+        // this.entities.sort((a,b) => a.y - b.y)
     }
 
     /**

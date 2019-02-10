@@ -9,7 +9,10 @@ export const ASSET_PATHS = {
     Teleport: './assets/img/teleport.png',
     Background: './assets/img/background.jpg',
     Effect32: './assets/img/effects_y32.png',
-    TitleAnimation: './assets/img/animated_title_bg.png'
+    TitleAnimation: './assets/img/animated_title_bg.png',
+    ScottsChar: './assets/img/scotts-char.png',
+    Fireball: './assets/img/fireball.png',
+    Skeleton: './assets/img/skeleton_base.png'
 }
 
 export const STATES = {
@@ -21,7 +24,11 @@ export const STATES = {
     Frozen: Symbol(),
     RemoveFromWorld: Symbol(),
     Aggressive: Symbol(),
-    Cooling: Symbol
+    Cooling: Symbol(),
+    Stage1: Symbol(),
+    Stage2: Symbol()
+
+
 }
 
 export const ANIMATIONS = {
@@ -63,9 +70,15 @@ export const ANIMATIONS = {
     StandUpEast: Symbol(),
 
     /** Mage-specific animations */
-    Impact: Symbol(),
     PowerupWest: Symbol(),
     PowerupEast: Symbol(),
+
+    /** Spell/effect specific animations. */
+    Fire: Symbol(),
+    Projectile: Symbol(),
+    Impact: Symbol(),
+    Boost: Symbol(),
+    Projectile: Symbol()
 }
 
 export const ANIMATION_RATES = {
@@ -95,7 +108,7 @@ export const DIRECTIONS = {
     East: Symbol(),
 }
 
-export const SPELLS = {
+export const EFFECTS = {
     Explosion: Symbol(),
     Fireball: Symbol(),
     Mage: Symbol()
@@ -190,6 +203,65 @@ export const KEYS = {
     Numpad0: 'Numpad0',
     NumpadDecimal: 'NumpadDecimal',
 }
+
+export const SPAWNERS = {
+    Mage: {
+        mage: .60,
+        archer: .10,
+        robot: .30
+    },
+    Archer: {
+        mage: .10,
+        archer: .60,
+        robot: .30
+    },
+    Robot: {
+        mage: 20,
+        archer: 15,
+        robot: 65
+    }
+}
+
+export const MAP_ITEMS = {
+    Rug: [[110, 111, 112], [126, 127, 128], [142, 143, 144]],
+    StairsN: [[155, 156, 157], [171, 172, 173]],
+    ShieldN: [[51]],
+    ShieldS: [[67]],
+    ShieldW: [[53]],
+    ShieldE: [[52]],
+    ChestOpen: [[225], [241]],
+    ChestClosed: [[247]],
+    Door90: [[132, 133], [148, 149], [148, 149], [164, 165]],
+    Door270: [[134, 135], [150, 151], [150, 151], [166, 167]],
+    Door90Lock: [[180], [196], [196], [2]],
+    DoorRoofV: [[92], [92], [92], [92]],
+    DoorPrintV: [[4, 4], [4, 4], [4, 4], [4,4]],
+    Door0: [[129, 130, 130, 131], [145, 146, 146, 147]],
+    Door180: [[161, 162, 162, 163], [177, 178, 178, 179]],
+    DoorPrintH: [[4, 4, 4, 4], [4, 4, 4, 4]],
+    DoorPathH: [[4, 4, 4, 4, 4], [4, 4, 4, 4, 4]],
+    DoorPathV: [[4,4],[4,4],[4,4],[4,4],[4,4]],
+    WallWest: [49, 50],
+    WallEast: [54, 55],
+    WallNorth: [[19], [35]],
+    WallSouth: [[99], [115]],
+    Pit: [[158, 159, 160], [174, 175, 176], [206, 207, 208]],
+    ICornerNW: [[17, 18], [33, 34]],
+    ICornerNE: [[22, 23], [38, 39]],
+    ICornerSW: [[97, 98], [113, 114]],
+    ICornerSE: [[102, 103], [118, 119]]
+}
+
+
+export const ROOMS ={
+    Exit: 'exit',
+    Treasure: 'treasure',
+    Spawn: 'spawn',
+    Boss: 'boss',
+    Initial: 'initial',
+
+}
+
 
 export const CTX_EVENTS = {
     LeftClick: 'click',

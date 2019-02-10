@@ -26,9 +26,9 @@ export default class Marriott extends Character {
             this.animations[ANIMS.StandUpEast].elapsedTime = 0
             this.animations[ANIMS.StandUpWest].elapsedTime = 0
         } else {
-            this.standingTime = 0
-            this.animations[ANIMS.SitDownEast].elapsedTime = 0
-            this.animations[ANIMS.SitDownWest].elapsedTime = 0
+            // this.standingTime = 0
+            // this.animations[ANIMS.SitDownEast].elapsedTime = 0
+            // this.animations[ANIMS.SitDownWest].elapsedTime = 0
         }
         if (this.states[STATES.Following] === true) {
             this.movingTime++
@@ -37,17 +37,20 @@ export default class Marriott extends Character {
     }
 
     draw() {
-        this.animation.drawFrame(this.game, this.x, this.y)
+        this.animation.drawFrame(this.game, this.x, this.y, 0)
         super.draw()
     }
 
     handleStanding() {
         if (this.standingTime > this.standingDelay) {
-            if (this.direction === DIRECTIONS.East || this.direction === DIRECTIONS.South) {
-                this.animation = this.animations[ANIMS.SitDownEast]
-            } else {
-                this.animation = this.animations[ANIMS.SitDownWest]
+            if (this.animation !== this.animations[ANIMS.SitDownEast] || this.animation !== this.animations[ANIMS.SitDownWest]) {
+                if (this.direction === DIRECTIONS.East || this.direction === DIRECTIONS.South) {
+                    this.animation = this.animations[ANIMS.SitDownEast]
+                } else {
+                    this.animation = this.animations[ANIMS.SitDownWest]
+                }
             }
+
         } else {
             super.handleStanding()
         }
