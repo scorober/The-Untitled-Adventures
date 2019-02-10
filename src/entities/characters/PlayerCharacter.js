@@ -53,6 +53,7 @@ export default class PlayableCharacter extends Character {
             const cam = this.game.camera
             const click = this.game.inputManager.lastLeftClickPosition
             //TODO method for all entities to find direction and give an origin pont in that direction form center.
+            //TODO check player vector vs target prior to creating a fireball
             this.game.sceneManager.currentScene.addEntity(new Fireball(this.game, this.game.getAsset(ASSET_PATHS.Fireball), { x: this.x, y : this.y }, { x: cam.xView + click.x, y: cam.yView + click.y }))
         }
     }

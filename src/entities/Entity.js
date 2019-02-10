@@ -116,9 +116,6 @@ export default class Entity {
 
     }
 
-
-
-
     rotateAndCache(image, angle) {
         const offscreenCanvas = document.createElement('canvas')
         const size = Math.max(image.width, image.height)

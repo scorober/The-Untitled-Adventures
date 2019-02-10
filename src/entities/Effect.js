@@ -1,11 +1,10 @@
 import Entity from './Entity.js'
-import Animation from '../Animation.js'
 import { EFFECTS, ANIMATION_RATES as AR, ANIMATIONS as ANIMS } from '../utils/Const.js'
+import AnimationFactory from '../AnimationFactory.js'
 
 export default class Effect extends Entity {
     constructor(game, spritesheet, effect, pos) {
         super(game, pos)
-        this.spritesheet = spritesheet
         this.game = game
         this.scale = 1.5
         this.animationRates = this.getDefaultAnimationRates()
@@ -38,8 +37,6 @@ export default class Effect extends Entity {
     }
 
     getAnimations(spritesheet) {
-        const mage = 192
-        const explosion = 32
         const animations = {
             getAnimations(spritesheet) {
 

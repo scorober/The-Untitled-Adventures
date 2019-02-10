@@ -52,9 +52,7 @@ export default class Scene {
      * @param entitiy
      */
     removeEntity(index) {
-        console.log(this.entities)
         this.entities.splice(index, 1)
-        console.log(this.entities)
     }
 
     /**

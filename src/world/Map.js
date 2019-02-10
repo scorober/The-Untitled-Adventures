@@ -209,7 +209,7 @@ export default class Map extends Entity {
     update() {}
     
     draw() {
-         for (let c = 0; c < this.cols; c++) {
+        for (let c = 0; c < this.cols; c++) {
             for (let r = 0; r < this.rows; r++) {
                 const tile = this.map.get([c, r])
                 const objTile = this.objectMap.get([c, r])
