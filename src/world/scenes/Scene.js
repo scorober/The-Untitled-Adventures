@@ -106,6 +106,7 @@ export default class Scene {
         }
         for (let i = 0; i < entitiesCount; i++) {
             const entity = this.entities[i]
+            console.log(entity)
             if (entity) { //Removed entities are still in array and being called on??
                 if (entity.removeFromWorld === true) {
                     this.removeEntity(i)

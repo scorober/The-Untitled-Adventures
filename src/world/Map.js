@@ -1,6 +1,7 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
-import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM } from '../utils/Const.js'
+import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, SPAWNERS } from '../utils/Const.js'
+import Spawner from '../entities/Spawner.js';
 
 export default class Map extends Entity {
     /**
@@ -11,9 +12,8 @@ export default class Map extends Entity {
      * @param setLength Number of tiles wide
      * @param tiles  a reference to the tile array map thing
      */
-    constructor(game, tileAtlas, tileSize, setLength, dungeon) {
+    constructor(game, tileAtlas, tileSize, setLength, dungeon, scene) {
         super(game, 0, 0)
-        this.game = game
         this.tileAtlas = tileAtlas
         this.tileSize = tileSize
         this.setLength = setLength
@@ -21,6 +21,7 @@ export default class Map extends Entity {
         this.rows = dungeon.size[1]
         this.cols = dungeon.size[0]
         this.tiles = []
+        this.scene = scene
         this.buildMap()
     }
 
@@ -102,6 +103,10 @@ export default class Map extends Entity {
                 break
             case ROOMS.Spawn:
                 this.createObject(this.objectMap, center, MI.Rug)
+                const spawner = new Spawner(this.game, 
+                    { x: center[0] * this.tileSize, y: center[1] * this.tileSize },
+                    SPAWNERS.Mage, 8, this.getRadius(piece))
+                this.scene.addEntity(spawner)
                 break
             case ROOMS.Treasure:
                 this.createObject(this.objectMap, center, MI.ChestOpen)
@@ -278,5 +283,10 @@ export default class Map extends Entity {
             x: Math.floor((obj.x + tileSize / 2) / 64),
             y: Math.floor((obj.y + tileSize / 2) / 64)
         }
+    }
+
+    getRadius(piece) {
+        let size = Math.min(piece.size[0], piece.size[1])
+        return Math.floor((size - 4) / 2 * 64)
     }
 }

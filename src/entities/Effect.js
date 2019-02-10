@@ -39,7 +39,6 @@ export default class Effect extends Entity {
     getAnimations(spritesheet) {
         const animations = {
             getAnimations(spritesheet) {
-
                 //TODO Replace with "effects" sprite sheet, this is just fireball stuff
                 const animations = []
                 const animationFactory = new AnimationFactory(spritesheet, this.scale)

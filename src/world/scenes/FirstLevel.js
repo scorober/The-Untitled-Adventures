@@ -59,12 +59,11 @@ export default class FirstLevel extends Scene {
 
 
         this.setBackground(new Background(game, game.getAsset(ASSET_PATHS.Background)))
-        this.setMap(new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon))
+        this.setMap(new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon, this))
 
         const start = this.map.getStartPos()
         const player = new PlayerCharacter(game, game.getAsset(ASSET_PATHS.ScottsChar), start)
         game.camera.setFollowedEntity(player)
-
 
         const archer0 = new Archer(game, game.getAsset(ASSET_PATHS.Archer), start)
         const robot0 = new Robot(game, game.getAsset(ASSET_PATHS.Robot), start)
@@ -78,10 +77,10 @@ export default class FirstLevel extends Scene {
 
         this.addEntity(player)
         this.addEntity(game.camera)
-        this.addEntity(mage)
-        // this.addEntity(marriott)
-        this.addEntity(robot0)
-        this.addEntity(archer0)
+        // this.addEntity(mage)
+        // // this.addEntity(marriott)
+        // this.addEntity(robot0)
+        // this.addEntity(archer0)
     }
 
     /**
@@ -92,8 +91,8 @@ export default class FirstLevel extends Scene {
         //here to reduce confusion, and to allow the order they are updated/rendered to be adjusted.
         this.updateMap()
         this.updateEntities()
-        //Reorders the entities in the correct drawing format
-        this.entities.sort((a,b) => a.y - b.y)
+        // //Reorders the entities in the correct drawing format
+        // this.entities.sort((a,b) => a.y - b.y)
     }
 
     /**

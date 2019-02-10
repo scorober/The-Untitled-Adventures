@@ -16,13 +16,10 @@ export default class Fireball extends Entity {
         this.scale = 1
         this.animation = this.animations[ANIMS.Start]
         this.speed = 3
-
         this.dir = new Vector(target.x - pos.x, target.y - pos.y)
-
         this.dir.normalize()
         this.states[STATES.Stage1] = true
         this.angle = Vector.getAngle(pos, target)
-
         this.states[STATES.Moving] = true
     }
 

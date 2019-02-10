@@ -204,6 +204,24 @@ export const KEYS = {
     NumpadDecimal: 'NumpadDecimal',
 }
 
+export const SPAWNERS = {
+    Mage: {
+        mage: .60,
+        archer: .10,
+        robot: .30
+    },
+    Archer: {
+        mage: .10,
+        archer: .60,
+        robot: .30
+    },
+    Robot: {
+        mage: 20,
+        archer: 15,
+        robot: 65
+    }
+}
+
 export const MAP_ITEMS = {
     Rug: [[110, 111, 112], [126, 127, 128], [142, 143, 144]],
     StairsN: [[155, 156, 157], [171, 172, 173]],
