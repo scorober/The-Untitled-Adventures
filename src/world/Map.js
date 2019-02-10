@@ -106,7 +106,10 @@ export default class Map extends Entity {
                 break
             case ROOMS.Spawn:
                 this.createObject(this.objectMap, center, MI.Rug)
-                this.scene.addEntity(spawner)
+                // Note: This should somehow be in scene. Maybe use room tags
+                // to mark positions where spawners should spawn into the map
+                // like characters?
+                //this.scene.addEntity(spawner)
                 break
             case ROOMS.Treasure:
                 this.createObject(this.objectMap, center, MI.ChestOpen)
