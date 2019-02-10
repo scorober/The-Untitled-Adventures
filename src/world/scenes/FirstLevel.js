@@ -5,8 +5,9 @@ import Background from '../Background.js'
 import Entity from '../../entities/Entity.js'
 import { ASSET_PATHS } from '../../utils/Const.js'
 
-import AnimationComponent from '../../entities/components/AnimationComponent.js'
+
 import PlayerCharacterData from '../../entities/characters/PlayerCharacterDefaultData.js'
+import PlayerCharacterAnimationComponent from '../../entities/components/PlayerCharacterAnimationComponent.js'
 import MovementComponent from '../../entities/components/MovementComponent.js'
 import PlayerInputComponent from '../../entities/components/PlayerInputComponent.js'
 
@@ -45,16 +46,20 @@ export default class FirstLevel extends Scene {
 
         dungeon.generate()
 
-
-
         this.setBackground(new Background(game, game.getAsset(ASSET_PATHS.Background)))
         this.setMap(new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon))
         const start = this.map.getStartPos()
 
         const playerCharacter = new Entity(game, start)
-        playerCharacter.addComponent(new AnimationComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
+        // Most entities should be able to use the basic AnimationBasic, but LPC characters and other characters
+        // will need custom methods on their AnimationComponents, (e.x. oversized attacks) thus PlayerCharacterAnimationComponent
+        // can just extend AnimationComponent
+        playerCharacter.addComponent(new PlayerCharacterAnimationComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
         playerCharacter.addComponent(new MovementComponent(playerCharacter))
         playerCharacter.addComponent(new PlayerInputComponent(playerCharacter))
+
+        //const mage = new Entity(game, start)
+        //mage.addComponent(new AnimationComponent(mage, )) // Need to make MageData
 
         game.camera.setFollowedEntity(playerCharacter)
         this.addEntity(playerCharacter)

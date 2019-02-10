@@ -42,6 +42,13 @@ export default class AnimationComponent extends Component {
             if (anim.hasOwnProperty('goBackRows') && anim.hasOwnProperty('goBackHeight')) {
                 animationFactory.rewindFactory(anim.goBackRows, anim.goBackHeight)
             }
+            // If this animation is optional for the spritesheet then the spritesheet may
+            // not contain these sprites
+            if (anim.hasOwnProperty('optional')) {
+                if (animationFactory.hasNextRow(anim.height) == false) {
+                    return animations
+                }
+            }
             animations[symbolKey] = animationFactory.getNextRow(anim.width, anim.height, animationConfig.AnimationRates[anim.rate], anim.options)
         }
         return animations

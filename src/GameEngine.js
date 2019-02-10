@@ -16,7 +16,6 @@ export default class GameEngine {
         this.requestAnimFrame = this.getPlatformRAF().bind(window)
     }
 
-    // eslint-disable-next-line complexity
     getPlatformRAF() {
         return window.requestAnimationFrame ||
             window.webkitRequestAnimationFrame ||
@@ -24,7 +23,7 @@ export default class GameEngine {
             window.oRequestAnimationFrame ||
             window.msRequestAnimationFrame ||
             // eslint-disable-next-line no-unused-vars
-            function(/* function */ callback, /* DOMElement */ element) {
+            function (/* function */ callback, /* DOMElement */ element) {
                 window.setTimeout(callback, 1000 / 60)
             }
     }
@@ -81,8 +80,17 @@ export default class GameEngine {
         this.draw()
     }
 
-    getAsset(path){
+    getAsset(path) {
         return this.assetManager.getAsset(path)
+    }
+
+    /**
+     * Gets an array with the current map.
+     * This needs to be replaced with a similar array which also contains character, NPC, and other entities.
+     * @returns {Array} An array representation of the current map
+     */
+    getWorld() {
+        return this.sceneManager.currentScene.map.getPathfindingArray()
     }
 
     setCamera(camera) {

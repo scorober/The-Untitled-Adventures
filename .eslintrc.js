@@ -32,6 +32,6 @@ module.exports = {
             "destructuring": "any",
             "ignoreReadBeforeAssign": false
         }],
-        "complexity": ["warn", 5]
+        "complexity": ["warn", 6]
     }
 };

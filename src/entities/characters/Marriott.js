@@ -1,8 +1,8 @@
 import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR, STATES, DIRECTIONS } from '../../utils/Const.js'
-import Npc from '../Npc.js'
+import Character from '../Character.js'
 import AnimationFactory from '../../AnimationFactory.js'
 
-export default class Marriott extends Npc {
+export default class Marriott extends Character {
     constructor(game, spritesheet, pos) {
         super(game, pos)
         this.scale = 1.3

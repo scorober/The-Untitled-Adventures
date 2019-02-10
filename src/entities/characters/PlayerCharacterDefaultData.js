@@ -10,7 +10,7 @@ const scale = 1
 const yOffset = 0
 const oversizedWidth = 192
 const oversizedHeight = 192
-const oversizedYOffset = 85
+const oversizedYOffset = 64
 
 /** 
  * Animations should be defined in the order they appear in the spritesheet
@@ -210,6 +210,7 @@ export default {
             },
             // Oversized animations
             [ANIMS.OversizeNorth]: {
+                optional: true,
                 width: oversizedWidth,
                 height: oversizedHeight,
                 rate: AR.Oversize,

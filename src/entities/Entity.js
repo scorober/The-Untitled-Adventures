@@ -38,25 +38,43 @@ export default class Entity {
     /**
      * Adds a component to this Entity
      * @param {Component} component The component to add to this Entity
+     * @returns {Boolean} whether the component could be added.
      */
     addComponent(component) {
-        this.components.forEach((existingComponent) => {
-            if (component instanceof existingComponent.componentType) {
-                console.error('A ' + component.componentType + ' already exists')
+        for (const existingComponent in this.components) {
+            if (component.constructor.name === existingComponent.constructor.name) {
+                return false
             }
-        })
+        }
         this.components.push(component)
+        return true
+    }
+
+    /**
+     * Replaces an existing component in this Entity
+     * @param {Component} component The component to replace in this Entity
+     * @returns {Boolean} whether the component could be replaced
+     */
+    replaceComponent(component) {
+        for (let i = 0; i < this.components.length; i++) {
+            if (component.constructor.name === this.components[i].constructor.name) {
+                this.components[i] = component
+                return true
+            }
+        }
+        return false
     }
 
     /**
      * 
-     * @param {Class} componentType The component type to get
+     * @param {Class} type The component type to get
+     * @returns {Component} The component with the specified type
      */
-    getComponent(componentType) {
-        this.components.forEach((component) => {
-            const equal = component instanceof componentType
-            if (equal) return component
-        })
+    getComponent(type) {
+        for (const component of this.components) {
+            if (component instanceof type) return component
+        }
+        return false
     }
 
 

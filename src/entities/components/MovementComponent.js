@@ -1,6 +1,7 @@
 import Component from './Component.js'
 import AnimationComponent from './AnimationComponent.js'
 import AStarPathfinding from '../../utils/AStarPathfinding.js'
+import Map from '../../world/Map.js'
 import { DIRECTIONS } from '../../utils/Const.js'
 
 export default class MovementComponent extends Component {
@@ -38,29 +39,29 @@ export default class MovementComponent extends Component {
     /**
      * Handles movement according to previously calculated path.
      * Removes a tile from the path array when the Entity is close enough to it.
-     * Updates this.direction and this.moving
+     * Updates this.direction
      */
     handlePathMovement() {
         const tile = this.path[0]
         const tilePosition = Map.tileToWorldPosition(tile, this.entity.game.sceneManager.currentScene.map.tileSize)
         // dx and dy are the x and y distances between this Entity and the tile in world position (pixels)
-        let dx = tile.x - this.x
-        let dy = tile.y - this.y
+        let dx = tilePosition.x - this.entity.x
+        let dy = tilePosition.y - this.entity.y
         const distance = Math.sqrt(dx * dx + dy * dy)
         if (distance < 10) {
-            if (this.path.length > 1) {
+            if (this.path.length > 0) {
                 this.path.splice(0, 1)
             } else {
-                this.x = tilePosition.x
-                this.y = tilePosition.y
+                this.entity.x = tilePosition.x
+                this.entity.y = tilePosition.y
             }
         } else {
             dx = dx / distance
             dy = dy / distance
-            dx = dx * this.game.clockTick * this.speed
-            dy = dy * this.game.clockTick * this.speed
-            this.x += dx
-            this.y += dy
+            dx = dx * this.entity.game.clockTick * this.speed
+            dy = dy * this.entity.game.clockTick * this.speed
+            this.entity.x += dx
+            this.entity.y += dy
             this.direction = this.calculateDirection(dx, dy)
         }
     }
@@ -91,8 +92,9 @@ export default class MovementComponent extends Component {
      * @param {Number} x The x index of the tile to pathfind to (x values increase starting from the left going right)
      * @param {Number} y The y index of the tile to pathfind to (y values increase starting from the top going down)
      */
-    setPathfindingTarget(x, y) {
-        const pathfinder = new AStarPathfinding(this.entity.game.getWorld(), this.getCurrentTile(), [x, y])
+    setPathfindingTarget(tile) {
+        const currentTile = this.getCurrentTile()
+        const pathfinder = new AStarPathfinding(this.entity.game.getWorld(), [currentTile.x, currentTile.y], [tile.x, tile.y])
         const path = pathfinder.calculatePath()
         this.path = path.map((pathTile) => { return { x: pathTile[0], y: pathTile[1] } })
     }
@@ -119,6 +121,14 @@ export default class MovementComponent extends Component {
      */
     setDirection(direction) {
         this.direction = direction
+    }
+
+    /**
+     * Gets the Entity's current tile position
+     * @returns {Object} The current tile position object {x, y}
+     */
+    getCurrentTile() {
+        return Map.worldToTilePosition(this.entity, this.entity.game.sceneManager.currentScene.map.tileSize)
     }
 
     /**

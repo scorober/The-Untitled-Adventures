@@ -37,10 +37,16 @@ export default class AnimationFactory {
             this.row += 1
             return animation
         } else {
-            // eslint-disable-next-line no-console
-            //console.error('getNextRow has reached the bottom of the spritesheet and cannot access another row.')
             return false
         }
+    }
+
+    /**
+     * Checks whether the spritesheet has another row of sprites
+     * @param {Number} frameHeight The height of the expected next row
+     */
+    hasNextRow(frameHeight) {
+        return this.startY + frameHeight <= this.spritesheet.height
     }
 
     /**

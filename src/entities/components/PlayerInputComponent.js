@@ -1,6 +1,8 @@
 import Component from './Component.js'
 import Map from '../../world/Map.js'
 import MovementComponent from './MovementComponent.js'
+import { KEYS } from '../../utils/Const.js'
+import PlayerCharacterAnimationComponent from './PlayerCharacterAnimationComponent.js'
 
 export default class PlayerInputComponent extends Component {
     /**
@@ -18,6 +20,10 @@ export default class PlayerInputComponent extends Component {
         if (this.entity.game.inputManager.hasRightClick()) {
             const clickPos = this.entity.game.inputManager.getRightClick()
             this.handleRightClick(clickPos)
+        }
+        if (this.entity.game.inputManager.downKeys[KEYS.KeyD]) {
+            const direction = this.entity.getComponent(MovementComponent).direction
+            this.entity.getComponent(PlayerCharacterAnimationComponent).setOversizedAnimation(direction)
         }
     }
 
