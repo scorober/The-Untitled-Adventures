@@ -162,8 +162,6 @@ export default {
             // Oversized animations
             [ANIMS.OversizeNorth]: {
                 optional: true,
-                width: oversizedWidth,
-                height: oversizedHeight,
                 rate: AR.Oversize,
                 options: {
                     yOffset: oversizedYOffset,
@@ -172,8 +170,6 @@ export default {
                 }
             },
             [ANIMS.OversizeWest]: {
-                width: oversizedWidth,
-                height: oversizedHeight,
                 rate: AR.Oversize,
                 options: {
                     yOffset: oversizedYOffset,
@@ -183,8 +179,6 @@ export default {
 
             },
             [ANIMS.OversizeSouth]: {
-                width: oversizedWidth,
-                height: oversizedHeight,
                 rate: AR.Oversize,
                 options: {
                     yOffset: oversizedYOffset,
@@ -194,8 +188,6 @@ export default {
 
             },
             [ANIMS.OversizeEast]: {
-                width: oversizedWidth,
-                height: oversizedHeight,
                 rate: AR.Oversize,
                 options: {
                     yOffset: oversizedYOffset,
