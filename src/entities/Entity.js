@@ -13,12 +13,14 @@ export default class Entity {
         this.UUID = 'ENTITY::'+ create_UUID() //UUID for identifying this entity instance.
         this.size = 32
         this.radius = 16 //Default values TODO add in constructor
+        this.hitOffsetX = 0
+        this.hitOffsetY = 0
     }
 
     update() { 
         //Update hitbox location of collidable entities
         if(this.states[STATES.Collidable]){
-            this.hitbox.update(this.x, this.y)
+            this.hitbox.update(this.x + this.hitOffsetX, this.y + this.hitOffsetY)
         }
     }
 
@@ -49,9 +51,24 @@ export default class Entity {
     /**
      * Sets an entities state to be collidable and creates a hitbox from it's dimensions.
      */
-    setCollidable(){
+    setCollidable(options = {}){
+        const defaults = {
+            offset: false,
+            xOffset: 0,
+            yOffset: 0,
+            radius: 32
+        }
+        options = Object.assign({}, defaults, options)
         this.states[STATES.Collidable] = true
-        this.hitbox = new HitCircle(this.radius, this.x, this.y)
+        if (options.offset === true) {
+            this.hitOffsetX = options.xOffset
+            this.hitOffsetY = options.yOffset
+            this.hitbox = new HitCircle(options.radius, this.x + this.hitOffsetX, this.y + this.hitOffsetY)
+        } else {
+            this.hitbox = new HitCircle(this.radius, this.x, this.y)
+        }
+        
+       
     }
 
     /**

@@ -1,4 +1,4 @@
-import { ANIMATIONS as ANIMS, STATES, ANIMATION_RATES as AR, DIRECTIONS, ASSET_PATHS, SPELLS, KEYS } from '../../utils/Const.js'
+import { ANIMATIONS as ANIMS, STATES, ANIMATION_RATES as AR, DIRECTIONS, ASSET_PATHS, KEYS, EFFECTS } from '../../utils/Const.js'
 import Character from '../Character.js'
 import AStarPathfinding from '../../utils/AStarPathfinding.js'
 import Map from '../../world/Map.js'
@@ -161,7 +161,7 @@ export default class PlayableCharacter extends Character {
         this.coolDown = 0
         this.states[STATES.Cooling] = true
         this.game.sceneManager.currentScene.addEntity(
-            new Effect(this.game, this.game.getAsset(ASSET_PATHS.Mage), SPELLS.Mage, pos)
+            new Effect(this.game, this.game.getAsset(ASSET_PATHS.Mage), EFFECTS.Mage, pos)
         )
 
     }
@@ -175,7 +175,7 @@ export default class PlayableCharacter extends Character {
             const pos = [this.x + this.width + Math.cos(angle) * r,
                 this.y + this.height + Math.sin(angle) * r]
             this.game.sceneManager.currentScene.addEntity(
-                new Effect(this.game, this.game.getAsset(ASSET_PATHS.Effect32), SPELLS.Explosion, pos)
+                new Effect(this.game, this.game.getAsset(ASSET_PATHS.Effect32), EFFECTS.Explosion, pos)
             )
         }
     }

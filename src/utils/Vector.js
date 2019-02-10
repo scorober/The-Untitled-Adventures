@@ -110,6 +110,11 @@ export default class Vector {
         return this.x * this.x + this.y * this.y
     }
 
+    normalize() {
+        this.x /= this.magnitude
+        this.y /= this.magnitude
+    }
+
     /**
      * If the absolute vector axis is greater than `max`, multiplies the axis by `factor`
      *

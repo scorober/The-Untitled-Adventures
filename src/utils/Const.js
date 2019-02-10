@@ -108,7 +108,7 @@ export const DIRECTIONS = {
     East: Symbol(),
 }
 
-export const SPELLS = {
+export const EFFECTS = {
     Explosion: Symbol(),
     Fireball: Symbol(),
     Mage: Symbol()

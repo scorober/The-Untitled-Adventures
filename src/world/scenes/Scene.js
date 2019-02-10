@@ -51,8 +51,10 @@ export default class Scene {
      * Remove an entity from scene so it is no longer updated or drawn
      * @param entitiy
      */
-    removeEntitiy(entitiy) {
-        this.entities.pop(entitiy)
+    removeEntity(index) {
+        console.log(this.entities)
+        this.entities.splice(index, 1)
+        console.log(this.entities)
     }
 
     /**
@@ -106,7 +108,13 @@ export default class Scene {
         }
         for (let i = 0; i < entitiesCount; i++) {
             const entity = this.entities[i]
-            entity.update()
+            if (entity) { //Removed entities are still in array and being called on??
+                if (entity.removeFromWorld === true) {
+                    this.removeEntity(i)
+                } else {
+                    entity.update()
+                }
+            }
         }
 
     }

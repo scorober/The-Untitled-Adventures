@@ -9,15 +9,23 @@ import Vector from '../utils/Vector.js'
 export default class Fireball extends Entity {
     constructor(game, spritesheet, pos, target) {
         super(game, pos)
+        this.pos = new Vector(pos.x, pos.y)
+        this.target = new Vector(target.x, target.y)
         this.animationRates = this.getDefaultAnimationRates()
         this.animations = this.getAnimations(spritesheet)
         this.scale = 1
         this.animation = this.animations[ANIMS.Start]
-        this.speed = 250
+        this.speed = 1
+    
+        console.log(pos)
+        console.log(target)
+        this.dir = new Vector(target.x - pos.x, target.y - pos.y)
 
-        const dir = new Vector(target.x - pos.x, target.y - pos.y)
-        dir.divideScalar(dir.magnitude) //Why do I need this twice? Normalization is wrong...
-        this.vector = dir.divideScalar(dir.magnitude)
+        // dir.divideScalar(dir.magnitude) //Why do I need this twice? Normalization is wrong...
+        this.dir.normalize()
+
+        console.log(this.dir)
+        console.log('vector')
         this.states[STATES.Stage1] = true
         this.angle = Vector.getAngle(pos, target)
     }
@@ -29,12 +37,18 @@ export default class Fireball extends Entity {
                 this.states[STATES.Stage2] = true
             }
         }
-        this.x = this.x + this.vector.x * this.speed
-        this.y = this.y + this.vector.y * this.speed
+        const vec = new Vector(this.x, this.y)
+        if (vec.distance(this.target) < 10) {
+            this.removeFromWorld = true
+        } else {
+            // console.log(this.dir.x * this.speed)
+            this.x = this.x + this.dir.x * this.speed
+            this.y = this.y + this.dir.y * this.speed
+        }
+   
     }
 
     draw() {
-        
         this.animation.drawFrame(this.game, this.x, this.y, this.angle)
         super.draw()
     }

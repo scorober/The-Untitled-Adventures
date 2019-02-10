@@ -76,22 +76,22 @@ export default class FirstLevel extends Scene {
         game.camera.setFollowedEntity(player)
 
 
-        const archer0 = new Archer(game, game.getAsset(ASSET_PATHS.Archer), start)
-        const robot0 = new Robot(game, game.getAsset(ASSET_PATHS.Robot), start)
-        const mage = new Mage(game, game.getAsset(ASSET_PATHS.Mage), start)
+        // const archer0 = new Archer(game, game.getAsset(ASSET_PATHS.Archer), start)
+        // const robot0 = new Robot(game, game.getAsset(ASSET_PATHS.Robot), start)
+        // const mage = new Mage(game, game.getAsset(ASSET_PATHS.Mage), start)
         // const marriott = new Marriott(game, game.getAsset(ASSET_PATHS.Marriott),start)
 
-        // marriott.setFollowTarget(player)
-        mage.setFollowTarget(player)   
-        robot0.setFollowTarget(player)
-        archer0.setFollowTarget(player)
+        // // marriott.setFollowTarget(player)
+        // mage.setFollowTarget(player)   
+        // robot0.setFollowTarget(player)
+        // archer0.setFollowTarget(player)
 
         this.addEntity(player)
         this.addEntity(game.camera)
-        this.addEntity(mage)
-        // this.addEntity(marriott)
-        this.addEntity(robot0)
-        this.addEntity(archer0)
+        // this.addEntity(mage)
+        // // this.addEntity(marriott)
+        // this.addEntity(robot0)
+        // this.addEntity(archer0)
     }
 
     /**
