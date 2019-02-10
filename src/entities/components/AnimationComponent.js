@@ -30,6 +30,7 @@ export default class AnimationComponent extends Component {
      * Parses the animation data and returns a collection of Animations
      * @param {Object} config The animation configuration object for this character
      */
+    // eslint-disable-next-line complexity
     getAnimations(config) {
         const animations = []
         const spritesheet = this.entity.game.getAsset(config.Spritesheet)
@@ -45,7 +46,8 @@ export default class AnimationComponent extends Component {
             // If this animation is optional for the spritesheet then the spritesheet may
             // not contain these sprites
             if (anim.hasOwnProperty('optional')) {
-                if (animationFactory.hasNextRow(anim.height) == false) {
+                const height = anim.options.hasOwnProperty('height') ? anim.options.height : config.Height
+                if (animationFactory.hasNextRow(height) == false) {
                     return animations
                 }
             }

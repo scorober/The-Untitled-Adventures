@@ -4,12 +4,7 @@ import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR, ASSET_PATHS } from '../../u
  * ANIMATIONS
  */
 // Values defined here for use in export object
-const width = 64
-const height = 64
-const scale = 1
 const yOffset = 0
-const oversizedWidth = 192
-const oversizedHeight = 192
 const oversizedYOffset = 64
 
 /** 
@@ -30,13 +25,9 @@ export default {
     // Animation Component Configuration
     AnimationConfig: {
         // Values are repeated here for export
-        Width: width,
-        Height: height,
-        Scale: scale,
-        YOffset: yOffset,
-        OversizedWidth: oversizedWidth,
-        OversizedHeight: oversizedHeight,
-        OversizedYOffset: oversizedYOffset,
+        Width: 64,
+        Height: 64,
+        Scale: 1,
         Spritesheet: ASSET_PATHS.MikesChar,
         InitialAnimation: ANIMS.StandEast,
         AnimationRates: {
@@ -121,7 +112,7 @@ export default {
             // Standing (modified slashing)
             [ANIMS.StandNorth]: {
                 goBackRows: 4,
-                goBackHeight: 4 * height,
+                goBackHeight: 4 * 64,
                 rate: AR.Stand,
                 options: { yOffset: yOffset, maxFrames: 2 }
             },
@@ -163,37 +154,21 @@ export default {
             [ANIMS.OversizeNorth]: {
                 optional: true,
                 rate: AR.Oversize,
-                options: {
-                    yOffset: oversizedYOffset,
-                    width: oversizedWidth,
-                    height: oversizedHeight
-                }
+                options: { yOffset: oversizedYOffset, width: 192, height: 192 }
             },
             [ANIMS.OversizeWest]: {
                 rate: AR.Oversize,
-                options: {
-                    yOffset: oversizedYOffset,
-                    width: oversizedWidth,
-                    height: oversizedHeight
-                }
+                options: { yOffset: oversizedYOffset, width: 192, height: 192 }
 
             },
             [ANIMS.OversizeSouth]: {
                 rate: AR.Oversize,
-                options: {
-                    yOffset: oversizedYOffset,
-                    width: oversizedWidth,
-                    height: oversizedHeight
-                }
+                options: { yOffset: oversizedYOffset, width: 192, height: 192 }
 
             },
             [ANIMS.OversizeEast]: {
                 rate: AR.Oversize,
-                options: {
-                    yOffset: oversizedYOffset,
-                    width: oversizedWidth,
-                    height: oversizedHeight
-                }
+                options: { yOffset: oversizedYOffset, width: 192, height: 192 }
             }
         }
     }
