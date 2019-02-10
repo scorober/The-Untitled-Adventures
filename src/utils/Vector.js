@@ -67,6 +67,12 @@ export default class Vector {
         return this
     }
 
+    divideScalar (s) {
+        this.x /= s
+        this.y /= s
+        return this
+    }
+
     subtractScalar (scalar) {
         this.x -= scalar
         this.y -= scalar
@@ -104,6 +110,32 @@ export default class Vector {
         return this.x * this.x + this.y * this.y
     }
 
+    normalize() {
+        this.x /= this.magnitude
+        this.y /= this.magnitude
+    }
+
+    /**
+     * If the absolute vector axis is greater than `max`, multiplies the axis by `factor`
+     *
+     * ### Examples:
+     *     var vec = new Victor(100, 50);
+     *
+     *     vec.limit(80, 0.9);
+     *     vec.toString();
+     *     // => x:90, y:50
+     *
+     * @param {Number} max The maximum value for both x and y axis
+     * @param {Number} factor Factor by which the axis are to be multiplied with
+     * @return {Vector} `this` for chaining capabilities
+     * @api public
+     */
+    limit(max, factor) {
+        if (Math.abs(this.x) > max){ this.x *= factor }
+        if (Math.abs(this.y) > max){ this.y *= factor }
+        return this
+    }
+
     /** static helper methods that can be called by any class. */
     static radian2degrees(radian){
         return radian * degrees
@@ -118,8 +150,18 @@ export default class Vector {
         return Math.sqrt(v.lengthSq())
     }
 
-
-
-
+    /**
+     * Gets the angle between two points relative to the canvas grid.
+     * @param {*} pos 
+     * @param {*} target 
+     */
+    static getAngle(pos, target) {
+        let theta = Math.atan2(-(pos.y - target.y), -(pos.x - target.x))
+        if (theta < 0) {
+            theta += Math.PI * 2
+        }
+        theta += (1/4) * Math.PI * 2
+        return theta
+    }
 }
 const degrees = 180 / Math.PI

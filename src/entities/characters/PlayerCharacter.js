@@ -1,9 +1,11 @@
-import { ANIMATIONS as ANIMS, STATES, ANIMATION_RATES as AR, DIRECTIONS, ASSET_PATHS, SPELLS, KEYS } from '../../utils/Const.js'
+import { ANIMATIONS as ANIMS, STATES, ANIMATION_RATES as AR, DIRECTIONS, ASSET_PATHS, KEYS, EFFECTS } from '../../utils/Const.js'
 import Character from '../Character.js'
 import AStarPathfinding from '../../utils/AStarPathfinding.js'
 import Map from '../../world/Map.js'
 import Effect from '../../entities/Effect.js'
 import AnimationFactory from '../../AnimationFactory.js'
+import Fireball from '../Fireball.js'
+import Vector from '../../utils/Vector.js';
 
 export default class PlayableCharacter extends Character {
     constructor(game, spritesheet, x, y) {
@@ -22,13 +24,14 @@ export default class PlayableCharacter extends Character {
         this.animation = this.animations[ANIMS.StandEast]
         this.states[STATES.Pathfinding] = false
         this.path = null
-
-        this.speed = 110
+        this.v = new Vector(x, y)
+        this.speed = 250
     }
 
     update() {
         //super.update()
         if (this.states[STATES.Following] == false) {
+            this.getCombatInput()
             this.getPathfindingInput()
 
         }
@@ -38,11 +41,24 @@ export default class PlayableCharacter extends Character {
         if (this.game.inputManager.downKeys[KEYS.KeyD] && this.oversize) {
             this.animation = this.animations[ANIMS.OversizeEast]
         }
+        //TODO temporary remove!!
+        this.v = new Vector(this.x, this.y)
     }
 
     draw() {
-        this.animation.drawFrame(this.game, this.x, this.y)
+        this.animation.drawFrame(this.game, this.x, this.y, 0)
         super.draw()
+    }
+
+    getCombatInput() {
+        if (this.game.inputManager.newLeftClick) {
+            this.game.inputManager.newLeftClick = false
+            const cam = this.game.camera
+            const click = this.game.inputManager.lastLeftClickPosition
+            //TODO method for all entities to find direction and give an origin pont in that direction form center.
+            //TODO check player vector vs target prior to creating a fireball
+            this.game.sceneManager.currentScene.addEntity(new Fireball(this.game, this.game.getAsset(ASSET_PATHS.Fireball), { x: this.x, y : this.y }, { x: cam.xView + click.x, y: cam.yView + click.y }))
+        }
     }
 
     getPathfindingInput() {
@@ -149,7 +165,7 @@ export default class PlayableCharacter extends Character {
         this.coolDown = 0
         this.states[STATES.Cooling] = true
         this.game.sceneManager.currentScene.addEntity(
-            new Effect(this.game, this.game.getAsset(ASSET_PATHS.Mage), SPELLS.Mage, pos)
+            new Effect(this.game, this.game.getAsset(ASSET_PATHS.Mage), EFFECTS.Mage, pos)
         )
 
     }
@@ -163,7 +179,7 @@ export default class PlayableCharacter extends Character {
             const pos = [this.x + this.width + Math.cos(angle) * r,
                 this.y + this.height + Math.sin(angle) * r]
             this.game.sceneManager.currentScene.addEntity(
-                new Effect(this.game, this.game.getAsset(ASSET_PATHS.Effect32), SPELLS.Explosion, pos)
+                new Effect(this.game, this.game.getAsset(ASSET_PATHS.Effect32), EFFECTS.Explosion, pos)
             )
         }
     }

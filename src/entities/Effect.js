@@ -1,35 +1,32 @@
 import Entity from './Entity.js'
-import Animation from '../Animation.js'
-import { SPELLS, ANIMATION_RATES as AR } from '../utils/Const.js'
+import { EFFECTS, ANIMATION_RATES as AR, ANIMATIONS as ANIMS } from '../utils/Const.js'
+import AnimationFactory from '../AnimationFactory.js'
 
 export default class Effect extends Entity {
-    constructor(game, spritesheet, spell, pos) {
+    constructor(game, spritesheet, effect, pos) {
         super(game, pos)
-        this.spritesheet = spritesheet
         this.game = game
         this.scale = 1.5
         this.animationRates = this.getDefaultAnimationRates()
         this.animations = this.getAnimations(spritesheet)
         this.states = []
 
-        if (spell === SPELLS.Explosion) {
-            this.width = 32
-            this.height = 32
-            this.animation = this.animations[SPELLS.Explosion]
-        }
-        if (spell === SPELLS.Mage) {
-            this.width = 192
-            this.height = 192
-            this.animation = this.animations[SPELLS.Mage]
+        if (effect === EFFECTS.Fireball) {
+            this.width = 22
+            this.height = 28
+            this.animation = this.animations[ANIMS.Fire]
         }
     }
 
     update() {
-        super.update()
+        if (this.animation.isDone()) {
+            this.removeFromWorld = true
+        }
+
     }
 
     draw() {
-        this.animation.drawFrame(this.game, this.x, this.y)
+        this.animation.drawFrame(this.game, this.x, this.y, 0)
         super.draw()
     }
 
@@ -40,11 +37,24 @@ export default class Effect extends Entity {
     }
 
     getAnimations(spritesheet) {
-        const mage = 192
-        const explosion = 32
         const animations = {
-            [SPELLS.Explosion]: new Animation(spritesheet, explosion, explosion, 7, 2, .6, 7, false, this.scale),
-            [SPELLS.Mage]: new Animation(spritesheet, mage, mage, 11, 5, this.animationRates[AR.Impact], 11, false, 1)
+            getAnimations(spritesheet) {
+                //TODO Replace with "effects" sprite sheet, this is just fireball stuff
+                const animations = []
+                const animationFactory = new AnimationFactory(spritesheet, this.scale)
+                const boostSize = 96
+                const fireW = 22
+                const fireH = 28
+                const blastW = 21
+                const blastH = 57
+        
+                animations[ANIMS.Boost] = animationFactory.getNextRow(boostSize, boostSize, this.animationRates[AR.Impact], { maxFrames: 15 })
+                animations[ANIMS.Fire] = animationFactory.getNextRow(fireW, fireH, this.animationRates[AR.Impact])
+                animations[ANIMS.Start] = animationFactory.getNextRow(blastW, blastH, this.animationRates[AR.Fireball], { maxFrames: 4, loop: false })
+                animations[ANIMS.Projectile] = animationFactory.getNextRow(blastW, blastH, this.animationRates[AR.Fireball], { maxFrames: 7 })
+                
+                return animations
+            }
         }
         return animations
     }

@@ -21,7 +21,7 @@ export default class Mage extends Enemy {
     }
 
     draw() {
-        this.animation.drawFrame(this.game, this.x, this.y)
+        this.animation.drawFrame(this.game, this.x, this.y, 0)
         super.draw()
     }
 

@@ -1,5 +1,7 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
+import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, SPAWNERS } from '../utils/Const.js'
+import Spawner from '../entities/Spawner.js';
 
 export default class Map extends Entity {
     /**
@@ -10,9 +12,8 @@ export default class Map extends Entity {
      * @param setLength Number of tiles wide
      * @param tiles  a reference to the tile array map thing
      */
-    constructor(game, tileAtlas, tileSize, setLength, dungeon) {
+    constructor(game, tileAtlas, tileSize, setLength, dungeon, scene) {
         super(game, 0, 0)
-        this.game = game
         this.tileAtlas = tileAtlas
         this.tileSize = tileSize
         this.setLength = setLength
@@ -20,10 +21,10 @@ export default class Map extends Entity {
         this.rows = dungeon.size[1]
         this.cols = dungeon.size[0]
         this.tiles = []
+        this.scene = scene
         this.buildMap()
     }
 
-    //Buggy, spawns in empty tiles sometimes.
     getStartPos() {
         return {
             x: this.dungeon.start_pos[0] * this.tileSize,
@@ -32,38 +33,124 @@ export default class Map extends Entity {
     }
 
     buildMap() {
-        this.map = new Array2D(this.dungeon.size, 0) //0 for empty tile
+        const rooms = this.dungeon.room_count
+        const size = [this.dungeon.size[0] + rooms, this.dungeon.size[1] + rooms]
+
+        this.map = new Array2D(size, 0) //0 for empty tile
+        this.objectMap = new Array2D(this.dungeon.size, 0)
         const dungeon = this.dungeon
         for (const piece of dungeon.children) {
-            //Fill interior, fix so perimeter isn't repeated.
-            this.map.set_square(piece.position, piece.size, 4, true)
-            //Fill wall around
-            this.map.set_square(piece.position, piece.size, 18)
-            //TODO get correct values for exits...
-            for (const exit of piece.exits) {
-                this.map.set(piece.global_pos(exit[0]), 38)
+            this.buildWalls(piece)
+            this.buildExits(piece)
+            this.buildRoom(piece)
+        }
+    }
+
+
+    createObject(map, pos, object) {
+        for (let row = 0; row < object.length; row++) {
+            for (let col = 0; col <object[0].length; col++) {
+                const point = [pos[0] + col, pos[1] + row]
+                map.set(point, object[row][col])
             }
         }
     }
 
-    /**
-     *
-     * @param col
-     * @param row
-     * @returns {*}
-     */
-    getTile(row, col) {
-        return this.tiles[row * this.cols + col]
+    buildWalls(piece) {
+        const pos = piece.position
+        const size = piece.size
+        const w = size[0]
+        const h = size[1]
+        const x = pos[0]
+        const y = pos[1]
+        const outerPos = [x + 1, y + 1]
+        const innerPos = [x + 2, y + 2]
+        const innerSize = [w - 4, h - 4]
+
+        //Set floor
+        this.map.set_square(innerPos, innerSize, 4, true)
+
+        const posNW = outerPos
+        const posNE = [outerPos[0] + innerSize[0], outerPos[1]]
+        const posSW = [outerPos[0], outerPos[1] + innerSize[1]]
+        const posSE = [outerPos[0] + innerSize[0], outerPos[1] + innerSize[1]]
+
+        //North
+        this.map.set_horizontal_line(this.alterPos(outerPos, 1, 0), innerSize[0] - 1, MI.WallNorth[0][0])
+        this.map.set_horizontal_line(innerPos, innerSize[0] - 1, MI.WallNorth[1][0])
+        //East
+        this.map.set_vertical_line(this.alterPos(posNE, 1, 2), innerSize[1] - 3, MI.WallEast[1])
+        this.map.set_vertical_line(this.alterPos(posNE, 0, 2), innerSize[1] - 3, MI.WallEast[0])
+        //South
+        this.map.set_horizontal_line(this.alterPos(posSW, 2, 0), innerSize[0] - 3, MI.WallSouth[0][0])
+        this.map.set_horizontal_line(this.alterPos(posSW, 2, 1), innerSize[0] - 3, MI.WallSouth[1][0])
+        //West
+        this.map.set_vertical_line(this.alterPos(posNW, 0, 2), innerSize[1] - 3, MI.WallWest[0])
+        this.map.set_vertical_line(this.alterPos(innerPos, 0, 1), innerSize[1] - 3, MI.WallWest[1])
+
+        this.createObject(this.map, posNE, MI.ICornerNE)
+        this.createObject(this.map, posNW, MI.ICornerNW)
+        this.createObject(this.map, posSW, MI.ICornerSW)
+        this.createObject(this.map, posSE, MI.ICornerSE)
     }
 
-    get2dArr() {
-        const arr = [this.rows][this.cols]
-        for (let r = 0; r < this.rows; r++) {
-            for (let c = 0; c < this.cols; c++) {
-                arr[r][c] = this.getTile(r, c)
+
+    buildRoom(piece) {
+        const center = piece.global_pos(piece.get_center_pos())
+        switch (piece.tag) {
+            case ROOMS.Initial:
+                this.createObject(this.objectMap, center, MI.ChestClosed)
+                break
+            case ROOMS.Spawn:
+                this.createObject(this.objectMap, center, MI.Rug)
+                const spawner = new Spawner(this.game, 
+                    { x: center[0] * this.tileSize, y: center[1] * this.tileSize },
+                    SPAWNERS.Mage, 8, this.getRadius(piece))
+                this.scene.addEntity(spawner)
+                break
+            case ROOMS.Treasure:
+                this.createObject(this.objectMap, center, MI.ChestOpen)
+                break
+            case ROOMS.Exit:
+                this.createObject(this.objectMap, center, MI.StairsN)
+                break
+
+        }
+    }
+
+    buildExits(piece) {
+        for (const exit of piece.exits) {
+            //Create the floor between rooms
+            const exitPos = piece.global_pos(exit[0])
+            this.map.set(piece.global_pos(exit[0]), 38)
+            //Create this exit door
+            if (exit[1] === TOP || exit[1] === BOTTOM) {
+                const transPos = this.alterPos(exitPos, 0, -2)
+                this.createObject(this.map, transPos, MI.DoorPathV)
+                if (exit[1] === TOP) {
+                    const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, 1)
+                    this.createObject(this.objectMap, doorPos, MI.Door0)
+                } else {
+                    const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, -2)
+                    this.createObject(this.objectMap, doorPos, MI.Door180)
+                }
+            } else {  //East and West
+                const transPos = this.alterPos(exitPos, -2, 0)
+                this.createObject(this.map, transPos, MI.DoorPathH)
+                if (exit[1] === RIGHT) {
+                    const doorPos = this.alterPos(exitPos, 1, -1)
+                    this.createObject(this.objectMap, doorPos, MI.Door90)
+                }
+                if (exit[1] === LEFT) {
+                    const doorPos = this.alterPos(piece.global_pos(exit[0]), -2, -1)
+                    this.createObject(this.objectMap, doorPos, MI.Door270)
+                }
             }
         }
-        return arr
+    }
+
+    alterPos(pos, dx, dy) {
+        return [pos[0] + dx, pos[1] + dy]
     }
 
     getPathfindingArray() {
@@ -91,55 +178,89 @@ export default class Map extends Entity {
         switch (value) {
             case 38:
                 return 3
+            case 148:
+                return 3
+            case 149:
+                return 3
+            case 150:
+                return 3
+            case 151:
+                return 3
+            case 162:
+                return 3
+            case 130:
+                return 3
+            case 146:
+                return 3
+            case 178:
+                return 3
+            case 177:
+                return 3
+            case 179:
+                return 3
+            case 147:
+                return 3
+            case 163:
+                return 3
+            case 161:
+                return 3
             case 0:
                 return 100
             default:
                 return value
         }
-
     }
 
-    //Update map based on camera view and when entering a new level
-    update() {
+    update() {}
+    
+    draw() {
+        for (let c = 0; c < this.cols; c++) {
+            for (let r = 0; r < this.rows; r++) {
+                const tile = this.map.get([c, r])
+                const objTile = this.objectMap.get([c, r])
+                this.drawTile(c, r, tile)
+                this.drawTile(c, r, objTile)
+            }
+        }
     }
 
-    draw() { //TODO use Array2D.iter()
+    /**
+     * Draw a tile at [c, r]
+     * @param {*} c Column 
+     * @param {*} r Row
+     * @param {*} tile Tile being drawn
+     */
+    drawTile(c, r, tile) {
         const cam = this.game.camera
         const width = this.game.ctx.canvas.width
         const height = this.game.ctx.canvas.height
         const centerTile = Map.worldToTilePosition({ x: cam.xView + width / 2, y: cam.yView + height / 2 }, this.tileSize)
         const tilesWide = Math.ceil(width / this.tileSize)
         const tilesTall = Math.ceil(height / this.tileSize)
-
-
-        for (let c = 0; c < this.cols; c++) {
-            for (let r = 0; r < this.rows; r++) {
-                const tileInView = this.tileInView(r, c, centerTile, tilesWide + 2, tilesTall + 2)
-                const tile = this.map.get([c, r])
-                if (tile && tileInView) {
-                    const tileX = c * this.tileSize - this.game.camera.xView
-                    const tileY = r * this.tileSize - this.game.camera.yView
-                    this.game.ctx.drawImage(
-                        this.tileAtlas,
-                        ((tile - 1) % this.setLength * this.tileSize),
-                        Math.floor((tile - 1) / this.setLength) * this.tileSize,
-                        this.tileSize,
-                        this.tileSize,
-                        tileX - this.tileSize / 2, //Placement on canvas
-                        tileY - this.tileSize / 2,
-                        this.tileSize,
-                        this.tileSize
-                    )
-                    //Debug 
-                    // this.game.ctx.font = '11px Arial'
-                    // this.game.ctx.fillStyle = 'white'
-                    // this.game.ctx.fillText('(' + c + ', ' + r + ')', tileX, tileY)
-                }
-            }
+        const tileInView = this.tileInView(c, r, centerTile, tilesWide + 2, tilesTall + 2)
+        if (tile && tileInView) {
+            const tileX = c * this.tileSize - this.game.camera.xView
+            const tileY = r * this.tileSize - this.game.camera.yView
+            this.game.ctx.drawImage(
+                this.tileAtlas,
+                ((tile - 1) % this.setLength * this.tileSize),
+                Math.floor((tile - 1) / this.setLength) * this.tileSize,
+                this.tileSize,
+                this.tileSize,
+                tileX - this.tileSize / 2, //Placement on canvas
+                tileY - this.tileSize / 2,
+                this.tileSize,
+                this.tileSize
+            )
+            // Debug 
+            // this.game.ctx.font = '11px Arial'
+            // this.game.ctx.fillStyle = 'white'
+            // this.game.ctx.fillText('(' + c + ', ' + r + ')', tileX, tileY)
         }
     }
 
-    tileInView(c, r, centerTile, tilesWide, tilesTall) {
+
+    tileInView(r, c, centerTile, tilesWide, tilesTall) {
         return (c > centerTile.y - tilesTall / 2 &&
             c < centerTile.y + tilesTall / 2 &&
             r > centerTile.x - tilesWide / 2 &&
@@ -162,5 +283,10 @@ export default class Map extends Entity {
             x: Math.floor((obj.x + tileSize / 2) / 64),
             y: Math.floor((obj.y + tileSize / 2) / 64)
         }
+    }
+
+    getRadius(piece) {
+        let size = Math.min(piece.size[0], piece.size[1])
+        return Math.floor((size - 4) / 2 * 64)
     }
 }

@@ -38,11 +38,21 @@ export default class Scene {
     }
 
     /**
+     * Adds an a collidable entity to the game. Works in place of addEntity.
+     * @param entity
+     */
+    addCollidableEntity(entity){
+        this.addEntity(entity)
+        entity.setCollidable()
+        this.game.sceneManager.addCollidableEntity(entity)
+    }
+
+    /**
      * Remove an entity from scene so it is no longer updated or drawn
      * @param entitiy
      */
-    removeEntitiy(entitiy) {
-        this.entities.pop(entitiy)
+    removeEntity(index) {
+        this.entities.splice(index, 1)
     }
 
     /**
@@ -91,10 +101,21 @@ export default class Scene {
      */
     updateEntities() {
         const entitiesCount = this.entities.length
+        if(entitiesCount){
+            this.entities.sort((a,b) => a.y - b.y)
+        }
         for (let i = 0; i < entitiesCount; i++) {
             const entity = this.entities[i]
-            entity.update()
+            console.log(entity)
+            if (entity) { //Removed entities are still in array and being called on??
+                if (entity.removeFromWorld === true) {
+                    this.removeEntity(i)
+                } else {
+                    entity.update()
+                }
+            }
         }
+
     }
 
     /**
@@ -115,6 +136,14 @@ export default class Scene {
      */
     setMap(map) {
         this.map = map
+    }
+
+    getPlayer() {
+        return this.player
+    }
+
+    setPlayer(player) {
+        this.player = player
     }
 
     /**

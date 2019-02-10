@@ -14,7 +14,7 @@ export default class TitleMenuScene extends Scene {
 
         //Adding draw function
         background.draw = function (game) {
-            background.drawFrame(game, game.surfaceWidth /2 , game.surfaceHeight / 1.5)
+            background.drawFrame(game, game.surfaceWidth /2 , game.surfaceHeight / 1.5, 0)
         }
 
         background.update = function (tick) {
