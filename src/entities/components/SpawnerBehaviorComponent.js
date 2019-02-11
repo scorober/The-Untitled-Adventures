@@ -9,6 +9,7 @@ import MovementComponent from './MovementComponent.js';
 import AnimationComponent from './AnimationComponent.js';
 import ArcherData from '../../entities/characters/ArcherDefaultData.js'
 import RobotData from '../../entities/characters/RobotDefaultData.js'
+import MageData from '../../entities/characters/MageDefaultData.js'
 
 export default class SpawnComponentBehavior extends Component {
     /**
@@ -81,10 +82,16 @@ export default class SpawnComponentBehavior extends Component {
      * Pushes the count of each mob type into mobs array.
      */
     generateMobs() {
-        for (let i = 0; i < this.archers; i++) {
+        for (let i = 0; i < this.mages; i++) {
             const angle = this.rng.float() * Math.PI * 2
             const r = this.rng.int(10, this.radius)
-            //NEEDS MAGE
+            const mage = new Entity(this.entity.game, {
+                x: this.entity.x + Math.cos(angle) * r,
+                y: this.entity.y + Math.sin(angle) * r
+            })
+            mage.addComponent(new MovementComponent(mage))
+            mage.addComponent(new AnimationComponent(mage, MageData.AnimationConfig))
+            this.mobs.push(mage)
         }
         for (let i = 0; i < this.archers; i++) {
             const angle = this.rng.float() * Math.PI * 2
