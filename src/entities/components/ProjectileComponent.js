@@ -1,6 +1,7 @@
 import Entity from '../Entity.js'
 import Component from './Component.js'
 import Vector from '../../utils/Vector.js';
+import MovementComponent from './MovementComponent.js';
 
 export default class ProjectileComponent extends Component {
     constructor(entity, target) {
@@ -13,8 +14,10 @@ export default class ProjectileComponent extends Component {
     }
 
     update() {
-        if (this.v.distance(this.target)) {
-            //Do something
+        if (this.v.distance(this.target) < 50) {
+            //Explode
+        } else {
+            this.entity.getComponent(MovementComponent).move(this.dir)
         }
     }
 
