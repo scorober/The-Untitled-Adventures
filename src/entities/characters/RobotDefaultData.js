@@ -1,15 +1,12 @@
-import {
-    ANIMATIONS as ANIMS,
-    ANIMATION_RATES as AR,
-    ASSET_PATHS
-} from '../../utils/Const.js'
+import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR, ASSET_PATHS } from '../../utils/Const.js'
 
 /**
  * ANIMATIONS
  */
 // Values defined here for use in export object
-const attackWidth = 288
+const attackWidth = 384
 const attackHeight = 192
+const impatctSize = 244
 const height = 192
 const width = 192
 const yOffset = 10
@@ -36,7 +33,7 @@ export default {
         Width: 192,
         Height: 192,
         Scale: 0.5,
-        Spritesheet: ASSET_PATHS.Archer,
+        Spritesheet: ASSET_PATHS.Robot,
         InitialAnimation: ANIMS.StandEast,
         AnimationRates: {
             [AR.Walk]: 0.06,
@@ -69,70 +66,45 @@ export default {
                 goBackRows: 2,
                 goBackHeight: 2 * attackHeight,
                 rate: AR.Shoot,
-                options: {
-                    yOffset: yOffset,
-                    width: attackWidth,
-                    height: attackHeight
-                }
+                options: { yOffset: yOffset, width: attackWidth, height: attackHeight }
             },
             // Copy of ShootEast
             [ANIMS.ShootSouth]: {
+                width: attackWidth,
+                height: attackHeight,
                 rate: AR.Shoot,
-                options: {
-                    yOffset: yOffset,
-                    width: attackWidth,
-                    height: attackHeight
-                }
+                options: { yOffset: yOffset, width: attackWidth, height: attackHeight }
             },
             // Standing
             [ANIMS.StandWest]: {
                 rate: AR.Stand,
-                options: {
-                    yOffset: yOffset,
-                }
+                options: { yOffset: yOffset, }
             },
             [ANIMS.StandEast]: {
                 rate: AR.Stand,
-                options: {
-                    yOffset: yOffset,
-                }
+                options: { yOffset: yOffset, }
             },
             // Copy of StandWest
             [ANIMS.StandNorth]: {
                 goBackRows: 2,
                 goBackHeight: 2,
                 rate: AR.Stand,
-                options: {
-                    yOffset: yOffset,
-                }
+                options: { yOffset: yOffset, }
             },
             // Copy of StandEast
             [ANIMS.StandSouth]: {
                 rate: AR.Stand,
-                options: {
-                    yOffset: yOffset,
-                }
+                options: { yOffset: yOffset, }
 
-            },
-            // Impact
-            [ANIMS.Impact]: {
-                rate: AR.Impact,
-                options: {
-                    loop: false
-                }
             },
             // Walking
             [ANIMS.WalkWest]: {
                 rate: AR.Walk,
-                options: {
-                    yOffset: yOffset,
-                }
+                options: { yOffset: yOffset, }
             },
             [ANIMS.WalkEast]: {
                 rate: AR.Walk,
-                options: {
-                    yOffset: yOffset,
-                }
+                options: { yOffset: yOffset, }
             },
             // Copy of WalkWest
             [ANIMS.WalkSouth]: {
@@ -141,19 +113,22 @@ export default {
                 width: width,
                 height: height,
                 rate: AR.Walk,
-                options: {
-                    yOffset: yOffset,
-                }
+                options: { yOffset: yOffset, }
             },
             // Copy of WalkEast
             [ANIMS.WalkNorth]: {
                 width: width,
                 height: height,
                 rate: AR.Walk,
-                options: {
-                    yOffset: yOffset,
-                }
-            }
+                options: { yOffset: yOffset, }
+            },
+            // Impact
+            [ANIMS.Impact]: {
+                rate: AR.Impact,
+                width: impatctSize,
+                height: impatctSize,
+                options: { loop: false }
+            },
         }
     }
 }

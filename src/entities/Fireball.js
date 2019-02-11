@@ -46,8 +46,6 @@ export default class Fireball extends Entity {
                 this.removeFromWorld = true
             }
         }
-
-
     }
     
     draw() {

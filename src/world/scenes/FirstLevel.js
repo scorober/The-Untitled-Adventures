@@ -3,7 +3,7 @@ import Map from '../Map.js'
 import Dungeon from '../generators/Dungeon.js'
 import Background from '../Background.js'
 import Entity from '../../entities/Entity.js'
-import { ASSET_PATHS } from '../../utils/Const.js'
+import { ASSET_PATHS, SPAWNERS } from '../../utils/Const.js'
 
 
 import PlayerCharacterData from '../../entities/characters/PlayerCharacterDefaultData.js'
@@ -11,7 +11,8 @@ import ArcherData from '../../entities/characters/ArcherDefaultData.js'
 import PlayerCharacterAnimationComponent from '../../entities/components/PlayerCharacterAnimationComponent.js'
 import MovementComponent from '../../entities/components/MovementComponent.js'
 import PlayerInputComponent from '../../entities/components/PlayerInputComponent.js'
-import AnimationComponent from '../../entities/components/AnimationComponent.js';
+import AnimationComponent from '../../entities/components/AnimationComponent.js'
+import SpawnerBehaviorComponent from '../../entities/components/SpawnerBehaviorComponent.js'
 
 
 export default class FirstLevel extends Scene {
@@ -32,7 +33,7 @@ export default class FirstLevel extends Scene {
                 },
                 any: {
                     min_size: [10, 10],
-                    max_size: [15, 15],
+                    max_size: [10, 10],
                     max_exits: 4
                 },
                 spawn: {
@@ -63,7 +64,10 @@ export default class FirstLevel extends Scene {
         dungeon.generate()
 
         this.setBackground(new Background(game, game.getAsset(ASSET_PATHS.Background)))
-        this.setMap(new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon, this))
+
+
+        const map = new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon, this)
+        this.setMap(map)
 
         const start = this.map.getStartPos()
 
@@ -82,11 +86,20 @@ export default class FirstLevel extends Scene {
         //const mage = new Entity(game, start)
         //mage.addComponent(new AnimationComponent(mage, )) // Need to make MageData
 
+
+
         this.setPlayer(playerCharacter)
         game.camera.setFollowedEntity(playerCharacter)
         this.addEntity(playerCharacter)
         this.addEntity(game.camera)
         this.addEntity(archer)
+
+
+        map.spawners.forEach(function(item) {
+            const spawner = new Entity(game, item.pos)
+            spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, SPAWNERS.Mage, item.r, 8))
+            this.addEntity(spawner)
+        }.bind(this))
     }
 
     /**

@@ -1,0 +1,127 @@
+import Component from './Component.js'
+import Random from '../../utils/Random.js'
+import {
+    STATES
+} from '../../utils/Const.js'
+import Vector from '../../utils/Vector.js'
+import MovementComponent from './MovementComponent.js'
+import AnimationComponent from './AnimationComponent.js'
+import Entity from '../Entity.js'
+import ArcherData from '../../entities/characters/ArcherDefaultData.js'
+import RobotData from '../../entities/characters/RobotDefaultData.js'
+
+export default class SpawnComponentBehavior extends Component {
+    /**
+     * @param {Entity} entity A reference to the Entity this Component is attached to.
+     * @param {Scene} scene The scene this spawn component will add mobs to.
+     * @param {Object} spawnConfig Spawn configuration for this spawner.
+     */
+    constructor(entity, scene, spawnConfig, radius, difficulty) {
+        super(entity)
+        this.v = new Vector(this.entity.x, this.entity.y)
+        this.scene = scene
+        this.cfg = spawnConfig
+        this.mobs = []
+        this.rng = new Random()
+        this.spawnTimer = 0
+        this.delay = 400
+        this.radius = radius
+        this.difficulty = difficulty
+        this.active = false
+        this.mages = 0
+        this.archers = 0
+        this.robots = 0
+        this.getMobs()
+        this.generateMobs()
+    }
+
+
+    /**
+     * Called each update cycle.
+     * Spawns mobs at a steady pace. In random order from mobs array.
+     */
+    update() {
+        if (this.active === false) {
+            const player = this.scene.getPlayer()
+            const v = new Vector(player.x, player.y)
+            if (v.distance(this.v) < 500) {
+                this.active = true
+            }
+        }
+        if (this.active) {
+            this.spawnTimer++
+            if (this.spawnTimer >= 400) {
+                this.addMob()
+            }
+        }
+    }
+
+    draw() {}
+
+    addMob() {
+        if (this.mobs.length > 0) {
+            const index = this.rng.int(0, this.mobs.length)
+            const entity = this.mobs[index]
+            this.scene.addEntity(entity)
+            this.mobs.splice(index, 1)
+        }
+        this.spawnTimer = 0
+    }
+
+    /**
+     * Gets mobs from spawnConfig
+     */
+    getMobs() {
+        this.mages = Math.ceil(this.cfg.mage * this.difficulty)
+        this.archers = Math.ceil(this.cfg.archer * this.difficulty)
+        this.robots = Math.ceil(this.cfg.robot * this.difficulty)
+    }
+
+    /**
+     * Pushes the count of each mob type into mobs array.
+     */
+    generateMobs() {
+        for (let i = 0; i < this.mages; i++) {
+            const angle = this.rng.float() * Math.PI * 2
+            const r = this.rng.int(10, this.radius)
+            // this.mobs.push(new Mage(this.game, this.game.getAsset(ASSET_PATHS.Mage), 
+            //     {
+            //         x: this.x + Math.cos(angle) * r,
+            //         y: this.y + Math.sin(angle) * r
+            //     }))
+        }
+        console.log(this.archers)
+        console.log(this.robots)
+        console.log(this.mages)
+        for (let i = 0; i < this.archers; i++) {
+            const angle = this.rng.float() * Math.PI * 2
+            const r = this.rng.int(10, this.radius)
+            const archer = new Entity(this.entity.game, {
+                x: this.entity.x + Math.cos(angle) * r,
+                y: this.entity.y + Math.sin(angle) * r
+            })
+            archer.addComponent(new MovementComponent(archer))
+            archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
+            this.mobs.push(archer)
+        }
+        for (let i = 0; i < this.robots; i++) {
+            const angle = this.rng.float() * Math.PI * 2
+            const r = this.rng.int(10, this.radius)
+            const robot = new Entity(this.entity.game, {
+                x: this.entity.x + Math.cos(angle) * r,
+                y: this.entity.y + Math.sin(angle) * r
+            })
+            robot.addComponent(new MovementComponent(robot))
+            robot.addComponent(new AnimationComponent(robot, RobotData.AnimationConfig))
+            this.mobs.push(robot)
+            
+            // this.mobs.push(new Robot(this.game, this.game.getAsset(ASSET_PATHS.Robot), 
+            //     {
+            //         x: this.x + Math.cos(angle) * r,
+            //         y: this.y + Math.sin(angle) * r
+            //     }))
+        }
+    }
+
+
+}

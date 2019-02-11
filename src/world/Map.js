@@ -1,7 +1,7 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
 import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, SPAWNERS } from '../utils/Const.js'
-import Spawner from '../entities/Spawner.js';
+import Spawner from '../entities/Spawner.js'
 
 export default class Map extends Entity {
     /**
@@ -22,6 +22,7 @@ export default class Map extends Entity {
         this.cols = dungeon.size[0]
         this.tiles = []
         this.scene = scene
+        this.spawners = [] //Array of spawner positions and radii.
         this.buildMap()
     }
 
@@ -97,19 +98,19 @@ export default class Map extends Entity {
 
     buildRoom(piece) {
         const center = piece.global_pos(piece.get_center_pos())
-        const spawner = new Spawner(this.game, 
-            { x: center[0] * this.tileSize, y: center[1] * this.tileSize },
-            SPAWNERS.Mage, 8, this.getRadius(piece))
         switch (piece.tag) {
             case ROOMS.Initial:
                 this.createObject(this.objectMap, center, MI.ChestClosed)
                 break
             case ROOMS.Spawn:
                 this.createObject(this.objectMap, center, MI.Rug)
-                // Note: This should somehow be in scene. Maybe use room tags
-                // to mark positions where spawners should spawn into the map
-                // like characters?
-                //this.scene.addEntity(spawner)
+                this.spawners.push({
+                    pos: {
+                        x: center[0] * this.tileSize,
+                        y: center[1] * this.tileSize,
+                    },
+                    r: this.getRadius(piece)
+                })
                 break
             case ROOMS.Treasure:
                 this.createObject(this.objectMap, center, MI.ChestOpen)
@@ -117,8 +118,11 @@ export default class Map extends Entity {
             case ROOMS.Exit:
                 this.createObject(this.objectMap, center, MI.StairsN)
                 break
-
         }
+    }
+
+    generateObjects(objects) {
+
     }
 
     // eslint-disable-next-line complexity

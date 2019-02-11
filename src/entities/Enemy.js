@@ -1,5 +1,5 @@
 import Character from './Character.js'
-import Vector from '../utils/Vector.js';
+import Vector from '../utils/Vector.js'
 
 export default class Enemy extends Character {
     constructor(game, pos) {

@@ -25,6 +25,7 @@ export const STATES = {
     RemoveFromWorld: Symbol(),
     Aggressive: Symbol(),
     Cooling: Symbol(),
+    Active: Symbol(),
     Stage1: Symbol(),
     Stage2: Symbol()
 
