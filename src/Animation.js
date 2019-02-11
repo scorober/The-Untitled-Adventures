@@ -74,7 +74,10 @@ export default class Animation {
     drawFrame(game, x, y, angle) {
         this.elapsedTime += game.clockTick
         if (this.isDone()) {
-            if (this.cb) this.cb()
+            if (this.cbCalled === false && this.cb) {
+                this.cbCalled = true
+                this.cb()
+            }
             if (this.loop) this.elapsedTime = 0
         }
         const frame = this.currentFrame()
@@ -126,6 +129,7 @@ export default class Animation {
     }
 
     setCallback(cb) {
+        this.cbCalled = false
         this.cb = cb
     }
 
