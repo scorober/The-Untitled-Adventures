@@ -39,41 +39,38 @@ export default {
         AnimationRates: {
             [AR.Walk]: 0.06,
             [AR.Stand]: 0.6,
-            [AR.Death]: 0.15,
-            [AR.Spellcast]: 0.15,
-            [AR.Thrust]: 0.15,
-            [AR.Slash]: 0.15,
-            [AR.Shoot]: 0.15,
+            [AR.Attack]: 0.15,
+            [AR.Impact]: 0.1
         },
         AnimationData: {
-            [ANIMS.ShootWest]: {
-                rate: AR.Shoot,
+            [ANIMS.AttackWest]: {
+                rate: AR.Attack,
                 options: {
                     yOffset: yOffset,
                     width: attackWidth,
                     height: attackHeight
                 }
             },
-            [ANIMS.ShootEast]: {
-                rate: AR.Shoot,
+            [ANIMS.AttackEast]: {
+                rate: AR.Attack,
                 options: {
                     yOffset: yOffset,
                     width: attackWidth,
                     height: attackHeight
                 }
             },
-            // Copy of ShootWest
-            [ANIMS.ShootNorth]: {
+            // Copy of AttackWest
+            [ANIMS.AttackNorth]: {
                 goBackRows: 2,
                 goBackHeight: 2 * attackHeight,
-                rate: AR.Shoot,
+                rate: AR.Attack,
                 options: { yOffset: yOffset, width: attackWidth, height: attackHeight }
             },
-            // Copy of ShootEast
-            [ANIMS.ShootSouth]: {
+            // Copy of AttackEast
+            [ANIMS.AttackSouth]: {
                 width: attackWidth,
                 height: attackHeight,
-                rate: AR.Shoot,
+                rate: AR.Attack,
                 options: { yOffset: yOffset, width: attackWidth, height: attackHeight }
             },
             // Standing
