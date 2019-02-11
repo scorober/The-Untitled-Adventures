@@ -32,14 +32,14 @@ export default class Animation {
         /** Interate and check each spot where a sprite may be. Terminate when the pixel is white
          * or when the image file ends.
          */
-        const sampleY = startY + frameHeight / 2
         for (let i = 0; i < Math.floor(sheetWidth / frameWidth); i++) {
-            const sampleX = frameWidth * i + frameWidth / 2
+            const sampleStartPoint = {x: frameWidth * i, y: startY}
+            const sampleEndPoint = {x: frameWidth * (i + 1), y: startY + frameHeight }
             /** Check whether the pixel in the center of where a sprite would be is transparent
              * One potential pitfall is if the sprite has a transparent pixel in the center.
              * TODO: Instead, sample a 2x2 area or something.
              */
-            if (this.pixelsAreTransparent(sampleCanvas, sampleX, sampleY)) {
+            if (this.pixelsAreTransparent(sampleCanvas, sampleStartPoint, sampleEndPoint)) {
                 return i
             }
         }
@@ -49,19 +49,24 @@ export default class Animation {
     /**
      * Checks whether a pixel is fully transparent or out of range of the canvas
      * @param {HTMLCanvasElement} canvas The offscreen Canvas element to sample from
-     * @param {number} x The x value of the pixel to sample
-     * @param {number} y The y value of the pixel to sample
+     * @param {Object} startPoint The top left point to start sampling
+     * @param {Object} endPoint The bottom right point to end sampling from
      * @returns {boolean} True if the pixel is white or off-canvas, false otherwise
      */
-    pixelsAreTransparent(canvas, x, y) {
+    pixelsAreTransparent(canvas, startPoint, endPoint) {
         /** Pixel data is in the form of a 1d array, with [r, g, b, a] for each pixel sampled
          * We're only sampling 1 pixel so it will have 4 elements.
          */
-        
-        const pixelData = canvas.getContext('2d').getImageData(x - 1, y - 1, 3, 3).data
+        const dx = endPoint.x - startPoint.x
+        const dy = endPoint.y - startPoint.y
+        const pixelData = canvas.getContext('2d').getImageData(startPoint.x, startPoint.y, dx, dy).data
         let alphaSum = 0
-        for (let i = 0; i < 9; i++) {
-            alphaSum += pixelData[i * 3 + 3]
+        for (let i = 0; i < dx; i++) {
+            for (let j = 0; j < dy; j++) {
+                // j * dx = number of rows, i * 3 + 3 = every 3 pixels
+                alphaSum += pixelData[j * dx + i * 3 + 3]
+            }
+            
         }
         return alphaSum === 0
     }

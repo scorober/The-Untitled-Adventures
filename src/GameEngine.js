@@ -93,6 +93,10 @@ export default class GameEngine {
         return this.sceneManager.currentScene.map.getPathfindingArray()
     }
 
+    getTileSize() {
+        return 64
+    }
+
     setCamera(camera) {
         this.camera = camera
     }

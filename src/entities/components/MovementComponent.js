@@ -15,6 +15,11 @@ export default class MovementComponent extends Component {
         // This needs to be pulled from a future AttributesComponent or StatsComponent
         this.speed = 150
         this.path = []
+
+        this.followTarget = null
+        this.followTargetLastPos = null
+        this.following = false
+        this.moving = false
     }
 
     /**
@@ -28,6 +33,13 @@ export default class MovementComponent extends Component {
         } else if (this.moving) {
             this.moving = false
             this.entity.getComponent(AnimationComponent).setStandingAnimation(this.direction)
+        }
+        if (this.following) {
+            const followTargetPos = Map.worldToTilePosition(this.followTarget, this.entity.game.getTileSize())
+            if (this.followTargetLastPos == null || this.followTargetLastPos.x != followTargetPos.x || this.followTargetLastPos.y != followTargetPos.y) {
+                this.followTargetLastPos = followTargetPos
+                this.setPathfindingTarget(this.followTargetLastPos)
+            }
         }
     }
 

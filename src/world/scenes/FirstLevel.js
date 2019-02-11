@@ -82,6 +82,7 @@ export default class FirstLevel extends Scene {
         const archer = new Entity(game, start)
         archer.addComponent(new MovementComponent(archer))
         archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
+        archer.getComponent(MovementComponent).setFollowTarget(playerCharacter)
 
         //const mage = new Entity(game, start)
         //mage.addComponent(new AnimationComponent(mage, )) // Need to make MageData
