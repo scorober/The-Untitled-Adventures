@@ -58,12 +58,18 @@ export default class MovementComponent extends Component {
         } else {
             dx = dx / distance
             dy = dy / distance
-            dx = dx * this.entity.game.clockTick * this.speed
-            dy = dy * this.entity.game.clockTick * this.speed
-            this.entity.x += dx
-            this.entity.y += dy
+            this.move({x: dx, y: dy})            
             this.direction = this.calculateDirection(dx, dy)
         }
+    }
+
+    /**
+     * Moves the Entity according to its speed and the game's clock tick
+     * @param {Vector} vec The vector representing the direction to move
+     */
+    move(vec) {
+        this.entity.x += vec.x * this.entity.game.clockTick * this.speed
+        this.entity.y += vec.y * this.entity.game.clockTick * this.speed
     }
 
     /**
