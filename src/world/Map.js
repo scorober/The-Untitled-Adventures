@@ -1,7 +1,6 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
 import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, SPAWNERS } from '../utils/Const.js'
-import Spawner from '../entities/Spawner.js'
 
 export default class Map extends Entity {
     /**

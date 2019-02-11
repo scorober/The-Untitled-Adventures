@@ -110,8 +110,6 @@ export default class FirstLevel extends Scene {
         //here to reduce confusion, and to allow the order they are updated/rendered to be adjusted.
         this.updateMap()
         this.updateEntities()
-        // //Reorders the entities in the correct drawing format
-        // this.entities.sort((a,b) => a.y - b.y)
     }
 
     /**
