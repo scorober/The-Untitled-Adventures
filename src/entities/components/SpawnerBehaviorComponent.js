@@ -1,12 +1,12 @@
 import Component from './Component.js'
-import Random from '../../utils/Random.js'
+import Random from '../../utils/Random.js';
+import Entity from '../Entity.js'
 import {
     STATES
 } from '../../utils/Const.js'
-import Vector from '../../utils/Vector.js'
-import MovementComponent from './MovementComponent.js'
-import AnimationComponent from './AnimationComponent.js'
-import Entity from '../Entity.js'
+import Vector from '../../utils/Vector.js';
+import MovementComponent from './MovementComponent.js';
+import AnimationComponent from './AnimationComponent.js';
 import ArcherData from '../../entities/characters/ArcherDefaultData.js'
 import RobotData from '../../entities/characters/RobotDefaultData.js'
 
@@ -37,7 +37,7 @@ export default class SpawnComponentBehavior extends Component {
 
 
     /**
-     * Called each update cycle.
+     * Called ach update cycle.
      * Spawns mobs at a steady pace. In random order from mobs array.
      */
     update() {
@@ -81,18 +81,11 @@ export default class SpawnComponentBehavior extends Component {
      * Pushes the count of each mob type into mobs array.
      */
     generateMobs() {
-        for (let i = 0; i < this.mages; i++) {
+        for (let i = 0; i < this.archers; i++) {
             const angle = this.rng.float() * Math.PI * 2
             const r = this.rng.int(10, this.radius)
-            // this.mobs.push(new Mage(this.game, this.game.getAsset(ASSET_PATHS.Mage), 
-            //     {
-            //         x: this.x + Math.cos(angle) * r,
-            //         y: this.y + Math.sin(angle) * r
-            //     }))
+            //NEEDS MAGE
         }
-        console.log(this.archers)
-        console.log(this.robots)
-        console.log(this.mages)
         for (let i = 0; i < this.archers; i++) {
             const angle = this.rng.float() * Math.PI * 2
             const r = this.rng.int(10, this.radius)
@@ -114,14 +107,6 @@ export default class SpawnComponentBehavior extends Component {
             robot.addComponent(new MovementComponent(robot))
             robot.addComponent(new AnimationComponent(robot, RobotData.AnimationConfig))
             this.mobs.push(robot)
-            
-            // this.mobs.push(new Robot(this.game, this.game.getAsset(ASSET_PATHS.Robot), 
-            //     {
-            //         x: this.x + Math.cos(angle) * r,
-            //         y: this.y + Math.sin(angle) * r
-            //     }))
         }
     }
-
-
 }
