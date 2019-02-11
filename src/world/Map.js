@@ -1,6 +1,6 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
-import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, SPAWNERS } from '../utils/Const.js'
+import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM } from '../utils/Const.js'
 
 export default class Map extends Entity {
     /**
@@ -118,10 +118,6 @@ export default class Map extends Entity {
                 this.createObject(this.objectMap, center, MI.StairsN)
                 break
         }
-    }
-
-    generateObjects(objects) {
-
     }
 
     // eslint-disable-next-line complexity

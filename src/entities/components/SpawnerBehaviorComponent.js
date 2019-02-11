@@ -1,12 +1,9 @@
 import Component from './Component.js'
-import Random from '../../utils/Random.js';
+import Random from '../../utils/Random.js'
 import Entity from '../Entity.js'
-import {
-    STATES
-} from '../../utils/Const.js'
-import Vector from '../../utils/Vector.js';
-import MovementComponent from './MovementComponent.js';
-import AnimationComponent from './AnimationComponent.js';
+import Vector from '../../utils/Vector.js'
+import MovementComponent from './MovementComponent.js'
+import AnimationComponent from './AnimationComponent.js'
 import ArcherData from '../../entities/characters/ArcherDefaultData.js'
 import RobotData from '../../entities/characters/RobotDefaultData.js'
 import MageData from '../../entities/characters/MageDefaultData.js'
@@ -57,7 +54,7 @@ export default class SpawnComponentBehavior extends Component {
         }
     }
 
-    draw() {}
+    draw() { }
 
     addMob() {
         if (this.mobs.length > 0) {

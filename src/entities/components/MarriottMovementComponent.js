@@ -37,7 +37,6 @@ export default class MarriottMovementComponent extends MovementComponent {
         this.sitStandAnimating = true
         const animationComponent = this.entity.getComponent(AnimationComponent)
         const cb = () => {
-            console.log(`got called back`)
             this.moving = true
             this.sitStandAnimating = false
         }
@@ -63,7 +62,6 @@ export default class MarriottMovementComponent extends MovementComponent {
         this.sitStandAnimating = true
         const animationComponent = this.entity.getComponent(AnimationComponent)
         const cb = () => {
-            console.log(`got called back`)
             this.moving = false
             this.sitStandAnimating = false
         }
