@@ -89,7 +89,7 @@ export default class SpawnComponentBehavior extends Component {
                 x: this.entity.x + Math.cos(angle) * r,
                 y: this.entity.y + Math.sin(angle) * r
             })
-            mage.addComponent(new MovementComponent(mage))
+            mage.addComponent(new MovementComponent(mage, MageData.Attributes))
             mage.addComponent(new AnimationComponent(mage, MageData.AnimationConfig))
             this.mobs.push(mage)
         }
@@ -100,7 +100,7 @@ export default class SpawnComponentBehavior extends Component {
                 x: this.entity.x + Math.cos(angle) * r,
                 y: this.entity.y + Math.sin(angle) * r
             })
-            archer.addComponent(new MovementComponent(archer))
+            archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
             archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
             this.mobs.push(archer)
         }
@@ -111,7 +111,7 @@ export default class SpawnComponentBehavior extends Component {
                 x: this.entity.x + Math.cos(angle) * r,
                 y: this.entity.y + Math.sin(angle) * r
             })
-            robot.addComponent(new MovementComponent(robot))
+            robot.addComponent(new MovementComponent(robot, RobotData.Attributes))
             robot.addComponent(new AnimationComponent(robot, RobotData.AnimationConfig))
             this.mobs.push(robot)
         }

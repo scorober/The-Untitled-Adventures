@@ -28,7 +28,8 @@ export default {
         Mana: 10,
         Atk: 10,
         Def: 15,
-        Mdef: 3
+        Mdef: 3,
+        Speed: 50
     },
     // Animation Component Configuration
     AnimationConfig: {
@@ -100,7 +101,7 @@ export default {
             // Copy of StandWest
             [ANIMS.StandNorth]: {
                 goBackRows: 2,
-                goBackHeight: 2,
+                goBackHeight: 2 * height,
                 rate: AR.Stand,
                 options: {
                     yOffset: yOffset,
@@ -118,7 +119,8 @@ export default {
             [ANIMS.Impact]: {
                 rate: AR.Impact,
                 options: {
-                    loop: false
+                    loop: false,
+                    maxFrames: 12
                 }
             },
             // Walking

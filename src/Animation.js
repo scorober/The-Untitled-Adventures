@@ -57,9 +57,9 @@ export default class Animation {
         /** Pixel data is in the form of a 1d array, with [r, g, b, a] for each pixel sampled
          * We're only sampling 1 pixel so it will have 4 elements.
          */
-        const dx = endPoint.x - startPoint.x
-        const dy = endPoint.y - startPoint.y
-        const pixelData = canvas.getContext('2d').getImageData(startPoint.x, startPoint.y, dx, dy).data
+        const dx = endPoint.x - startPoint.x - 2
+        const dy = endPoint.y - startPoint.y - 2
+        const pixelData = canvas.getContext('2d').getImageData(startPoint.x + 1, startPoint.y + 1, dx, dy).data
         let alphaSum = 0
         for (let i = 0; i < dx; i++) {
             for (let j = 0; j < dy; j++) {
@@ -74,8 +74,8 @@ export default class Animation {
     drawFrame(game, x, y, angle) {
         this.elapsedTime += game.clockTick
         if (this.isDone()) {
+            if (this.cb) this.cb()
             if (this.loop) this.elapsedTime = 0
-            // else this.elapsedTime -= game.clockTick
         }
         const frame = this.currentFrame()
         const startX = (frame % this.frames) * this.frameWidth
@@ -118,10 +118,18 @@ export default class Animation {
     }
 
     currentFrame() {
-        return Math.floor(this.elapsedTime / this.frameDuration)
+        return Math.min(this.frames - 1, Math.floor(this.elapsedTime / this.frameDuration))
     }
 
     isDone() {
         return this.elapsedTime >= this.totalTime
+    }
+
+    setCallback(cb) {
+        this.cb = cb
+    }
+
+    removeCallback() {
+        this.cb = null
     }
 }

@@ -28,7 +28,8 @@ export default {
         Mana: 10,
         Atk: 10,
         Def: 15,
-        Mdef: 3
+        Mdef: 3,
+        Speed: 50
     },
     // Animation Component Configuration
     AnimationConfig: {
