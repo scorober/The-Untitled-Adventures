@@ -5,7 +5,7 @@ import Map from '../../world/Map.js'
 import Effect from '../../entities/Effect.js'
 import AnimationFactory from '../../AnimationFactory.js'
 import Fireball from '../Fireball.js'
-import Vector from '../../utils/Vector.js';
+import Vector from '../../utils/Vector.js'
 
 export default class PlayableCharacter extends Character {
     constructor(game, spritesheet, x, y) {

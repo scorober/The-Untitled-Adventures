@@ -7,9 +7,11 @@ import { ASSET_PATHS } from '../../utils/Const.js'
 
 
 import PlayerCharacterData from '../../entities/characters/PlayerCharacterDefaultData.js'
+import ArcherData from '../../entities/characters/ArcherDefaultData.js'
 import PlayerCharacterAnimationComponent from '../../entities/components/PlayerCharacterAnimationComponent.js'
 import MovementComponent from '../../entities/components/MovementComponent.js'
 import PlayerInputComponent from '../../entities/components/PlayerInputComponent.js'
+import AnimationComponent from '../../entities/components/AnimationComponent.js';
 
 
 export default class FirstLevel extends Scene {
@@ -73,6 +75,10 @@ export default class FirstLevel extends Scene {
         playerCharacter.addComponent(new MovementComponent(playerCharacter))
         playerCharacter.addComponent(new PlayerInputComponent(playerCharacter))
 
+        const archer = new Entity(game, start)
+        archer.addComponent(new MovementComponent(archer))
+        archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
+
         //const mage = new Entity(game, start)
         //mage.addComponent(new AnimationComponent(mage, )) // Need to make MageData
 
@@ -80,6 +86,7 @@ export default class FirstLevel extends Scene {
         game.camera.setFollowedEntity(playerCharacter)
         this.addEntity(playerCharacter)
         this.addEntity(game.camera)
+        this.addEntity(archer)
     }
 
     /**

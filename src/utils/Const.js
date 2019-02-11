@@ -63,6 +63,12 @@ export const ANIMATIONS = {
     OversizeSouth: Symbol(),
     OversizeEast: Symbol(),
 
+    /** NPC animations */
+    AttackWest: Symbol(),
+    AttackEast: Symbol(),
+    AttackNorth: Symbol(),
+    AttackSouth: Symbol(),
+
     /** Marriott-specific animations */
     SitDownWest: Symbol(),
     SitDownEast: Symbol(),
@@ -77,8 +83,7 @@ export const ANIMATIONS = {
     Fire: Symbol(),
     Projectile: Symbol(),
     Impact: Symbol(),
-    Boost: Symbol(),
-    Projectile: Symbol()
+    Boost: Symbol()
 }
 
 export const ANIMATION_RATES = {
