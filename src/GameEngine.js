@@ -79,6 +79,7 @@ export default class GameEngine {
         this.clockTick = this.timer.tick()
         this.update()
         this.draw()
+        this.inputManager.clear()
     }
 
     getAsset(path) {
@@ -100,6 +101,10 @@ export default class GameEngine {
 
     setCamera(camera) {
         this.camera = camera
+    }
+
+    getCurrentScene(){
+        return this.sceneManager.currentScene
     }
 
 

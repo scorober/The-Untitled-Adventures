@@ -22,6 +22,7 @@ export default class InputManager {
             e => {
                 this.lastLeftClickPosition = this.getXandY(e)
                 this.newLeftClick = true
+                console.log(this.lastLeftClickPosition)
             },
             false
         )
@@ -36,7 +37,7 @@ export default class InputManager {
         )
 
         this.ctx.canvas.addEventListener(CTX_EVENTS.MouseMove,
-            e => { this.mousePosition = this.getXandY(e) },
+            e => { this.mousePosition = this.getXandY(e)},
             false
         )
 
