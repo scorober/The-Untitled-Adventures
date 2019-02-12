@@ -1,2 +1,0 @@
-animations\[(.*)\] = animationFactory\.getNextRow\(this\.(.*), this\.(.*), this\.animationRates\[(.*)\]\)
-[$1]: {\nwidth:$2,\nheight: $3,\nrate: DefaultAnimationRates[$4],\noptions: {}\n},

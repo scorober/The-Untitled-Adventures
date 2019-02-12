@@ -11,6 +11,8 @@ import FireballData from '../effects/FireballDefaultData.js'
 import Entity from '../Entity.js'
 import MageEffectData from '../effects/MageEffectDefaultData.js'
 import ArcherEffectData from '../effects/ArcherEffectDefaultData.js'
+import { KEYS, ANIMATIONS as ANIMS } from '../../utils/Const.js'
+import AnimationComponent from './AnimationComponent.js'
 
 export default class PlayerInputComponent extends Component {
     /**
@@ -31,7 +33,12 @@ export default class PlayerInputComponent extends Component {
         }
         if (this.entity.game.inputManager.downKeys[KEYS.KeyD]) {
             const direction = this.entity.getComponent(MovementComponent).direction
-            this.entity.getComponent(PlayerCharacterAnimationComponent).setOversizedAnimation(direction)
+            this.entity.getComponent(AnimationComponent).setDirectionalAnimation(direction, {
+                north: ANIMS.OversizeNorth,
+                east: ANIMS.OversizeEast,
+                south: ANIMS.OversizeSouth,
+                west: ANIMS.OversizeWest
+            })
         }
         if (this.entity.game.inputManager.downKeys[KEYS.KeyQ]) {
             const direction = this.entity.getComponent(MovementComponent).direction

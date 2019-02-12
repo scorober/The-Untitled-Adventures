@@ -8,18 +8,21 @@ import { ASSET_PATHS, SPAWNERS } from '../../utils/Const.js'
 
 import PlayerCharacterData from '../../entities/characters/PlayerCharacterDefaultData.js'
 import ArcherData from '../../entities/characters/ArcherDefaultData.js'
-import PlayerCharacterAnimationComponent from '../../entities/components/PlayerCharacterAnimationComponent.js'
+import MarriottData from '../../entities/characters/MarriottDefaultData.js'
+
 import MovementComponent from '../../entities/components/MovementComponent.js'
+import MarriottMovementComponent from '../../entities/components/MarriottMovementComponent.js'
 import PlayerInputComponent from '../../entities/components/PlayerInputComponent.js'
 import AnimationComponent from '../../entities/components/AnimationComponent.js'
 import SpawnerBehaviorComponent from '../../entities/components/SpawnerBehaviorComponent.js'
+
 
 
 export default class FirstLevel extends Scene {
 
     constructor(game) {
         super(game)
-        this.name = 'level1'    
+        this.name = 'level1'
         //Initialize a dungeon with options, possibly move to the scene superclass w/ parameters.
         const dungeon = new Dungeon({
             size: [2000, 2000],
@@ -72,19 +75,20 @@ export default class FirstLevel extends Scene {
         const start = this.map.getStartPos()
 
         const playerCharacter = new Entity(game, start)
-        // Most entities should be able to use the basic AnimationBasic, but LPC characters and other characters
-        // will need custom methods on their AnimationComponents, (e.x. oversized attacks) thus PlayerCharacterAnimationComponent
-        // can just extend AnimationComponent
-        playerCharacter.addComponent(new PlayerCharacterAnimationComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
-        playerCharacter.addComponent(new MovementComponent(playerCharacter))
+
+        playerCharacter.addComponent(new AnimationComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
+        playerCharacter.addComponent(new MovementComponent(playerCharacter, PlayerCharacterData.Attributes))
         playerCharacter.addComponent(new PlayerInputComponent(playerCharacter))
 
         const archer = new Entity(game, start)
-        archer.addComponent(new MovementComponent(archer))
+        archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
         archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
+        archer.getComponent(MovementComponent).setFollowTarget(playerCharacter)
 
-        //const mage = new Entity(game, start)
-        //mage.addComponent(new AnimationComponent(mage, )) // Need to make MageData
+        const marriott = new Entity(game, start)
+        marriott.addComponent(new MarriottMovementComponent(marriott, MarriottData.Attributes))
+        marriott.addComponent(new AnimationComponent(marriott, MarriottData.AnimationConfig))
+        marriott.getComponent(MovementComponent).setFollowTarget(playerCharacter)
 
 
 
@@ -92,14 +96,15 @@ export default class FirstLevel extends Scene {
         game.camera.setFollowedEntity(playerCharacter)
         this.addEntity(playerCharacter)
         this.addEntity(game.camera)
-        this.addEntity(archer)
+        //this.addEntity(archer)
+        this.addEntity(marriott)
 
 
-        map.spawners.forEach(function(item) {
-            const spawner = new Entity(game, item.pos)
-            spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, SPAWNERS.Mage, item.r, 8))
+        for (const mapSpawner of map.spawners) {
+            const spawner = new Entity(game, mapSpawner.pos)
+            spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, SPAWNERS.Mage, mapSpawner.r, 8))
             this.addEntity(spawner)
-        }.bind(this))
+        }
     }
 
     /**

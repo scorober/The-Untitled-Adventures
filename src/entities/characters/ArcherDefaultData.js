@@ -28,7 +28,8 @@ export default {
         Mana: 10,
         Atk: 10,
         Def: 15,
-        Mdef: 3
+        Mdef: 3,
+        Speed: 50
     },
     // Animation Component Configuration
     AnimationConfig: {
@@ -39,16 +40,14 @@ export default {
         Spritesheet: ASSET_PATHS.Archer,
         InitialAnimation: ANIMS.StandEast,
         AnimationRates: {
-            [AR.Walk]: 0.06,
+            [AR.Walk]: 0.04,
             [AR.Stand]: 0.6,
-            [AR.Death]: 0.15,
-            [AR.Spellcast]: 0.15,
-            [AR.Thrust]: 0.15,
-            [AR.Slash]: 0.15,
-            [AR.Shoot]: 0.15,
+            [AR.Attack]: 0.15,
+            [AR.Impact]: 0.1
         },
         AnimationData: {
-            [ANIMS.ShootWest]: {
+            [ANIMS.AttackWest]: {
+                frames: 16,
                 rate: AR.Shoot,
                 options: {
                     yOffset: yOffset,
@@ -56,7 +55,8 @@ export default {
                     height: attackHeight
                 }
             },
-            [ANIMS.ShootEast]: {
+            [ANIMS.AttackEast]: {
+                frames: 16,
                 rate: AR.Shoot,
                 options: {
                     yOffset: yOffset,
@@ -65,7 +65,8 @@ export default {
                 }
             },
             // Copy of ShootWest
-            [ANIMS.ShootNorth]: {
+            [ANIMS.AttackNorth]: {
+                frames: 16,
                 goBackRows: 2,
                 goBackHeight: 2 * attackHeight,
                 rate: AR.Shoot,
@@ -76,7 +77,8 @@ export default {
                 }
             },
             // Copy of ShootEast
-            [ANIMS.ShootSouth]: {
+            [ANIMS.AttackSouth]: {
+                frames: 16,
                 rate: AR.Shoot,
                 options: {
                     yOffset: yOffset,
@@ -86,12 +88,14 @@ export default {
             },
             // Standing
             [ANIMS.StandWest]: {
+                frames: 8,
                 rate: AR.Stand,
                 options: {
                     yOffset: yOffset,
                 }
             },
             [ANIMS.StandEast]: {
+                frames: 8,
                 rate: AR.Stand,
                 options: {
                     yOffset: yOffset,
@@ -99,8 +103,9 @@ export default {
             },
             // Copy of StandWest
             [ANIMS.StandNorth]: {
+                frames: 8,
                 goBackRows: 2,
-                goBackHeight: 2,
+                goBackHeight: 2 * height,
                 rate: AR.Stand,
                 options: {
                     yOffset: yOffset,
@@ -108,6 +113,7 @@ export default {
             },
             // Copy of StandEast
             [ANIMS.StandSouth]: {
+                frames: 8,
                 rate: AR.Stand,
                 options: {
                     yOffset: yOffset,
@@ -116,19 +122,23 @@ export default {
             },
             // Impact
             [ANIMS.Impact]: {
+                frames: 10,
                 rate: AR.Impact,
                 options: {
-                    loop: false
+                    loop: false,
+                    maxFrames: 12
                 }
             },
             // Walking
             [ANIMS.WalkWest]: {
+                frames: 12,
                 rate: AR.Walk,
                 options: {
                     yOffset: yOffset,
                 }
             },
             [ANIMS.WalkEast]: {
+                frames: 12,
                 rate: AR.Walk,
                 options: {
                     yOffset: yOffset,
@@ -138,8 +148,7 @@ export default {
             [ANIMS.WalkSouth]: {
                 goBackRows: 2,
                 goBackHeight: 2 * height,
-                width: width,
-                height: height,
+                frames: 12,
                 rate: AR.Walk,
                 options: {
                     yOffset: yOffset,
@@ -147,6 +156,7 @@ export default {
             },
             // Copy of WalkEast
             [ANIMS.WalkNorth]: {
+                frames: 12,
                 width: width,
                 height: height,
                 rate: AR.Walk,

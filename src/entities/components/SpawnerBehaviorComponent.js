@@ -1,12 +1,9 @@
 import Component from './Component.js'
-import Random from '../../utils/Random.js';
+import Random from '../../utils/Random.js'
 import Entity from '../Entity.js'
-import {
-    STATES
-} from '../../utils/Const.js'
-import Vector from '../../utils/Vector.js';
-import MovementComponent from './MovementComponent.js';
-import AnimationComponent from './AnimationComponent.js';
+import Vector from '../../utils/Vector.js'
+import MovementComponent from './MovementComponent.js'
+import AnimationComponent from './AnimationComponent.js'
 import ArcherData from '../../entities/characters/ArcherDefaultData.js'
 import RobotData from '../../entities/characters/RobotDefaultData.js'
 import MageData from '../../entities/characters/MageDefaultData.js'
@@ -57,7 +54,7 @@ export default class SpawnComponentBehavior extends Component {
         }
     }
 
-    draw() {}
+    draw() { }
 
     addMob() {
         if (this.mobs.length > 0) {
@@ -89,7 +86,7 @@ export default class SpawnComponentBehavior extends Component {
                 x: this.entity.x + Math.cos(angle) * r,
                 y: this.entity.y + Math.sin(angle) * r
             })
-            mage.addComponent(new MovementComponent(mage))
+            mage.addComponent(new MovementComponent(mage, MageData.Attributes))
             mage.addComponent(new AnimationComponent(mage, MageData.AnimationConfig))
             this.mobs.push(mage)
         }
@@ -100,7 +97,7 @@ export default class SpawnComponentBehavior extends Component {
                 x: this.entity.x + Math.cos(angle) * r,
                 y: this.entity.y + Math.sin(angle) * r
             })
-            archer.addComponent(new MovementComponent(archer))
+            archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
             archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
             this.mobs.push(archer)
         }
@@ -111,7 +108,7 @@ export default class SpawnComponentBehavior extends Component {
                 x: this.entity.x + Math.cos(angle) * r,
                 y: this.entity.y + Math.sin(angle) * r
             })
-            robot.addComponent(new MovementComponent(robot))
+            robot.addComponent(new MovementComponent(robot, RobotData.Attributes))
             robot.addComponent(new AnimationComponent(robot, RobotData.AnimationConfig))
             this.mobs.push(robot)
         }
