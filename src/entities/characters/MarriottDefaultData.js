@@ -40,24 +40,29 @@ export default {
         },
         AnimationData: {
             [ANIMS.WalkNorth]: {
+                frames: 9,
                 rate: AR.Walk,
                 options: { yOffset: yOffset, }
             },
             [ANIMS.WalkWest]: {
+                frames: 9,
                 rate: AR.Walk,
                 options: { yOffset: yOffset, }
             },
             [ANIMS.WalkSouth]: {
+                frames: 9,
                 rate: AR.Walk,
                 options: { yOffset: yOffset, }
             },
             [ANIMS.WalkEast]: {
+                frames: 9,
                 rate: AR.Walk,
                 options: { yOffset: yOffset, }
             },
             [ANIMS.StandNorth]: {
                 goBackRows: 4,
                 goBackHeight: 4 * height,
+                frames: 5,
                 rate: AR.Stand,
                 options: {
                     yOffset: yOffset,
@@ -65,27 +70,28 @@ export default {
                 }
             },
             [ANIMS.StandWest]: {
+                frames: 2,
                 rate: AR.Stand,
                 options: {
-                    yOffset: yOffset,
-                    maxFrames: 2
+                    yOffset: yOffset
                 }
             },
             [ANIMS.StandSouth]: {
+                frames: 2,
                 rate: AR.Stand,
                 options: {
-                    yOffset: yOffset,
-                    maxFrames: 2
+                    yOffset: yOffset
                 }
             },
             [ANIMS.StandEast]: {
+                frames: 2,
                 rate: AR.Stand,
                 options: {
-                    yOffset: yOffset,
-                    maxFrames: 2
+                    yOffset: yOffset
                 }
             },
             [ANIMS.SitDownEast]: {
+                frames: 5,
                 rate: AR.Sit,
                 options: {
                     yOffset: yOffset,
@@ -93,6 +99,7 @@ export default {
                 }
             },
             [ANIMS.StandUpEast]: {
+                frames: 5,
                 rate: AR.Sit,
                 options: {
                     yOffset: yOffset,
@@ -100,6 +107,7 @@ export default {
                 }
             },
             [ANIMS.SitDownWest]: {
+                frames: 5,
                 rate: AR.Sit,
                 options: {
                     yOffset: yOffset,
@@ -107,6 +115,7 @@ export default {
                 }
             },
             [ANIMS.StandUpWest]: {
+                frames: 5,
                 rate: AR.Sit,
                 options: {
                     yOffset: yOffset,

@@ -51,7 +51,7 @@ export default class AnimationComponent extends Component {
                     return animations
                 }
             }
-            animations[symbolKey] = animationFactory.getNextRow(config.AnimationRates[anim.rate], anim.options)
+            animations[symbolKey] = animationFactory.getNextRow(anim.frames, config.AnimationRates[anim.rate], anim.options)
         }
         return animations
     }
@@ -71,7 +71,6 @@ export default class AnimationComponent extends Component {
      */
     setAnimation(animation, cb = null) {
         this.animation = animation
-        const theAnimation = this.animations[animation]
         if (this.animations[animation].loop === false) this.animations[animation].elapsedTime = 0
         this.animations[animation].setCallback(cb)
     }

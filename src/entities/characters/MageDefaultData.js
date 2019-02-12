@@ -11,8 +11,7 @@ import {
 const attackWidth = 384
 const attackHeight = 192
 const height = 192
-const width = 192
-const yOffset = 0
+const yOffset = 5
 
 
 /** 
@@ -41,13 +40,14 @@ export default {
         InitialAnimation: ANIMS.StandEast,
         AnimationRates: {
             [AR.Walk]: 0.06,
-            [AR.Stand]: 0.6,
+            [AR.Stand]: 0.12,
             [AR.Impact]: 0.15,
             [AR.Attack]: 0.15,
             [AR.Powerup]: 0.15,
         },
         AnimationData: {
             [ANIMS.AttackWest]: {
+                frames: 17,
                 rate: AR.Attack,
                 options: {
                     yOffset: yOffset,
@@ -56,6 +56,7 @@ export default {
                 }
             },
             [ANIMS.AttackEast]: {
+                frames: 17,
                 rate: AR.Attack,
                 options: {
                     yOffset: yOffset,
@@ -65,6 +66,7 @@ export default {
             },
             // Copy of AttackWest
             [ANIMS.AttackNorth]: {
+                frames: 17,
                 goBackRows: 2,
                 goBackHeight: 2 * attackHeight,
                 rate: AR.Attack,
@@ -76,6 +78,7 @@ export default {
             },
             // Copy of AttackEast
             [ANIMS.AttackSouth]: {
+                frames: 17,
                 rate: AR.Attack,
                 options: {
                     yOffset: yOffset,
@@ -85,12 +88,14 @@ export default {
             },
             // Standing
             [ANIMS.StandWest]: {
+                frames: 10,
                 rate: AR.Stand,
                 options: {
                     yOffset: yOffset,
                 }
             },
             [ANIMS.StandEast]: {
+                frames: 10,
                 rate: AR.Stand,
                 options: {
                     yOffset: yOffset,
@@ -98,6 +103,7 @@ export default {
             },
             // Copy of StandWest
             [ANIMS.StandNorth]: {
+                frames: 10,
                 goBackRows: 2,
                 goBackHeight: 2,
                 rate: AR.Stand,
@@ -107,6 +113,7 @@ export default {
             },
             // Copy of StandEast
             [ANIMS.StandSouth]: {
+                frames: 10,
                 rate: AR.Stand,
                 options: {
                     yOffset: yOffset,
@@ -114,6 +121,7 @@ export default {
             },
             // Impact
             [ANIMS.Impact]: {
+                frames: 11,
                 rate: AR.Impact,
                 options: {
                     loop: false,
@@ -122,6 +130,7 @@ export default {
             },
             // Power-up
             [ANIMS.PowerupWest]: {
+                frames: 17,
                 rate: AR.Powerup,
                 options: {
                     loop: false,
@@ -129,6 +138,7 @@ export default {
                 }
             },
             [ANIMS.PowerupEast]: {
+                frames: 17,
                 rate: AR.Powerup,
                 options: {
                     loop: false,
@@ -137,12 +147,14 @@ export default {
             },
             // Walking
             [ANIMS.WalkWest]: {
+                frames: 8,
                 rate: AR.Walk,
                 options: {
                     yOffset: yOffset,
                 }
             },
             [ANIMS.WalkEast]: {
+                frames: 8,
                 rate: AR.Walk,
                 options: {
                     yOffset: yOffset,
@@ -152,8 +164,7 @@ export default {
             [ANIMS.WalkSouth]: {
                 goBackRows: 2,
                 goBackHeight: 2 * height,
-                width: width,
-                height: height,
+                frames: 8,
                 rate: AR.Walk,
                 options: {
                     yOffset: yOffset,
@@ -161,8 +172,7 @@ export default {
             },
             // Copy of WalkEast
             [ANIMS.WalkNorth]: {
-                width: width,
-                height: height,
+                frames: 8,
                 rate: AR.Walk,
                 options: {
                     yOffset: yOffset,

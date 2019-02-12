@@ -43,69 +43,84 @@ export default {
         },
         AnimationData: {
             [ANIMS.SpellcastNorth]: {
+                frames: 7,
                 rate: AR.Spellcast,
                 options: { yOffset: yOffset }
             },
             [ANIMS.SpellcastWest]: {
+                frames: 7,
                 rate: AR.Spellcast,
                 options: { yOffset: yOffset }
             },
             [ANIMS.SpellcastSouth]: {
+                frames: 7,
                 rate: AR.Spellcast,
                 options: { yOffset: yOffset }
             },
             [ANIMS.SpellcastEast]: {
-
+                frames: 7,
                 rate: AR.Spellcast,
                 options: { yOffset: yOffset }
             },
             [ANIMS.ThrustNorth]: {
+                frames: 8,
                 rate: AR.Thrust,
                 options: { yOffset: yOffset }
             },
             [ANIMS.ThrustWest]: {
+                frames: 8,
                 rate: AR.Thrust,
                 options: { yOffset: yOffset }
             },
             [ANIMS.ThrustSouth]: {
+                frames: 8,
                 rate: AR.Thrust,
                 options: { yOffset: yOffset }
             },
             [ANIMS.ThrustEast]: {
+                frames: 8,
                 rate: AR.Thrust,
                 options: { yOffset: yOffset }
             },
             // Walk cycle
             [ANIMS.WalkNorth]: {
+                frames: 9,
                 rate: AR.Walk,
                 options: { yOffset: yOffset }
             },
             [ANIMS.WalkWest]: {
+                frames: 9,
                 rate: AR.Walk,
                 options: { yOffset: yOffset }
             },
             [ANIMS.WalkSouth]: {
+                frames: 9,
                 rate: AR.Walk,
                 options: { yOffset: yOffset }
             },
             [ANIMS.WalkEast]: {
+                frames: 9,
                 rate: AR.Walk,
                 options: { yOffset: yOffset }
             },
             // Slashing
             [ANIMS.SlashNorth]: {
+                frames: 6,
                 rate: AR.Slash,
                 options: { yOffset: yOffset }
             },
             [ANIMS.SlashWest]: {
+                frames: 6,
                 rate: AR.Slash,
                 options: { yOffset: yOffset }
             },
             [ANIMS.SlashSouth]: {
+                frames: 6,
                 rate: AR.Slash,
                 options: { yOffset: yOffset }
             },
             [ANIMS.SlashEast]: {
+                frames: 6,
                 rate: AR.Slash,
                 options: { yOffset: yOffset }
             },
@@ -114,60 +129,76 @@ export default {
             [ANIMS.StandNorth]: {
                 goBackRows: 4,
                 goBackHeight: 4 * 64,
+                frames: 2,
                 rate: AR.Stand,
-                options: { yOffset: yOffset, maxFrames: 2 }
+                options: { yOffset: yOffset }
             },
             [ANIMS.StandWest]: {
+                frames: 2,
                 rate: AR.Stand,
-                options: { yOffset: yOffset, maxFrames: 2 }
+                options: { yOffset: yOffset }
             },
             [ANIMS.StandSouth]: {
+                frames: 2,
                 rate: AR.Stand,
-                options: { yOffset: yOffset, maxFrames: 2 }
+                options: { yOffset: yOffset }
             },
             [ANIMS.StandEast]: {
+                frames: 2,
                 rate: AR.Stand,
-                options: { yOffset: yOffset, maxFrames: 2 }
+                options: { yOffset: yOffset }
             },
             // Shooting
             [ANIMS.ShootNorth]: {
+                frames: 13,
                 rate: AR.Shoot,
                 options: { yOffset: yOffset }
             },
             [ANIMS.ShootWest]: {
+                frames: 13,
                 rate: AR.Shoot,
                 options: { yOffset: yOffset }
             },
             [ANIMS.ShootSouth]: {
+                frames: 13,
                 rate: AR.Shoot,
                 options: { yOffset: yOffset }
             },
             [ANIMS.ShootEast]: {
+                frames: 13,
                 rate: AR.Shoot,
                 options: { yOffset: yOffset }
             },
             // Hurt
             [ANIMS.DeathSouth]: {
+                frames: 6,
                 rate: AR.Death,
                 options: { yOffset: yOffset }
             },
             // Oversized animations
             [ANIMS.OversizeNorth]: {
                 optional: true,
+                frames: 6,
                 rate: AR.Oversize,
                 options: { yOffset: oversizedYOffset, width: 192, height: 192 }
             },
             [ANIMS.OversizeWest]: {
+                optional: true,
+                frames: 6,
                 rate: AR.Oversize,
                 options: { yOffset: oversizedYOffset, width: 192, height: 192 }
 
             },
             [ANIMS.OversizeSouth]: {
+                optional: true,
+                frames: 6,
                 rate: AR.Oversize,
                 options: { yOffset: oversizedYOffset, width: 192, height: 192 }
 
             },
             [ANIMS.OversizeEast]: {
+                optional: true,
+                frames: 6,
                 rate: AR.Oversize,
                 options: { yOffset: oversizedYOffset, width: 192, height: 192 }
             }

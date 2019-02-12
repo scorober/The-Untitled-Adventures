@@ -6,9 +6,8 @@ import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR, ASSET_PATHS } from '../../u
 // Values defined here for use in export object
 const attackWidth = 384
 const attackHeight = 192
-const impatctSize = 244
+const impactSize = 244
 const height = 192
-const width = 192
 const yOffset = 10
 
 
@@ -33,17 +32,18 @@ export default {
         // Values are repeated here for export
         Width: 192,
         Height: 192,
-        Scale: 0.5,
+        Scale: 0.6,
         Spritesheet: ASSET_PATHS.Robot,
         InitialAnimation: ANIMS.StandEast,
         AnimationRates: {
             [AR.Walk]: 0.06,
-            [AR.Stand]: 0.6,
+            [AR.Stand]: 0.12,
             [AR.Attack]: 0.15,
             [AR.Impact]: 0.1
         },
         AnimationData: {
             [ANIMS.AttackWest]: {
+                frames: 17,
                 rate: AR.Attack,
                 options: {
                     yOffset: yOffset,
@@ -52,6 +52,7 @@ export default {
                 }
             },
             [ANIMS.AttackEast]: {
+                frames: 17,
                 rate: AR.Attack,
                 options: {
                     yOffset: yOffset,
@@ -63,22 +64,24 @@ export default {
             [ANIMS.AttackNorth]: {
                 goBackRows: 2,
                 goBackHeight: 2 * attackHeight,
+                frames: 17,
                 rate: AR.Attack,
                 options: { yOffset: yOffset, width: attackWidth, height: attackHeight }
             },
             // Copy of AttackEast
             [ANIMS.AttackSouth]: {
-                width: attackWidth,
-                height: attackHeight,
+                frames: 17,
                 rate: AR.Attack,
                 options: { yOffset: yOffset, width: attackWidth, height: attackHeight }
             },
             // Standing
             [ANIMS.StandWest]: {
+                frames: 18,
                 rate: AR.Stand,
                 options: { yOffset: yOffset, }
             },
             [ANIMS.StandEast]: {
+                frames: 18,
                 rate: AR.Stand,
                 options: { yOffset: yOffset, }
             },
@@ -86,21 +89,25 @@ export default {
             [ANIMS.StandNorth]: {
                 goBackRows: 2,
                 goBackHeight: 2,
+                frames: 18,
                 rate: AR.Stand,
                 options: { yOffset: yOffset, }
             },
             // Copy of StandEast
             [ANIMS.StandSouth]: {
+                frames: 18,
                 rate: AR.Stand,
                 options: { yOffset: yOffset, }
 
             },
             // Walking
             [ANIMS.WalkWest]: {
+                frames: 9,
                 rate: AR.Walk,
                 options: { yOffset: yOffset, }
             },
             [ANIMS.WalkEast]: {
+                frames: 9,
                 rate: AR.Walk,
                 options: { yOffset: yOffset, }
             },
@@ -108,24 +115,21 @@ export default {
             [ANIMS.WalkSouth]: {
                 goBackRows: 2,
                 goBackHeight: 2 * height,
-                width: width,
-                height: height,
+                frames: 9,
                 rate: AR.Walk,
                 options: { yOffset: yOffset, }
             },
             // Copy of WalkEast
             [ANIMS.WalkNorth]: {
-                width: width,
-                height: height,
+                frames: 9,
                 rate: AR.Walk,
                 options: { yOffset: yOffset, }
             },
             // Impact
             [ANIMS.Impact]: {
+                frames: 9,
                 rate: AR.Impact,
-                width: impatctSize,
-                height: impatctSize,
-                options: { loop: false }
+                options: { loop: false, width: impactSize, height: impactSize }
             },
         }
     }
