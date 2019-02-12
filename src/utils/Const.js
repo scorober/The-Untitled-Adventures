@@ -15,7 +15,8 @@ export const ASSET_PATHS = {
     Skeleton: './assets/img/skeleton_base.png',
     MageEffects: './assets/img/mageEffects.png',
     MapEffects: './assets/img/mapEffects.png',
-    ArcherEffects: './assets/img/archerEffects.png'
+    ArcherEffects: './assets/img/archerEffects.png',
+    Lightning: './assets/img/lightning.png'
 }
 
 export const STATES = {

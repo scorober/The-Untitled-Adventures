@@ -23,8 +23,6 @@ export default class ProjectileBehavior extends Component {
         this.angle = Vector.getAngle(this.v, this.target) //TODO flip arrow sprite
         this.dir = t.subtract(this.v)
         this.dir.normalize()
-
-        console.log(this.target)
         this.animComp = this.entity.getComponent(AnimationComponent)
         this.animComp.setAngle(this.angle)
         this.initial = false
