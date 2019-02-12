@@ -64,6 +64,7 @@ export default class GameEngine {
     }
 
     draw() {
+        //console.log('rect cler')
         this.ctx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight)
         this.ctx.save()
         this.sceneManager.draw()
@@ -78,6 +79,7 @@ export default class GameEngine {
         this.clockTick = this.timer.tick()
         this.update()
         this.draw()
+        this.inputManager.clear()
     }
 
     getAsset(path) {
@@ -99,6 +101,10 @@ export default class GameEngine {
 
     setCamera(camera) {
         this.camera = camera
+    }
+
+    getCurrentScene(){
+        return this.sceneManager.currentScene
     }
 
 

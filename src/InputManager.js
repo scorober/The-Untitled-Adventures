@@ -18,11 +18,11 @@ export default class InputManager {
 
     registerEventListeners(ctx) {
         this.ctx = ctx
-
         this.ctx.canvas.addEventListener(CTX_EVENTS.LeftClick,
             e => {
                 this.lastLeftClickPosition = this.getXandY(e)
                 this.newLeftClick = true
+                console.log(this.lastLeftClickPosition)
             },
             false
         )
@@ -37,7 +37,7 @@ export default class InputManager {
         )
 
         this.ctx.canvas.addEventListener(CTX_EVENTS.MouseMove,
-            e => { this.mousePosition = this.getXandY(e) },
+            e => { this.mousePosition = this.getXandY(e)},
             false
         )
 
@@ -62,6 +62,19 @@ export default class InputManager {
         const x = e.clientX - this.ctx.canvas.getBoundingClientRect().left
         const y = e.clientY - this.ctx.canvas.getBoundingClientRect().top
         return { x: x, y: y }
+    }
+
+    /**
+     * Reset values between game loops to prevent overlap
+     */
+    clear(){
+        this.downKeys = {}
+        this.mousePosition = null
+        this.newLeftClick = false
+        this.lastLeftClickPosition = false
+        this.newRightClick = false
+        this.lastRightClickPosition = false
+        this.mouseWheel = null
     }
 
     hasRightClick() {
