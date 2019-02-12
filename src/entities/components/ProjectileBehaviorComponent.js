@@ -19,40 +19,55 @@ export default class ProjectileBehavior extends Component {
         super(entity)
         this.v = new Vector(entity.x, entity.y)
         this.target = new Vector(target.x, target.y)
-        const t = this.target
-        this.angle = Vector.getAngle(this.v, this.target) + Math.PI //TODO flip arrow sprite???
+        const t = new Vector(target.x, target.y)
+        this.angle = Vector.getAngle(this.v, this.target) //TODO flip arrow sprite
         this.dir = t.subtract(this.v)
         this.dir.normalize()
 
-        
+        console.log(this.target)
         this.animComp = this.entity.getComponent(AnimationComponent)
         this.animComp.setAngle(this.angle)
         this.initial = false
-        if (initial === true) {
-            this.animComp.setAnimation(ANIMS.Initial)
-            this.initial = true
-        } else {
-            this.animComp.setAnimation(ANIMS.Projectile)
-        }        
+
+        this.checkInitialState(initial)
     }
 
     /**
      * Called each update cycle
-     * Switches animations of projectile and determines if target was reached.
+     * Moves projectile, if target is reached switches to impact anim and does damage.
      */
     update() {
-        if (this.initial) {
-            if (this.animComp.getCurrentAnimation().isDone()) {
-                this.setAnimation(ANIMS.Projectile)
-                this.initial = false
-            }
-        }
+        this.v = new Vector(this.entity.x, this.entity.y)
         if (this.v.distance(this.target) < 50) {
-            this.setAnimation(ANIMS.Impact)
+            const cb = () => {
+                this.impact()
+                this.entity.removeFromWorld = true
+            }
+            this.animComp.setAnimation(ANIMS.Impact, cb)
         } else {
             this.entity.getComponent(MovementComponent).move(this.dir)
         }
     }
 
     draw() { }
+
+    /**
+     * Call on an attack or Attribute component from the caster to do damage.
+     */
+    impact() {
+        console.log('boom')
+    }
+
+    checkInitialState(initial) {
+        if (initial === true) {
+            this.initial = true
+            const cb = () => {
+                this.initial = false
+                this.animComp.setAnimation(ANIMS.Projectile, null)
+            }
+            this.animComp.setAnimation(ANIMS.Initial, cb)
+        } else {
+            this.animComp.setAnimation(ANIMS.Projectile, null)
+        }
+    }
 }

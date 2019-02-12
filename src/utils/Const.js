@@ -1,6 +1,6 @@
 
 export const ASSET_PATHS = {
-    MikesChar: './assets/img/goldenknight.png',
+    MikesChar: './assets/img/scotts-char.png',
     Mage: './assets/img/mage.png',
     Archer: './assets/img/archer.png',
     Robot: './assets/img/robot-full.png',

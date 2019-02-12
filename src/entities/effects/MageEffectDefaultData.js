@@ -9,12 +9,14 @@ import {
 export default {
     Attributes: {
         Damage: 10,
-        Radius: 15
+        Radius: 15,
+        Speed: 900
     },
 
     AnimationConfig: {
-        Scale: 1.3,
+        Scale: 1,
         Spritesheet: ASSET_PATHS.MageEffects,
+        InitialAnimation: ANIMS.Effect0,
         AnimationRates: {
             [AR.Projectile]: .15,
             [AR.Boost]: .15,
@@ -22,6 +24,7 @@ export default {
         },
         AnimationData: {
             [ANIMS.Effect0]: {
+                frames: 7,
                 rate: AR.Boost,
                 options: {
                     width: 64,
@@ -29,30 +32,32 @@ export default {
                 }
             },
             [ANIMS.Projectile]: {
+                frames: 9,
                 rate: AR.Boost,
                 options: {
                     width: 32,
                     height: 32,
-                    MaxFrames: 12
                 }
             },
             [ANIMS.Effect1]: {
+                frames:10,
                 rate: AR.Projectile,
                 options: {
                     width: 96,
                     height: 96,
-                    maxFrames: 10
                 }
             },
             [ANIMS.Effect2]: {
+                frames: 11,
                 rate: AR.Projectile,
                 options: {
                     width: 48,
                     height: 48,
-                    maxFrames: 11
+  
                 }
             },
             [ANIMS.Impact]: {
+                frames: 11,
                 rate: AR.Impact,
                 options: {
                     width: 192,

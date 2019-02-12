@@ -9,31 +9,31 @@ import {
 export default {
     Attributes: {
         Damage: 10,
+        Speed: 1200
     },
-
     AnimationConfig: {
-        Scale: 1.0,
+        Scale: .75,
         Spritesheet: ASSET_PATHS.ArcherEffects,
+        InitialAnimation: ANIMS.Projectile,
         AnimationRates: {
             [AR.Projectile]: .15,
             [AR.Impact]: .13
         },
-        
         AnimationData: {
             [ANIMS.Projectile]: {
+                frames: 7,
                 rate: AR.Projectile,
                 options: {
                     width: 32,
                     height: 64,
-                    maxFrames: 7
                 }
             },
             [ANIMS.Impact]: {
-                rate: AR.Boost,
+                frames: 12,
+                rate: AR.Impact,
                 options: {
                     width: 192,
                     height: 192,
-                    maxFrames: 12
                 }
             }
 
