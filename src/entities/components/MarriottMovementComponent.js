@@ -20,7 +20,12 @@ export default class MarriottMovementComponent extends MovementComponent {
                     return
                 }
                 this.handlePathMovement()
-                this.entity.getComponent(AnimationComponent).setMovingAnimation(this.direction)
+                this.entity.getComponent(AnimationComponent).setDirectionalAnimation(this.direction, {
+                    north: ANIMS.WalkNorth,
+                    east: ANIMS.WalkEast,
+                    south: ANIMS.WalkSouth,
+                    west: ANIMS.WalkWest
+                })
             }
             else if (this.moving) {
                 // If just stopped moving (because there's no more path data), but this.moving still true, and not currently animating

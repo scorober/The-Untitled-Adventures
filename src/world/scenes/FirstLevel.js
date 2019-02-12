@@ -10,7 +10,6 @@ import PlayerCharacterData from '../../entities/characters/PlayerCharacterDefaul
 import ArcherData from '../../entities/characters/ArcherDefaultData.js'
 import MarriottData from '../../entities/characters/MarriottDefaultData.js'
 
-import PlayerCharacterAnimationComponent from '../../entities/components/PlayerCharacterAnimationComponent.js'
 import MovementComponent from '../../entities/components/MovementComponent.js'
 import MarriottMovementComponent from '../../entities/components/MarriottMovementComponent.js'
 import PlayerInputComponent from '../../entities/components/PlayerInputComponent.js'
@@ -76,10 +75,8 @@ export default class FirstLevel extends Scene {
         const start = this.map.getStartPos()
 
         const playerCharacter = new Entity(game, start)
-        // Most entities should be able to use the basic AnimationBasic, but LPC characters and other characters
-        // will need custom methods on their AnimationComponents, (e.x. oversized attacks) thus PlayerCharacterAnimationComponent
-        // can just extend AnimationComponent
-        playerCharacter.addComponent(new PlayerCharacterAnimationComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
+
+        playerCharacter.addComponent(new AnimationComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
         playerCharacter.addComponent(new MovementComponent(playerCharacter, PlayerCharacterData.Attributes))
         playerCharacter.addComponent(new PlayerInputComponent(playerCharacter))
 

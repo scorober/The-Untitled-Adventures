@@ -1,8 +1,8 @@
 import Component from './Component.js'
 import Map from '../../world/Map.js'
 import MovementComponent from './MovementComponent.js'
-import { KEYS } from '../../utils/Const.js'
-import PlayerCharacterAnimationComponent from './PlayerCharacterAnimationComponent.js'
+import { KEYS, ANIMATIONS as ANIMS } from '../../utils/Const.js'
+import AnimationComponent from './AnimationComponent.js'
 
 export default class PlayerInputComponent extends Component {
     /**
@@ -23,7 +23,12 @@ export default class PlayerInputComponent extends Component {
         }
         if (this.entity.game.inputManager.downKeys[KEYS.KeyD]) {
             const direction = this.entity.getComponent(MovementComponent).direction
-            this.entity.getComponent(PlayerCharacterAnimationComponent).setOversizedAnimation(direction)
+            this.entity.getComponent(AnimationComponent).setDirectionalAnimation(direction, {
+                north: ANIMS.OversizeNorth,
+                east: ANIMS.OversizeEast,
+                south: ANIMS.OversizeSouth,
+                west: ANIMS.OversizeWest
+            })
         }
     }
 

@@ -2,7 +2,7 @@ import Component from './Component.js'
 import AnimationComponent from './AnimationComponent.js'
 import AStarPathfinding from '../../utils/AStarPathfinding.js'
 import Map from '../../world/Map.js'
-import { DIRECTIONS } from '../../utils/Const.js'
+import { DIRECTIONS, ANIMATIONS as ANIMS } from '../../utils/Const.js'
 
 export default class MovementComponent extends Component {
     /**
@@ -28,10 +28,21 @@ export default class MovementComponent extends Component {
         if (this.path.length > 0) {
             this.moving = true
             this.handlePathMovement()
-            this.entity.getComponent(AnimationComponent).setMovingAnimation(this.direction)
+            this.entity.getComponent(AnimationComponent).setDirectionalAnimation(this.direction, {
+                north: ANIMS.WalkNorth,
+                east: ANIMS.WalkEast,
+                south: ANIMS.WalkSouth,
+                west: ANIMS.WalkWest
+            })
         } else if (this.moving) {
             this.moving = false
-            this.entity.getComponent(AnimationComponent).setStandingAnimation(this.direction)
+            this.entity.getComponent(AnimationComponent).setDirectionalAnimation(this.direction, {
+                north: ANIMS.StandNorth,
+                east: ANIMS.StandEast,
+                south: ANIMS.StandSouth,
+                west: ANIMS.StandWest
+
+            })
         }
         if (this.following) {
             this.handleFollowing()
@@ -119,6 +130,8 @@ export default class MovementComponent extends Component {
         const path = pathfinder.calculatePath()
         this.path = path.map((pathTile) => { return { x: pathTile[0], y: pathTile[1] } })
     }
+
+
 
     /**
      * Sets the follow target and sets following to true

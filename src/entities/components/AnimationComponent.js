@@ -71,6 +71,7 @@ export default class AnimationComponent extends Component {
      */
     setAnimation(animation, cb = null) {
         this.animation = animation
+        const theAnimation = this.animations[animation]
         if (this.animations[animation].loop === false) this.animations[animation].elapsedTime = 0
         this.animations[animation].setCallback(cb)
     }
@@ -78,43 +79,24 @@ export default class AnimationComponent extends Component {
     /**
      * Sets the active moving animation according to direction
      * @param {Symbol} direction The direction to walk in
+     * @param {Object} anims An object with four properties (North, East, South, West)
+     *                       containing the directional Animation
      */
-    setMovingAnimation(direction, cb = null) {
+    setDirectionalAnimation(direction, directionalAnims, cb = null) {
+        const animComponent = this.entity.getComponent(AnimationComponent)
         switch (direction) {
             case DIRECTIONS.North:
-                this.setAnimation(ANIMS.WalkNorth, cb)
+                animComponent.setAnimation(directionalAnims.north, cb)
                 break
             case DIRECTIONS.East:
-                this.setAnimation(ANIMS.WalkEast, cb)
+                animComponent.setAnimation(directionalAnims.east, cb)
                 break
             case DIRECTIONS.West:
-                this.setAnimation(ANIMS.WalkWest, cb)
+                animComponent.setAnimation(directionalAnims.west, cb)
                 break
             case DIRECTIONS.South:
             default:
-                this.setAnimation(ANIMS.WalkSouth, cb)
-                break
-        }
-    }
-
-    /**
-     * Sets the active standing animation according to direction
-     * @param {Symbol} direction The direction to stand in
-     */
-    setStandingAnimation(direction, cb = null) {
-        switch (direction) {
-            case DIRECTIONS.North:
-                this.setAnimation(ANIMS.StandNorth, cb)
-                break
-            case DIRECTIONS.East:
-                this.setAnimation(ANIMS.StandEast, cb)
-                break
-            case DIRECTIONS.West:
-                this.setAnimation(ANIMS.StandWest, cb)
-                break
-            case DIRECTIONS.South:
-            default:
-                this.setAnimation(ANIMS.StandSouth, cb)
+                animComponent.setAnimation(directionalAnims.south, cb)
                 break
         }
     }
