@@ -12,7 +12,10 @@ export const ASSET_PATHS = {
     TitleAnimation: './assets/img/animated_title_bg.png',
     ScottsChar: './assets/img/scotts-char.png',
     Fireball: './assets/img/fireball.png',
-    Skeleton: './assets/img/skeleton_base.png'
+    Skeleton: './assets/img/skeleton_base.png',
+    MageEffects: './assets/img/mageEffects.png',
+    MapEffects: './assets/img/mapEffects.png',
+    ArcherEffects: './assets/img/archerEffects.png'
 }
 
 export const STATES = {
@@ -25,11 +28,6 @@ export const STATES = {
     RemoveFromWorld: Symbol(),
     Aggressive: Symbol(),
     Cooling: Symbol(),
-    Active: Symbol(),
-    Stage1: Symbol(),
-    Stage2: Symbol()
-
-
 }
 
 export const ANIMATIONS = {
@@ -84,7 +82,11 @@ export const ANIMATIONS = {
     Fire: Symbol(),
     Projectile: Symbol(),
     Impact: Symbol(),
-    Boost: Symbol()
+    Boost: Symbol(),
+    Initial: Symbol(),
+    Effect0: Symbol(),
+    Effect1: Symbol(),
+    Effect2: Symbol()
 }
 
 export const ANIMATION_RATES = {
@@ -102,9 +104,13 @@ export const ANIMATION_RATES = {
     /** Marriott-specific rates */
     Sit: Symbol(),
 
-    /** Mob-specific rates */
-    Impact: Symbol(),
-    Powerup: Symbol()
+    /** Mage-specific rate */
+    Powerup: Symbol(),
+
+    /** Effect specific rates */
+    Boost: Symbol(),
+    Projectile: Symbol(),
+    Impact: Symbol()
 }
 
 export const DIRECTIONS = {

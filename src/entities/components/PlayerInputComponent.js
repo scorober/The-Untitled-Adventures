@@ -5,8 +5,12 @@ import {
     KEYS
 } from '../../utils/Const.js'
 import PlayerCharacterAnimationComponent from './PlayerCharacterAnimationComponent.js'
-import ProjectileComponent from './ProjectileComponent.js';
+import ProjectileBehaviorComponent from './ProjectileBehaviorComponent.js'
 import AnimationComponent from './AnimationComponent.js';
+import FireballData from '../effects/FireballDefaultData.js'
+import Entity from '../Entity.js'
+import MageEffectData from '../effects/ArcherEffectDefaultData.js'
+import ArcherEffectData from '../effects/MageEffectDefaultData.js'
 
 export default class PlayerInputComponent extends Component {
     /**
@@ -32,16 +36,47 @@ export default class PlayerInputComponent extends Component {
         if (this.entity.game.inputManager.downKeys[KEYS.KeyQ]) {
             const direction = this.entity.getComponent(MovementComponent).direction
             //Offset direction
+           
             const fireball = new Entity(this.entity.game, {
                 x: this.entity.x,
                 y: this.entity.y
             })
-            const target = this.entity.game.inputManager.mousePosition()
+            const target = this.entity.game.inputManager.mousePosition
             //TODO get screen to world
-            fireball.addComponent(new ProjectileComponent(fireball, target))
+            fireball.addComponent(new AnimationComponent(fireball, FireballData.animationConfig))
             fireball.addComponent(new MovementComponent(fireball))
-            // fireball.addComponent(new AnimationComponent())
+            fireball.addComponent(new ProjectileBehaviorComponent(fireball, target, true))
             this.entity.game.sceneManager.currentScene.addEntity(fireball)
+        }
+        if (this.entity.game.inputManager.downKeys[KEYS.KeyW]) {
+            const direction = this.entity.getComponent(MovementComponent).direction
+            //Offset direction
+           
+            const mageEffect = new Entity(this.entity.game, {
+                x: this.entity.x,
+                y: this.entity.y
+            })
+            const target = this.entity.game.inputManager.mousePosition
+            //TODO get screen to world
+            mageEffect.addComponent(new AnimationComponent(mageEffect, MageEffectData.animationConfig))
+            mageEffect.addComponent(new MovementComponent(mageEffect))
+            mageEffect.addComponent(new ProjectileBehaviorComponent(mageEffect, target, false))
+            this.entity.game.sceneManager.currentScene.addEntity(mageEffect)
+        }
+        if (this.entity.game.inputManager.downKeys[KEYS.KeyE]) {
+            const direction = this.entity.getComponent(MovementComponent).direction
+            //Offset direction
+           
+            const archerEffect = new Entity(this.entity.game, {
+                x: this.entity.x,
+                y: this.entity.y
+            })
+            const target = this.entity.game.inputManager.mousePosition
+            //TODO get screen to world
+            archerEffect.addComponent(new AnimationComponent(archerEffect, ArcherEffectData.animationConfig))
+            archerEffect.addComponent(new MovementComponent(archerEffect))
+            archerEffect.addComponent(new ProjectileBehaviorComponent(archerEffect, target, false))
+            this.entity.game.sceneManager.currentScene.addEntity(archerEffect)
         }
 
     }
