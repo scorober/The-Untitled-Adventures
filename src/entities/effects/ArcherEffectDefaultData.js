@@ -11,30 +11,32 @@ export default {
         Damage: 10,
     },
 
-    animationConfig: {
-        Scale: 1.3,
+    AnimationConfig: {
+        Scale: 1.0,
         Spritesheet: ASSET_PATHS.ArcherEffects,
         AnimationRates: {
             [AR.Projectile]: .15,
             [AR.Impact]: .13
         },
+        
         AnimationData: {
-            [ANIMS.Impact]: {
-                rate: AR.Boost,
-                options: {
-                    width: 192,
-                    height: 192,
-                    // maxFrames: 12
-                }
-            },
             [ANIMS.Projectile]: {
                 rate: AR.Projectile,
                 options: {
                     width: 32,
                     height: 64,
-                    // maxFrames: 7
+                    maxFrames: 7
+                }
+            },
+            [ANIMS.Impact]: {
+                rate: AR.Boost,
+                options: {
+                    width: 192,
+                    height: 192,
+                    maxFrames: 12
                 }
             }
+
         }
     }
 }

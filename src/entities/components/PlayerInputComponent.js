@@ -9,8 +9,8 @@ import ProjectileBehaviorComponent from './ProjectileBehaviorComponent.js'
 import AnimationComponent from './AnimationComponent.js';
 import FireballData from '../effects/FireballDefaultData.js'
 import Entity from '../Entity.js'
-import MageEffectData from '../effects/ArcherEffectDefaultData.js'
-import ArcherEffectData from '../effects/MageEffectDefaultData.js'
+import MageEffectData from '../effects/MageEffectDefaultData.js'
+import ArcherEffectData from '../effects/ArcherEffectDefaultData.js'
 
 export default class PlayerInputComponent extends Component {
     /**
@@ -41,9 +41,10 @@ export default class PlayerInputComponent extends Component {
                 x: this.entity.x,
                 y: this.entity.y
             })
-            const target = this.entity.game.inputManager.mousePosition
+            const pos = this.entity.game.inputManager.mousePosition
+            const target = this.entity.game.screenToWorld(pos)
             //TODO get screen to world
-            fireball.addComponent(new AnimationComponent(fireball, FireballData.animationConfig))
+            fireball.addComponent(new AnimationComponent(fireball, FireballData.AnimationConfig))
             fireball.addComponent(new MovementComponent(fireball))
             fireball.addComponent(new ProjectileBehaviorComponent(fireball, target, true))
             this.entity.game.sceneManager.currentScene.addEntity(fireball)
@@ -56,9 +57,11 @@ export default class PlayerInputComponent extends Component {
                 x: this.entity.x,
                 y: this.entity.y
             })
-            const target = this.entity.game.inputManager.mousePosition
+            const pos = this.entity.game.inputManager.mousePosition
+            const target = this.entity.game.screenToWorld(pos)
+            console.log(target)
             //TODO get screen to world
-            mageEffect.addComponent(new AnimationComponent(mageEffect, MageEffectData.animationConfig))
+            mageEffect.addComponent(new AnimationComponent(mageEffect, MageEffectData.AnimationConfig))
             mageEffect.addComponent(new MovementComponent(mageEffect))
             mageEffect.addComponent(new ProjectileBehaviorComponent(mageEffect, target, false))
             this.entity.game.sceneManager.currentScene.addEntity(mageEffect)
@@ -71,9 +74,11 @@ export default class PlayerInputComponent extends Component {
                 x: this.entity.x,
                 y: this.entity.y
             })
-            const target = this.entity.game.inputManager.mousePosition
+            const pos = this.entity.game.inputManager.mousePosition
+            const target = this.entity.game.screenToWorld(pos)
+            
             //TODO get screen to world
-            archerEffect.addComponent(new AnimationComponent(archerEffect, ArcherEffectData.animationConfig))
+            archerEffect.addComponent(new AnimationComponent(archerEffect, ArcherEffectData.AnimationConfig))
             archerEffect.addComponent(new MovementComponent(archerEffect))
             archerEffect.addComponent(new ProjectileBehaviorComponent(archerEffect, target, false))
             this.entity.game.sceneManager.currentScene.addEntity(archerEffect)

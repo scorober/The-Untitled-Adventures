@@ -18,7 +18,7 @@ export default {
         Radius: 15
     },
 
-    animationConfig: {
+    AnimationConfig: {
         Scale: 1.3,
         Spritesheet: ASSET_PATHS.Fireball,
         AnimationRates: {
@@ -30,14 +30,16 @@ export default {
                 rate: AR.Boost,
                 options: {
                     width: boostSize,
-                    height: boostSize
+                    height: boostSize,
+                    maxFrames: 12
                 }
             },
             [ANIMS.Fire]: {
                 rate: AR.Boost,
                 options: {
                     width: fireWidth,
-                    height: fireHeight
+                    height: fireHeight,
+                    maxFrames: 11
                 }
             },
             [ANIMS.Initial]: {
@@ -52,7 +54,8 @@ export default {
                 rate: AR.Projectile,
                 options: {
                     width: projWidth,
-                    height: projHeight
+                    height: projHeight,
+                    maxFrames: 7
                 }
             }
         }

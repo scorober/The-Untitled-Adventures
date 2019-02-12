@@ -152,4 +152,8 @@ export default class MovementComponent extends Component {
     getTileBehind() {
 
     }
+
+    setSpeed(speed) {
+        this.speed = speed
+    }
 }

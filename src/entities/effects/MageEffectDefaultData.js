@@ -12,7 +12,7 @@ export default {
         Radius: 15
     },
 
-    animationConfig: {
+    AnimationConfig: {
         Scale: 1.3,
         Spritesheet: ASSET_PATHS.MageEffects,
         AnimationRates: {
