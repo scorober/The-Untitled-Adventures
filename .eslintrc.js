@@ -20,7 +20,8 @@ module.exports = {
         ],
         "quotes": [
             "error",
-            "single"
+            "single",
+            { "allowTemplateLiterals": true }
         ],
         "semi": [
             "error",
@@ -32,6 +33,6 @@ module.exports = {
             "destructuring": "any",
             "ignoreReadBeforeAssign": false
         }],
-        "complexity": ["warn", 5]
+        "complexity": ["warn", 6]
     }
 };

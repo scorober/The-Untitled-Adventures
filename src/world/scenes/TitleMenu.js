@@ -25,14 +25,16 @@ export default class TitleMenuScene extends Scene {
 
         this.selectedItem = 0
         this.drawSpeedBuffer = 0
-        const yBase = this.ctx.canvas.height / 2 + 20
+        const canvasWidth = this.game.ctx.canvas.width
+        const canvasHeight = this.game.ctx.canvas.height
+        const yBase = canvasHeight / 2 + 20
         this.text = [
-            {TIME: 1.5, TEXT: 'THE UNTITLED ADVENTURES OF', W: this.ctx.canvas.width / 2, H: yBase - 200, COLOR: 'red', FONT: '40px arcade'},
-            {TIME: 2, TEXT: 'DR. MARRIOTT', W: this.ctx.canvas.width / 2, H: yBase - 150, COLOR: 'red', FONT: '40px arcade'},
-            {TIME: 3, TEXT: 'START', W: this.ctx.canvas.width / 2, H: yBase - 30, COLOR: 'red', FONT: '30px arcade'},
-            {TIME: 3.4, TEXT: 'OPTIONS', W: this.ctx.canvas.width / 2, H: yBase + 5, COLOR: 'red', FONT: '30px arcade'},
-            {TIME: 3.8, TEXT: 'HIGH SCORE', W: this.ctx.canvas.width / 2, H: yBase + 40, COLOR: 'red', FONT: '30px arcade'},
-            {TIME: 4.2, TEXT: 'EXIT', W: this.ctx.canvas.width / 2, H: yBase + 75, COLOR: 'red', FONT: '30px arcade'}
+            {TIME: 1.5, TEXT: 'THE UNTITLED ADVENTURES OF', W: canvasWidth / 2, H: yBase - 200, COLOR: 'red', FONT: '40px arcade'},
+            {TIME: 2, TEXT: 'DR. MARRIOTT', W: canvasWidth / 2, H: yBase - 150, COLOR: 'red', FONT: '40px arcade'},
+            {TIME: 3, TEXT: 'START', W: canvasWidth / 2, H: yBase - 30, COLOR: 'red', FONT: '30px arcade'},
+            {TIME: 3.4, TEXT: 'OPTIONS', W: canvasWidth / 2, H: yBase + 5, COLOR: 'red', FONT: '30px arcade'},
+            {TIME: 3.8, TEXT: 'HIGH SCORE', W: canvasWidth / 2, H: yBase + 40, COLOR: 'red', FONT: '30px arcade'},
+            {TIME: 4.2, TEXT: 'EXIT', W: canvasWidth / 2, H: yBase + 75, COLOR: 'red', FONT: '30px arcade'}
         ]
 
     }

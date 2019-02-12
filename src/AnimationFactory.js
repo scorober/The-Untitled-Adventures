@@ -6,41 +6,45 @@ export default class AnimationFactory {
      * @param {HTMLImageElement} spritesheet The entire spritesheet for this Entity
      * @param {number} scale The scale at which to draw the sprites
      */
-    constructor(spritesheet, scale = 1) {
+    constructor(spritesheet, height, width, scale = 1) {
         this.spritesheet = spritesheet
         this.scale = scale
-
+        this.height = height
+        this.width = width
         this.startY = 0
         this.row = 1
     }
 
     /**
      * Returns the next row of sprites as a single Animation object.
-     * @param {number} frameWidth Width of a single sprite on this row
-     * @param {number} frameHeight Height of a single sprite on this row
+     * @param {Number} frames The number of sprite frames in this row
      * @param {number} rate Duration before switching to the next sprite frame
-     * @param {boolean} loop Whether to loop this animation
-     * @param {boolean or number} maxFrames The maximum number of frames, starting from the left of the spritesheet,
-     *                                      which should be included in this animation
      * @returns The animation on the next row, or false if no more rows of sprites exist.
      */
-    getNextRow(frameWidth, frameHeight, rate, options = {}) {
+    getNextRow(frameCount, rate, options = {}) {
         const defaults = {
             loop: true,
-            maxFrames: false,
-            yOffset: 0
+            yOffset: 0 
         }
         options = Object.assign({}, defaults, options)
-        if (this.startY + frameHeight <= this.spritesheet.height) {
-            const animation = new Animation(this.spritesheet, frameWidth, frameHeight, this.startY, options.yOffset, rate, options.loop, this.scale, options.maxFrames)
-            this.startY += frameHeight
+        const width = options.width ? options.width : this.width
+        const height = options.height ? options.height : this.height
+        if (this.startY + width <= this.spritesheet.height) {
+            const animation = new Animation(this.spritesheet, width, height, this.startY, frameCount, options.yOffset, rate, options.loop, this.scale, options.maxFrames)
+            this.startY += height
             this.row += 1
             return animation
         } else {
-            // eslint-disable-next-line no-console
-            //console.error('getNextRow has reached the bottom of the spritesheet and cannot access another row.')
             return false
         }
+    }
+
+    /**
+     * Checks whether the spritesheet has another row of sprites
+     * @param {Number} frameHeight The height of the expected next row
+     */
+    hasNextRow(frameHeight) {
+        return this.startY + frameHeight <= this.spritesheet.height
     }
 
     /**

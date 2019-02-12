@@ -1,19 +1,28 @@
 import Scene from './Scene.js'
 import Map from '../Map.js'
-import PlayerCharacter from '../../entities/characters/PlayerCharacter.js'
 import Dungeon from '../generators/Dungeon.js'
 import Background from '../Background.js'
-import Mage from '../../entities/characters/Mage.js'
-import Marriott from '../../entities/characters/Marriott.js'
-import { ASSET_PATHS } from '../../utils/Const.js'
-import Robot from '../../entities/characters/Robot.js'
-import Archer from '../../entities/characters/Archer.js'
+import Entity from '../../entities/Entity.js'
+import { ASSET_PATHS, SPAWNERS } from '../../utils/Const.js'
+
+
+import PlayerCharacterData from '../../entities/characters/PlayerCharacterDefaultData.js'
+import ArcherData from '../../entities/characters/ArcherDefaultData.js'
+import MarriottData from '../../entities/characters/MarriottDefaultData.js'
+
+import MovementComponent from '../../entities/components/MovementComponent.js'
+import MarriottMovementComponent from '../../entities/components/MarriottMovementComponent.js'
+import PlayerInputComponent from '../../entities/components/PlayerInputComponent.js'
+import AnimationComponent from '../../entities/components/AnimationComponent.js'
+import SpawnerBehaviorComponent from '../../entities/components/SpawnerBehaviorComponent.js'
+
+
 
 export default class FirstLevel extends Scene {
 
     constructor(game) {
         super(game)
-        this.name = 'level1'    
+        this.name = 'level1'
         //Initialize a dungeon with options, possibly move to the scene superclass w/ parameters.
         const dungeon = new Dungeon({
             size: [2000, 2000],
@@ -27,7 +36,7 @@ export default class FirstLevel extends Scene {
                 },
                 any: {
                     min_size: [10, 10],
-                    max_size: [15, 15],
+                    max_size: [10, 10],
                     max_exits: 4
                 },
                 spawn: {
@@ -54,34 +63,48 @@ export default class FirstLevel extends Scene {
             max_interconnect_length: 10,
             room_count: 10
         })
-        
+
         dungeon.generate()
 
-
         this.setBackground(new Background(game, game.getAsset(ASSET_PATHS.Background)))
-        this.setMap(new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon, this))
+
+
+        const map = new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon, this)
+        this.setMap(map)
 
         const start = this.map.getStartPos()
-        const player = new PlayerCharacter(game, game.getAsset(ASSET_PATHS.ScottsChar), start)
-        game.camera.setFollowedEntity(player)
-        this.setPlayer(player)
 
-        const archer0 = new Archer(game, game.getAsset(ASSET_PATHS.Archer), start)
-        const robot0 = new Robot(game, game.getAsset(ASSET_PATHS.Robot), start)
-        const mage = new Mage(game, game.getAsset(ASSET_PATHS.Mage), start)
-        const marriott = new Marriott(game, game.getAsset(ASSET_PATHS.Marriott),start)
+        const playerCharacter = new Entity(game, start)
 
-        // marriott.setFollowTarget(player)
-        mage.setFollowTarget(player)   
-        robot0.setFollowTarget(player)
-        archer0.setFollowTarget(player)
+        playerCharacter.addComponent(new AnimationComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
+        playerCharacter.addComponent(new MovementComponent(playerCharacter, PlayerCharacterData.Attributes))
+        playerCharacter.addComponent(new PlayerInputComponent(playerCharacter))
 
-        this.addEntity(player)
+        const archer = new Entity(game, start)
+        archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
+        archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
+        archer.getComponent(MovementComponent).setFollowTarget(playerCharacter)
+
+        const marriott = new Entity(game, start)
+        marriott.addComponent(new MarriottMovementComponent(marriott, MarriottData.Attributes))
+        marriott.addComponent(new AnimationComponent(marriott, MarriottData.AnimationConfig))
+        marriott.getComponent(MovementComponent).setFollowTarget(playerCharacter)
+
+
+
+        this.setPlayer(playerCharacter)
+        game.camera.setFollowedEntity(playerCharacter)
+        this.addEntity(playerCharacter)
         this.addEntity(game.camera)
-        // this.addEntity(mage)
-        // // this.addEntity(marriott)
-        // this.addEntity(robot0)
-        // this.addEntity(archer0)
+        //this.addEntity(archer)
+        this.addEntity(marriott)
+
+
+        for (const mapSpawner of map.spawners) {
+            const spawner = new Entity(game, mapSpawner.pos)
+            spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, SPAWNERS.Mage, mapSpawner.r, 8))
+            this.addEntity(spawner)
+        }
     }
 
     /**
@@ -92,8 +115,6 @@ export default class FirstLevel extends Scene {
         //here to reduce confusion, and to allow the order they are updated/rendered to be adjusted.
         this.updateMap()
         this.updateEntities()
-        // //Reorders the entities in the correct drawing format
-        // this.entities.sort((a,b) => a.y - b.y)
     }
 
     /**

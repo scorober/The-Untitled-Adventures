@@ -1,7 +1,6 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
-import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, SPAWNERS } from '../utils/Const.js'
-import Spawner from '../entities/Spawner.js';
+import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM } from '../utils/Const.js'
 
 export default class Map extends Entity {
     /**
@@ -22,6 +21,7 @@ export default class Map extends Entity {
         this.cols = dungeon.size[0]
         this.tiles = []
         this.scene = scene
+        this.spawners = [] //Array of spawner positions and radii.
         this.buildMap()
     }
 
@@ -103,10 +103,13 @@ export default class Map extends Entity {
                 break
             case ROOMS.Spawn:
                 this.createObject(this.objectMap, center, MI.Rug)
-                const spawner = new Spawner(this.game, 
-                    { x: center[0] * this.tileSize, y: center[1] * this.tileSize },
-                    SPAWNERS.Mage, 8, this.getRadius(piece))
-                this.scene.addEntity(spawner)
+                this.spawners.push({
+                    pos: {
+                        x: center[0] * this.tileSize,
+                        y: center[1] * this.tileSize,
+                    },
+                    r: this.getRadius(piece)
+                })
                 break
             case ROOMS.Treasure:
                 this.createObject(this.objectMap, center, MI.ChestOpen)
@@ -114,10 +117,10 @@ export default class Map extends Entity {
             case ROOMS.Exit:
                 this.createObject(this.objectMap, center, MI.StairsN)
                 break
-
         }
     }
 
+    // eslint-disable-next-line complexity
     buildExits(piece) {
         for (const exit of piece.exits) {
             //Create the floor between rooms
@@ -174,6 +177,7 @@ export default class Map extends Entity {
      * a lower value that the algorithm deems "walkable".
      * This is temporary until we have a more robust solution.
      */
+    // eslint-disable-next-line complexity
     mapValueToPathfindingValue(value) {
         switch (value) {
             case 38:
@@ -252,10 +256,6 @@ export default class Map extends Entity {
                 this.tileSize,
                 this.tileSize
             )
-            // Debug 
-            // this.game.ctx.font = '11px Arial'
-            // this.game.ctx.fillStyle = 'white'
-            // this.game.ctx.fillText('(' + c + ', ' + r + ')', tileX, tileY)
         }
     }
 
@@ -286,7 +286,7 @@ export default class Map extends Entity {
     }
 
     getRadius(piece) {
-        let size = Math.min(piece.size[0], piece.size[1])
+        const size = Math.min(piece.size[0], piece.size[1])
         return Math.floor((size - 4) / 2 * 64)
     }
 }

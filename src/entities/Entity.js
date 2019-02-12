@@ -1,6 +1,6 @@
 import { STATES } from '../utils/Const.js'
-import {create_UUID} from '../utils/Random.js'
-import {HitCircle} from '../utils/Collision.js'
+import { create_UUID } from '../utils/Random.js'
+import { HitCircle } from '../utils/Collision.js'
 import Vector from '../utils/Vector.js'
 
 export default class Entity {
@@ -10,20 +10,30 @@ export default class Entity {
         this.y = pos.y
         this.removeFromWorld = false
         this.states = this.getDefaultStates()
-        this.UUID = 'ENTITY::'+ create_UUID() //UUID for identifying this entity instance.
+        this.components = []
+        this.UUID = 'ENTITY::' + create_UUID() //UUID for identifying this entity instance.
         this.size = 32
         this.radius = 16 //Default values TODO add in constructor
         this.hitOffsetX = 0
         this.hitOffsetY = 0
     }
 
-    update() { 
-        //Update hitbox location of collidable entities
-        if(this.states[STATES.Collidable]){
+    /**
+     * Calls update on each of the Entity's components.
+     */
+    update() {
+        this.components.forEach((component) => {
+            component.update()
+        })
+        if (this.states[STATES.Collidable]) {
             this.hitbox.update(this.x + this.hitOffsetX, this.y + this.hitOffsetY)
         }
     }
 
+
+    /**
+     * Calls draw on each of the Entity's components
+     */
     draw() {
         this.game.ctx.fillRect(this.x - this.game.camera.xView, this.y - this.game.camera.yView, 5, 5)
         if (this.game.showOutlines && this.radius) {
@@ -33,7 +43,53 @@ export default class Entity {
             this.game.ctx.stroke()
             this.game.ctx.closePath()
         }
+        this.components.forEach((component) => {
+            component.draw()
+        })
     }
+
+    /**
+     * Adds a component to this Entity
+     * @param {Component} component The component to add to this Entity
+     * @returns {Boolean} whether the component could be added.
+     */
+    addComponent(component) {
+        for (const existingComponent in this.components) {
+            if (component.constructor.name === existingComponent.constructor.name) {
+                return false
+            }
+        }
+        this.components.push(component)
+        return true
+    }
+
+    /**
+     * Replaces an existing component in this Entity
+     * @param {Component} component The component to replace in this Entity
+     * @returns {Boolean} whether the component could be replaced
+     */
+    replaceComponent(component) {
+        for (let i = 0; i < this.components.length; i++) {
+            if (component.constructor.name === this.components[i].constructor.name) {
+                this.components[i] = component
+                return true
+            }
+        }
+        return false
+    }
+
+    /**
+     * 
+     * @param {Class} type The component type to get
+     * @returns {Component} The component with the specified type
+     */
+    getComponent(type) {
+        for (const component of this.components) {
+            if (component instanceof type) return component
+        }
+        return false
+    }
+
 
     getDefaultStates() {
         const states = []
@@ -51,7 +107,7 @@ export default class Entity {
     /**
      * Sets an entities state to be collidable and creates a hitbox from it's dimensions.
      */
-    setCollidable(options = {}){
+    setCollidable(options = {}) {
         const defaults = {
             offset: false,
             xOffset: 0,
@@ -67,8 +123,8 @@ export default class Entity {
         } else {
             this.hitbox = new HitCircle(this.radius, this.x, this.y)
         }
-        
-       
+
+
     }
 
     /**
@@ -78,12 +134,12 @@ export default class Entity {
      * @param x
      * @param y
      */
-    tryMove(x,y){
-        if(this.states[STATES.Collidable]){
+    tryMove(x, y) {
+        if (this.states[STATES.Collidable]) {
 
-            const isCollided = this.game.sceneManager.collisionLayer.collides(this, new Vector(x,y))
+            const isCollided = this.game.sceneManager.collisionLayer.collides(this, new Vector(x, y))
 
-            if(!isCollided){
+            if (!isCollided) {
                 this.x = x
                 this.y = y
             }//else, collision happened, don't update x/y
@@ -97,11 +153,11 @@ export default class Entity {
 
     goTo(x, y) {
 
-        if(this.states[STATES.Collidable]){
+        if (this.states[STATES.Collidable]) {
 
-            const isCollided = this.game.sceneManager.collisionLayer.collides(this, new Vector(x,y))
+            const isCollided = this.game.sceneManager.collisionLayer.collides(this, new Vector(x, y))
 
-            if(!isCollided){
+            if (!isCollided) {
                 this.goToX = x
                 this.goToY = y
             }//else, collision happened, don't update x/y
