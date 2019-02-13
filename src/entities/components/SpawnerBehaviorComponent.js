@@ -7,6 +7,7 @@ import AnimationComponent from './AnimationComponent.js'
 import ArcherData from '../../entities/characters/ArcherDefaultData.js'
 import RobotData from '../../entities/characters/RobotDefaultData.js'
 import MageData from '../../entities/characters/MageDefaultData.js'
+import AttributeComponent from './AttributeComponent.js'
 
 export default class SpawnComponentBehavior extends Component {
     /**
@@ -88,6 +89,8 @@ export default class SpawnComponentBehavior extends Component {
             })
             mage.addComponent(new MovementComponent(mage, MageData.Attributes))
             mage.addComponent(new AnimationComponent(mage, MageData.AnimationConfig))
+            mage.addComponent(new AttributeComponent(mage, MageData.Attributes, this.scene, true))
+            mage.UUID = 'ARCHER::' + mage.UUID
             this.mobs.push(mage)
         }
         for (let i = 0; i < this.archers; i++) {
@@ -99,6 +102,8 @@ export default class SpawnComponentBehavior extends Component {
             })
             archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
             archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
+            archer.addComponent(new AttributeComponent(archer, MageData.Attributes, this.scene, true))
+            archer.UUID = 'ARCHER::' + archer.UUID
             this.mobs.push(archer)
         }
         for (let i = 0; i < this.robots; i++) {
@@ -110,6 +115,8 @@ export default class SpawnComponentBehavior extends Component {
             })
             robot.addComponent(new MovementComponent(robot, RobotData.Attributes))
             robot.addComponent(new AnimationComponent(robot, RobotData.AnimationConfig))
+            robot.addComponent(new AttributeComponent(robot, MageData.Attributes, this.scene, true))
+            robot.UUID = 'ROBOT::' + robot.UUID
             this.mobs.push(robot)
         }
     }

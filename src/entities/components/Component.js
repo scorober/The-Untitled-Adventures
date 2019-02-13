@@ -5,7 +5,7 @@ export default class Component {
      */
     constructor(entity) {
         if (new.target === Component) {
-            throw new TypeError('Cannot instantiate Component directly')
+            throw new TypeError('Cannot instantiate Component directly ')
         }
         this.entity = entity
     }
@@ -15,6 +15,6 @@ export default class Component {
     }
 
     draw() {
-        throw new TypeError('Must override Component\'s draw in derived class')
+        //throw new TypeError('Must override Component\'s draw in derived class.... but y tho? ')
     }
 }

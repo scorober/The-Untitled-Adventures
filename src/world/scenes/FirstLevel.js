@@ -15,6 +15,7 @@ import MarriottMovementComponent from '../../entities/components/MarriottMovemen
 import PlayerInputComponent from '../../entities/components/PlayerInputComponent.js'
 import AnimationComponent from '../../entities/components/AnimationComponent.js'
 import SpawnerBehaviorComponent from '../../entities/components/SpawnerBehaviorComponent.js'
+import AttributeComponent from '../../entities/components/AttributeComponent.js'
 
 
 
@@ -32,7 +33,7 @@ export default class FirstLevel extends Scene {
                     min_size: [10, 10], //Floor size
                     max_size: [10, 10],
                     max_exits: 4,
-                    position: [100, 100] //OPTIONAL pos of initial room 
+                    position: [100, 100] //OPTIONAL pos of initial room
                 },
                 any: {
                     min_size: [10, 10],
@@ -79,6 +80,8 @@ export default class FirstLevel extends Scene {
         playerCharacter.addComponent(new AnimationComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
         playerCharacter.addComponent(new MovementComponent(playerCharacter, PlayerCharacterData.Attributes))
         playerCharacter.addComponent(new PlayerInputComponent(playerCharacter))
+        playerCharacter.addComponent(new AttributeComponent(playerCharacter, PlayerCharacterData.Attributes, this, true))
+        playerCharacter.UUID = 'PLAYER::' + playerCharacter.UUID
 
         const archer = new Entity(game, start)
         archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
@@ -89,6 +92,8 @@ export default class FirstLevel extends Scene {
         marriott.addComponent(new MarriottMovementComponent(marriott, MarriottData.Attributes))
         marriott.addComponent(new AnimationComponent(marriott, MarriottData.AnimationConfig))
         marriott.getComponent(MovementComponent).setFollowTarget(playerCharacter)
+        marriott.addComponent(new AttributeComponent(marriott, MarriottData.Attributes, this, true))
+        marriott.UUID = 'MARRIOTT::' + marriott.UUID
 
 
 
@@ -126,4 +131,13 @@ export default class FirstLevel extends Scene {
         this.drawEntities()
     }
 
+    enter(params){
+        console.log('params:', params)
+        if(params === 'ARCHER'){
+            //hi
+        }else if(params === 'SWORDMAN'){
+            this.player = new PlayerCharacter(this.game, this.game.getAsset(ASSET_PATHS.Swordman), this.map.getStartPos())
+            console.log('created new swordman')
+        }
+    }
 }

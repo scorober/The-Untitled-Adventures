@@ -26,9 +26,6 @@ export const ASSET_PATHS = {
     ScottsChar: './assets/img/scotts-char.png',
     Fireball: './assets/img/fireball.png',
     Skeleton: './assets/img/skeleton_base.png',
-    SwordmanPlayer: './assets/img/sprites/swordman/run_slashing.png',
-    ArcherPlayer: './assets/img/sprites/archer/run_shooting.png',
-    MagePlayer:'./assets/img/sprites/mage/run_attacking.png'
 }
 
 export const STATES = {
@@ -48,6 +45,10 @@ export const STATES = {
     Combat_Entity : Symbol(),
 
 }
+// Switch to this to separate states & types?
+// export const ENTITY_TYPES = {
+//     Combat : Symbol(),
+// }
 
 export const ANIMATIONS = {
     /** PlayerCharacter animations */

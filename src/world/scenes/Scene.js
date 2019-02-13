@@ -10,6 +10,7 @@ export default class Scene {
         this.background = null
         this.timeElapsed = 0
         this.timeBuffer = 0
+        this.ctx = game.ctx
     }
 
     /**
@@ -26,7 +27,7 @@ export default class Scene {
      * Super-most enter method for the scene hierarchy.
      * Currently just resets the timeElapsed variable to ensure it is reset when scenes change.
      */
-    enter() { this.timeElapsed = 0 }
+    enter(params) { this.timeElapsed = 0 }
     exit() { }
 
     /**
@@ -38,11 +39,10 @@ export default class Scene {
     }
 
     /**
-     * Adds an a collidable entity to the game. Works in place of addEntity.
+     * Adds an a collidable entity to the game.
      * @param entity
      */
     addCollidableEntity(entity){
-        this.addEntity(entity)
         entity.setCollidable()
         this.game.sceneManager.addCollidableEntity(entity)
     }
@@ -53,6 +53,10 @@ export default class Scene {
      */
     removeEntity(index) {
         this.entities.splice(index, 1)
+    }
+
+    removeEntityByRef(entity){
+        this.removeEntity(this.entities.indexOf(entity))
     }
 
     /**
