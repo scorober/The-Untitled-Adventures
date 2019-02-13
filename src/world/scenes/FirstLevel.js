@@ -15,6 +15,7 @@ import MarriottMovementComponent from '../../entities/components/MarriottMovemen
 import PlayerInputComponent from '../../entities/components/PlayerInputComponent.js'
 import AnimationComponent from '../../entities/components/AnimationComponent.js'
 import SpawnerBehaviorComponent from '../../entities/components/SpawnerBehaviorComponent.js'
+import SpawnerDefaultData from '../../entities/effects/SpawnerDefaultData.js';
 
 
 
@@ -101,6 +102,7 @@ export default class FirstLevel extends Scene {
 
         for (const mapSpawner of map.spawners) {
             const spawner = new Entity(game, mapSpawner.pos)
+            spawner.addComponent(new AnimationComponent(spawner, SpawnerDefaultData.AnimationConfig))
             spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, SPAWNERS.Mage, mapSpawner.r, 8))
             this.addEntity(spawner)
         }

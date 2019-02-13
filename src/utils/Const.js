@@ -10,6 +10,7 @@ export const ASSET_PATHS = {
     Background: './assets/img/background.jpg',
     Effect32: './assets/img/effects_y32.png',
     TitleAnimation: './assets/img/animated_title_bg.png',
+    Spawner: './assets/img/vending.png',
 
     Swordman_RunAttack: './assets/img/sprites/swordman/run_slashing.png',
     Swordman_Hurt: './assets/img/sprites/swordman/hurt.png',
@@ -96,6 +97,10 @@ export const ANIMATIONS = {
     PowerupWest: Symbol(),
     PowerupEast: Symbol(),
 
+    /** Spawner specific */
+    Crashed: Symbol(),
+    Static: Symbol(),
+
     /** Spell/effect specific animations. */
     Fire: Symbol(),
     Projectile: Symbol(),
@@ -128,7 +133,10 @@ export const ANIMATION_RATES = {
     /** Effect specific rates */
     Boost: Symbol(),
     Projectile: Symbol(),
-    Impact: Symbol()
+    Impact: Symbol(),
+
+    /** Spawner specific rate */
+    Console: Symbol()
 }
 
 export const DIRECTIONS = {

@@ -21,6 +21,7 @@ assetManager.queueDownload(ASSET_PATHS.ArcherEffects)
 assetManager.queueDownload(ASSET_PATHS.MageEffects)
 assetManager.queueDownload(ASSET_PATHS.Lightning)
 assetManager.queueDownload(ASSET_PATHS.Freeze)
+assetManager.queueDownload(ASSET_PATHS.Spawner)
 
 
 assetManager.downloadBulk(Object.values(ASSET_PATHS), function () {
