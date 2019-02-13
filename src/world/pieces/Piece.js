@@ -152,6 +152,7 @@ export default class Piece {
         this.exits.push([exit[0], exit[1], room])
     }
 
+    // eslint-disable-next-line complexity
     print() {
         for (let y = 0; y < this.size[1]; y++) {
             let row = ''

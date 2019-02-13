@@ -191,4 +191,8 @@ export default class MovementComponent extends Component {
                 return { x: entityTile.x + 1, y: entityTile.y }
         }
     }
+
+    setSpeed(speed) {
+        this.speed = speed
+    }
 }

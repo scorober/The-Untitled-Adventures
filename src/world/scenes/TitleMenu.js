@@ -120,7 +120,7 @@ class BaseLevel {
     //Default update method
     update(){
         //tpm debug hack
-        var oldtime = this.manager.timeElapsed
+        const oldtime = this.manager.timeElapsed
         this.manager.timeElapsed = 100
         if(this.manager.timeElapsed > 4.5 ) {
             const key = this.manager.checkKeys()
@@ -205,6 +205,7 @@ class StartMenu extends BaseLevel {
 
     }
     enter(params){
+        params
 
     }
 

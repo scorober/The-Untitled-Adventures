@@ -1,6 +1,7 @@
 import Room from './Room.js'
 
 export default class Corridor extends Room {
+    // eslint-disable-next-line complexity
     constructor(options) {
         options = Object.assign({}, {
             length: 2,

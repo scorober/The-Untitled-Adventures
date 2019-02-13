@@ -103,9 +103,14 @@ export default class GameEngine {
         this.camera = camera
     }
 
+    screenToWorld(pos) {
+        return {
+            x: pos.x + this.camera.xView,
+            y: pos.y + this.camera.yView
+        }
+    }
     getCurrentScene(){
         return this.sceneManager.currentScene
     }
-
 
 }

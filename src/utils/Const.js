@@ -1,6 +1,6 @@
 
 export const ASSET_PATHS = {
-    MikesChar: './assets/img/goldenknight.png',
+    MikesChar: './assets/img/scotts-char.png',
     Mage: './assets/img/mage.png',
     Archer: './assets/img/archer.png',
     Robot: './assets/img/robot-full.png',
@@ -10,25 +10,14 @@ export const ASSET_PATHS = {
     Background: './assets/img/background.jpg',
     Effect32: './assets/img/effects_y32.png',
     TitleAnimation: './assets/img/animated_title_bg.png',
-
-    Swordman_RunAttack: './assets/img/sprites/swordman/run_slashing.png',
-    Swordman_Hurt: './assets/img/sprites/swordman/hurt.png',
-    Swordman_Slide:'./assets/img/sprites/swordman/sliding.png',
-
-    ArcherPlayer_RunAttack: './assets/img/sprites/archer/run_shooting.png',
-    ArcherPlayer_Hurt:'./assets/img/sprites/archer/hurt.png',
-    ArcherPlayer_Slide:'./assets/img/sprites/archer/sliding.png',
-
-    MagePlayer_RunAttack: './assets/img/sprites/mage/run_attacking.png',
-    MagePlayer_Hurt:'./assets/img/sprites/mage/hurt.png',
-    MagePlayer_Slide:'./assets/img/sprites/mage/sliding.png',
-
     ScottsChar: './assets/img/scotts-char.png',
     Fireball: './assets/img/fireball.png',
     Skeleton: './assets/img/skeleton_base.png',
-    SwordmanPlayer: './assets/img/sprites/swordman/run_slashing.png',
-    ArcherPlayer: './assets/img/sprites/archer/run_shooting.png',
-    MagePlayer:'./assets/img/sprites/mage/run_attacking.png'
+    MageEffects: './assets/img/mageEffects.png',
+    MapEffects: './assets/img/mapEffects.png',
+    ArcherEffects: './assets/img/archerEffects.png',
+    Lightning: './assets/img/lightning.png',
+    Freeze: './assets/img/freeze.png',
 }
 
 export const STATES = {
@@ -41,11 +30,6 @@ export const STATES = {
     RemoveFromWorld: Symbol(),
     Aggressive: Symbol(),
     Cooling: Symbol(),
-    Active: Symbol(),
-    Stage1: Symbol(),
-    Stage2: Symbol()
-
-
 }
 
 export const ANIMATIONS = {
@@ -100,7 +84,11 @@ export const ANIMATIONS = {
     Fire: Symbol(),
     Projectile: Symbol(),
     Impact: Symbol(),
-    Boost: Symbol()
+    Boost: Symbol(),
+    Initial: Symbol(),
+    Effect0: Symbol(),
+    Effect1: Symbol(),
+    Effect2: Symbol()
 }
 
 export const ANIMATION_RATES = {
@@ -118,9 +106,13 @@ export const ANIMATION_RATES = {
     /** Marriott-specific rates */
     Sit: Symbol(),
 
-    /** Mob-specific rates */
-    Impact: Symbol(),
-    Powerup: Symbol()
+    /** Mage-specific rate */
+    Powerup: Symbol(),
+
+    /** Effect specific rates */
+    Boost: Symbol(),
+    Projectile: Symbol(),
+    Impact: Symbol()
 }
 
 export const DIRECTIONS = {
