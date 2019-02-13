@@ -16,7 +16,7 @@ export default class ProjectileBehavior extends Component {
      */
     constructor(entity, target, initial) {
         super(entity)
-        this.v = new Vector(entity.x, entity.y)
+        this.v = Vector.vectorFromEntity(entity)
         this.target = new Vector(target.x, target.y)
         const t = new Vector(target.x, target.y)
         this.angle = Vector.getAngle(this.v, this.target) //TODO flip arrow sprite
@@ -34,7 +34,7 @@ export default class ProjectileBehavior extends Component {
      * Moves projectile, if target is reached switches to impact anim and does damage.
      */
     update() {
-        this.v = new Vector(this.entity.x, this.entity.y)
+        this.v = Vector.vectorFromEntity(this.entity)
         if (this.v.distance(this.target) < 50) {
             const cb = () => {
                 this.impact()

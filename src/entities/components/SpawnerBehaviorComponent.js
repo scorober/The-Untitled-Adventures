@@ -16,7 +16,7 @@ export default class SpawnComponentBehavior extends Component {
      */
     constructor(entity, scene, spawnConfig, radius, difficulty) {
         super(entity)
-        this.v = new Vector(this.entity.x, this.entity.y)
+        this.v = Vector.vectorFromEntity(entity)
         this.scene = scene
         this.cfg = spawnConfig
         this.mobs = []

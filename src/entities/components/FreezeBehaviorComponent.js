@@ -15,7 +15,7 @@ export default class FreezeBehaviorComponent extends Component {
     constructor(entity) {
         super(entity)
         //Entity location defined when created
-        this.v = new Vector(entity.x, entity.y)
+        this.v = Vector.vectorFromEntity(entity)
         this.count = 0
         this.delay = 200
         this.rng = new Random()
