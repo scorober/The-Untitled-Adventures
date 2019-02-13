@@ -1,7 +1,8 @@
 import Component from './Component.js'
 import Vector from '../../utils/Vector.js'
-import {STATES} from '../../utils/Const.js'
+import {STATES, ANIMATIONS} from '../../utils/Const.js'
 import AttributeComponent from './AttributeComponent.js'
+import AnimationComponent from './AnimationComponent.js'
 
 
 export default class CombatComponent extends Component {
@@ -26,20 +27,38 @@ export default class CombatComponent extends Component {
                 const v1 = Vector.vectorFromEntity(this.entity)
                 const v2 = Vector.vectorFromEntity(this.attackTarget)
                 const dist = v1.distance(v2)
-                if (dist < this.attributeComponent.RANGE) {
-                    this.entity.states[STATES.Attacking] = true
-                    const turnDamage = this.attributeComponent.calculatePhysicalDamage()
 
+                if (dist < this.attributeComponent.RANGE) {
+
+                    this.setAttacking()
+
+                    const turnDamage = this.attributeComponent.calculatePhysicalDamage()
                     const isDead = this.attackTarget.getComponent(AttributeComponent).applyPhysicalDamage(turnDamage)
 
                     if(isDead){
                         this.removeTarget()
                     }
+
+                } else {
+                    this.unsetAttacking()
                 }
                 this.attackTimer = this.attributeComponent.ATTACKRATE
             }
         }
     }
+
+    setAttacking(){
+        this.entity.states[STATES.Attacking] = true
+
+        //SET THE ANIMATION HERE
+    }
+
+    unsetAttacking(){
+        this.entity.states[STATES.Attacking] = false
+
+        //SET REGULAR ANIMATION HERE
+    }
+
 
     /**
      * Sets a new attack target
@@ -57,5 +76,6 @@ export default class CombatComponent extends Component {
     removeTarget(){
         this.attackTarget = undefined
         this.hasTarget = false
+        this.entity.states[STATES.Attacking] = false
     }
 }
