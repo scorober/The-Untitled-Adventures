@@ -2,6 +2,7 @@ import { STATES } from '../utils/Const.js'
 import { create_UUID } from '../utils/Random.js'
 import { HitCircle } from '../utils/Collision.js'
 import Vector from '../utils/Vector.js'
+import Map from '../world/Map.js'
 
 export default class Entity {
     constructor(game, pos) {
@@ -26,7 +27,8 @@ export default class Entity {
             component.update()
         })
         if (this.states[STATES.Collidable]) {
-            this.hitbox.update(this.x + this.hitOffsetX, this.y + this.hitOffsetY)
+            const pos = Map.worldToTilePosition(this, this.game.getTileSize())
+            this.hitbox.update(pos.x, pos.y)
         }
     }
 
