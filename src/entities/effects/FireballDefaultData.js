@@ -10,12 +10,13 @@ const fireHeight = 28
 const projWidth = 21
 const projHeight = 57
 const boostSize = 96
+const yOffset = 20
 
 export default {
     Attributes: {
         Damage: 10,
         Radius: 15,
-        Speed: 800
+        Speed: 400
     },
 
     AnimationConfig: {
@@ -23,16 +24,18 @@ export default {
         Spritesheet: ASSET_PATHS.Fireball,
         InitialAnimation: ANIMS.Initial,
         AnimationRates: {
-            [AR.Projectile]: .15,
-            [AR.Boost]: .15
+            [AR.Projectile]: .05,
+            [AR.Boost]: .05,
+            [AR.Impact]: 0.2
         },
         AnimationData: {
             [ANIMS.Impact]: {
                 frames: 12,
-                rate: AR.Boost,
+                rate: AR.Impact,
                 options: {
                     width: boostSize,
                     height: boostSize,
+                    yOffset: yOffset
                 }
             },
             [ANIMS.Fire]: {
@@ -41,6 +44,7 @@ export default {
                 options: {
                     width: fireWidth,
                     height: fireHeight,
+                    yOffset: yOffset
                 }
             },
             [ANIMS.Initial]: {
@@ -49,6 +53,7 @@ export default {
                 options: {
                     width: projWidth,
                     height: projHeight,
+                    yOffset: yOffset
                 }
             },
             [ANIMS.Projectile]: {
@@ -57,6 +62,7 @@ export default {
                 options: {
                     width: projWidth,
                     height: projHeight,
+                    yOffset: yOffset
                 }
             }
         }

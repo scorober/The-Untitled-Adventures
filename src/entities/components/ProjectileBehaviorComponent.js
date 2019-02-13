@@ -14,19 +14,18 @@ export default class ProjectileBehavior extends Component {
      * @param {Vector} target  Target of the projectile
      * @param {boolean} initial  True if this projectile has an initial animation
      */
-    constructor(entity, target, initial) {
+    constructor(entity, target) {
         super(entity)
         this.v = Vector.vectorFromEntity(entity)
         this.target = new Vector(target.x, target.y)
         const t = new Vector(target.x, target.y)
         this.angle = Vector.getAngle(this.v, this.target) //TODO flip arrow sprite
-        this.dir = t.subtract(this.v)
-        this.dir.normalize()
+        this.dir = t.subtract(this.v).normalized()
         this.animComp = this.entity.getComponent(AnimationComponent)
         this.animComp.setAngle(this.angle)
-        this.initial = false
-
-        this.checkInitialState(initial)
+        this.animComp.setAnimation(ANIMS.Initial, () => {
+            this.animComp.setAnimation(ANIMS.Projectile)
+        })
     }
 
     /**
@@ -35,7 +34,7 @@ export default class ProjectileBehavior extends Component {
      */
     update() {
         this.v = Vector.vectorFromEntity(this.entity)
-        if (this.v.distance(this.target) < 50) {
+        if (this.v.distance(this.target) < 20) {
             const cb = () => {
                 this.impact()
                 this.entity.removeFromWorld = true
@@ -53,18 +52,5 @@ export default class ProjectileBehavior extends Component {
      */
     impact() {
 
-    }
-
-    checkInitialState(initial) {
-        if (initial === true) {
-            this.initial = true
-            const cb = () => {
-                this.initial = false
-                this.animComp.setAnimation(ANIMS.Projectile, null)
-            }
-            this.animComp.setAnimation(ANIMS.Initial, cb)
-        } else {
-            this.animComp.setAnimation(ANIMS.Projectile, null)
-        }
     }
 }
