@@ -14,7 +14,7 @@ export default {
     AnimationConfig: {
         Width: 64,
         Height: 64,
-        Scale: 1,
+        Scale: 2,
         Spritesheet: ASSET_PATHS.Spawner,
         InitialAnimation: ANIMS.Crashed,
         AnimationRates: {
