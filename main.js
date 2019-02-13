@@ -23,7 +23,7 @@ assetManager.queueDownload(ASSET_PATHS.Lightning)
 assetManager.queueDownload(ASSET_PATHS.Freeze)
 
 
-assetManager.downloadAll(function () {
+assetManager.downloadBulk(Object.values(ASSET_PATHS), function () {
     const canvas = document.getElementById('gameWorld')
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight

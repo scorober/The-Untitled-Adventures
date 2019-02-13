@@ -10,6 +10,19 @@ export const ASSET_PATHS = {
     Background: './assets/img/background.jpg',
     Effect32: './assets/img/effects_y32.png',
     TitleAnimation: './assets/img/animated_title_bg.png',
+
+    Swordman_RunAttack: './assets/img/sprites/swordman/run_slashing.png',
+    Swordman_Hurt: './assets/img/sprites/swordman/hurt.png',
+    Swordman_Slide:'./assets/img/sprites/swordman/sliding.png',
+
+    ArcherPlayer_RunAttack: './assets/img/sprites/archer/run_shooting.png',
+    ArcherPlayer_Hurt:'./assets/img/sprites/archer/hurt.png',
+    ArcherPlayer_Slide:'./assets/img/sprites/archer/sliding.png',
+
+    MagePlayer_RunAttack: './assets/img/sprites/mage/run_attacking.png',
+    MagePlayer_Hurt:'./assets/img/sprites/mage/hurt.png',
+    MagePlayer_Slide:'./assets/img/sprites/mage/sliding.png',
+
     ScottsChar: './assets/img/scotts-char.png',
     Fireball: './assets/img/fireball.png',
     Skeleton: './assets/img/skeleton_base.png',
@@ -17,7 +30,10 @@ export const ASSET_PATHS = {
     MapEffects: './assets/img/mapEffects.png',
     ArcherEffects: './assets/img/archerEffects.png',
     Lightning: './assets/img/lightning.png',
-    Freeze: './assets/img/freeze.png'
+    Freeze: './assets/img/freeze.png',
+    SwordmanPlayer: './assets/img/sprites/swordman/run_slashing.png',
+    ArcherPlayer: './assets/img/sprites/archer/run_shooting.png',
+    MagePlayer:'./assets/img/sprites/mage/run_attacking.png'
 }
 
 export const STATES = {

@@ -17,7 +17,7 @@ export default class SceneManager {
         const title = new TitleMenuScene(game)
         this.addScene(firstlevel.name, firstlevel)
         this.addScene(title.name, title)
-        // this.currentScene = title //switch this.currentScene to disable title screen on load
+        //this.currentScene = title //switch this.currentScene to disable title screen on load
         this.currentScene = firstlevel
     }
 
@@ -61,7 +61,7 @@ export default class SceneManager {
     change(name){
         this.currentScene.exit()  //exit old scene
         this.currentScene = this.getScene(name)
-        this.currentScene.enter() //enter new scene
+        this.currentScene.enter(params) //enter new scene
     }
 
     /**

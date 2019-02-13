@@ -12,6 +12,19 @@ export default class AssetManager {
         this.downloadQueue.push(path)
     }
 
+    queDownloadBulk(paths){
+        for(let i = 0; i < paths.length; i++) {
+            this.downloadQueue.push(paths[i])
+        }
+    }
+
+    downloadBulk(paths, callback){
+        for(let i = 0; i < paths.length; i++) {
+            this.downloadQueue.push(paths[i])
+        }
+        this.downloadAll(callback)
+    }
+
     isDone() {
         return this.downloadQueue.length === this.successCount + this.errorCount
     }

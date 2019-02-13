@@ -17,6 +17,7 @@ export default class Scene {
      * Currently just updates a timer that tracks how long the current scene is active.
      */
     update() {
+
         this.timeElapsed += this.game.clockTick
     }
     draw() { }
