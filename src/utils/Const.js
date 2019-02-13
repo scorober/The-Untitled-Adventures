@@ -43,8 +43,9 @@ export const STATES = {
     Cooling: Symbol(),
     Active: Symbol(),
     Stage1: Symbol(),
-    Stage2: Symbol()
-
+    Stage2: Symbol(),
+    Attacking : Symbol(),
+    Combat_Entity : Symbol(),
 
 }
 
@@ -93,6 +94,7 @@ export const ANIMATIONS = {
     StandUpEast: Symbol(),
 
     /** Mage-specific animations */
+
     PowerupWest: Symbol(),
     PowerupEast: Symbol(),
 

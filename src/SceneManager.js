@@ -12,13 +12,21 @@ export default class SceneManager {
         this.game = game
         this.scenes = []
         //Step 1, define scenes
+        this.collisionLayer = null
+
+
+        //this.currentScene = title //switch this.currentScene to disable title screen on load
+        this.currentScene = null
+    }
+
+    initScenes(){
         this.collisionLayer = new CollisionLayer()
-        const firstlevel = new FirstLevel(game)
-        const title = new TitleMenuScene(game)
+        const firstlevel = new FirstLevel(this.game)
+        const title = new TitleMenuScene(this.game)
         this.addScene(firstlevel.name, firstlevel)
         this.addScene(title.name, title)
-        //this.currentScene = title //switch this.currentScene to disable title screen on load
         this.currentScene = firstlevel
+        //callback()
     }
 
     /**
@@ -61,7 +69,7 @@ export default class SceneManager {
     change(name){
         this.currentScene.exit()  //exit old scene
         this.currentScene = this.getScene(name)
-        this.currentScene.enter(params) //enter new scene
+        this.currentScene.enter() //enter new scene
     }
 
     /**

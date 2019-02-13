@@ -47,6 +47,7 @@ export default class GameEngine {
     }
 
     start() {
+        this.sceneManager.initScenes()
         this.gameLoop()
     }
 
@@ -107,5 +108,9 @@ export default class GameEngine {
         return this.sceneManager.currentScene
     }
 
+
+    getEntityByXY(x, y){
+        return this.sceneManager.collisionLayer.getEntityByXY(x,y)
+    }
 
 }
