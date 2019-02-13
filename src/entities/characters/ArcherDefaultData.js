@@ -27,7 +27,7 @@ export default {
         HP: 30,
         Mana: 10,
         Atk: 10,
-        Def: 15,
+        Def: 10,
         Mdef: 3,
         Speed: 50
     },

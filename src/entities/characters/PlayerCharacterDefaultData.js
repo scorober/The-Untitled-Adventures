@@ -16,12 +16,15 @@ const oversizedYOffset = 64
 export default {
     // Attributes Component Configuration
     Attributes: {
-        HP: 30,
+        HP: 3000,
         Mana: 10,
         Atk: 10,
-        Def: 15,
+        Def: 150,
         Mdef: 3,
-        Speed: 180
+        Speed: 180,
+        range : 50,
+        strength : 8,
+        attackRate : 0.8, //clockticks ~ 0.5, so about once every 2 clockticks will attack
     },
     // Animation Component Configuration
     AnimationConfig: {
