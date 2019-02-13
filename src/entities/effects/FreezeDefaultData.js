@@ -4,7 +4,7 @@ import {
     ASSET_PATHS
 } from '../../utils/Const.js'
 
-
+const yOffset = 60
 
 export default {
     Attributes: {
@@ -24,14 +24,18 @@ export default {
         AnimationData: {
             [ANIMS.Effect0]: {
                 frames: 16,
-                rate: AR.Projectile
+                rate: AR.Projectile,
+                options: {
+                    yOffset: yOffset
+                }
             },
             [ANIMS.Effect1]: {
                 frames: 9,
                 rate: AR.Projectile,
                 options: {
                     width: 33,
-                    height: 16
+                    height: 16,
+                    yOffset: yOffset
                 }
             },
             [ANIMS.Effect2]: {
@@ -39,7 +43,8 @@ export default {
                 rate: AR.Impact,
                 options: {
                     width: 50,
-                    height: 25
+                    height: 25,
+                    yOffset: yOffset
                 }
             },
             [ANIMS.Impact]: {
@@ -48,6 +53,7 @@ export default {
                 options: {
                     width: 64,
                     height: 64,
+                    yOffset: yOffset
                 }
             }
         }

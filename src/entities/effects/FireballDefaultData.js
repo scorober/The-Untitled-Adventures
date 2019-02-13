@@ -18,14 +18,13 @@ export default {
         Radius: 15,
         Speed: 400
     },
-
     AnimationConfig: {
         Scale: 1.3,
         Spritesheet: ASSET_PATHS.Fireball,
         InitialAnimation: ANIMS.Initial,
         AnimationRates: {
+            [AR.Initial]: 0.1,
             [AR.Projectile]: .05,
-            [AR.Boost]: .05,
             [AR.Impact]: 0.2
         },
         AnimationData: {
