@@ -1,6 +1,6 @@
 import Component from './Component.js'
 import AnimationFactory from '../../AnimationFactory.js'
-import { DIRECTIONS, ANIMATIONS as ANIMS } from '../../utils/Const.js'
+import { DIRECTIONS } from '../../utils/Const.js'
 
 export default class AnimationComponent extends Component {
     /**

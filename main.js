@@ -20,6 +20,7 @@ assetManager.queueDownload(ASSET_PATHS.Skeleton)
 assetManager.queueDownload(ASSET_PATHS.ArcherEffects)
 assetManager.queueDownload(ASSET_PATHS.MageEffects)
 assetManager.queueDownload(ASSET_PATHS.Lightning)
+assetManager.queueDownload(ASSET_PATHS.Freeze)
 
 
 assetManager.downloadAll(function () {

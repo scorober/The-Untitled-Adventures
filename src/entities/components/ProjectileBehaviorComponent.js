@@ -1,8 +1,7 @@
-import Entity from '../Entity.js'
 import Component from './Component.js'
-import Vector from '../../utils/Vector.js';
-import MovementComponent from './MovementComponent.js';
-import AnimationComponent from './AnimationComponent.js';
+import Vector from '../../utils/Vector.js'
+import MovementComponent from './MovementComponent.js'
+import AnimationComponent from './AnimationComponent.js'
 import { ANIMATIONS as ANIMS} from '../../utils/Const.js'
 
 export default class ProjectileBehavior extends Component {
@@ -53,7 +52,7 @@ export default class ProjectileBehavior extends Component {
      * Call on an attack or Attribute component from the caster to do damage.
      */
     impact() {
-        console.log('boom')
+
     }
 
     checkInitialState(initial) {

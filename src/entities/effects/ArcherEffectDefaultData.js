@@ -20,20 +20,20 @@ export default {
             [AR.Impact]: .13
         },
         AnimationData: {
-            [ANIMS.Projectile]: {
-                frames: 7,
-                rate: AR.Projectile,
-                options: {
-                    width: 32,
-                    height: 64,
-                }
-            },
             [ANIMS.Impact]: {
                 frames: 12,
                 rate: AR.Impact,
                 options: {
                     width: 192,
                     height: 192,
+                }
+            },
+            [ANIMS.Projectile]: {
+                frames: 7,
+                rate: AR.Projectile,
+                options: {
+                    width: 32,
+                    height: 64,
                 }
             }
         }

@@ -7,7 +7,6 @@ import {
 
 const fireWidth = 22
 const fireHeight = 28
-const startWidth = 27
 const projWidth = 21
 const projHeight = 57
 const boostSize = 96
@@ -15,7 +14,7 @@ const boostSize = 96
 export default {
     Attributes: {
         Damage: 10,
-        // Radius: 15,
+        Radius: 15,
         Speed: 800
     },
 
@@ -32,32 +31,32 @@ export default {
                 frames: 12,
                 rate: AR.Boost,
                 options: {
-                    width: 96,
-                    height: 96,
+                    width: boostSize,
+                    height: boostSize,
                 }
             },
             [ANIMS.Fire]: {
                 frames: 11,
                 rate: AR.Boost,
                 options: {
-                    width: 22,
-                    height: 28,
+                    width: fireWidth,
+                    height: fireHeight,
                 }
             },
             [ANIMS.Initial]: {
                 frames: 4,
                 rate: AR.Projectile,
                 options: {
-                    width: 21,
-                    height: 57,
+                    width: projWidth,
+                    height: projHeight,
                 }
             },
             [ANIMS.Projectile]: {
                 frames: 7,
                 rate: AR.Projectile,
                 options: {
-                    width: 21,
-                    height: 57,
+                    width: projWidth,
+                    height: projHeight,
                 }
             }
         }

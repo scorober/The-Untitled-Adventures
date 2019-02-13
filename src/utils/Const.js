@@ -16,7 +16,8 @@ export const ASSET_PATHS = {
     MageEffects: './assets/img/mageEffects.png',
     MapEffects: './assets/img/mapEffects.png',
     ArcherEffects: './assets/img/archerEffects.png',
-    Lightning: './assets/img/lightning.png'
+    Lightning: './assets/img/lightning.png',
+    Freeze: './assets/img/freeze.png'
 }
 
 export const STATES = {
