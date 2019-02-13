@@ -21,8 +21,7 @@ export default class LightningBehaviorComponent extends Component {
         this.target = new Vector(target.x, target.y)
         const t = new Vector(target.x, target.y)
         this.angle = Vector.getAngle(this.v, this.target) //TODO flip arrow sprite
-        this.dir = t.subtract(this.v)
-        this.dir.normalize()
+        this.dir = t.subtract(this.v).normalized()
         this.count = 0
         this.delay = 200
         this.rng = new Random()
@@ -31,7 +30,7 @@ export default class LightningBehaviorComponent extends Component {
 
     update() {
         this.v = Vector.vectorFromEntity(this.entity)
-        if (this.v.distance(this.target) < 50) {
+        if (this.v.distance(this.target) < 20) {
             const cb = () => {
                 this.impact()
                 this.entity.removeFromWorld = true

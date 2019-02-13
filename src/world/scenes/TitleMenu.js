@@ -205,6 +205,7 @@ class StartMenu extends BaseLevel {
 
     }
     enter(params){
+        params
 
     }
 

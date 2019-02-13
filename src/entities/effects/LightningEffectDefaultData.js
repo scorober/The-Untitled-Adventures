@@ -4,12 +4,12 @@ import {
     ASSET_PATHS
 } from '../../utils/Const.js'
 
-
+const yOffset = 20
 
 export default {
     Attributes: {
         Damage: 10,
-        Speed: 600
+        Speed: 380
     },
     AnimationConfig: {
         Scale: 1,
@@ -25,7 +25,8 @@ export default {
                 rate: AR.Projectile,
                 options: {
                     width: 64,
-                    height: 64
+                    height: 64,
+                    yOffset: yOffset
                 }
             },
             [ANIMS.Impact]: {
@@ -34,6 +35,7 @@ export default {
                 options: {
                     width: 96,
                     height: 96,
+                    yOffset: yOffset
                 }
             },
             [ANIMS.Projectile]: {
@@ -42,6 +44,7 @@ export default {
                 options: {
                     width: 48,
                     height: 48,
+                    yOffset: yOffset
                 }
             }
         }

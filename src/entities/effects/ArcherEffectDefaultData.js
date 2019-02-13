@@ -4,12 +4,12 @@ import {
     ASSET_PATHS
 } from '../../utils/Const.js'
 
-
+const yOffset = 20
 
 export default {
     Attributes: {
         Damage: 10,
-        Speed: 1200
+        Speed: 800
     },
     AnimationConfig: {
         Scale: .75,
@@ -26,6 +26,7 @@ export default {
                 options: {
                     width: 192,
                     height: 192,
+                    yOffset: yOffset
                 }
             },
             [ANIMS.Projectile]: {
@@ -34,6 +35,7 @@ export default {
                 options: {
                     width: 32,
                     height: 64,
+                    yOffset: yOffset
                 }
             }
         }
