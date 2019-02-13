@@ -11,7 +11,7 @@ export default class Vector {
 
     static vectorFromEntity(e){
 
-        return new Vector(e.x, e.y)
+        return new Vector(e.x, e.y) || new Vector(e.hitbox.x, e.hitbox.y)
     }
 
     addX(vector){

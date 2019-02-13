@@ -25,6 +25,18 @@ export class CollisionLayer {
         )
     }
 
+    getEntityByXY(x,y){
+        const dest = new Vector(x,y)
+        for(let i = 0; i < this.collidables.length; i++){
+            var e = this.collidables[i]
+            var dist = dest.distance(e.hitbox.location)
+            console.log('distance between click and entity  ',e.UUID,':  ', dist)
+        }
+        return this.collidables.filter( e =>
+            dest.distance(e.hitbox.location) < 1.1
+        )
+    }
+
     /**
      * Given an entity and a destination, this func will return true or false if there are any collisions.
      * @param entity the entity to check collision for
