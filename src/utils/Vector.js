@@ -13,6 +13,10 @@ export default class Vector {
         return new Vector(e.x, e.y)
     }
 
+    static vectorFromPos(pos) {
+        return new Vector(pos[0], pos[1])
+    }
+
     addX(vector){
         this.x += vector.x
         return this

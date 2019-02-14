@@ -1,5 +1,6 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
+import Vector from '../utils/Vector.js'
 import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM } from '../utils/Const.js'
 
 export default class Map extends Entity {
@@ -36,10 +37,18 @@ export default class Map extends Entity {
         const rooms = this.dungeon.room_count
         const size = [this.dungeon.size[0] + rooms, this.dungeon.size[1] + rooms]
 
-        this.map = new Array2D(size, 0) //0 for empty tile
-        this.objectMap = new Array2D(this.dungeon.size, 0)
+        /* 
+         * Map0: Base layer: floors, empty tiles and walls.
+         * Map1: Object layer 1: Doors, most objects
+         * Map2: Top object layer: Door ceilings
+         */
+        this.map0 = new Array2D(size, 0)
+        this.map1 = new Array2D(size, 0)
+        this.map2 = new Array2D(size, 0)
+
         const dungeon = this.dungeon
         for (const piece of dungeon.children) {
+            console.log(piece.tag)
             this.buildWalls(piece)
             this.buildExits(piece)
             this.buildRoom(piece)
@@ -56,7 +65,7 @@ export default class Map extends Entity {
         }
     }
 
-    buildWalls(piece) {
+    generateCorners(piece) {
         const pos = piece.position
         const size = piece.size
         const w = size[0]
@@ -64,34 +73,50 @@ export default class Map extends Entity {
         const x = pos[0]
         const y = pos[1]
         const outerPos = [x + 1, y + 1]
-        const innerPos = [x + 2, y + 2]
         const innerSize = [w - 4, h - 4]
 
-        //Set floor
-        this.map.set_square(innerPos, innerSize, 4, true)
+        return {
+            posNW: outerPos,
+            posNE: [outerPos[0] + innerSize[0], outerPos[1]],
+            posSW: [outerPos[0], outerPos[1] + innerSize[1]],
+            posSE: [outerPos[0] + innerSize[0], outerPos[1] + innerSize[1]],
+            outerPos: [x + 1, y + 1],
+            innerPos: [x + 2, y + 2],
+            innerSize: [w - 4, h - 4]
+        }
 
-        const posNW = outerPos
-        const posNE = [outerPos[0] + innerSize[0], outerPos[1]]
-        const posSW = [outerPos[0], outerPos[1] + innerSize[1]]
-        const posSE = [outerPos[0] + innerSize[0], outerPos[1] + innerSize[1]]
+    }
+
+    /**
+     * Builds the default floor and walls on map base layer.
+     * @param {Piece} piece Current piece 
+     */
+    buildWalls(piece) {
+
+        //Corners and sizes
+        const p = this.generateCorners(piece)
+
+        //Set floor
+        this.map0.set_square(p.innerPos, p.innerSize, 4, true)
 
         //North
-        this.map.set_horizontal_line(this.alterPos(outerPos, 1, 0), innerSize[0] - 1, MI.WallNorth[0][0])
-        this.map.set_horizontal_line(innerPos, innerSize[0] - 1, MI.WallNorth[1][0])
+        this.map0.set_horizontal_line(this.alterPos(p.outerPos, 1, 0), p.innerSize[0] - 1, MI.WallNorth[0][0])
+        this.map0.set_horizontal_line(p.innerPos, p.innerSize[0] - 1, MI.WallNorth[1][0])
         //East
-        this.map.set_vertical_line(this.alterPos(posNE, 1, 2), innerSize[1] - 3, MI.WallEast[1])
-        this.map.set_vertical_line(this.alterPos(posNE, 0, 2), innerSize[1] - 3, MI.WallEast[0])
+        this.map0.set_vertical_line(this.alterPos(p.posNE, 1, 2), p.innerSize[1] - 3, MI.WallEast[1])
+        this.map0.set_vertical_line(this.alterPos(p.posNE, 0, 2), p.innerSize[1] - 3, MI.WallEast[0])
         //South
-        this.map.set_horizontal_line(this.alterPos(posSW, 2, 0), innerSize[0] - 3, MI.WallSouth[0][0])
-        this.map.set_horizontal_line(this.alterPos(posSW, 2, 1), innerSize[0] - 3, MI.WallSouth[1][0])
+        this.map0.set_horizontal_line(this.alterPos(p.posSW, 2, 0), p.innerSize[0] - 3, MI.WallSouth[0][0])
+        this.map0.set_horizontal_line(this.alterPos(p.posSW, 2, 1), p.innerSize[0] - 3, MI.WallSouth[1][0])
         //West
-        this.map.set_vertical_line(this.alterPos(posNW, 0, 2), innerSize[1] - 3, MI.WallWest[0])
-        this.map.set_vertical_line(this.alterPos(innerPos, 0, 1), innerSize[1] - 3, MI.WallWest[1])
+        this.map0.set_vertical_line(this.alterPos(p.posNW, 0, 2), p.innerSize[1] - 3, MI.WallWest[0])
+        this.map0.set_vertical_line(this.alterPos(p.innerPos, 0, 1), p.innerSize[1] - 3, MI.WallWest[1])
 
-        this.createObject(this.map, posNE, MI.ICornerNE)
-        this.createObject(this.map, posNW, MI.ICornerNW)
-        this.createObject(this.map, posSW, MI.ICornerSW)
-        this.createObject(this.map, posSE, MI.ICornerSE)
+        //Add corners
+        this.createObject(this.map0, p.posNE, MI.ICornerNE)
+        this.createObject(this.map0, p.posNW, MI.ICornerNW)
+        this.createObject(this.map0, p.posSW, MI.ICornerSW)
+        this.createObject(this.map0, p.posSE, MI.ICornerSE)
     }
 
 
@@ -99,10 +124,10 @@ export default class Map extends Entity {
         const center = piece.global_pos(piece.get_center_pos())
         switch (piece.tag) {
             case ROOMS.Initial:
-                this.createObject(this.objectMap, center, MI.ChestClosed)
+                this.createObject(this.map1, center, MI.ChestClosed)
                 break
-            case ROOMS.Spawn:
-                this.createObject(this.objectMap, center, MI.Rug)
+            case ROOMS.Any:
+                this.createObject(this.map1, this.alterPos(center, -1, -1), MI.Rug)
                 this.spawners.push({
                     pos: {
                         x: center[0] * this.tileSize,
@@ -112,10 +137,10 @@ export default class Map extends Entity {
                 })
                 break
             case ROOMS.Treasure:
-                this.createObject(this.objectMap, center, MI.ChestOpen)
+                this.createObject(this.map1, center, MI.ChestOpen)
                 break
             case ROOMS.Exit:
-                this.createObject(this.objectMap, center, MI.StairsN)
+                this.createObject(this.map1, center, MI.StairsN)
                 break
         }
     }
@@ -125,28 +150,34 @@ export default class Map extends Entity {
         for (const exit of piece.exits) {
             //Create the floor between rooms
             const exitPos = piece.global_pos(exit[0])
-            this.map.set(piece.global_pos(exit[0]), 38)
+            this.map0.set(piece.global_pos(exit[0]), 38)
             //Create this exit door
             if (exit[1] === TOP || exit[1] === BOTTOM) {
                 const transPos = this.alterPos(exitPos, 0, -2)
-                this.createObject(this.map, transPos, MI.DoorPathV)
+                this.createObject(this.map0, transPos, MI.DoorPathV)
                 if (exit[1] === TOP) {
                     const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, 1)
-                    this.createObject(this.objectMap, doorPos, MI.Door0)
+                    this.createObject(this.map1, doorPos, MI.Door0)
+                    this.createObject(this.map2, doorPos, MI.Door0Top)
                 } else {
                     const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, -2)
-                    this.createObject(this.objectMap, doorPos, MI.Door180)
+                    this.createObject(this.map1, doorPos, MI.Door180)
+                    this.createObject(this.map2, doorPos, MI.Door180Top)
                 }
             } else {  //East and West
                 const transPos = this.alterPos(exitPos, -2, 0)
-                this.createObject(this.map, transPos, MI.DoorPathH)
+                this.createObject(this.map0, transPos, MI.DoorPathH)
                 if (exit[1] === RIGHT) {
                     const doorPos = this.alterPos(exitPos, 1, -1)
-                    this.createObject(this.objectMap, doorPos, MI.Door90)
+                    this.createObject(this.map0, doorPos, MI.Door90)
+                    this.createObject(this.map1, this.alterPos(doorPos, 1, 0), MI.Lock90)
+                    this.createObject(this.map2, doorPos, MI.Door90Top)
                 }
                 if (exit[1] === LEFT) {
                     const doorPos = this.alterPos(piece.global_pos(exit[0]), -2, -1)
-                    this.createObject(this.objectMap, doorPos, MI.Door270)
+                    this.createObject(this.map1, doorPos, MI.Door270)
+                    this.createObject(this.map2, doorPos, MI.Door270Top)
+
                 }
             }
         }
@@ -158,8 +189,8 @@ export default class Map extends Entity {
 
     getPathfindingArray() {
         const array = []
-        for (let i = 0; i < this.map.rows.length; i++) {
-            array[i] = [...this.map.rows[i]]
+        for (let i = 0; i < this.map0.rows.length; i++) {
+            array[i] = [...this.map0.rows[i]]
         }
         for (let i = 0; i < array.length; i++) {
             for (let j = 0; j < array[0].length; j++) {
@@ -220,10 +251,21 @@ export default class Map extends Entity {
     draw() {
         for (let c = 0; c < this.cols; c++) {
             for (let r = 0; r < this.rows; r++) {
-                const tile = this.map.get([c, r])
-                const objTile = this.objectMap.get([c, r])
+                const tile = this.map0.get([c, r])
+                const objTile = this.map1.get([c, r])
+                // const objTile1 = this.map2.get([c, r])
                 this.drawTile(c, r, tile)
                 this.drawTile(c, r, objTile)
+                // this.drawTile(c, r, objTile1)
+            }
+        }
+    }
+
+    drawTop() {
+        for (let c = 0; c < this.cols; c++) {
+            for (let r = 0; r < this.rows; r++) {
+                const objTile1 = this.map2.get([c, r])
+                this.drawTile(c, r, objTile1)
             }
         }
     }

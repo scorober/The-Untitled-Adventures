@@ -8,6 +8,7 @@ import {
 
 export default {
     Attributes: {
+        Type: 'Spawner'
         //TODO Empty
     },
 

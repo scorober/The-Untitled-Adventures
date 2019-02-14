@@ -129,6 +129,12 @@ export const DIRECTIONS = {
     West: Symbol(),
     South: Symbol(),
     East: Symbol(),
+
+    /** Map specific directions */
+    NorthWest: Symbol(),
+    NorthEast: Symbol(),
+    SouthWest: Symbol(),
+    SouthEast: Symbol(),
 }
 
 export const EFFECTS = {
@@ -254,13 +260,26 @@ export const MAP_ITEMS = {
     ShieldE: [[52]],
     ChestOpen: [[225], [241]],
     ChestClosed: [[247]],
-    Door90: [[132, 133], [148, 149], [148, 149], [164, 165]],
-    Door270: [[134, 135], [150, 151], [150, 151], [166, 167]],
+    Door0: [[129, 0, 0, 131], [145, 146, 146, 147]],
+    Door0Top:[[0, 130, 130, 0], [0, 0, 0, 0]],
+    Door90: [[0, 133], [0, 149], [0, 149], [0, 165]],
+    Door90Top: [[132, 0], [148, 0], [148, 0], [164, 0]],
+    //Remove shadows from door hangs??
+    Door180: [[161, 0, 0, 163], [177, 0, 0, 179]],
+    Door180Top:[[0, 0, 0, 0], [0, 178, 178, 0]],
+    Door270: [[134, 0], [150, 0], [150, 0], [166, 167]],
+    Door270Top: [[0, 135], [0, 151], [0, 151], [0, 0]],
     Door90Lock: [[180], [196], [196], [2]],
     DoorRoofV: [[92], [92], [92], [92]],
+
+    Lock0: [209, 210, 210, 211],
+    Lock90: [[180], [196], [196], [212]],
+    Lock180: [[193, 194, 194, 195]],
+    Lock270: [[181], [196], [196], [213]],
+    
+
+
     DoorPrintV: [[4, 4], [4, 4], [4, 4], [4,4]],
-    Door0: [[129, 130, 130, 131], [145, 146, 146, 147]],
-    Door180: [[161, 162, 162, 163], [177, 178, 178, 179]],
     DoorPrintH: [[4, 4, 4, 4], [4, 4, 4, 4]],
     DoorPathH: [[4, 4, 4, 4, 4], [4, 4, 4, 4, 4]],
     DoorPathV: [[4,4],[4,4],[4,4],[4,4],[4,4]],
@@ -282,6 +301,7 @@ export const ROOMS ={
     Spawn: 'spawn',
     Boss: 'boss',
     Initial: 'initial',
+    Any: 'any'
 
 }
 
