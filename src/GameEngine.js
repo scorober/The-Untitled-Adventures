@@ -65,7 +65,6 @@ export default class GameEngine {
     }
 
     draw() {
-        //console.log('rect cler')
         this.ctx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight)
         this.ctx.save()
         this.sceneManager.draw()
@@ -104,6 +103,12 @@ export default class GameEngine {
         this.camera = camera
     }
 
+    screenToWorld(pos) {
+        return {
+            x: pos.x + this.camera.xView,
+            y: pos.y + this.camera.yView
+        }
+    }
     getCurrentScene(){
         return this.sceneManager.currentScene
     }

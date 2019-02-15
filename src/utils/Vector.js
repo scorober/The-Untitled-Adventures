@@ -6,7 +6,6 @@ export default class Vector {
     constructor(x, y){
         this.x = x
         this.y = y
-        this.magnitude = Math.sqrt(this.lengthSq())
     }
 
     static vectorFromEntity(e){
@@ -118,9 +117,9 @@ export default class Vector {
         return this.x * this.x + this.y * this.y
     }
 
-    normalize() {
-        this.x /= this.magnitude
-        this.y /= this.magnitude
+    normalized() {
+        const magnitude = Math.sqrt(this.lengthSq())
+        return new Vector(this.x / magnitude, this.y / magnitude)
     }
 
     /**

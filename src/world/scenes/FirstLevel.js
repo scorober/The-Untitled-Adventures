@@ -104,7 +104,6 @@ export default class FirstLevel extends Scene {
         //this.addEntity(archer)
         this.addEntity(marriott)
 
-
         for (const mapSpawner of map.spawners) {
             const spawner = new Entity(game, mapSpawner.pos)
             spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, SPAWNERS.Mage, mapSpawner.r, 8))

@@ -1,7 +1,6 @@
 import Component from './Component.js'
 import AnimationFactory from '../../AnimationFactory.js'
-import {CTX_EVENTS, DIRECTIONS, ANIMATIONS as ANIMS } from '../../utils/Const.js'
-
+import { DIRECTIONS, ANIMATIONS as ANIMS } from '../../utils/Const.js'
 
 export default class AnimationComponent extends Component {
     /**
@@ -13,6 +12,7 @@ export default class AnimationComponent extends Component {
         this.animationConfig = animationConfig
         this.animations = this.getAnimations(this.animationConfig)
         this.setAnimation(animationConfig.InitialAnimation)
+        this.angle = 0
     }
 
     /**
@@ -24,7 +24,7 @@ export default class AnimationComponent extends Component {
      * Called each draw cycle
      */
     draw() {
-        this.animations[this.animation].drawFrame(this.entity.game, this.entity.x, this.entity.y)
+        this.animations[this.animation].drawFrame(this.entity.game, this.entity.x, this.entity.y, this.angle)
     }
 
     /**
@@ -35,8 +35,6 @@ export default class AnimationComponent extends Component {
     getAnimations(config) {
         const animations = []
         const spritesheet = this.entity.game.getAsset(config.Spritesheet)
-
-
         const animationFactory = new AnimationFactory(spritesheet, config.Width, config.Height, config.Scale)
         // Create an animation for each property in AnimationData
         for (const symbolKey of Object.getOwnPropertySymbols(config.AnimationData)) {
@@ -79,6 +77,14 @@ export default class AnimationComponent extends Component {
     }
 
     /**
+     * Sets the angle of rotation for this animation.
+     * @param {Number} angle Angle animation should be rotated.
+     */
+    setAngle(angle) {
+        this.angle = angle
+    }
+
+    /**
      * Sets the active moving animation according to direction
      * @param {Symbol} direction The direction to walk in
      * @param {Object} anims An object with four properties (North, East, South, West)
@@ -101,5 +107,9 @@ export default class AnimationComponent extends Component {
                 animComponent.setAnimation(directionalAnims.south, cb)
                 break
         }
+    }
+
+    getCurrentAnimation() {
+        return this.animations[this.animation]
     }
 }

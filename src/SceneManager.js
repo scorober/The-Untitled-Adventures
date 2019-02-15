@@ -67,6 +67,7 @@ export default class SceneManager {
      * @param name the name of the scene you want to change to
      */
     change(name){
+        const params = {}
         this.currentScene.exit()  //exit old scene
         this.currentScene = this.getScene(name)
         this.currentScene.enter() //enter new scene
