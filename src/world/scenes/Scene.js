@@ -11,17 +11,22 @@ export default class Scene {
         this.timeElapsed = 0
         this.timeBuffer = 0
         this.ctx = game.ctx
+        this.hoveredEntity = null;
+        this.selectedEntity = null;
     }
+
 
     /**
      * Super-most update method for the scene hierarchy.
      * Currently just updates a timer that tracks how long the current scene is active.
      */
-    update() {
+    update(){
 
         this.timeElapsed += this.game.clockTick
+
+
     }
-    draw() { }
+    draw(){ }
 
     /**
      * Super-most enter method for the scene hierarchy.
@@ -73,7 +78,7 @@ export default class Scene {
 
     /**
      * Draws the scene's background.
-     * @param ctx 
+     * @param ctx
      */
     drawBackground(ctx) {
         if (this.background) {
@@ -146,19 +151,24 @@ export default class Scene {
 
     /**
      * Sets the background for this scene
-     * 
-     * @param background 
+     *
+     * @param background
      */
     setBackground(background) {
         this.background = background
     }
 
+
+
+
+
     /**
      * Generates the map from a dungeon object for this scene.
-     * 
-     * @param  dungeon 
+     *
+     * @param  dungeon
      */
     generateMap(dungeon) {
         this.dungeon = dungeon
     }
+
 }

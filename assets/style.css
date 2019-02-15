@@ -4,7 +4,7 @@ html, body, div, canvas {
 }
 
 canvas {
-    background: #000000;
+    background: #050505;
     position: fixed;
     -ms-interpolation-mode: nearest-neighbor;
     image-rendering: -webkit-crisp-edges;

@@ -14,6 +14,7 @@ export default class Animation {
     }
 
     drawFrame(game, x, y, angle) {
+        this.scale = 1
         this.elapsedTime += game.clockTick
         if (this.isDone()) {
             if (this.cbCalled === false && this.cb) {
@@ -38,14 +39,14 @@ export default class Animation {
         thirdCanvas.height = size
         const thirdCtx = thirdCanvas.getContext('2d')
 
-            
+
         thirdCtx.drawImage(
             this.spritesheet,
-            startX, 
+            startX,
             startY,
-            this.frameWidth, 
+            this.frameWidth,
             this.frameHeight,
-            0, 
+            0,
             0,
             this.frameWidth * this.scale,
             this.frameHeight * this.scale

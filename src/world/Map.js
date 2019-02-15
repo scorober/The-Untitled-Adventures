@@ -216,7 +216,7 @@ export default class Map extends Entity {
     }
 
     update() {}
-    
+
     draw() {
         for (let c = 0; c < this.cols; c++) {
             for (let r = 0; r < this.rows; r++) {
@@ -230,7 +230,7 @@ export default class Map extends Entity {
 
     /**
      * Draw a tile at [c, r]
-     * @param {*} c Column 
+     * @param {*} c Column
      * @param {*} r Row
      * @param {*} tile Tile being drawn
      */
@@ -276,12 +276,19 @@ export default class Map extends Entity {
 
     /**
      * Converts from world coordinates (measured in pixels starting from the top left of the Map)
-     * to 
+     * to
      */
     static worldToTilePosition(obj, tileSize) {
         return {
             x: Math.floor((obj.x + tileSize / 2) / 64),
             y: Math.floor((obj.y + tileSize / 2) / 64)
+        }
+    }
+
+    static trueWorldToTilePosition(obj, game){
+        return {
+            x: obj.x -  game.camera.xView,
+            y: obj.y - (obj.size) -  game.camera.yView + 5,
         }
     }
 

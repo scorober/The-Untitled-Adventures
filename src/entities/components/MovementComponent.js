@@ -2,7 +2,7 @@ import Component from './Component.js'
 import AnimationComponent from './AnimationComponent.js'
 import AStarPathfinding from '../../utils/AStarPathfinding.js'
 import Map from '../../world/Map.js'
-import { DIRECTIONS, ANIMATIONS as ANIMS } from '../../utils/Const.js'
+import { STATES, DIRECTIONS, ANIMATIONS as ANIMS } from '../../utils/Const.js'
 
 export default class MovementComponent extends Component {
     /**

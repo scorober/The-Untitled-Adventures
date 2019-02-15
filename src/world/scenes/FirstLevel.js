@@ -75,25 +75,25 @@ export default class FirstLevel extends Scene {
 
         const start = this.map.getStartPos()
 
-        const playerCharacter = new Entity(game, start)
+        const playerCharacter = new Entity(game, {x: start.x, y: start.y, name: 'PLAYER'})
 
         playerCharacter.addComponent(new AnimationComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
         playerCharacter.addComponent(new MovementComponent(playerCharacter, PlayerCharacterData.Attributes))
         playerCharacter.addComponent(new PlayerInputComponent(playerCharacter))
         playerCharacter.addComponent(new AttributeComponent(playerCharacter, PlayerCharacterData.Attributes, this, true))
-        playerCharacter.UUID = 'PLAYER::' + playerCharacter.UUID
 
-        const archer = new Entity(game, start)
+
+        const archer = new Entity(game, {x: start.x, y: start.y, name: 'ARCHER'})
         archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
         archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
         archer.getComponent(MovementComponent).setFollowTarget(playerCharacter)
 
-        const marriott = new Entity(game, start)
+        const marriott = new Entity(game, {x: start.x, y: start.y, name: 'MARIOTT'})
         marriott.addComponent(new MarriottMovementComponent(marriott, MarriottData.Attributes))
         marriott.addComponent(new AnimationComponent(marriott, MarriottData.AnimationConfig))
         marriott.getComponent(MovementComponent).setFollowTarget(playerCharacter)
         marriott.addComponent(new AttributeComponent(marriott, MarriottData.Attributes, this, true))
-        marriott.UUID = 'MARRIOTT::' + marriott.UUID
+
 
 
 

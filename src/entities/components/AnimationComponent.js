@@ -1,6 +1,7 @@
 import Component from './Component.js'
 import AnimationFactory from '../../AnimationFactory.js'
-import { DIRECTIONS, ANIMATIONS as ANIMS } from '../../utils/Const.js'
+import {CTX_EVENTS, DIRECTIONS, ANIMATIONS as ANIMS } from '../../utils/Const.js'
+
 
 export default class AnimationComponent extends Component {
     /**
@@ -34,6 +35,8 @@ export default class AnimationComponent extends Component {
     getAnimations(config) {
         const animations = []
         const spritesheet = this.entity.game.getAsset(config.Spritesheet)
+
+
         const animationFactory = new AnimationFactory(spritesheet, config.Width, config.Height, config.Scale)
         // Create an animation for each property in AnimationData
         for (const symbolKey of Object.getOwnPropertySymbols(config.AnimationData)) {

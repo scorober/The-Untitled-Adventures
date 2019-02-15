@@ -85,12 +85,12 @@ export default class SpawnComponentBehavior extends Component {
             const r = this.rng.int(10, this.radius)
             const mage = new Entity(this.entity.game, {
                 x: this.entity.x + Math.cos(angle) * r,
-                y: this.entity.y + Math.sin(angle) * r
+                y: this.entity.y + Math.sin(angle) * r,
+                name : 'MAGE'
             })
             mage.addComponent(new MovementComponent(mage, MageData.Attributes))
             mage.addComponent(new AnimationComponent(mage, MageData.AnimationConfig))
             mage.addComponent(new AttributeComponent(mage, MageData.Attributes, this.scene, true))
-            mage.UUID = 'ARCHER::' + mage.UUID
             this.mobs.push(mage)
         }
         for (let i = 0; i < this.archers; i++) {
@@ -98,12 +98,12 @@ export default class SpawnComponentBehavior extends Component {
             const r = this.rng.int(10, this.radius)
             const archer = new Entity(this.entity.game, {
                 x: this.entity.x + Math.cos(angle) * r,
-                y: this.entity.y + Math.sin(angle) * r
+                y: this.entity.y + Math.sin(angle) * r,
+                name : 'ARCHER'
             })
             archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
             archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
             archer.addComponent(new AttributeComponent(archer, MageData.Attributes, this.scene, true))
-            archer.UUID = 'ARCHER::' + archer.UUID
             this.mobs.push(archer)
         }
         for (let i = 0; i < this.robots; i++) {
@@ -111,12 +111,12 @@ export default class SpawnComponentBehavior extends Component {
             const r = this.rng.int(10, this.radius)
             const robot = new Entity(this.entity.game, {
                 x: this.entity.x + Math.cos(angle) * r,
-                y: this.entity.y + Math.sin(angle) * r
+                y: this.entity.y + Math.sin(angle) * r,
+                name : 'ROBOT'
             })
             robot.addComponent(new MovementComponent(robot, RobotData.Attributes))
             robot.addComponent(new AnimationComponent(robot, RobotData.AnimationConfig))
             robot.addComponent(new AttributeComponent(robot, MageData.Attributes, this.scene, true))
-            robot.UUID = 'ROBOT::' + robot.UUID
             this.mobs.push(robot)
         }
     }

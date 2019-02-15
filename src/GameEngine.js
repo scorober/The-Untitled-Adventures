@@ -113,4 +113,24 @@ export default class GameEngine {
         return this.sceneManager.collisionLayer.getEntityByXY(x,y)
     }
 
+    setEntityHover(entity){
+        this.sceneManager.currentScene.hoveredEntity = entity
+    }
+
+    setSelectedEntity(entity){
+        this.sceneManager.currentScene.selectedEntity = entity
+    }
+
+    removeEntityHover(){
+        this.sceneManager.currentScene.hoveredEntity = null
+    }
+
+    removeSelectedEntity() {
+        this.sceneManager.currentScene.selectedEntity = null
+    }
+
+    hasHoveredEntity(){
+        return this.sceneManager.currentScene.hoveredEntity != null
+    }
+
 }

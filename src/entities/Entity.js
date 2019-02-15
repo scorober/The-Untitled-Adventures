@@ -4,25 +4,66 @@ import { HitCircle } from '../utils/Collision.js'
 import Vector from '../utils/Vector.js'
 import Map from '../world/Map.js'
 
+
 export default class Entity {
-    constructor(game, pos) {
+    constructor(game, params) {
         this.game = game
-        this.x = pos.x
-        this.y = pos.y
+        this.x = params.x
+        this.y = params.y
         this.removeFromWorld = false
         this.states = this.getDefaultStates()
         this.components = []
-        this.UUID = 'ENTITY::' + create_UUID() //UUID for identifying this entity instance.
+        this.name = params.name || 'Entity'
+        this.UUID = create_UUID() //UUID for identifying this entity instance.
+        this.UUID = this.name + '::' + this.UUID
         this.size = 32
         this.radius = 16 //Default values TODO add in constructor
         this.hitOffsetX = 0
         this.hitOffsetY = 0
+        this.states[STATES.IsHovered] = false
     }
 
     /**
      * Calls update on each of the Entity's components.
      */
     update() {
+        if(this.states[STATES.IsHovered] ){
+            console.log(this.UUID, ' HOVERED')
+        }
+        if(this.game.inputManager.mousePosition  && !this.UUID.includes('PLAYER')){ //don't highlight player
+
+            let mp = this.game.inputManager.mousePosition
+            if(mp) {
+                let mouseVec = new Vector(mp.x, mp.y)
+                let entityTruePos = Map.trueWorldToTilePosition(this, this.game)
+                let dist = mouseVec.distance(entityTruePos)
+                if(dist < this.size) {
+
+                    //then check if x/y coords are correct
+                    const distY = mouseVec.absdistanceY(entityTruePos)
+                    const distX = mouseVec.absdistanceX(entityTruePos)
+                    //  console.log('mouse (x,y): ', mouseVec.x, mouseVec.y)
+                    //  console.log('entityTruePos (x,y): ', entityTruePos.x, entityTruePos.y)
+                    //  console.log('dist: ', dist)//30
+                    //   console.log('distX: ', distX)
+                    //  console.log('distY: ', distY)
+
+
+                    if(distX < 15 && distY < 25 && !this.game.hasHoveredEntity()){//TODO: this.W, this.H
+                        this.states[STATES.IsHovered] = true
+                    }
+
+                } else {
+                    this.game.removeEntityHover()
+                    this.states[STATES.IsHovered] = false
+                }
+            }
+        }
+
+
+        //console.log(v1.distance(v2));
+
+
         this.components.forEach((component) => {
             component.update()
         })
@@ -37,18 +78,20 @@ export default class Entity {
      * Calls draw on each of the Entity's components
      */
     draw() {
-        this.game.ctx.fillRect(this.x - this.game.camera.xView, this.y - this.game.camera.yView, 5, 5)
-        if (this.game.showOutlines && this.radius) {
-            this.game.ctx.beginPath()
-            this.game.ctx.strokeStyle = 'green'
-            this.game.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
-            this.game.ctx.stroke()
-            this.game.ctx.closePath()
+        if(this.states[STATES.IsHovered]){
+            let entityTruePos = Map.trueWorldToTilePosition(this, this.game)
+            this.game.ctx.textAlign = 'center'
+            this.game.ctx.font = '14px arcade'
+            this.game.ctx.fillStyle = 'red'
+            this.game.ctx.fillText(this.name, entityTruePos.x , entityTruePos.y + this.size + (this.size/2))
+            this.game.ctx.fillText('HP:' + this.hitPoints, entityTruePos.x , entityTruePos.y + this.size + (this.size))
         }
         this.components.forEach((component) => {
             component.draw()
         })
     }
+
+
 
     /**
      * Adds a component to this Entity
@@ -81,7 +124,7 @@ export default class Entity {
     }
 
     /**
-     * 
+     *
      * @param {Class} type The component type to get
      * @returns {Component} The component with the specified type
      */
@@ -97,7 +140,7 @@ export default class Entity {
         const states = []
         for (const state of Object.entries(STATES)) {
             /** `state` comes out as an array, first element being
-             * a string that represents the Symbol, second element 
+             * a string that represents the Symbol, second element
              * being the Symbol itself.
              */
             const stateSymbol = state[1]
@@ -154,24 +197,17 @@ export default class Entity {
 
 
     goTo(x, y) {
-
         if (this.states[STATES.Collidable]) {
-
             const isCollided = this.game.sceneManager.collisionLayer.collides(this, new Vector(x, y))
-
             if (!isCollided) {
                 this.goToX = x
                 this.goToY = y
             }//else, collision happened, don't update x/y
-
         } else { //not collidable
             this.goToX = x
             this.goToY = y
         }
-
         this.following = true
-
-
     }
 
     rotateAndCache(image, angle) {

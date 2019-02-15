@@ -43,6 +43,8 @@ export const STATES = {
     Stage2: Symbol(),
     Attacking : Symbol(),
     Combat_Entity : Symbol(),
+    IsHovered : Symbol(),
+    IsSelectedEntity : Symbol(),
 
 }
 // Switch to this to separate states & types?

@@ -14,6 +14,7 @@ export default class InputManager {
         this.lastRightClickPosition = false
         // (e) Event object: Last mouse wheel event stored here
         this.mouseWheel = null
+        this.checkMouse = false
     }
 
     registerEventListeners(ctx) {
@@ -22,6 +23,7 @@ export default class InputManager {
             e => {
                 this.lastLeftClickPosition = this.getXandY(e)
                 this.newLeftClick = true
+                this.checkMouse = true
                 console.log(this.lastLeftClickPosition)
             },
             false
@@ -69,12 +71,13 @@ export default class InputManager {
      */
     clear(){
         this.downKeys = {}
-        this.mousePosition = null
-        this.newLeftClick = false
-        this.lastLeftClickPosition = false
-        this.newRightClick = false
-        this.lastRightClickPosition = false
-        this.mouseWheel = null
+        this.checkMouse = false
+        //this.mousePosition = null
+        //this.newLeftClick = false
+        //this.lastLeftClickPosition = false
+        //this.newRightClick = false
+        //this.lastRightClickPosition = false
+        //this.mouseWheel = null
     }
 
     hasRightClick() {

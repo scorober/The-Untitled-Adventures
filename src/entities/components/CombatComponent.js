@@ -3,6 +3,7 @@ import Vector from '../../utils/Vector.js'
 import {STATES, ANIMATIONS} from '../../utils/Const.js'
 import AttributeComponent from './AttributeComponent.js'
 import AnimationComponent from './AnimationComponent.js'
+import MovementComponent from './MovementComponent.js'
 
 
 export default class CombatComponent extends Component {
@@ -49,7 +50,8 @@ export default class CombatComponent extends Component {
 
     setAttacking(){
         this.entity.states[STATES.Attacking] = true
-
+        const dir = this.entity.getComponent(MovementComponent).getDirection()
+       // this.entity.getComponent(AnimationComponent).setDirectionalAnimation(, ANIMATIONS.AttackEast)
         //SET THE ANIMATION HERE
     }
 
