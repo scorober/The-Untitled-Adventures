@@ -36,7 +36,12 @@ export default class AttributeComponent extends Component {
 
 
     update(){
+        this.dmgTimer -= this.entity.game.clockTick
         //console.log(this.entity.hitPoints)
+        if(this.checkDead()){
+            this.scene.removeEntityByRef(this.entity)
+            return true
+        }
     }
 
     /**
@@ -44,8 +49,28 @@ export default class AttributeComponent extends Component {
      *
      * @returns {number} the damage to apply
      */
-    calculatePhysicalDamage(){
-        return this.random.int(this.STR / 3, this.ATTACKPOWER)  * this.STR / 3
+    calculatePhysicalDamage(modifiers = {}){
+        let appliedSTR = modifiers.STR + this.STR || this.STR
+        let appliedATK = modifiers.ATTACKPOWER + this.ATTACKPOWER || this.ATTACKPOWER
+        let coverage = 1
+        if(modifiers.distance != null){
+            coverage = Math.min(1, this.SIZE / modifiers.distance)
+        }
+        let dmg = this.random.int(appliedSTR / 3, appliedATK)
+
+        return (dmg*appliedSTR / 3) * coverage
+    }
+
+    calculateMagicDamage(modifiers){
+        let appliedINT = modifiers.INT + this.INT || this.INT
+        let appliedSP = modifiers.SPELLPOWER + this.SPELLPOWER || this.SPELLPOWER
+        let coverage = 1
+        if(modifiers.distance != null){
+            coverage = Math.min(1, this.SIZE / modifiers.distance)
+        }
+        let dmg = this.random.int(appliedINT / 3, appliedSP)
+
+        return (dmg * appliedINT / 3) * coverage
     }
 
     /**
@@ -61,8 +86,10 @@ export default class AttributeComponent extends Component {
         //if greater than 0, apply it.
         if(damage >= 0) {
             this.displayDamage = true
+            this.damageColor = 'red'
             this.lastDamage = damage
             this.entity.hitPoints = this.entity.hitPoints - damage
+            this.dmgTimer = 1.5
 
             //check if dead
             if(this.checkDead()){
@@ -74,20 +101,29 @@ export default class AttributeComponent extends Component {
         return false
     }
 
+
     /**
      * Not fully implemented, but logic should be same as physical damage. Spells etc should deal magic damage.
      *
      * @param damage
      */
     applyMagicDamage(damage){
+        //reduce damage by magic def rate
+        damage = Math.floor(damage - this.MAGICDEFRATE)
+        //if greater than 0, apply it.
+        if(damage >= 0){
+            this.displayDamage = true
+            this.damageColor = 'blue'
+            this.lastDamage = damage
+            this.entity.hitPoints = this.entity.hitPoints - damage
+            this.dmgTimer = 1.5
 
-        this.entity.hitPoints = this.entity.hitPoints - damage
-
-        if(this.checkDead()){
-            console.log('ENTITY KILLED')
-            this.scene.removeEntityByRef(this.entity)
-            return true
+            if(this.checkDead()){
+                this.scene.removeEntityByRef(this.entity)
+                return true
+            }
         }
+        return false
     }
 
     /**
@@ -95,16 +131,17 @@ export default class AttributeComponent extends Component {
      * TODO: This currently draws above the player's head. Find better place to display? Above victim's head?
      */
     draw(){
-        if(this.displayDamage && this.lastDamage != null){
-            this.scene.ctx.font = '50px arcade'
-            this.scene.ctx.fillStyle = 'red'
+        if(this.displayDamage && this.lastDamage != null && this.dmgTimer > 0 ){
+            this.scene.ctx.font = '36px arcade'
+            this.scene.ctx.fillStyle = this.damageColor || 'red'
             this.scene.ctx.textAlign = 'center'
-            this.scene.ctx.fillText(this.lastDamage, this.scene.ctx.canvas.width/2 - 20, this.scene.ctx.canvas.height/2 - 100)
+            let pos = this.scene.game.worldToScreen(this.entity)
+            this.scene.ctx.fillText(this.lastDamage, pos.x, pos.y - 64)
         }
     }
 
     checkDead(){
-        return this.entity.hitPoints <= 0
+        return this.entity.hitPoints <= 0 || this.entity.removeFromWorld
     }
 
     /**
@@ -130,9 +167,9 @@ export default class AttributeComponent extends Component {
 
         this.STR = this.entity.strength = this.entity.strength || attr.strength || defaultAttributes.strength
 
-        this.entity.intelligence = this.entity.intelligence || attr.intelligence || defaultAttributes.intelligence
+        this.INT = this.entity.intelligence = this.entity.intelligence || attr.intelligence || defaultAttributes.intelligence
 
-        this.entity.spellPower = this.entity.spellPower || attr.spellPower || defaultAttributes.spellPower
+        this.SPELLPOWER = this.entity.spellPower = this.entity.spellPower || attr.spellPower || defaultAttributes.spellPower
 
         this.ATTACKPOWER = this.entity.attackPower = this.entity.attackPower || attr.Atk || defaultAttributes.attackPower
 
@@ -143,6 +180,8 @@ export default class AttributeComponent extends Component {
         this.SIZE = this.entity.size = this.entity.size || attr.size || defaultAttributes.size
 
         this.DEFENSERATE = this.entity.defenseRate = this.entity.defenseRate || attr.Def || defaultAttributes.defenseRate
+
+        this.MAGICDEFRATE = this.entity.magicDefenseRate = this.entity.magicDefenseRate || attr.Mdef || defaultAttributes.mDefenseRate
 
         this.RANGE = this.entity.range = this.entity.range || attr.range || defaultAttributes.range
 
@@ -158,14 +197,15 @@ const defaultAttributes = {
     hitPoints : 0,  //duh
     mana : 0,
     strength : 0,    //attack power multiplier
-    intelligence : 0, //spell power multiplier
-    spellPower : 0,  //magic damage
+    intelligence : 7, //spell power multiplier
+    spellPower : 6,  //magic damage
     attackPower : 0,
     attackRate : 0, //speed attacks happen
     moveSpeed : 0, //how fast they move
     size : 0,
     defenseRate : 0,
     range : 0,
+    mDefenseRate : 5,
 
 }
 

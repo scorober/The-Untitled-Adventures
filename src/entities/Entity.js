@@ -4,59 +4,39 @@ import { HitCircle } from '../utils/Collision.js'
 import Vector from '../utils/Vector.js'
 import Map from '../world/Map.js'
 
+//TODO: Add all attributes / combat from here in constructor
 
 export default class Entity {
     constructor(game, params) {
         this.game = game
         this.x = params.x
         this.y = params.y
+        this.width = params.width || 16
+        this.height = params.height || 16
         this.removeFromWorld = false
         this.states = this.getDefaultStates()
         this.components = []
-        this.name = params.name || 'Entity'
+        this.name = params.name || 'ENTITY'
         this.UUID = create_UUID() //UUID for identifying this entity instance.
         this.UUID = this.name + '::' + this.UUID
-        this.size = 32
+        //this.size = 32
         this.radius = 16 //Default values TODO add in constructor
         this.hitOffsetX = 0
         this.hitOffsetY = 0
         this.states[STATES.IsHovered] = false
+        this.size = (this.width > this.height) ? this.width * 2 : this.height * 2 //set size to largest dimension
+
     }
 
     /**
      * Calls update on each of the Entity's components.
      */
     update() {
-        if(this.states[STATES.IsHovered] ){
-            console.log(this.UUID, ' HOVERED')
-        }
-        if(this.game.inputManager.mousePosition  && !this.UUID.includes('PLAYER')){ //don't highlight player
+        if(this.game.inputManager.mousePosition  && !(this.UUID.includes('PLAYER') || this.UUID.includes('ENTITY') )){ //don't highlight player
 
             let mp = this.game.inputManager.mousePosition
             if(mp) {
-                let mouseVec = new Vector(mp.x, mp.y)
-                let entityTruePos = Map.trueWorldToTilePosition(this, this.game)
-                let dist = mouseVec.distance(entityTruePos)
-                if(dist < this.size) {
-
-                    //then check if x/y coords are correct
-                    const distY = mouseVec.absdistanceY(entityTruePos)
-                    const distX = mouseVec.absdistanceX(entityTruePos)
-                    //  console.log('mouse (x,y): ', mouseVec.x, mouseVec.y)
-                    //  console.log('entityTruePos (x,y): ', entityTruePos.x, entityTruePos.y)
-                    //  console.log('dist: ', dist)//30
-                    //   console.log('distX: ', distX)
-                    //  console.log('distY: ', distY)
-
-
-                    if(distX < 15 && distY < 25 && !this.game.hasHoveredEntity()){//TODO: this.W, this.H
-                        this.states[STATES.IsHovered] = true
-                    }
-
-                } else {
-                    this.game.removeEntityHover()
-                    this.states[STATES.IsHovered] = false
-                }
+                this.states[STATES.IsHovered] = !!this.checkCollisionScreen(new Vector(mp.x, mp.y))
             }
         }
 
@@ -147,6 +127,56 @@ export default class Entity {
             states[stateSymbol] = false
         }
         return states
+    }
+
+
+
+    checkCollisionScreen(vector){
+        let entityTruePos = this.game.worldToScreen({x: this.x, y: this.y - this.height}) // get position on screen
+        let dist = vector.distance(entityTruePos)
+        if(dist < this.size){
+            //console.log(this.name, ' IN DISTANCE!  ', dist)
+            const distY = vector.absdistanceY(entityTruePos)
+            const distX = vector.absdistanceX(entityTruePos)
+
+            if(distX < this.width && distY < this.height){
+                return true
+            }else{
+                return false
+            }
+        }
+    }
+
+    checkCollisionWorld(vector){
+        let ret = {collides: false, distance: null}
+        //let entityTruePos = this.game.screenToWorld(this) // get position on screen
+        let dist = vector.distance(this)
+        if(dist < this.size){
+            ret.distance = dist
+            const distY = vector.absdistanceY(this)
+            const distX = vector.absdistanceX(this)
+
+            if(distX < this.width && distY < this.height){
+                ret.collides = true
+            }else{
+                ret.collides = false
+            }
+        }
+        return ret
+    }
+
+    /**
+     * Returns true if an x,y value is in range of this entity
+     * @param pos {x:x, y:y}
+     * @returns {boolean}
+     */
+    collidableCheckInRange(pos){
+
+        if(this.states[STATES.Collidable]){
+            return this.checkCollision(new Vector(pos.x, pos.y))
+        }
+
+        return false
     }
 
     /**

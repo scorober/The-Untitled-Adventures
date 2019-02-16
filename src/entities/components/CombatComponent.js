@@ -61,6 +61,14 @@ export default class CombatComponent extends Component {
         //SET REGULAR ANIMATION HERE
     }
 
+    applySkill(skillEntity, targetData){
+        //TODO: Check if physical or magic
+        skillEntity.distance = targetData.distance
+        let dmgOut = this.attributeComponent.calculateMagicDamage(skillEntity)
+        targetData.entity.getComponent(AttributeComponent).applyMagicDamage(dmgOut)
+
+    }
+
 
     /**
      * Sets a new attack target

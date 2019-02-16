@@ -62,16 +62,16 @@ export default class PlayerInputComponent extends Component {
         if (this.entity.game.inputManager.downKeys[KEYS.KeyQ]) {
             const origin = this.getEffectOffsetPos()
             const target = this.getTarget()
-            const fireball = new Entity(this.entity.game, origin)
+            const fireball = new Entity(this.entity.game, {x:origin.x, y:origin.y, name:'FIREBALL', attributes: FireballData.Attributes})
             fireball.addComponent(new AnimationComponent(fireball, FireballData.AnimationConfig))
             fireball.addComponent(new MovementComponent(fireball, FireballData.Attributes))
-            fireball.addComponent(new ProjectileBehaviorComponent(fireball, target, true))
+            fireball.addComponent(new ProjectileBehaviorComponent(fireball, this.entity, target, true))
             this.entity.game.sceneManager.currentScene.addEntity(fireball)
             this.coolDown = 0
         }
         if (this.entity.game.inputManager.downKeys[KEYS.KeyR]) {
             const origin = this.getEffectOffsetPos()
-            const lightningEffect = new Entity(this.entity.game, origin)
+            const lightningEffect = new Entity(this.entity.game, {x:origin.x, y:origin.y, name:'LIGHTNING'})
             const target = this.getTarget()
             lightningEffect.addComponent(new AnimationComponent(lightningEffect, LightningData.AnimationConfig))
             lightningEffect.addComponent(new MovementComponent(lightningEffect, LightningData.Attributes))
@@ -81,7 +81,7 @@ export default class PlayerInputComponent extends Component {
         }
         if (this.entity.game.inputManager.downKeys[KEYS.KeyT]) {
             const target = this.getTarget()
-            const freezeEffect = new Entity(this.entity.game, target)
+            const freezeEffect = new Entity(this.entity.game, {x:origin.x, y:origin.y, name:'LIGHTNING'})
             freezeEffect.addComponent(new AnimationComponent(freezeEffect, FreezeData.AnimationConfig))
             freezeEffect.addComponent(new FreezeBehaviorComponent(freezeEffect))
             this.entity.game.sceneManager.currentScene.addEntity(freezeEffect)
@@ -133,13 +133,10 @@ export default class PlayerInputComponent extends Component {
         }, tileSize)
         this.entity.getComponent(MovementComponent).setPathfindingTarget(targetTile)
 
-        if(this.entity.states[STATES.Combat_Entity]){
-            let entities = this.entity.game.getEntityByXY(targetTile.x, targetTile.y)
-            entities = entities.filter( e =>
-                e.UUID !== this.entity.UUID
-            )
-            if(entities.length === 1){
-                this.entity.getComponent(CombatComponent).setAttackTarget(entities[0])
+        if(this.entity.states[STATES.Combat_Entity] && !this.entity.states[STATES.IsHovered]){
+            let hovered = this.entity.game.getHoveredEntity()
+            if(hovered != null){
+                this.entity.getComponent(CombatComponent).setAttackTarget(hovered)
             }
         }
     }
