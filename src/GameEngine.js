@@ -109,6 +109,12 @@ export default class GameEngine {
             y: pos.y + this.camera.yView
         }
     }
+    worldToScreen(pos){
+        return {
+            x: pos.x - this.camera.xView,
+            y: pos.y - this.camera.yView
+        }
+    }
     getCurrentScene(){
         return this.sceneManager.currentScene
     }
