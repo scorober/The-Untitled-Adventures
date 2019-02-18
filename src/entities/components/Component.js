@@ -11,10 +11,10 @@ export default class Component {
     }
 
     update() {
-        throw new TypeError('Must override Component\'s update in derived class')
+
     }
 
     draw() {
-        throw new TypeError('Must override Component\'s draw in derived class')
+
     }
 }
