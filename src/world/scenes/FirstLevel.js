@@ -74,18 +74,18 @@ export default class FirstLevel extends Scene {
 
         const start = this.map.getStartPos()
 
-        const playerCharacter = new Entity(game, start)
+        const playerCharacter = new Entity(game, start, PlayerCharacterData.Attributes)
 
         playerCharacter.addComponent(new AnimationComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
         playerCharacter.addComponent(new MovementComponent(playerCharacter, PlayerCharacterData.Attributes))
         playerCharacter.addComponent(new PlayerInputComponent(playerCharacter))
 
-        const archer = new Entity(game, start)
+        const archer = new Entity(game, start, ArcherData.Attributes)
         archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
         archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
         archer.getComponent(MovementComponent).setFollowTarget(playerCharacter)
 
-        const marriott = new Entity(game, start)
+        const marriott = new Entity(game, start, MarriottData.Attributes)
         marriott.addComponent(new MarriottMovementComponent(marriott, MarriottData.Attributes))
         marriott.addComponent(new AnimationComponent(marriott, MarriottData.AnimationConfig))
         marriott.getComponent(MovementComponent).setFollowTarget(playerCharacter)

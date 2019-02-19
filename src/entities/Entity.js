@@ -2,25 +2,21 @@ import { STATES } from '../utils/Const.js'
 import { create_UUID } from '../utils/Random.js'
 import { HitCircle } from '../utils/Collision.js'
 import Vector from '../utils/Vector.js'
+import AttributeComponent from './components/AttributeComponent.js'
 
 export default class Entity {
-    constructor(game, pos) {
+    constructor(game, pos, attributes = {}) {
         this.game = game
         this.x = pos.x
         this.y = pos.y
         this.removeFromWorld = false
         this.states = this.getDefaultStates()
         this.components = []
-        this.UUID = 'ENTITY::' + create_UUID() //UUID for identifying this entity instance.
-        this.size = 32
-        this.radius = 16 //Default values TODO add in constructor
+        this.UUID = create_UUID()
         this.hitOffsetX = 0
         this.hitOffsetY = 0
-        //TODO: values below will be added from data in next push. Hardcoded for now to make a different component work.
-        this.height = 32
-        this.width = 32
-        this.hitPoints = 100
-        this.name = 'HARDCODED NAME'
+        this.attributes = new AttributeComponent(this, attributes, game)
+        this.addComponent(this.attributes)
     }
 
     /**
@@ -29,13 +25,16 @@ export default class Entity {
      * Calls update on each of the Entity's components.
      */
     update() {
-        if(this.game.inputManager.mousePosition  && !(this.UUID.includes('PLAYER') || this.UUID.includes('CAMERA') )){ //don't highlight player
+        this.states[STATES.IsHovered] = false
+        if(this.game.inputManager.mousePosition  && !(this.UUID.includes('PLAYER') || this.UUID.includes('ENTITY') )){ //don't highlight player
             const mp = this.game.inputManager.mousePosition
             if(mp) {
-                this.states[STATES.IsHovered] = !!this.checkCollisionScreen(new Vector(mp.x, mp.y))
+                let mouseVector = new Vector(mp.x, mp.y)
+                if(this.checkCollisionScreen(mouseVector)){
+                    this.states[STATES.IsHovered] = true
+                }
             }
         }
-
         this.components.forEach((component) => {
             component.update()
         })
@@ -52,12 +51,15 @@ export default class Entity {
      */
     draw() {
         if(this.states[STATES.IsHovered]){
-            const entityTruePos = this.game.worldToScreen({x: this.x, y: this.y - this.height}) // get position on screen
+            const entityTruePos = this.game.worldToScreen({x: this.x, y: this.y}) // get position on screen
             this.game.ctx.textAlign = 'center'
             this.game.ctx.font = '14px arcade'
+            this.game.ctx.fillStyle = (this.attributes.Name === 'MARIOTT') ? 'black' : 'red'
+            this.game.ctx.fillText(this.attributes.Name, entityTruePos.x , entityTruePos.y + this.attributes.Size )
             this.game.ctx.fillStyle = 'red'
-            this.game.ctx.fillText(this.name, entityTruePos.x , entityTruePos.y + this.size + (this.size/2))
-            this.game.ctx.fillText('HP:' + this.hitPoints, entityTruePos.x , entityTruePos.y + this.size + (this.size))
+            this.game.ctx.fillText('HP:' + this.attributes.HP, entityTruePos.x , entityTruePos.y + this.attributes.Size + (this.attributes.Size))
+            this.game.ctx.fillStyle = 'blue'
+            //this.game.ctx.fillText('MANA:' + this.attributes.Mana, entityTruePos.x , entityTruePos.y + this.attributes.Size + 2*(this.attributes.Size))
         }
         this.components.forEach((component) => {
             component.draw()
@@ -127,8 +129,12 @@ export default class Entity {
     /**
      * Sets an entities state to be collidable and creates a hitbox from it's dimensions.
      * This may be replaced and moved to attribute component.
+     *
+     * Depreciated
      */
     setCollidable(options = {}) {
+        //THIS FUNCTION LIKELY GOING TO BE USED IN ATTRIBUTES (if at all) KEEPING FOR NOW
+        //TO REFERENCE THE CODE LATER IF NEEDED.
         const defaults = {
             offset: false,
             xOffset: 0,
@@ -153,14 +159,15 @@ export default class Entity {
      * @returns {boolean}
      */
     checkCollisionScreen(vector){
-        const entityTruePos = this.game.worldToScreen({x: this.x, y: this.y - this.height}) // get position on screen
+        const entityTruePos = this.game.worldToScreen({x: this.x, y: this.y - this.attributes.Height}) // get position on screen
         const dist = vector.distance(entityTruePos)
-        if(dist < this.size){
+        if(dist < this.attributes.Size){
             //console.log(this.name, ' IN DISTANCE!  ', dist)
             const distY = vector.absdistanceY(entityTruePos)
             const distX = vector.absdistanceX(entityTruePos)
 
-            if(distX < this.width && distY < this.height){
+            if(distX < this.attributes.Width && distY < this.attributes.Height){
+
                 return true
             }else{
                 return false
@@ -175,7 +182,7 @@ export default class Entity {
      * @returns {boolean}
      */
     checkCollisionWorld(vector){
-        let ret = {collides: false, distance: null} //DONT const...this value changes...eslint is dumb
+        const ret = {collides: false, distance: null}
         //let entityTruePos = this.game.screenToWorld(this) // get position on screen
         const dist = vector.distance(this)
         if(dist < this.size){
@@ -183,7 +190,7 @@ export default class Entity {
             const distY = vector.absdistanceY(this)
             const distX = vector.absdistanceX(this)
 
-            ret.collides = distX < this.width && distY < this.height
+            ret.collides = distX < this.attributes.Width && distY < this.attributes.Height
         }
         return ret
     }

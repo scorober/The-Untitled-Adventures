@@ -4,14 +4,20 @@
 import FirstLevel from './world/scenes/FirstLevel.js'
 import TitleMenuScene from './world/scenes/TitleMenu.js'
 import {HitCircle, CollisionLayer} from './utils/Collision.js'
+import Vector from './utils/Vector.js'
 
 export default class SceneManager {
 
 
-    constructor(game) {
-        this.game = game
+    constructor() {
+        this.game = {}
         this.scenes = []
         //Step 1, define scenes
+        this.collisionLayer = {}
+        this.currentScene = {}
+    }
+    init(game){
+        this.game = game
         this.collisionLayer = new CollisionLayer()
         const firstlevel = new FirstLevel(game)
         const title = new TitleMenuScene(game)
@@ -78,4 +84,42 @@ export default class SceneManager {
             this.collisionLayer.addCollidable(entity)
         }
     }
+
+    getCollidablesXYScreen(pos){
+        let ret = []
+        for(let i = 0; i < this.currentScene.entities.length; i++){
+            var e = this.currentScene.entities[i]
+            var t = e.checkCollisionScreen(pos)
+            if(t){
+                ret.push(e)
+            }
+            var z = this.game.worldToScreen(e)
+            var dist = new Vector(pos.x, pos.y).distance(new Vector(z.x, z.y))
+
+            console.log(t)
+
+        }
+        return ret
+        // return this.currentScene.entities.filter(e =>{
+        //     var b = e.checkCollisionScreen(pos)
+        //    // e.checkCollisionScreen(pos) === true
+        //     b == true
+        // })
+    }
+
+    getCollidablesXYWorld(pos){
+        let ret = []
+
+        for(let i = 0; i < this.currentScene.entities.length; i++){
+            let e = this.currentScene.entities[i]
+            if(!(e.name.includes('PLAYER') || e.name.includes('FIRE') || e.name.includes('ENT'))){
+                let data = e.checkCollisionWorld(pos)
+                if(data.collides != null && data.collides){
+                    ret.push({entity: e, distance: data.distance})
+                }
+            }
+        }
+        return ret
+    }
+
 }

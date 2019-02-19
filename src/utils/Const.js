@@ -32,6 +32,7 @@ export const STATES = {
     Cooling: Symbol(),
     IsHovered : Symbol(),
     IsCombat : Symbol(),
+    IsAttacking : Symbol(),
 }
 
 export const ANIMATIONS = {

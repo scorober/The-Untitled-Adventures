@@ -25,7 +25,9 @@ export default {
         Atk: 10,
         Def: 15,
         Mdef: 3,
-        Speed: 40
+        Speed: 40,
+        Name: 'ROBOT',
+        isCombat: true,
     },
     // Animation Component Configuration
     AnimationConfig: {
