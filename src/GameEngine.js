@@ -2,6 +2,7 @@ import Timer from './utils/Timer.js'
 import InputManager from './InputManager.js'
 import SceneManager from './SceneManager.js'
 import Camera from './entities/Camera.js'
+import Vector from './utils/Vector.js'
 
 export default class GameEngine {
     constructor() {
@@ -34,8 +35,9 @@ export default class GameEngine {
         this.surfaceWidth = this.ctx.canvas.width
         this.surfaceHeight = this.ctx.canvas.height
         this.timer = new Timer()
+        this.sceneManager = new SceneManager()
         this.camera = new Camera(this)
-        this.sceneManager = new SceneManager(this)
+        this.sceneManager.init(this)
         this.startInput()
     }
 
@@ -116,7 +118,74 @@ export default class GameEngine {
         }
     }
     getCurrentScene(){
-        return this.sceneManager.currentScene
+        if(this.sceneManager){
+            return this.sceneManager.currentScene
+        }else{
+            return {}
+        }
+    }
+
+    removeEntityByRef (entity) {
+        const scene = this.sceneManager.currentScene
+        scene.removeEntity(scene.entities.indexOf(entity))
+    }
+
+    getHighlightedEntity(){
+        return this.sceneManager.currentScene.highlightedEntity
+    }
+    setHighlightedEntity(e){
+        this.sceneManager.currentScene.highlightedEntity = e
+    }
+    removeHighlightedEntity(){
+        this.sceneManager.currentScene.highlightedEntity = null
+    }
+    getEntityByXYOnScreen(pos){
+        return this.sceneManager.getCollidablesXYScreen(new Vector(pos.x, pos.y))
+    }
+
+    getEntityByXYInWorld(pos){
+        return this.sceneManager.getCollidablesXYWorld(new Vector(pos.x, pos.y))
+    }
+
+    getCollidablesXYScreen(pos){
+        let ret = []
+        let scene = this.sceneManager.currentScene
+        for(let i = 0; i < scene.entities.length; i++){
+            var e = scene.entities[i]
+            var t = e.checkCollisionScreen(pos)
+            if(t){
+                ret.push(e)
+            }
+            var z = this.worldToScreen(e)
+            var dist = new Vector(pos.x, pos.y).distance(new Vector(z.x, z.y))
+
+            console.log(t)
+
+        }
+        return ret
+        // return this.currentScene.entities.filter(e =>{
+        //     var b = e.checkCollisionScreen(pos)
+        //    // e.checkCollisionScreen(pos) === true
+        //     b == true
+        // })
+    }
+
+    getCollidablesXYWorld(pos){
+        let ret = []
+        let scene = this.sceneManager.currentScene
+        for(let i = 0; i < scene.entities.length; i++){
+
+            let e = scene.entities[i]
+
+            if(!(e.name.includes('PLAYER') || e.name.includes('FIRE') || e.name.includes('ENT'))){
+
+                let data = e.checkCollisionWorld(pos)
+                if(data.collides != null && data.collides){
+                    ret.push({entity: e, distance: data.distance})
+                }
+            }
+        }
+        return ret
     }
 
 }

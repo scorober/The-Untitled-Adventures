@@ -23,7 +23,9 @@ export default {
         Atk: 10,
         Def: 15,
         Mdef: 3,
-        Speed: 70
+        Speed: 70,
+        Name: 'MARIOTT',
+        isCombat: true,
     },
     // Animation Component Configuration
     AnimationConfig: {
