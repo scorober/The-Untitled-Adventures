@@ -1,7 +1,5 @@
 import Component from './Component.js'
 
-
-
 export default class AttributeComponent extends Component {
     constructor(entity, attributes){
         super(entity)
@@ -19,7 +17,6 @@ export default class AttributeComponent extends Component {
      */
     update(){
         this.dmgTimer -= this.entity.game.clockTick
-        //console.log(this.entity.hitPoints)
         if(this.checkDead()){
             if(!this.scene){this.getScene()}
             this.entity.game.removeEntityByRef(this.entity)
@@ -77,7 +74,6 @@ export default class AttributeComponent extends Component {
 
             //check if dead
             if(this.checkDead()){
-                console.log('ENTITY KILLED')
                 this.game.removeEntityByRef(this.entity)
                 return true
             }
@@ -103,7 +99,6 @@ export default class AttributeComponent extends Component {
             this.lastDamage = damage
             this.entity.hitPoints = this.entity.hitPoints - damage
             this.dmgTimer = 1.5
-
             if(this.checkDead()){
                 this.game.removeEntityByRef(this.entity)
                 return true
@@ -123,7 +118,7 @@ export default class AttributeComponent extends Component {
      * TODO: This currently draws above the player's head. Find better place to display? Above victim's head?
      */
     draw(){
-        let ctx = this.entity.game.ctx
+        const ctx = this.entity.game.ctx
         if(this.isCombat && this.displayDamage && this.lastDamage != null && this.dmgTimer > 0 ){
             const pos = this.entity.game.worldToScreen(this.entity)
             ctx.font = '36px arcade'
@@ -140,30 +135,11 @@ export default class AttributeComponent extends Component {
      * @param attr
      */
     setAttributes(attr){
-        this.x = this.entity.x || attr.x || defaultAttributes.x
-        this.y = this.entity.y || attr.y || defaultAttributes.y
-        this.Height = this.entity.Height || attr.Height || defaultAttributes.Height
-        this.Width = this.entity.Width || attr.Width || defaultAttributes.Width
-        this.Size = this.entity.size || attr.Size || this.Height / 2
-        this.XpYield = this.entity.XpYield || attr.XpYield || defaultAttributes.XpYield
-        this.GoldYield = this.entity.GoldYield || attr.GoldYield || defaultAttributes.GoldYield
-        this.HP = this.entity.HP || attr.HP || defaultAttributes.HP
-        this.Mana = this.entity.Mana || attr.Mana || defaultAttributes.Mana
-        this.STR = this.entity.STR || attr.STR || defaultAttributes.STR
-        this.INT = this.entity.INT || attr.INT || defaultAttributes.INT
-        this.SpellPower = this.entity.SpellPower || attr.SpellPower || defaultAttributes.SpellPower
-        this.AttackPower = this.entity.AttackPower || attr.AttackPower || defaultAttributes.AttackPower
-        this.AttackSpeed = this.entity.AttackSpeed || attr.AttackSpeed || defaultAttributes.AttackSpeed
-        this.MoveSpeed = this.entity.MoveSpeed || attr.MoveSpeed || defaultAttributes.MoveSpeed
-        this.Range = this.entity.Range || attr.Range || defaultAttributes.Range
-        this.Def = this.entity.Def || attr.Def || defaultAttributes.Def
-        this.Mdef = this.entity.Mdef || attr.Mdef || defaultAttributes.Mdef
-        this.Name = this.entity.Name || attr.Name || defaultAttributes.Name
+        Object.assign(this, defaultAttributes, attr)
         this.entity.UUID = this.Name + this.entity.UUID
     }
 }
 const defaultAttributes = {
-
     x : 0,
     y : 0,
     Height : 32,
