@@ -16,37 +16,55 @@ export default class Entity {
         this.radius = 16 //Default values TODO add in constructor
         this.hitOffsetX = 0
         this.hitOffsetY = 0
+        //TODO: values below will be added from data in next push. Hardcoded for now to make a different component work.
+        this.height = 32
+        this.width = 32
+        this.hitPoints = 100
+        this.name = 'HARDCODED NAME'
     }
 
     /**
+     * First determines if entity is hovered based on the mouse's location.
+     *
      * Calls update on each of the Entity's components.
      */
     update() {
+        if(this.game.inputManager.mousePosition  && !(this.UUID.includes('PLAYER') || this.UUID.includes('CAMERA') )){ //don't highlight player
+            const mp = this.game.inputManager.mousePosition
+            if(mp) {
+                this.states[STATES.IsHovered] = !!this.checkCollisionScreen(new Vector(mp.x, mp.y))
+            }
+        }
+
         this.components.forEach((component) => {
             component.update()
         })
         if (this.states[STATES.Collidable]) {
-            this.hitbox.update(this.x + this.hitOffsetX, this.y + this.hitOffsetY)
+            const pos = Map.worldToTilePosition(this, this.game.getTileSize())
+            this.hitbox.update(pos.x, pos.y)
         }
     }
 
 
     /**
-     * Calls draw on each of the Entity's components
+     * Calls draw on each of the Entity's components.
+     * Also draws unit information if the entity is a hovered entity.
      */
     draw() {
-        this.game.ctx.fillRect(this.x - this.game.camera.xView, this.y - this.game.camera.yView, 5, 5)
-        if (this.game.showOutlines && this.radius) {
-            this.game.ctx.beginPath()
-            this.game.ctx.strokeStyle = 'green'
-            this.game.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
-            this.game.ctx.stroke()
-            this.game.ctx.closePath()
+        if(this.states[STATES.IsHovered]){
+            const entityTruePos = this.game.worldToScreen({x: this.x, y: this.y - this.height}) // get position on screen
+            this.game.ctx.textAlign = 'center'
+            this.game.ctx.font = '14px arcade'
+            this.game.ctx.fillStyle = 'red'
+            this.game.ctx.fillText(this.name, entityTruePos.x , entityTruePos.y + this.size + (this.size/2))
+            this.game.ctx.fillText('HP:' + this.hitPoints, entityTruePos.x , entityTruePos.y + this.size + (this.size))
         }
         this.components.forEach((component) => {
             component.draw()
         })
     }
+
+    //////////// COMPONENT STUFF ////////////
 
     /**
      * Adds a component to this Entity
@@ -104,8 +122,11 @@ export default class Entity {
         return states
     }
 
+    //////////// COLLISION STUFF //////////////
+
     /**
      * Sets an entities state to be collidable and creates a hitbox from it's dimensions.
+     * This may be replaced and moved to attribute component.
      */
     setCollidable(options = {}) {
         const defaults = {
@@ -123,8 +144,48 @@ export default class Entity {
         } else {
             this.hitbox = new HitCircle(this.radius, this.x, this.y)
         }
+    }
 
+    /**
+     * Uses the WORLD-TO-SCREEN converter in the game engine to determine if an entity is at a certain location.
+     *
+     * @param vector
+     * @returns {boolean}
+     */
+    checkCollisionScreen(vector){
+        const entityTruePos = this.game.worldToScreen({x: this.x, y: this.y - this.height}) // get position on screen
+        const dist = vector.distance(entityTruePos)
+        if(dist < this.size){
+            //console.log(this.name, ' IN DISTANCE!  ', dist)
+            const distY = vector.absdistanceY(entityTruePos)
+            const distX = vector.absdistanceX(entityTruePos)
 
+            if(distX < this.width && distY < this.height){
+                return true
+            }else{
+                return false
+            }
+        }
+    }
+
+    /**
+     * Uses the SCREEN-TO-WORLD converter in the game engine to determine if an entity is at a certain location.
+     *
+     * @param vector
+     * @returns {boolean}
+     */
+    checkCollisionWorld(vector){
+        let ret = {collides: false, distance: null} //DONT const...this value changes...eslint is dumb
+        //let entityTruePos = this.game.screenToWorld(this) // get position on screen
+        const dist = vector.distance(this)
+        if(dist < this.size){
+            ret.distance = dist
+            const distY = vector.absdistanceY(this)
+            const distX = vector.absdistanceX(this)
+
+            ret.collides = distX < this.width && distY < this.height
+        }
+        return ret
     }
 
     /**
@@ -149,7 +210,6 @@ export default class Entity {
             this.y = y
         }
     }
-
 
     goTo(x, y) {
 
