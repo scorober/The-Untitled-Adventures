@@ -111,81 +111,39 @@ export default class GameEngine {
             y: pos.y + this.camera.yView
         }
     }
-    worldToScreen(pos){
+    worldToScreen(pos) {
         return {
             x: pos.x - this.camera.xView,
             y: pos.y - this.camera.yView
         }
     }
-    getCurrentScene(){
-        if(this.sceneManager){
+    getCurrentScene() {
+        if (this.sceneManager) {
             return this.sceneManager.currentScene
-        }else{
+        } else {
             return {}
         }
     }
 
-    removeEntityByRef (entity) {
+    removeEntityByRef(entity) {
         const scene = this.sceneManager.currentScene
         scene.removeEntity(scene.entities.indexOf(entity))
     }
 
-    getHighlightedEntity(){
+    getHighlightedEntity() {
         return this.sceneManager.currentScene.highlightedEntity
     }
-    setHighlightedEntity(e){
-        this.sceneManager.currentScene.highlightedEntity = e
+    setHighlightedEntity(entity) {
+        this.sceneManager.currentScene.highlightedEntity = entity
     }
-    removeHighlightedEntity(){
+    removeHighlightedEntity() {
         this.sceneManager.currentScene.highlightedEntity = null
     }
-    getEntityByXYOnScreen(pos){
+    getEntityByXYOnScreen(pos) {
         return this.sceneManager.getCollidablesXYScreen(new Vector(pos.x, pos.y))
     }
 
-    getEntityByXYInWorld(pos){
+    getEntityByXYInWorld(pos) {
         return this.sceneManager.getCollidablesXYWorld(new Vector(pos.x, pos.y))
     }
-
-    getCollidablesXYScreen(pos){
-        let ret = []
-        let scene = this.sceneManager.currentScene
-        for(let i = 0; i < scene.entities.length; i++){
-            var e = scene.entities[i]
-            var t = e.checkCollisionScreen(pos)
-            if(t){
-                ret.push(e)
-            }
-            var z = this.worldToScreen(e)
-            var dist = new Vector(pos.x, pos.y).distance(new Vector(z.x, z.y))
-
-            console.log(t)
-
-        }
-        return ret
-        // return this.currentScene.entities.filter(e =>{
-        //     var b = e.checkCollisionScreen(pos)
-        //    // e.checkCollisionScreen(pos) === true
-        //     b == true
-        // })
-    }
-
-    getCollidablesXYWorld(pos){
-        let ret = []
-        let scene = this.sceneManager.currentScene
-        for(let i = 0; i < scene.entities.length; i++){
-
-            let e = scene.entities[i]
-
-            if(!(e.name.includes('PLAYER') || e.name.includes('FIRE') || e.name.includes('ENT'))){
-
-                let data = e.checkCollisionWorld(pos)
-                if(data.collides != null && data.collides){
-                    ret.push({entity: e, distance: data.distance})
-                }
-            }
-        }
-        return ret
-    }
-
 }

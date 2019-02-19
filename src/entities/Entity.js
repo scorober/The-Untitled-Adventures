@@ -1,11 +1,12 @@
 import { STATES } from '../utils/Const.js'
 import { create_UUID } from '../utils/Random.js'
-import { HitCircle } from '../utils/Collision.js'
 import Vector from '../utils/Vector.js'
 import AttributeComponent from './components/AttributeComponent.js'
+import CollisionComponent from './components/CollisionComponent.js'
+import AnimationComponent from './components/AnimationComponent.js'
 
 export default class Entity {
-    constructor(game, pos, attributes = {}) {
+    constructor(game, pos) {
         this.game = game
         this.x = pos.x
         this.y = pos.y
@@ -15,8 +16,6 @@ export default class Entity {
         this.UUID = create_UUID()
         this.hitOffsetX = 0
         this.hitOffsetY = 0
-        this.attributes = new AttributeComponent(this, attributes, game)
-        this.addComponent(this.attributes)
     }
 
     /**
@@ -25,48 +24,53 @@ export default class Entity {
      * Calls update on each of the Entity's components.
      */
     update() {
-        this.states[STATES.IsHovered] = false
-        if(this.game.inputManager.mousePosition  && !(this.UUID.includes('PLAYER') || this.UUID.includes('ENTITY') )){ //don't highlight player
-            const mp = this.game.inputManager.mousePosition
-            if(mp) {
-                let mouseVector = new Vector(mp.x, mp.y)
-                if(this.checkCollisionScreen(mouseVector)){
-                    this.states[STATES.IsHovered] = true
-                }
-            }
-        }
+        this.checkMouseover()
         this.components.forEach((component) => {
             component.update()
         })
-        if (this.states[STATES.Collidable]) {
-            const pos = Map.worldToTilePosition(this, this.game.getTileSize())
-            this.hitbox.update(pos.x, pos.y)
-        }
     }
 
+    checkMouseover() {
+        this.states[STATES.IsHovered] = false
+        if (this.game.inputManager.mousePosition && this.UUID.includes('PLAYER') === false) { //don't highlight player
+            const mp = this.game.inputManager.mousePosition
+            if (mp) {
+                const collisionComponent = this.getComponent(CollisionComponent)
+                if (collisionComponent) {
+                    const mouseVector = new Vector(mp.x, mp.y)
+                    if (collisionComponent.checkCollisionScreen(mouseVector)) {
+                        this.states[STATES.IsHovered] = true
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * Calls draw on each of the Entity's components.
      * Also draws unit information if the entity is a hovered entity.
      */
     draw() {
-        if(this.states[STATES.IsHovered]){
-            const entityTruePos = this.game.worldToScreen({x: this.x, y: this.y}) // get position on screen
-            this.game.ctx.textAlign = 'center'
-            this.game.ctx.font = '14px arcade'
-            this.game.ctx.fillStyle = (this.attributes.Name === 'MARIOTT') ? 'black' : 'red'
-            this.game.ctx.fillText(this.attributes.Name, entityTruePos.x , entityTruePos.y + this.attributes.Size )
-            this.game.ctx.fillStyle = 'red'
-            this.game.ctx.fillText('HP:' + this.attributes.HP, entityTruePos.x , entityTruePos.y + this.attributes.Size + (this.attributes.Size))
-            this.game.ctx.fillStyle = 'blue'
-            //this.game.ctx.fillText('MANA:' + this.attributes.Mana, entityTruePos.x , entityTruePos.y + this.attributes.Size + 2*(this.attributes.Size))
-        }
         this.components.forEach((component) => {
             component.draw()
         })
+        if (this.states[STATES.IsHovered]) {
+            const attributeComponent = this.getComponent(AttributeComponent)
+            const animationComponent = this.getComponent(AnimationComponent)
+            if (attributeComponent && animationComponent) {
+                const currentAnimation = animationComponent.getCurrentAnimation()
+                const entityTruePos = this.game.worldToScreen({ x: this.x, y: this.y }) // get position on screen
+                this.game.ctx.textAlign = 'center'
+                this.game.ctx.font = '14px arcade'
+                this.game.ctx.fillStyle = (attributeComponent.Name === 'MARIOTT') ? 'black' : 'red'
+                this.game.ctx.fillText(attributeComponent.Name, entityTruePos.x, entityTruePos.y + currentAnimation.yOffset + currentAnimation.frameHeight / 2)
+                this.game.ctx.fillStyle = 'red'
+                this.game.ctx.fillText('HP:' + attributeComponent.HP, entityTruePos.x, entityTruePos.y + currentAnimation.yOffset + currentAnimation.frameHeight / 2 + 17)
+                this.game.ctx.fillStyle = 'blue'
+                //this.game.ctx.fillText('MANA:' + this.attributes.Mana, entityTruePos.x , entityTruePos.y + this.attributes.Size + 2*(this.attributes.Size))
+            }
+        }
     }
-
-    //////////// COMPONENT STUFF ////////////
 
     /**
      * Adds a component to this Entity
@@ -122,121 +126,6 @@ export default class Entity {
             states[stateSymbol] = false
         }
         return states
-    }
-
-    //////////// COLLISION STUFF //////////////
-
-    /**
-     * Sets an entities state to be collidable and creates a hitbox from it's dimensions.
-     * This may be replaced and moved to attribute component.
-     *
-     * Depreciated
-     */
-    setCollidable(options = {}) {
-        //THIS FUNCTION LIKELY GOING TO BE USED IN ATTRIBUTES (if at all) KEEPING FOR NOW
-        //TO REFERENCE THE CODE LATER IF NEEDED.
-        const defaults = {
-            offset: false,
-            xOffset: 0,
-            yOffset: 0,
-            radius: 32
-        }
-        options = Object.assign({}, defaults, options)
-        this.states[STATES.Collidable] = true
-        if (options.offset === true) {
-            this.hitOffsetX = options.xOffset
-            this.hitOffsetY = options.yOffset
-            this.hitbox = new HitCircle(options.radius, this.x + this.hitOffsetX, this.y + this.hitOffsetY)
-        } else {
-            this.hitbox = new HitCircle(this.radius, this.x, this.y)
-        }
-    }
-
-    /**
-     * Uses the WORLD-TO-SCREEN converter in the game engine to determine if an entity is at a certain location.
-     *
-     * @param vector
-     * @returns {boolean}
-     */
-    checkCollisionScreen(vector){
-        const entityTruePos = this.game.worldToScreen({x: this.x, y: this.y - this.attributes.Height}) // get position on screen
-        const dist = vector.distance(entityTruePos)
-        if(dist < this.attributes.Size){
-            //console.log(this.name, ' IN DISTANCE!  ', dist)
-            const distY = vector.absdistanceY(entityTruePos)
-            const distX = vector.absdistanceX(entityTruePos)
-
-            if(distX < this.attributes.Width && distY < this.attributes.Height){
-
-                return true
-            }else{
-                return false
-            }
-        }
-    }
-
-    /**
-     * Uses the SCREEN-TO-WORLD converter in the game engine to determine if an entity is at a certain location.
-     *
-     * @param vector
-     * @returns {boolean}
-     */
-    checkCollisionWorld(vector){
-        const ret = {collides: false, distance: null}
-        //let entityTruePos = this.game.screenToWorld(this) // get position on screen
-        const dist = vector.distance(this)
-        if(dist < this.size){
-            ret.distance = dist
-            const distY = vector.absdistanceY(this)
-            const distX = vector.absdistanceX(this)
-
-            ret.collides = distX < this.attributes.Width && distY < this.attributes.Height
-        }
-        return ret
-    }
-
-    /**
-     * Helper method for moving to check if the x/y coordinate is good.
-     * If there is a collision, x/y is not updated.
-     *
-     * @param x
-     * @param y
-     */
-    tryMove(x, y) {
-        if (this.states[STATES.Collidable]) {
-
-            const isCollided = this.game.sceneManager.collisionLayer.collides(this, new Vector(x, y))
-
-            if (!isCollided) {
-                this.x = x
-                this.y = y
-            }//else, collision happened, don't update x/y
-
-        } else { //not collidable
-            this.x = x
-            this.y = y
-        }
-    }
-
-    goTo(x, y) {
-
-        if (this.states[STATES.Collidable]) {
-
-            const isCollided = this.game.sceneManager.collisionLayer.collides(this, new Vector(x, y))
-
-            if (!isCollided) {
-                this.goToX = x
-                this.goToY = y
-            }//else, collision happened, don't update x/y
-
-        } else { //not collidable
-            this.goToX = x
-            this.goToY = y
-        }
-
-        this.following = true
-
-
     }
 
     rotateAndCache(image, angle) {

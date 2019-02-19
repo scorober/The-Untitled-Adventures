@@ -7,7 +7,7 @@ import { DIRECTIONS, ANIMATIONS as ANIMS } from '../../utils/Const.js'
 export default class MovementComponent extends Component {
     /**
      * @param {Entity} entity A reference to the Entity this Component is attached to
-     * @param {Object} animationConfig Animation configuration object for this character.
+     * @param {Object} attributesConfig Attributes configuration object for this character.
      */
     constructor(entity, attributes) {
         super(entity)
