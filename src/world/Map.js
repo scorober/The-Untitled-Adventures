@@ -1,7 +1,7 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
 import Vector from '../utils/Vector.js'
-import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM } from '../utils/Const.js'
+import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, VERTICAL, HORIZONTAL } from '../utils/Const.js'
 
 export default class Map extends Entity {
     /**
@@ -23,6 +23,7 @@ export default class Map extends Entity {
         this.tiles = []
         this.scene = scene
         this.spawners = [] //Array of spawner positions and radii.
+        this.exits = [] //Array of door positions and room they enter.
         this.buildMap()
     }
 
@@ -45,13 +46,20 @@ export default class Map extends Entity {
         this.map0 = new Array2D(size, 0)
         this.map1 = new Array2D(size, 0)
         this.map2 = new Array2D(size, 0)
+        this.map3 = new Array2D(size, 0)
 
         const dungeon = this.dungeon
         for (const piece of dungeon.children) {
-            console.log(piece.tag)
+            // console.log(piece)
             this.buildWalls(piece)
-            this.buildExits(piece)
             this.buildRoom(piece)
+            this.buildExits(piece)
+            
+            console.log(this.exits)
+            for (let i = 0; i < this.exits.length; i++) {
+                this.openExit(this.exits[i].tiles)
+            }
+
         }
     }
 
@@ -147,39 +155,108 @@ export default class Map extends Entity {
 
     // eslint-disable-next-line complexity
     buildExits(piece) {
+        const tiles = []
+        let orientation = null
         for (const exit of piece.exits) {
             //Create the floor between rooms
             const exitPos = piece.global_pos(exit[0])
-            this.map0.set(piece.global_pos(exit[0]), 38)
+            // this.map0.set(piece.global_pos(exit[0]), 38)
             //Create this exit door
             if (exit[1] === TOP || exit[1] === BOTTOM) {
                 const transPos = this.alterPos(exitPos, 0, -2)
                 this.createObject(this.map0, transPos, MI.DoorPathV)
                 if (exit[1] === TOP) {
+
                     const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, 1)
                     this.createObject(this.map1, doorPos, MI.Door0)
-                    this.createObject(this.map2, doorPos, MI.Door0Top)
+                    this.createObject(this.map2, this.alterPos(doorPos, 0, 1), MI.Lock0)
+                    this.createObject(this.map3, doorPos, MI.Door0Top)
+                    tiles.push(this.alterPos(doorPos, 1, 1))
+                    tiles.push(this.alterPos(doorPos, 2, 1))
+                    orientation = HORIZONTAL
                 } else {
                     const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, -2)
                     this.createObject(this.map1, doorPos, MI.Door180)
-                    this.createObject(this.map2, doorPos, MI.Door180Top)
+                    this.createObject(this.map2, doorPos, MI.Lock180)
+                    this.createObject(this.map3, doorPos, MI.Door180Top)
+                    tiles.push(this.alterPos(doorPos, 1, 0))
+                    tiles.push(this.alterPos(doorPos, 2, 0))
+                    orientation = HORIZONTAL
                 }
             } else {  //East and West
                 const transPos = this.alterPos(exitPos, -2, 0)
                 this.createObject(this.map0, transPos, MI.DoorPathH)
                 if (exit[1] === RIGHT) {
                     const doorPos = this.alterPos(exitPos, 1, -1)
-                    this.createObject(this.map0, doorPos, MI.Door90)
-                    this.createObject(this.map1, this.alterPos(doorPos, 1, 0), MI.Lock90)
-                    this.createObject(this.map2, doorPos, MI.Door90Top)
+                    this.createObject(this.map1, doorPos, MI.Door90)
+                    this.createObject(this.map2, this.alterPos(doorPos, 1, 0), MI.Lock90)
+                    this.createObject(this.map3, doorPos, MI.Door90Top)
+                    tiles.push(this.alterPos(doorPos, 1, 1))
+                    tiles.push(this.alterPos(doorPos, 1, 2))
+                    orientation = VERTICAL
                 }
                 if (exit[1] === LEFT) {
                     const doorPos = this.alterPos(piece.global_pos(exit[0]), -2, -1)
                     this.createObject(this.map1, doorPos, MI.Door270)
-                    this.createObject(this.map2, doorPos, MI.Door270Top)
-
+                    this.createObject(this.map2, doorPos, MI.Lock270)
+                    this.createObject(this.map3, doorPos, MI.Door270Top)
+                    tiles.push(this.alterPos(doorPos, 0, 1))
+                    tiles.push(this.alterPos(doorPos, 0, 2))
+                    orientation = VERTICAL
                 }
             }
+            this.addExit(piece.id, exit[2].id, tiles, orientation)
+        }
+    }
+
+    /**
+     * 
+     * @param {Array} tiles Door tiles that need to be replaced with floor
+     */
+    openExit(tiles) {
+        for (let i = 0; i < tiles.length; i++) {
+            this.map2.set(tiles[i], 4)
+        }
+    }
+
+    /**
+     * Populates an array of exits for entity creation. Matches pairs with doors.
+     * TODO remove repeated pairings.
+     * @param {Number} destination ID of the destination room.
+     * @param {Number} room ID of the current room.
+     * @param {Array} tiles Array of tile positions that represent the exit door.
+     */
+    addExit(destination, room, tiles, orientation) {
+        let paired = false
+        this.exits.forEach(function(exit) {
+            if (!exit.paired) {
+                if (exit.room === destination) {
+                    destination = exit.room
+                    exit.paired = true
+                    paired = true
+                }
+            }
+        })
+        if (paired === false) {
+            this.exits.push(
+                {
+                    tiles: tiles,
+                    room: room,
+                    destination: destination,
+                    orientation: orientation,
+                    paired: false
+                }
+            )
+        } else {
+            this.exits.push(
+                {
+                    tiles: tiles,
+                    room: room,
+                    destination: destination,
+                    orientation: orientation,
+                    paired: true
+                }
+            )
         }
     }
 
@@ -253,10 +330,10 @@ export default class Map extends Entity {
             for (let r = 0; r < this.rows; r++) {
                 const tile = this.map0.get([c, r])
                 const objTile = this.map1.get([c, r])
-                // const objTile1 = this.map2.get([c, r])
+                const objTile2 = this.map2.get([c,r])
                 this.drawTile(c, r, tile)
                 this.drawTile(c, r, objTile)
-                // this.drawTile(c, r, objTile1)
+                this.drawTile(c, r, objTile2)
             }
         }
     }
@@ -264,7 +341,7 @@ export default class Map extends Entity {
     drawTop() {
         for (let c = 0; c < this.cols; c++) {
             for (let r = 0; r < this.rows; r++) {
-                const objTile1 = this.map2.get([c, r])
+                const objTile1 = this.map3.get([c, r])
                 this.drawTile(c, r, objTile1)
             }
         }

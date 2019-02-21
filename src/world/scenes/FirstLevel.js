@@ -16,6 +16,9 @@ import PlayerInputComponent from '../../entities/components/PlayerInputComponent
 import AnimationComponent from '../../entities/components/AnimationComponent.js'
 import SpawnerBehaviorComponent from '../../entities/components/SpawnerBehaviorComponent.js'
 import CollisionComponent from '../../entities/components/CollisionComponent.js'
+import AttributeComponent from '../../entities/components/AttributeComponent.js'
+import SpawnerData from '../../entities/effects/SpawnerDefaultData.js'
+import DoorBehaviorComponent from '../../entities/components/DoorBehaviorComponent.js';
 
 
 export default class FirstLevel extends Scene {
@@ -117,9 +120,18 @@ export default class FirstLevel extends Scene {
 
         for (const mapSpawner of map.spawners) {
             const spawner = new Entity(game, mapSpawner.pos)
-            spawner.addComponent(new AnimationComponent(spawner, SpawnerDefaultData.AnimationConfig))
+            spawner.addComponent(new AnimationComponent(spawner, SpawnerData.AnimationConfig))
             spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, SPAWNERS.Mage, mapSpawner.r, 8))
             this.addEntity(spawner)
+        }
+
+        for (const exit of map.exits) {
+            const tilePos = exit.tiles[0]
+            console.log(exit.tiles) //TODO is this outputting bad values?
+            const pos = Map.tileToWorldPosition({x: tilePos[0], y: tilePos[1]} , map.tileSize)
+            const door = new Entity(game, pos)
+            door.addComponent(new DoorBehaviorComponent(door, exit, exit.tiles))
+            this.addEntity(door)
         }
     }
 
