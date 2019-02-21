@@ -78,4 +78,12 @@ export default class Animation {
     removeCallback() {
         this.cb = null
     }
+
+    getWidth() {
+        return this.frameWidth * this.scale
+    }
+
+    getHeight() {
+        return this.frameHeight * this.scale
+    }
 }
