@@ -105,4 +105,5 @@ export default class Entity {
         offscreenCtx.restore()
         return offscreenCanvas
     }
+
 }
