@@ -105,8 +105,16 @@ export default class Vector {
         return this.x - vector.x
     }
 
+    absdistanceX(vector){
+        return Math.abs(this.x - vector.x)
+    }
+
     distanceY(vector){
         return this.y - vector.y
+    }
+
+    absdistanceY(vector){
+        return Math.abs(this.y - vector.y)
     }
 
     lengthSq(){

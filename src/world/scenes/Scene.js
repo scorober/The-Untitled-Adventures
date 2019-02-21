@@ -8,6 +8,7 @@ export default class Scene {
         this.entities = []
         this.map = null
         this.background = null
+        this.highlightedEntity = {}
         this.timeElapsed = 0
         this.timeBuffer = 0
     }

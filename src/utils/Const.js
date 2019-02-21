@@ -32,6 +32,9 @@ export const STATES = {
     RemoveFromWorld: Symbol(),
     Aggressive: Symbol(),
     Cooling: Symbol(),
+    IsHovered : Symbol(),
+    IsCombat : Symbol(),
+    IsAttacking : Symbol(),
 }
 
 export const ANIMATIONS = {

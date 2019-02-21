@@ -1,7 +1,9 @@
 import { STATES } from '../utils/Const.js'
 import { create_UUID } from '../utils/Random.js'
-import { HitCircle } from '../utils/Collision.js'
 import Vector from '../utils/Vector.js'
+import AttributeComponent from './components/AttributeComponent.js'
+import CollisionComponent from './components/CollisionComponent.js'
+import AnimationComponent from './components/AnimationComponent.js'
 
 export default class Entity {
     constructor(game, pos) {
@@ -11,41 +13,63 @@ export default class Entity {
         this.removeFromWorld = false
         this.states = this.getDefaultStates()
         this.components = []
-        this.UUID = 'ENTITY::' + create_UUID() //UUID for identifying this entity instance.
-        this.size = 32
-        this.radius = 16 //Default values TODO add in constructor
+        this.UUID = create_UUID()
         this.hitOffsetX = 0
         this.hitOffsetY = 0
     }
 
     /**
+     * First determines if entity is hovered based on the mouse's location.
+     *
      * Calls update on each of the Entity's components.
      */
     update() {
+        this.checkMouseover()
         this.components.forEach((component) => {
             component.update()
         })
-        if (this.states[STATES.Collidable]) {
-            this.hitbox.update(this.x + this.hitOffsetX, this.y + this.hitOffsetY)
+    }
+
+    checkMouseover() {
+        this.states[STATES.IsHovered] = false
+        if (this.game.inputManager.mousePosition && this.UUID.includes('PLAYER') === false) { //don't highlight player
+            const mp = this.game.inputManager.mousePosition
+            if (mp) {
+                const collisionComponent = this.getComponent(CollisionComponent)
+                if (collisionComponent) {
+                    const mouseVector = new Vector(mp.x, mp.y)
+                    if (collisionComponent.checkCollisionScreen(mouseVector)) {
+                        this.states[STATES.IsHovered] = true
+                    }
+                }
+            }
         }
     }
 
-
     /**
-     * Calls draw on each of the Entity's components
+     * Calls draw on each of the Entity's components.
+     * Also draws unit information if the entity is a hovered entity.
      */
     draw() {
-        this.game.ctx.fillRect(this.x - this.game.camera.xView, this.y - this.game.camera.yView, 5, 5)
-        if (this.game.showOutlines && this.radius) {
-            this.game.ctx.beginPath()
-            this.game.ctx.strokeStyle = 'green'
-            this.game.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
-            this.game.ctx.stroke()
-            this.game.ctx.closePath()
-        }
         this.components.forEach((component) => {
             component.draw()
         })
+        if (this.states[STATES.IsHovered]) {
+            const attributeComponent = this.getComponent(AttributeComponent)
+            const animationComponent = this.getComponent(AnimationComponent)
+            if (attributeComponent && animationComponent) {
+                const currentAnimation = animationComponent.getCurrentAnimation()
+                const entityTruePos = this.game.worldToScreen({ x: this.x, y: this.y }) // get position on screen
+                this.game.ctx.textAlign = 'center'
+                this.game.ctx.font = '14px arcade'
+                this.game.ctx.fillStyle = (attributeComponent.Name === 'MARIOTT') ? 'black' : 'red'
+                this.game.ctx.fillText(attributeComponent.Name, entityTruePos.x, entityTruePos.y + currentAnimation.yOffset + currentAnimation.frameHeight / 2)
+                this.game.ctx.fillStyle = 'red'
+                this.game.ctx.fillText('HP:' + attributeComponent.HP, entityTruePos.x, entityTruePos.y + currentAnimation.yOffset + currentAnimation.frameHeight / 2 + 17)
+                this.game.ctx.fillStyle = 'blue'
+                //this.game.ctx.fillText('MANA:' + this.attributes.Mana, entityTruePos.x , entityTruePos.y + this.attributes.Size + 2*(this.attributes.Size))
+            }
+        }
     }
 
     /**
@@ -102,74 +126,6 @@ export default class Entity {
             states[stateSymbol] = false
         }
         return states
-    }
-
-    /**
-     * Sets an entities state to be collidable and creates a hitbox from it's dimensions.
-     */
-    setCollidable(options = {}) {
-        const defaults = {
-            offset: false,
-            xOffset: 0,
-            yOffset: 0,
-            radius: 32
-        }
-        options = Object.assign({}, defaults, options)
-        this.states[STATES.Collidable] = true
-        if (options.offset === true) {
-            this.hitOffsetX = options.xOffset
-            this.hitOffsetY = options.yOffset
-            this.hitbox = new HitCircle(options.radius, this.x + this.hitOffsetX, this.y + this.hitOffsetY)
-        } else {
-            this.hitbox = new HitCircle(this.radius, this.x, this.y)
-        }
-
-
-    }
-
-    /**
-     * Helper method for moving to check if the x/y coordinate is good.
-     * If there is a collision, x/y is not updated.
-     *
-     * @param x
-     * @param y
-     */
-    tryMove(x, y) {
-        if (this.states[STATES.Collidable]) {
-
-            const isCollided = this.game.sceneManager.collisionLayer.collides(this, new Vector(x, y))
-
-            if (!isCollided) {
-                this.x = x
-                this.y = y
-            }//else, collision happened, don't update x/y
-
-        } else { //not collidable
-            this.x = x
-            this.y = y
-        }
-    }
-
-
-    goTo(x, y) {
-
-        if (this.states[STATES.Collidable]) {
-
-            const isCollided = this.game.sceneManager.collisionLayer.collides(this, new Vector(x, y))
-
-            if (!isCollided) {
-                this.goToX = x
-                this.goToY = y
-            }//else, collision happened, don't update x/y
-
-        } else { //not collidable
-            this.goToX = x
-            this.goToY = y
-        }
-
-        this.following = true
-
-
     }
 
     rotateAndCache(image, angle) {

@@ -2,6 +2,7 @@ import Timer from './utils/Timer.js'
 import InputManager from './InputManager.js'
 import SceneManager from './SceneManager.js'
 import Camera from './entities/Camera.js'
+import Vector from './utils/Vector.js'
 
 export default class GameEngine {
     constructor() {
@@ -34,8 +35,9 @@ export default class GameEngine {
         this.surfaceWidth = this.ctx.canvas.width
         this.surfaceHeight = this.ctx.canvas.height
         this.timer = new Timer()
+        this.sceneManager = new SceneManager()
         this.camera = new Camera(this)
-        this.sceneManager = new SceneManager(this)
+        this.sceneManager.init(this)
         this.startInput()
     }
 
@@ -109,8 +111,39 @@ export default class GameEngine {
             y: pos.y + this.camera.yView
         }
     }
-    getCurrentScene(){
-        return this.sceneManager.currentScene
+    worldToScreen(pos) {
+        return {
+            x: pos.x - this.camera.xView,
+            y: pos.y - this.camera.yView
+        }
+    }
+    getCurrentScene() {
+        if (this.sceneManager) {
+            return this.sceneManager.currentScene
+        } else {
+            return {}
+        }
     }
 
+    removeEntityByRef(entity) {
+        const scene = this.sceneManager.currentScene
+        scene.removeEntity(scene.entities.indexOf(entity))
+    }
+
+    getHighlightedEntity() {
+        return this.sceneManager.currentScene.highlightedEntity
+    }
+    setHighlightedEntity(entity) {
+        this.sceneManager.currentScene.highlightedEntity = entity
+    }
+    removeHighlightedEntity() {
+        this.sceneManager.currentScene.highlightedEntity = null
+    }
+    getEntityByXYOnScreen(pos) {
+        return this.sceneManager.getCollidablesXYScreen(new Vector(pos.x, pos.y))
+    }
+
+    getEntityByXYInWorld(pos) {
+        return this.sceneManager.getCollidablesXYWorld(new Vector(pos.x, pos.y))
+    }
 }

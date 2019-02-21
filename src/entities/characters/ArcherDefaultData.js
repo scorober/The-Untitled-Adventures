@@ -29,7 +29,9 @@ export default {
         Atk: 10,
         Def: 15,
         Mdef: 3,
-        Speed: 50
+        Speed: 50,
+        Name: 'ARCHER',
+        isCombat: true,
     },
     // Animation Component Configuration
     AnimationConfig: {

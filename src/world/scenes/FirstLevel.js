@@ -15,8 +15,7 @@ import MarriottMovementComponent from '../../entities/components/MarriottMovemen
 import PlayerInputComponent from '../../entities/components/PlayerInputComponent.js'
 import AnimationComponent from '../../entities/components/AnimationComponent.js'
 import SpawnerBehaviorComponent from '../../entities/components/SpawnerBehaviorComponent.js'
-import SpawnerDefaultData from '../../entities/effects/SpawnerDefaultData.js';
-
+import CollisionComponent from '../../entities/components/CollisionComponent.js'
 
 
 export default class FirstLevel extends Scene {
@@ -85,20 +84,26 @@ export default class FirstLevel extends Scene {
 
         const start = this.map.getStartPos()
 
-        const playerCharacter = new Entity(game, start)
+        const playerCharacter = new Entity(game, start, PlayerCharacterData.Attributes)
 
         playerCharacter.addComponent(new AnimationComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
+        playerCharacter.addComponent(new AttributeComponent(playerCharacter, PlayerCharacterData.Attributes))
         playerCharacter.addComponent(new MovementComponent(playerCharacter, PlayerCharacterData.Attributes))
+        playerCharacter.addComponent(new CollisionComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
         playerCharacter.addComponent(new PlayerInputComponent(playerCharacter))
 
-        const archer = new Entity(game, start)
+        const archer = new Entity(game, start, ArcherData.Attributes)
         archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
+        archer.addComponent(new AttributeComponent(archer, ArcherData.Attributes))
         archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
+        archer.addComponent(new CollisionComponent(archer, ArcherData.AnimationConfig))
         archer.getComponent(MovementComponent).setFollowTarget(playerCharacter)
 
-        const marriott = new Entity(game, start)
+        const marriott = new Entity(game, start, MarriottData.Attributes)
         marriott.addComponent(new MarriottMovementComponent(marriott, MarriottData.Attributes))
+        marriott.addComponent(new AttributeComponent(marriott, MarriottData.Attributes))
         marriott.addComponent(new AnimationComponent(marriott, MarriottData.AnimationConfig))
+        marriott.addComponent(new CollisionComponent(marriott, MarriottData.AnimationConfig))
         marriott.getComponent(MovementComponent).setFollowTarget(playerCharacter)
 
 
@@ -107,7 +112,7 @@ export default class FirstLevel extends Scene {
         game.camera.setFollowedEntity(playerCharacter)
         this.addEntity(playerCharacter)
         this.addEntity(game.camera)
-        //this.addEntity(archer)
+        this.addEntity(archer)
         this.addEntity(marriott)
 
         for (const mapSpawner of map.spawners) {
