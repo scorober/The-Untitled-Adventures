@@ -121,7 +121,7 @@ export default class GameEngine {
         if (this.sceneManager) {
             return this.sceneManager.currentScene
         } else {
-            return {}
+            return false
         }
     }
 

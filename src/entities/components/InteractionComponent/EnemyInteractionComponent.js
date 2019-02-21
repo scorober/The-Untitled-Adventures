@@ -1,6 +1,7 @@
 import InteractionComponent from './InteractionComponent.js'
 import AttributeComponent from '../AttributeComponent.js'
 import AnimationComponent from '../AnimationComponent.js'
+import CombatComponent from '../CombatComponent.js'
 
 export default class EnemyInteractionComponent extends InteractionComponent {
     constructor(entity) {
@@ -8,19 +9,18 @@ export default class EnemyInteractionComponent extends InteractionComponent {
     }
 
     update() {
-        
+        if (this.leftClick) {
+            // handle left click()
+        }
+        if (this.rightClick) {
+            this.handleAttack()
+        }
     }
 
     draw() {
         super.update()
         if (this.hovered) {
             this.drawMouseover()
-        }
-        if (this.leftClick) {
-            // handle left click()
-        }
-        if (this.rightClick) {
-            // handle right click()
         }
     }
 
@@ -38,6 +38,15 @@ export default class EnemyInteractionComponent extends InteractionComponent {
             ctx.fillStyle = 'red'
             ctx.fillText(attributeComponent.Name, screenPos.x, screenPos.y + height / 2 - currentAnimation.yOffset)
             ctx.fillText('HP:' + attributeComponent.HP, screenPos.x, screenPos.y + height / 2 - currentAnimation.yOffset + fontSize + 3)
+        }
+    }
+
+    handleAttack() {
+        const combatComponent = this.entity.getComponent(CombatComponent)
+        if (combatComponent) {
+            const player = this.entity.game.getCurrentScene().getPlayer()
+            const playerCombatComponent = player.getComponent(CombatComponent)
+            playerCombatComponent.meleeAttack(combatComponent)
         }
     }
 }

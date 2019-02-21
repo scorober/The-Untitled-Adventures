@@ -11,14 +11,21 @@ export default class InteractionComponent extends Component {
     }
 
     update() {
-        this.checkMouseInteraction()
+        this.hovered = this.checkMouseover()
     }
 
     draw() {
-        
+
     }
 
-    checkMouseInteraction() {
+    checkMouseover() {
+        const inputManager = this.entity.game.inputManager
+        const mouseVector = inputManager.mousePosition
+        const collisionComponent = this.entity.getComponent(CollisionComponent)
+        return mouseVector && collisionComponent && collisionComponent.checkCollisionScreen(mouseVector)
+    }
+
+    checkMouseove2() {
         this.hovered = false
         this.leftClick = false
         this.rightClick = false
@@ -39,5 +46,21 @@ export default class InteractionComponent extends Component {
                 }
             }
         }
+    }
+
+    setRightClick() {
+        this.rightClick = true
+    }
+
+    setLeftClick() {
+        this.leftClick = true
+    }
+
+    unsetRightClick() {
+        this.rightClick = false
+    }
+
+    unsetLeftClick() {
+        this.leftClick = false
     }
 }

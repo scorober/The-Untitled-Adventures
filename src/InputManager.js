@@ -1,4 +1,5 @@
 import { CTX_EVENTS } from './utils/Const.js'
+import Vector from './utils/Vector.js';
 
 export default class InputManager {
     constructor() {
@@ -60,7 +61,7 @@ export default class InputManager {
     getXandY(e) {
         const x = e.clientX - this.ctx.canvas.getBoundingClientRect().left
         const y = e.clientY - this.ctx.canvas.getBoundingClientRect().top
-        return { x: x, y: y }
+        return new Vector(x, y)
     }
 
     /**
