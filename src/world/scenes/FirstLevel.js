@@ -17,6 +17,7 @@ import AnimationComponent from '../../entities/components/AnimationComponent.js'
 import SpawnerBehaviorComponent from '../../entities/components/SpawnerBehaviorComponent.js'
 import CollisionComponent from '../../entities/components/CollisionComponent.js'
 import AttributeComponent from '../../entities/components/AttributeComponent.js'
+import MouseoverComponent from '../../entities/components/MouseoverComponent.js'
 
 
 
@@ -89,6 +90,7 @@ export default class FirstLevel extends Scene {
         archer.addComponent(new AttributeComponent(archer, ArcherData.Attributes))
         archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
         archer.addComponent(new CollisionComponent(archer, ArcherData.AnimationConfig))
+        archer.addComponent(new MouseoverComponent(archer))
         archer.getComponent(MovementComponent).setFollowTarget(playerCharacter)
 
         const marriott = new Entity(game, start, MarriottData.Attributes)
@@ -96,6 +98,7 @@ export default class FirstLevel extends Scene {
         marriott.addComponent(new AttributeComponent(marriott, MarriottData.Attributes))
         marriott.addComponent(new AnimationComponent(marriott, MarriottData.AnimationConfig))
         marriott.addComponent(new CollisionComponent(marriott, MarriottData.AnimationConfig))
+        marriott.addComponent(new MouseoverComponent(marriott))
         marriott.getComponent(MovementComponent).setFollowTarget(playerCharacter)
 
 
