@@ -18,7 +18,6 @@ import SpawnerBehaviorComponent from '../../entities/components/SpawnerBehaviorC
 import CollisionComponent from '../../entities/components/CollisionComponent.js'
 import AttributeComponent from '../../entities/components/AttributeComponent.js'
 import SpawnerData from '../../entities/effects/SpawnerDefaultData.js'
-import DoorBehaviorComponent from '../../entities/components/DoorBehaviorComponent.js'
 
 
 export default class FirstLevel extends Scene {
@@ -120,13 +119,6 @@ export default class FirstLevel extends Scene {
             this.addEntity(spawner)
         }
 
-        for (const exit of map.exits) {
-            const tilePos = exit.tiles[0]
-            const pos = Map.tileToWorldPosition({x: tilePos[0], y: tilePos[1]} , map.tileSize)
-            const door = new Entity(game, pos)
-            door.addComponent(new DoorBehaviorComponent(door, exit, exit.tiles))
-            this.addEntity(door)
-        }
     }
 
     /**
