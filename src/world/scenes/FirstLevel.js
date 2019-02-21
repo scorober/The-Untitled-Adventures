@@ -17,7 +17,8 @@ import AnimationComponent from '../../entities/components/AnimationComponent.js'
 import SpawnerBehaviorComponent from '../../entities/components/SpawnerBehaviorComponent.js'
 import CollisionComponent from '../../entities/components/CollisionComponent.js'
 import AttributeComponent from '../../entities/components/AttributeComponent.js'
-import MouseoverComponent from '../../entities/components/MouseoverComponent.js'
+import EnemyInteractionComponent from '../../entities/components/InteractionComponent/EnemyInteractionComponent.js'
+import MarriottInteractionComponent from '../../entities/components/InteractionComponent/MarriottInteractionComponent.js'
 
 
 
@@ -69,52 +70,59 @@ export default class FirstLevel extends Scene {
 
         dungeon.generate()
 
-        this.setBackground(new Background(game, game.getAsset(ASSET_PATHS.Background)))
-
-
         const map = new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon, this)
         this.setMap(map)
-
+        this.setBackground(new Background(game, game.getAsset(ASSET_PATHS.Background)))
         const start = this.map.getStartPos()
 
-        const playerCharacter = new Entity(game, start, PlayerCharacterData.Attributes)
-
-        playerCharacter.addComponent(new AnimationComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
-        playerCharacter.addComponent(new AttributeComponent(playerCharacter, PlayerCharacterData.Attributes))
-        playerCharacter.addComponent(new MovementComponent(playerCharacter, PlayerCharacterData.Attributes))
-        playerCharacter.addComponent(new CollisionComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
-        playerCharacter.addComponent(new PlayerInputComponent(playerCharacter))
-
-        const archer = new Entity(game, start, ArcherData.Attributes)
-        archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
-        archer.addComponent(new AttributeComponent(archer, ArcherData.Attributes))
-        archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
-        archer.addComponent(new CollisionComponent(archer, ArcherData.AnimationConfig))
-        archer.addComponent(new MouseoverComponent(archer))
-        archer.getComponent(MovementComponent).setFollowTarget(playerCharacter)
-
-        const marriott = new Entity(game, start, MarriottData.Attributes)
-        marriott.addComponent(new MarriottMovementComponent(marriott, MarriottData.Attributes))
-        marriott.addComponent(new AttributeComponent(marriott, MarriottData.Attributes))
-        marriott.addComponent(new AnimationComponent(marriott, MarriottData.AnimationConfig))
-        marriott.addComponent(new CollisionComponent(marriott, MarriottData.AnimationConfig))
-        marriott.addComponent(new MouseoverComponent(marriott))
-        marriott.getComponent(MovementComponent).setFollowTarget(playerCharacter)
-
-
+        const playerCharacter = this.createPlayerCharacter(game, start)
+        const archer = this.createArcher(game, start, playerCharacter)
+        const marriott = this.createMarriott(game, start, playerCharacter)
 
         this.setPlayer(playerCharacter)
-        game.camera.setFollowedEntity(playerCharacter)
         this.addEntity(playerCharacter)
-        this.addEntity(game.camera)
         this.addEntity(archer)
         this.addEntity(marriott)
+        this.addEntity(game.camera)
+        this.game.camera.setFollowedEntity(playerCharacter)
 
         for (const mapSpawner of map.spawners) {
             const spawner = new Entity(game, mapSpawner.pos)
             spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, SPAWNERS.Mage, mapSpawner.r, 8))
             this.addEntity(spawner)
         }
+    }
+
+    createMarriott(game, start, playerCharacter) {
+        const marriott = new Entity(game, start, MarriottData.Attributes)
+        marriott.addComponent(new AnimationComponent(marriott, MarriottData.AnimationConfig))
+        marriott.addComponent(new MarriottMovementComponent(marriott, MarriottData.Attributes))
+        marriott.addComponent(new AttributeComponent(marriott, MarriottData.Attributes))
+        marriott.addComponent(new CollisionComponent(marriott, MarriottData.AnimationConfig))
+        marriott.addComponent(new MarriottInteractionComponent(marriott))
+        marriott.getComponent(MovementComponent).setFollowTarget(playerCharacter)
+        return marriott
+    }
+
+    createArcher(game, start, playerCharacter) {
+        const archer = new Entity(game, start, ArcherData.Attributes)
+        archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
+        archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
+        archer.addComponent(new AttributeComponent(archer, ArcherData.Attributes))
+        archer.addComponent(new CollisionComponent(archer, ArcherData.AnimationConfig))
+        archer.addComponent(new EnemyInteractionComponent(archer))
+        archer.getComponent(MovementComponent).setFollowTarget(playerCharacter)
+        return archer
+    }
+
+    createPlayerCharacter(game, start) {
+        const playerCharacter = new Entity(game, start, PlayerCharacterData.Attributes)
+        playerCharacter.addComponent(new AnimationComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
+        playerCharacter.addComponent(new AttributeComponent(playerCharacter, PlayerCharacterData.Attributes))
+        playerCharacter.addComponent(new MovementComponent(playerCharacter, PlayerCharacterData.Attributes))
+        playerCharacter.addComponent(new CollisionComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
+        playerCharacter.addComponent(new PlayerInputComponent(playerCharacter))
+        return playerCharacter
     }
 
     /**

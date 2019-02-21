@@ -6,7 +6,7 @@ import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR, ASSET_PATHS } from '../../u
 // Values defined here for use in export object
 
 const height = 64
-const yOffset = 10
+const yOffset = 8
 
 
 /** 
