@@ -1,7 +1,6 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
-import Vector from '../utils/Vector.js'
-import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, VERTICAL, HORIZONTAL } from '../utils/Const.js'
+import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM } from '../utils/Const.js'
 
 export default class Map extends Entity {
     /**
@@ -55,15 +54,17 @@ export default class Map extends Entity {
             this.buildRoom(piece)
             this.buildExits(piece)
             
-            console.log(this.exits)
-            for (let i = 0; i < this.exits.length; i++) {
-                this.openExit(this.exits[i].tiles)
-            }
-
+            // this.removeAllExits()
+            this.openRoomExits(1)
         }
     }
 
-
+    /**
+     * 
+     * @param {Array2D} map Map layer this object is created in. 
+     * @param {Array} pos Map position of upper left corner of object.
+     * @param {Array} object 2D array representing the object.
+     */
     createObject(map, pos, object) {
         for (let row = 0; row < object.length; row++) {
             for (let col = 0; col <object[0].length; col++) {
@@ -73,7 +74,11 @@ export default class Map extends Entity {
         }
     }
 
-    generateCorners(piece) {
+    /**
+     * Generates corner positions and sizes of a room for wall building.
+     * @param {Piece} piece Room that has these properties.
+     */
+    generateRoomProperties(piece) {
         const pos = piece.position
         const size = piece.size
         const w = size[0]
@@ -102,7 +107,7 @@ export default class Map extends Entity {
     buildWalls(piece) {
 
         //Corners and sizes
-        const p = this.generateCorners(piece)
+        const p = this.generateRoomProperties(piece)
 
         //Set floor
         this.map0.set_square(p.innerPos, p.innerSize, 4, true)
@@ -127,7 +132,11 @@ export default class Map extends Entity {
         this.createObject(this.map0, p.posSE, MI.ICornerSE)
     }
 
-
+    // eslint-disable-next-line complexity
+    /**
+     * Builds objects in tagged rooms.
+     * @param {Piece} piece Room objects will be built in.
+     */
     buildRoom(piece) {
         const center = piece.global_pos(piece.get_center_pos())
         switch (piece.tag) {
@@ -153,27 +162,29 @@ export default class Map extends Entity {
         }
     }
 
+    
+    /**
+     * Builds exits for each piece in a room.
+     * @param {Piece} piece Room that generates exits.
+     */
     // eslint-disable-next-line complexity
     buildExits(piece) {
-        const tiles = []
-        let orientation = null
         for (const exit of piece.exits) {
+            const tiles = []
             //Create the floor between rooms
             const exitPos = piece.global_pos(exit[0])
-            // this.map0.set(piece.global_pos(exit[0]), 38)
             //Create this exit door
             if (exit[1] === TOP || exit[1] === BOTTOM) {
                 const transPos = this.alterPos(exitPos, 0, -2)
                 this.createObject(this.map0, transPos, MI.DoorPathV)
                 if (exit[1] === TOP) {
-
                     const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, 1)
                     this.createObject(this.map1, doorPos, MI.Door0)
                     this.createObject(this.map2, this.alterPos(doorPos, 0, 1), MI.Lock0)
                     this.createObject(this.map3, doorPos, MI.Door0Top)
                     tiles.push(this.alterPos(doorPos, 1, 1))
                     tiles.push(this.alterPos(doorPos, 2, 1))
-                    orientation = HORIZONTAL
+                    this.addExit(exit[2].id, piece.id, tiles, exit[1])
                 } else {
                     const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, -2)
                     this.createObject(this.map1, doorPos, MI.Door180)
@@ -181,7 +192,7 @@ export default class Map extends Entity {
                     this.createObject(this.map3, doorPos, MI.Door180Top)
                     tiles.push(this.alterPos(doorPos, 1, 0))
                     tiles.push(this.alterPos(doorPos, 2, 0))
-                    orientation = HORIZONTAL
+                    this.addExit(exit[2].id, piece.id, tiles, exit[1])
                 }
             } else {  //East and West
                 const transPos = this.alterPos(exitPos, -2, 0)
@@ -193,7 +204,7 @@ export default class Map extends Entity {
                     this.createObject(this.map3, doorPos, MI.Door90Top)
                     tiles.push(this.alterPos(doorPos, 1, 1))
                     tiles.push(this.alterPos(doorPos, 1, 2))
-                    orientation = VERTICAL
+                    this.addExit(exit[2].id, piece.id, tiles, exit[1])
                 }
                 if (exit[1] === LEFT) {
                     const doorPos = this.alterPos(piece.global_pos(exit[0]), -2, -1)
@@ -202,64 +213,76 @@ export default class Map extends Entity {
                     this.createObject(this.map3, doorPos, MI.Door270Top)
                     tiles.push(this.alterPos(doorPos, 0, 1))
                     tiles.push(this.alterPos(doorPos, 0, 2))
-                    orientation = VERTICAL
+                    this.addExit(exit[2].id, piece.id, tiles, exit[1])
                 }
             }
-            this.addExit(piece.id, exit[2].id, tiles, orientation)
         }
     }
 
     /**
-     * 
+     * Replaces door tiles with floor tiles.
      * @param {Array} tiles Door tiles that need to be replaced with floor
      */
     openExit(tiles) {
         for (let i = 0; i < tiles.length; i++) {
-            this.map2.set(tiles[i], 4)
+            this.map2.set(tiles[i], 13)
         }
     }
 
     /**
      * Populates an array of exits for entity creation. Matches pairs with doors.
-     * TODO remove repeated pairings.
      * @param {Number} destination ID of the destination room.
      * @param {Number} room ID of the current room.
      * @param {Array} tiles Array of tile positions that represent the exit door.
      */
-    addExit(destination, room, tiles, orientation) {
-        let paired = false
+    addExit(destination, room, tiles) {
+        let newExit = true
         this.exits.forEach(function(exit) {
-            if (!exit.paired) {
-                if (exit.room === destination) {
-                    destination = exit.room
-                    exit.paired = true
-                    paired = true
+            if (exit.destination === room && exit.room === destination) {
+                //push tiles to existing exit
+                newExit = false
+
+                for (let i = 0; i < tiles.length; i++) {
+                    exit.tiles.push(tiles[i])
                 }
+    
             }
         })
-        if (paired === false) {
-            this.exits.push(
+        if (newExit) {
+            //Add new exit
+            this.exits.push( 
                 {
                     tiles: tiles,
                     room: room,
                     destination: destination,
-                    orientation: orientation,
-                    paired: false
                 }
             )
-        } else {
-            this.exits.push(
-                {
-                    tiles: tiles,
-                    room: room,
-                    destination: destination,
-                    orientation: orientation,
-                    paired: true
-                }
-            )
+        } 
+    }
+
+    /**
+     * Mostly for debugging. Replaces all doors with floor tiles.
+     */
+    removeAllExits() {
+        for (let i = 0; i < this.exits.length; i++) {
+            this.openExit(this.exits[i].tiles)
         }
     }
 
+    openRoomExits(id) {
+        for (let i = 0; i < this.exits.length; i++) {
+            if (this.exits[i].room === id ) {
+                this.openExit(this.exits[i].tiles)
+            }
+        }
+    }
+
+    /**
+     * Alters a position array for use with Array2D and dungeon generator.
+     * @param {Array} pos A map position.
+     * @param {Number} dx Change in x.
+     * @param {Number} dy Change in y.
+     */
     alterPos(pos, dx, dy) {
         return [pos[0] + dx, pos[1] + dy]
     }
@@ -404,8 +427,12 @@ export default class Map extends Entity {
         }
     }
 
+    /**
+     * Generates a radius for spawners to create an area for mobs to spawn.
+     * @param {Object} piece The piece this radius covers. 
+     */
     getRadius(piece) {
         const size = Math.min(piece.size[0], piece.size[1])
-        return Math.floor((size - 4) / 2 * 64)
+        return Math.floor((size - 6) / 2 * 64)
     }
 }

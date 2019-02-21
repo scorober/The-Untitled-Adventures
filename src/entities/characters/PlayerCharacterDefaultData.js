@@ -21,7 +21,7 @@ export default {
         Atk: 10,
         Def: 15,
         Mdef: 3,
-        Speed: 180,
+        Speed: 500,
         Name: 'PLAYER',
         isCombat : true
     },

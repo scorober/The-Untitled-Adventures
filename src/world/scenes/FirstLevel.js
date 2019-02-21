@@ -18,7 +18,7 @@ import SpawnerBehaviorComponent from '../../entities/components/SpawnerBehaviorC
 import CollisionComponent from '../../entities/components/CollisionComponent.js'
 import AttributeComponent from '../../entities/components/AttributeComponent.js'
 import SpawnerData from '../../entities/effects/SpawnerDefaultData.js'
-import DoorBehaviorComponent from '../../entities/components/DoorBehaviorComponent.js';
+import DoorBehaviorComponent from '../../entities/components/DoorBehaviorComponent.js'
 
 
 export default class FirstLevel extends Scene {
@@ -47,12 +47,7 @@ export default class FirstLevel extends Scene {
                     max_size: [25, 25],
                     max_exits: 4
                 },
-                spawn: {
-                    min_size: [15, 15],
-                    max_size: [25, 25],
-                    max_exits: 4
-                },
-                spawn: {
+                empty: {
                     min_size: [15, 15],
                     max_size: [25, 25],
                     max_exits: 4
@@ -121,13 +116,12 @@ export default class FirstLevel extends Scene {
         for (const mapSpawner of map.spawners) {
             const spawner = new Entity(game, mapSpawner.pos)
             spawner.addComponent(new AnimationComponent(spawner, SpawnerData.AnimationConfig))
-            spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, SPAWNERS.Mage, mapSpawner.r, 8))
+            spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, SPAWNERS.Mage, mapSpawner.r, 4))
             this.addEntity(spawner)
         }
 
         for (const exit of map.exits) {
             const tilePos = exit.tiles[0]
-            console.log(exit.tiles) //TODO is this outputting bad values?
             const pos = Map.tileToWorldPosition({x: tilePos[0], y: tilePos[1]} , map.tileSize)
             const door = new Entity(game, pos)
             door.addComponent(new DoorBehaviorComponent(door, exit, exit.tiles))

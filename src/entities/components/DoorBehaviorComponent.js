@@ -1,7 +1,4 @@
 import Component from './Component.js'
-import Entity from '../Entity.js'
-import Vector from '../../utils/Vector.js'
-import { STATES, RIGHT, LEFT, TOP, BOTTOM } from '../../utils/Const.js';
 import Map from '../../world/Map.js'
 
 export default class DoorBehaviorComponent extends Component {
@@ -20,11 +17,7 @@ export default class DoorBehaviorComponent extends Component {
      * Called each update cycle.
      */
     update() {
-        //TODO this steals right click behavior work on tomorrow....
-        // if (this.entity.game.inputManager.hasRightClick()) {
-        //     const clickPos = this.entity.game.inputManager.getRightClick()
-        //     this.checkDoor(clickPos)
-        // }
+
     }
 
     
