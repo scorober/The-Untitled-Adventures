@@ -1,9 +1,5 @@
 import { STATES } from '../utils/Const.js'
 import { create_UUID } from '../utils/Random.js'
-import Vector from '../utils/Vector.js'
-import AttributeComponent from './components/AttributeComponent.js'
-import CollisionComponent from './components/CollisionComponent.js'
-import AnimationComponent from './components/AnimationComponent.js'
 
 export default class Entity {
     constructor(game, pos) {
@@ -24,26 +20,9 @@ export default class Entity {
      * Calls update on each of the Entity's components.
      */
     update() {
-        this.checkMouseover()
         this.components.forEach((component) => {
             component.update()
         })
-    }
-
-    checkMouseover() {
-        this.states[STATES.IsHovered] = false
-        if (this.game.inputManager.mousePosition && this.UUID.includes('PLAYER') === false) { //don't highlight player
-            const mp = this.game.inputManager.mousePosition
-            if (mp) {
-                const collisionComponent = this.getComponent(CollisionComponent)
-                if (collisionComponent) {
-                    const mouseVector = new Vector(mp.x, mp.y)
-                    if (collisionComponent.checkCollisionScreen(mouseVector)) {
-                        this.states[STATES.IsHovered] = true
-                    }
-                }
-            }
-        }
     }
 
     /**
@@ -54,22 +33,6 @@ export default class Entity {
         this.components.forEach((component) => {
             component.draw()
         })
-        if (this.states[STATES.IsHovered]) {
-            const attributeComponent = this.getComponent(AttributeComponent)
-            const animationComponent = this.getComponent(AnimationComponent)
-            if (attributeComponent && animationComponent) {
-                const currentAnimation = animationComponent.getCurrentAnimation()
-                const entityTruePos = this.game.worldToScreen({ x: this.x, y: this.y }) // get position on screen
-                this.game.ctx.textAlign = 'center'
-                this.game.ctx.font = '14px arcade'
-                this.game.ctx.fillStyle = (attributeComponent.Name === 'MARIOTT') ? 'black' : 'red'
-                this.game.ctx.fillText(attributeComponent.Name, entityTruePos.x, entityTruePos.y + currentAnimation.yOffset + currentAnimation.frameHeight / 2)
-                this.game.ctx.fillStyle = 'red'
-                this.game.ctx.fillText('HP:' + attributeComponent.HP, entityTruePos.x, entityTruePos.y + currentAnimation.yOffset + currentAnimation.frameHeight / 2 + 17)
-                this.game.ctx.fillStyle = 'blue'
-                //this.game.ctx.fillText('MANA:' + this.attributes.Mana, entityTruePos.x , entityTruePos.y + this.attributes.Size + 2*(this.attributes.Size))
-            }
-        }
     }
 
     /**

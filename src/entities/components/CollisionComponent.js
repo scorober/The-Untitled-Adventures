@@ -2,25 +2,17 @@ import Component from './Component.js'
 import { STATES } from '../../utils/Const.js'
 import { HitCircle } from '../../utils/Collision.js'
 import Map from '../../world/Map.js'
+import AnimationComponent from './AnimationComponent.js'
 
 export default class CollisionComponent extends Component {
-    constructor(entity, animationConfig) {
+    constructor(entity) {
         super(entity)
-        this.height = animationConfig.Height
-        this.size = animationConfig.Height
-        this.width = animationConfig.Width
-        // Note: This needs work because offsetY and offsetY, height and width will actually
-        // be different for different animations of the same entity.
-        this.hitbox = this.setCollidable({
-            offset: false,
-            xOffset: 0,
-            yOffset: 0,
-            radius: 32
-        })
+        this.animationComponent = this.entity.getComponent(AnimationComponent)
+        this.setCollidableHitbox()
     }
 
     update() {
-        const pos = Map.worldToTilePosition(this, this.entity.game.getTileSize())
+        const pos = Map.worldToTilePosition(this.entity, this.entity.game.getTileSize())
         this.hitbox.update(pos.x, pos.y)
     }
 
@@ -30,22 +22,15 @@ export default class CollisionComponent extends Component {
      *
      * Depreciated
      */
-    setCollidable(options = {}) {
-        const defaults = {
-            offset: false,
-            xOffset: 0,
-            yOffset: 0,
-            radius: 32
-        }
-        options = Object.assign({}, defaults, options)
+    setCollidableHitbox() {
         this.entity.states[STATES.Collidable] = true
-        if (options.offset === true) {
-            const hitOffsetX = options.xOffset
-            const hitOffsetY = options.yOffset
-            return new HitCircle(options.radius, this.entity.x + hitOffsetX, this.entity.y + hitOffsetY)
-        } else {
-            return new HitCircle(this.radius, this.entity.x, this.entity.y)
-        }
+        const animation = this.animationComponent.getCurrentAnimation()
+        const width = animation.getWidth()
+        const height = animation.getHeight()
+        const yOffset = animation.yOffset
+        const xOffset = 0 // This is not currently a thing in Animation
+        const radius = Math.max(width, height) / 2
+        this.hitbox = new HitCircle(radius, this.entity.x + xOffset, this.entity.y - height + yOffset)
     }
 
     /**
@@ -55,12 +40,15 @@ export default class CollisionComponent extends Component {
      * @returns {boolean}
      */
     checkCollisionScreen(vector) {
-        const entityTruePos = this.entity.game.worldToScreen({ x: this.entity.x, y: this.entity.y - this.height }) // get position on screen
-        const dist = vector.distance(entityTruePos)
-        if (dist < this.size) {
-            const distY = vector.absdistanceY(entityTruePos)
-            const distX = vector.absdistanceX(entityTruePos)
-            return (distX < this.width && distY < this.height)
+        const currentAnim = this.entity.getComponent(AnimationComponent).getCurrentAnimation()
+        const height = currentAnim.getHeight()
+        const width = currentAnim.getWidth()
+        const hitboxScreenPos = this.entity.game.worldToScreen({ x: this.entity.x, y: this.entity.y - height / 2 }) // get position on screen
+        const dist = vector.distance(hitboxScreenPos)
+        if (dist < this.hitbox.radius) {
+            const distY = vector.absdistanceY(hitboxScreenPos)
+            const distX = vector.absdistanceX(hitboxScreenPos)
+            return (distX < width && distY < height)
         }
     }
 

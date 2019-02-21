@@ -12,7 +12,7 @@ const attackWidth = 288
 const attackHeight = 192
 const height = 192
 const width = 192
-const yOffset = 10
+const yOffset = 20
 
 
 /** 
