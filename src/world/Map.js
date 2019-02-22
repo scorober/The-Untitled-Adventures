@@ -30,7 +30,7 @@ export default class Map extends Entity {
     getStartPos() {
         return new Vector(
             this.dungeon.start_pos[0] * this.tileSize,
-            this.dungeon.start_pos[1] * this.tileSize
+            this.dungeon.start_pos[1] * this.tileSize + 100
         )
     }
 
@@ -56,7 +56,7 @@ export default class Map extends Entity {
             this.buildExits(piece)
             
             // this.removeAllExits()
-            this.openRoomExits(1)
+            // this.openRoomExits(1)
         }
     }
 
@@ -185,7 +185,7 @@ export default class Map extends Entity {
                     this.createObject(this.map3, doorPos, MI.Door0Top)
                     tiles.push(this.alterPos(doorPos, 1, 1))
                     tiles.push(this.alterPos(doorPos, 2, 1))
-                    this.addExit(exit[2].id, piece.id, tiles, exit[1])
+                    this.addExit(exit[2].id, piece.id, tiles)
                 } else {
                     const doorPos = this.alterPos(piece.global_pos(exit[0]), -1, -2)
                     this.createObject(this.map1, doorPos, MI.Door180)
@@ -193,7 +193,7 @@ export default class Map extends Entity {
                     this.createObject(this.map3, doorPos, MI.Door180Top)
                     tiles.push(this.alterPos(doorPos, 1, 0))
                     tiles.push(this.alterPos(doorPos, 2, 0))
-                    this.addExit(exit[2].id, piece.id, tiles, exit[1])
+                    this.addExit(exit[2].id, piece.id, tiles)
                 }
             } else {  //East and West
                 const transPos = this.alterPos(exitPos, -2, 0)
@@ -205,7 +205,7 @@ export default class Map extends Entity {
                     this.createObject(this.map3, doorPos, MI.Door90Top)
                     tiles.push(this.alterPos(doorPos, 1, 1))
                     tiles.push(this.alterPos(doorPos, 1, 2))
-                    this.addExit(exit[2].id, piece.id, tiles, exit[1])
+                    this.addExit(exit[2].id, piece.id, tiles)
                 }
                 if (exit[1] === LEFT) {
                     const doorPos = this.alterPos(piece.global_pos(exit[0]), -2, -1)
@@ -214,9 +214,29 @@ export default class Map extends Entity {
                     this.createObject(this.map3, doorPos, MI.Door270Top)
                     tiles.push(this.alterPos(doorPos, 0, 1))
                     tiles.push(this.alterPos(doorPos, 0, 2))
-                    this.addExit(exit[2].id, piece.id, tiles, exit[1])
+                    this.addExit(exit[2].id, piece.id, tiles)
                 }
             }
+        }
+    }
+
+    getDoorBox(tiles) {
+        let minX = Number.MAX_VALUE
+        let minY = Number.MAX_VALUE
+        let maxX = Number.MIN_VALUE
+        let maxY = Number.MIN_VALUE
+
+        tiles.forEach(function(tile) {
+            minX = Math.min(minX, tile[0])
+            minY = Math.min(minY, tile[1])
+            maxX = Math.max(maxX, tile[0])
+            maxY = Math.max(maxY, tile[1])
+        })
+        return {
+            x: minX * this.tileSize,
+            y: minY * this.tileSize,
+            width: (maxX - minX) * this.tileSize,
+            height: (maxY - minY) * this.tileSize
         }
     }
 

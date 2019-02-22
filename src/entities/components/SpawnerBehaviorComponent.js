@@ -7,6 +7,10 @@ import AnimationComponent from './AnimationComponent.js'
 import ArcherData from '../../entities/characters/ArcherDefaultData.js'
 import RobotData from '../../entities/characters/RobotDefaultData.js'
 import MageData from '../../entities/characters/MageDefaultData.js'
+import AttributeComponent from './AttributeComponent.js'
+import CollisionComponent from './CollisionComponent.js'
+import EnemyInteractionComponent from './InteractionComponent/EnemyInteractionComponent.js'
+import CombatComponent from './CombatComponent.js'
 
 export default class SpawnComponentBehavior extends Component {
     /**
@@ -86,8 +90,13 @@ export default class SpawnComponentBehavior extends Component {
                 this.entity.x + Math.cos(angle) * r,
                 this.entity.y + Math.sin(angle) * r
             ), MageData.Attributes)
-            mage.addComponent(new MovementComponent(mage, MageData.Attributes))
             mage.addComponent(new AnimationComponent(mage, MageData.AnimationConfig))
+            mage.addComponent(new MovementComponent(mage, MageData.Attributes))
+            mage.addComponent(new AttributeComponent(mage, MageData.Attributes))
+            mage.addComponent(new CollisionComponent(mage))
+            mage.addComponent(new EnemyInteractionComponent(mage))
+            mage.addComponent(new CombatComponent(mage))
+       
             this.mobs.push(mage)
         }
         for (let i = 0; i < this.archers; i++) {
@@ -97,8 +106,12 @@ export default class SpawnComponentBehavior extends Component {
                 this.entity.x + Math.cos(angle) * r,
                 this.entity.y + Math.sin(angle) * r
             ), ArcherData.Attributes)
-            archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
             archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
+            archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
+            archer.addComponent(new AttributeComponent(archer, ArcherData.Attributes))
+            archer.addComponent(new CollisionComponent(archer))
+            archer.addComponent(new EnemyInteractionComponent(archer))
+            archer.addComponent(new CombatComponent(archer))
             this.mobs.push(archer)
         }
         for (let i = 0; i < this.robots; i++) {
@@ -108,8 +121,12 @@ export default class SpawnComponentBehavior extends Component {
                 this.entity.x + Math.cos(angle) * r,
                 this.entity.y + Math.sin(angle) * r
             ), RobotData.Attributes)
-            robot.addComponent(new MovementComponent(robot, RobotData.Attributes))
             robot.addComponent(new AnimationComponent(robot, RobotData.AnimationConfig))
+            robot.addComponent(new MovementComponent(robot, RobotData.Attributes))
+            robot.addComponent(new AttributeComponent(robot, RobotData.Attributes))
+            robot.addComponent(new CollisionComponent(robot))
+            robot.addComponent(new EnemyInteractionComponent(robot))
+            robot.addComponent(new CombatComponent(robot))
             this.mobs.push(robot)
         }
     }
