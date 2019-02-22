@@ -16,6 +16,7 @@ export default class CombatComponent extends Component {
     update() {
         this.dmgTimer -= this.entity.game.clockTick
         if (this.checkDead()) {
+            // this.game.en
             this.entity.game.removeEntityByRef(this.entity)
         }
         if (this.combatTarget && this.dmgTimer <= 0) {

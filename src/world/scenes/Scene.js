@@ -3,7 +3,7 @@
  */
 
 export default class Scene {
-    constructor(game) {
+    constructor(game, lvl) {
         this.game = game
         this.entities = []
         this.map = null
@@ -11,6 +11,8 @@ export default class Scene {
         this.highlightedEntity = {}
         this.timeElapsed = 0
         this.timeBuffer = 0
+        this.scores = []
+        this.level = lvl
     }
 
     /**
@@ -18,7 +20,6 @@ export default class Scene {
      * Currently just updates a timer that tracks how long the current scene is active.
      */
     update() {
-
         this.timeElapsed += this.game.clockTick
     }
     draw() { }
@@ -113,6 +114,9 @@ export default class Scene {
             const entity = this.entities[i]
             if (entity) { //Removed entities are still in array and being called on??
                 if (entity.removeFromWorld === true) {
+                    this.addScore(entity)
+                    console.log('score: ' + this.scores)
+                    
                     this.removeEntity(i)
                 } else {
                     entity.update()
@@ -166,5 +170,43 @@ export default class Scene {
      */
     generateMap(dungeon) {
         this.dungeon = dungeon
+    }
+
+    /**
+     * Generates score object from entity and ads it to the score board.
+     * 
+     * @param  entity 
+     */
+    addScore(entity) {
+        // Score = null;
+        console.log('here')
+        if (entity.UUID.includes('ARCHER')) {
+            const Score = {
+                Name: 'Archer_Kill',
+                Time: this.game.timer.gameTime,
+                Duration: null,
+                Lvl: this.lvl,
+                Score: 400
+            }
+            this.scores.push(Score)
+        } else if (entity.UUID.includes('MAGE')) {
+            const Score = {
+                Name: 'Mage_Kill',
+                Time: this.game.timer.gameTime,
+                Duration: null,
+                Lvl: this.lvl,
+                Score: 700
+            }
+            this.scores.push(Score)
+        } else if (entity.UUID.includes('ROBOT')) {
+            const Score = {
+                Name: 'Robot_Kill',
+                Time: this.game.timer.gameTime,
+                Duration: null,
+                Lvl: this.lvl,
+                Score: 550
+            }
+            this.scores.push(Score)
+        }
     }
 }
