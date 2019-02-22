@@ -20,6 +20,8 @@ import CombatComponent from '../../entities/components/CombatComponent.js'
 import SpawnerData from '../../entities/effects/SpawnerDefaultData.js'
 import EnemyInteractionComponent from '../../entities/components/InteractionComponent/EnemyInteractionComponent.js'
 import MarriottInteractionComponent from '../../entities/components/InteractionComponent/MarriottInteractionComponent.js'
+import Vector from '../../utils/Vector.js'
+import DoorInteractionComponent from '../../entities/components/InteractionComponent/DoorInteractionComponent.js'
 
 export default class FirstLevel extends Scene {
     constructor(game) {
@@ -37,8 +39,8 @@ export default class FirstLevel extends Scene {
                     position: [100, 100] //OPTIONAL pos of initial room 
                 },
                 any: {
-                    min_size: [10, 10],
-                    max_size: [25, 25],
+                    min_size: [15, 15],
+                    max_size: [25, 27],
                     max_exits: 4
                 },
                 spawn: {
@@ -89,21 +91,45 @@ export default class FirstLevel extends Scene {
         this.addEntity(game.camera)
         this.game.camera.setFollowedEntity(playerCharacter)
 
+        this.createMapEntities(game, map)
+
+
+
+    }
+
+    createMapEntities(game, map) {
+        this.createSpawners(game, map)
+        this.createExits(game, map)
+    }
+
+    createExits(game, map) {
+        
+        for (const exit of map.exits) {
+            const doorBox = map.getDoorBox(exit.tiles)
+            const door = new Entity(game, new Vector(doorBox.x, doorBox.y))
+            door.addComponent(new DoorInteractionComponent(door, exit.tiles, exit.destination, exit. room))
+            door.addComponent(new CollisionComponent(door, doorBox))
+            this.addEntity(door)
+        }
+    }
+
+
+    createSpawners(game, map) {
         for (const mapSpawner of map.spawners) {
             const spawner = new Entity(game, mapSpawner.pos)
             spawner.addComponent(new AnimationComponent(spawner, SpawnerData.AnimationConfig))
             spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, SPAWNERS.Mage, mapSpawner.r, 4))
             this.addEntity(spawner)
         }
-
     }
+
 
     createMarriott(game, start, playerCharacter) {
         const marriott = new Entity(game, start, MarriottData.Attributes)
         marriott.addComponent(new AnimationComponent(marriott, MarriottData.AnimationConfig))
         marriott.addComponent(new MarriottMovementComponent(marriott, MarriottData.Attributes))
         marriott.addComponent(new AttributeComponent(marriott, MarriottData.Attributes))
-        marriott.addComponent(new CollisionComponent(marriott, MarriottData.AnimationConfig))
+        marriott.addComponent(new CollisionComponent(marriott))
         marriott.addComponent(new MarriottInteractionComponent(marriott))
         marriott.getComponent(MovementComponent).setFollowTarget(playerCharacter)
         return marriott
@@ -114,7 +140,7 @@ export default class FirstLevel extends Scene {
         archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
         archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
         archer.addComponent(new AttributeComponent(archer, ArcherData.Attributes))
-        archer.addComponent(new CollisionComponent(archer, ArcherData.AnimationConfig))
+        archer.addComponent(new CollisionComponent(archer))
         archer.addComponent(new EnemyInteractionComponent(archer))
         archer.addComponent(new CombatComponent(archer))
         archer.getComponent(MovementComponent).setFollowTarget(playerCharacter)
@@ -126,7 +152,7 @@ export default class FirstLevel extends Scene {
         pc.addComponent(new AnimationComponent(pc, PlayerCharacterData.AnimationConfig))
         pc.addComponent(new AttributeComponent(pc, PlayerCharacterData.Attributes))
         pc.addComponent(new MovementComponent(pc, PlayerCharacterData.Attributes))
-        pc.addComponent(new CollisionComponent(pc, PlayerCharacterData.AnimationConfig))
+        pc.addComponent(new CollisionComponent(pc))
         pc.addComponent(new MarriottInteractionComponent(pc))
         pc.addComponent(new CombatComponent(pc))
         pc.addComponent(new PlayerInputComponent(pc))

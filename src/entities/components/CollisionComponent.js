@@ -6,15 +6,36 @@ import AnimationComponent from './AnimationComponent.js'
 import Vector from '../../utils/Vector.js'
 
 export default class CollisionComponent extends Component {
-    constructor(entity) {
+    constructor(entity, staticHitBox) {
         super(entity)
         this.animationComponent = this.entity.getComponent(AnimationComponent)
-        this.setCollidableHitbox()
+        this.isStatic = false
+
+        if (staticHitBox) {
+            this.setStaticHitbox(staticHitBox)
+            this.isStatic = true
+            this.width = staticHitBox.width
+            this.height = staticHitBox.height
+        } else {
+            this.setCollidableHitbox()
+        }
     }
 
     update() {
         const pos = Map.worldToTilePosition(this.entity, this.entity.game.getTileSize())
         this.hitbox.update(pos.x, pos.y)
+    }
+
+    /**
+     * Creates a static hitbox for map interaction objects.
+     * @param {Object} staticHit Contains width and height of the static hitbox.
+     */
+    setStaticHitbox(staticHit) {
+        this.entity.states[STATES.Collidable] = true
+        this.radius = Math.max(staticHit.width, staticHit.height) / 2
+        this.hitbox = new HitCircle(
+            this.radius, this.entity.x + staticHit.width / 2, this.entity.y + staticHit.height / 2
+        )
     }
 
     /**
@@ -41,15 +62,33 @@ export default class CollisionComponent extends Component {
      * @returns {boolean}
      */
     checkCollisionScreen(vector) {
-        const currentAnim = this.entity.getComponent(AnimationComponent).getCurrentAnimation()
-        const height = currentAnim.getHeight()
-        const width = currentAnim.getWidth()
-        const hitboxScreenPos = this.entity.game.worldToScreen(new Vector(this.entity.x, this.entity.y - height / 2)) // get position on screen
+        if (this.isStatic) {
+            return this.checkStaticCollisionScreen(vector)
+        } else {
+            const currentAnim = this.entity.getComponent(AnimationComponent).getCurrentAnimation()
+            const height = currentAnim.getHeight()
+            const width = currentAnim.getWidth()
+            const hitboxScreenPos = this.entity.game.worldToScreen(new Vector(this.entity.x, this.entity.y - height / 2)) // get position on screen
+            const dist = vector.distance(hitboxScreenPos)
+            if (dist < this.hitbox.radius) {
+                const distY = vector.absdistanceY(hitboxScreenPos)
+                const distX = vector.absdistanceX(hitboxScreenPos)
+                return (distX < width && distY < height)
+            }
+        }
+
+    }
+
+
+    checkStaticCollisionScreen(vector) {
+        const hitboxScreenPos = this.entity.game.worldToScreen(
+            new Vector(this.entity.x + this.width / 2, this.entity.y + this.height / 2)
+        )
         const dist = vector.distance(hitboxScreenPos)
         if (dist < this.hitbox.radius) {
             const distY = vector.absdistanceY(hitboxScreenPos)
             const distX = vector.absdistanceX(hitboxScreenPos)
-            return (distX < width && distY < height)
+            return (distX < this.width && distY < this.height)
         }
     }
 
