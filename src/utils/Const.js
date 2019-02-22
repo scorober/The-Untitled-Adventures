@@ -10,6 +10,8 @@ export const ASSET_PATHS = {
     Background: './assets/img/background.jpg',
     Effect32: './assets/img/effects_y32.png',
     TitleAnimation: './assets/img/animated_title_bg.png',
+    Spawner: './assets/img/vending.png',
+
     ScottsChar: './assets/img/scotts-char.png',
     Fireball: './assets/img/fireball.png',
     Skeleton: './assets/img/skeleton_base.png',
@@ -83,6 +85,10 @@ export const ANIMATIONS = {
     PowerupWest: Symbol(),
     PowerupEast: Symbol(),
 
+    /** Spawner specific */
+    Crashed: Symbol(),
+    Static: Symbol(),
+
     /** Spell/effect specific animations. */
     Fire: Symbol(),
     Projectile: Symbol(),
@@ -115,7 +121,10 @@ export const ANIMATION_RATES = {
     /** Effect specific rates */
     Boost: Symbol(),
     Projectile: Symbol(),
-    Impact: Symbol()
+    Impact: Symbol(),
+
+    /** Spawner specific rate */
+    Console: Symbol()
 }
 
 export const DIRECTIONS = {
@@ -123,6 +132,12 @@ export const DIRECTIONS = {
     West: Symbol(),
     South: Symbol(),
     East: Symbol(),
+
+    /** Map specific directions */
+    NorthWest: Symbol(),
+    NorthEast: Symbol(),
+    SouthWest: Symbol(),
+    SouthEast: Symbol(),
 }
 
 export const EFFECTS = {
@@ -248,16 +263,31 @@ export const MAP_ITEMS = {
     ShieldE: [[52]],
     ChestOpen: [[225], [241]],
     ChestClosed: [[247]],
-    Door90: [[132, 133], [148, 149], [148, 149], [164, 165]],
-    Door270: [[134, 135], [150, 151], [150, 151], [166, 167]],
-    Door90Lock: [[180], [196], [196], [2]],
-    DoorRoofV: [[92], [92], [92], [92]],
-    DoorPrintV: [[4, 4], [4, 4], [4, 4], [4,4]],
-    Door0: [[129, 130, 130, 131], [145, 146, 146, 147]],
-    Door180: [[161, 162, 162, 163], [177, 178, 178, 179]],
+
+    //TOP
+    Door0: [[4, 4, 4, 4], [145, 4, 4, 147]],
+    Door0Top:[[129, 130, 130, 131]],
+    Lock0: [[193, 194, 194, 195]],
+    //LEFT exit to room on the right
+    Door90: [[0, 133], [4, 4], [4, 4], [0, 165]],
+    Door90Top: [[132, 0], [148, 0], [148, 0], [164, 0]],
+    Lock90: [[180], [196], [196], [212]],
+    //BOTTOM
+    Door180: [[161, 0, 0, 163], [177, 0, 0, 179]],
+    Door180Top:[[0, 0, 0, 0], [0, 178, 178, 0]],
+    Lock180: [[209, 210, 210, 211]],
+    //RIGHT exit to room on the left
+    Door270: [[134, 0], [4, 4], [4, 4], [166, 167]],
+    Door270Top: [[0, 135], [0, 151], [0, 151], [0, 0]],
+    Lock270: [[181], [197], [197], [213]],
+    
+    DoorPrintV: [[4, 4], [4, 4], [4, 4], [4,4], [4,4]],
     DoorPrintH: [[4, 4, 4, 4], [4, 4, 4, 4]],
     DoorPathH: [[4, 4, 4, 4, 4], [4, 4, 4, 4, 4]],
     DoorPathV: [[4,4],[4,4],[4,4],[4,4],[4,4]],
+
+
+
     WallWest: [49, 50],
     WallEast: [54, 55],
     WallNorth: [[19], [35]],
@@ -276,6 +306,7 @@ export const ROOMS ={
     Spawn: 'spawn',
     Boss: 'boss',
     Initial: 'initial',
+    Any: 'any'
 
 }
 
@@ -295,6 +326,9 @@ export const TOP = 0
 export const RIGHT = 90
 export const BOTTOM = 180
 export const LEFT = 270
+
+export const VERTICAL = Symbol()
+export const HORIZONTAL = Symbol()
 
 export const FACING = [TOP, RIGHT, BOTTOM, LEFT]
 

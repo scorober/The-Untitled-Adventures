@@ -17,6 +17,7 @@ import SpawnerBehaviorComponent from '../../entities/components/SpawnerBehaviorC
 import CollisionComponent from '../../entities/components/CollisionComponent.js'
 import AttributeComponent from '../../entities/components/AttributeComponent.js'
 import CombatComponent from '../../entities/components/CombatComponent.js'
+import SpawnerData from '../../entities/effects/SpawnerDefaultData.js'
 import EnemyInteractionComponent from '../../entities/components/InteractionComponent/EnemyInteractionComponent.js'
 import MarriottInteractionComponent from '../../entities/components/InteractionComponent/MarriottInteractionComponent.js'
 
@@ -30,17 +31,22 @@ export default class FirstLevel extends Scene {
             // seed: 'abcd', //omit for generated seed
             rooms: {
                 initial: {
-                    min_size: [10, 10], //Floor size
-                    max_size: [10, 10],
+                    min_size: [12, 12], //Floor size
+                    max_size: [12, 12],
                     max_exits: 4,
                     position: [100, 100] //OPTIONAL pos of initial room 
                 },
                 any: {
                     min_size: [10, 10],
-                    max_size: [10, 10],
+                    max_size: [25, 25],
                     max_exits: 4
                 },
                 spawn: {
+                    min_size: [15, 15],
+                    max_size: [25, 25],
+                    max_exits: 4
+                },
+                empty: {
                     min_size: [15, 15],
                     max_size: [25, 25],
                     max_exits: 4
@@ -62,7 +68,7 @@ export default class FirstLevel extends Scene {
             symmetric_rooms: true, // exits must be in the center of a wall if true. Setting true will make design easier
             interconnects: 1, //extra corridors to connect rooms and make circular paths. not 100% guaranteed
             max_interconnect_length: 10,
-            room_count: 10
+            room_count: 20
         })
 
         dungeon.generate()
@@ -85,9 +91,11 @@ export default class FirstLevel extends Scene {
 
         for (const mapSpawner of map.spawners) {
             const spawner = new Entity(game, mapSpawner.pos)
-            spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, SPAWNERS.Mage, mapSpawner.r, 8))
+            spawner.addComponent(new AnimationComponent(spawner, SpawnerData.AnimationConfig))
+            spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, SPAWNERS.Mage, mapSpawner.r, 4))
             this.addEntity(spawner)
         }
+
     }
 
     createMarriott(game, start, playerCharacter) {
@@ -142,5 +150,6 @@ export default class FirstLevel extends Scene {
         this.drawBackground()
         this.drawMap()
         this.drawEntities()
+        this.drawMapTop()
     }
 }

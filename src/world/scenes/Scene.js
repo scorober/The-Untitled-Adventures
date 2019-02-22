@@ -93,6 +93,15 @@ export default class Scene {
     }
 
     /**
+     * Draws the top layer of the scene's map over entities.
+     */
+    drawMapTop() {
+        if (this.map && this.map.update) {
+            this.map.drawTop(this.game.ctx)
+        }
+    }
+
+    /**
      * Update entities details, location, etc
      */
     updateEntities() {
