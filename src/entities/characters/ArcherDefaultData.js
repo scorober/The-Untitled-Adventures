@@ -26,8 +26,11 @@ export default {
     Attributes: {
         HP: 30,
         Mana: 10,
+        Str: 5,
+        Int: 5,
         Atk: 10,
-        Def: 15,
+        Matk: 5,
+        Def: 10,
         Mdef: 3,
         Speed: 50,
         Name: 'ARCHER',

@@ -1,43 +1,43 @@
 import Component from '../Component.js'
 import CollisionComponent from '../CollisionComponent.js'
-import Vector from '../../../utils/Vector.js'
 
 export default class InteractionComponent extends Component {
     constructor(entity) {
         super(entity)
+        if (new.target === InteractionComponent) {
+            throw new TypeError('Cannot instantiate InteractionComponent directly')
+        }
         this.hovered = false
-        this.leftClick = false
-        this.rightClick = false
     }
 
     update() {
-        this.checkMouseInteraction()
+        this.hovered = this.checkMouseover()
     }
 
     draw() {
-        
+
     }
 
-    checkMouseInteraction() {
-        this.hovered = false
-        this.leftClick = false
-        this.rightClick = false
+    checkMouseover() {
         const inputManager = this.entity.game.inputManager
-        const mousePosition = inputManager.mousePosition
+        const mouseVector = inputManager.mousePosition
         const collisionComponent = this.entity.getComponent(CollisionComponent)
-        if (mousePosition && collisionComponent) {
-            const mouseVector = new Vector(mousePosition.x, mousePosition.y)
-            if (collisionComponent.checkCollisionScreen(mouseVector)) {
-                this.hovered = true
-                if (inputManager.hasRightClick()) {
-                    inputManager.getRightClick()
-                    this.rightClick = true
-                }
-                if (inputManager.hasLeftClick()) {
-                    inputManager.getLeftClick()
-                    this.leftClick = true
-                }
-            }
-        }
+        return mouseVector && collisionComponent && collisionComponent.checkCollisionScreen(mouseVector)
+    }
+
+    setRightClick() {
+        throw 'InteractionComponent subclass must implement setRightClick()'
+    }
+
+    unsetRightClick() {
+        throw 'InteractionComponent subclass must implement unsetRightClick()'
+    }
+
+    setLeftClick() {
+        throw 'InteractionComponent subclass must implement setLeftClick()'
+    }
+
+    unsetLeftClick() {
+        throw 'InteractionComponent subclass must implement unsetLeftClick()'
     }
 }
