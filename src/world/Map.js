@@ -1,6 +1,6 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
-import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM } from '../utils/Const.js'
+import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, TILE_COLLISION as TC } from '../utils/Const.js'
 
 export default class Map extends Entity {
     /**
@@ -29,7 +29,7 @@ export default class Map extends Entity {
     getStartPos() {
         return {
             x: this.dungeon.start_pos[0] * this.tileSize,
-            y: this.dungeon.start_pos[1] * this.tileSize
+            y: this.dungeon.start_pos[1] * this.tileSize + 100
         }
     }
 
@@ -287,17 +287,43 @@ export default class Map extends Entity {
         return [pos[0] + dx, pos[1] + dy]
     }
 
+    /**
+     * Builds the pathfinding array from all map layers.
+     * If a collidable tile exists in one of the layers that tile
+     * coordinate is marked collidable.
+     */
+    // eslint-disable-next-line complexity
     getPathfindingArray() {
         const array = []
         for (let i = 0; i < this.map0.rows.length; i++) {
-            array[i] = [...this.map0.rows[i]]
-        }
-        for (let i = 0; i < array.length; i++) {
-            for (let j = 0; j < array[0].length; j++) {
-                array[i][j] = this.mapValueToPathfindingValue(array[i][j])
+            array[i] = []
+            for (let j = 0; j < this.map0.rows[i].length; j++) {
+
+                const tile0 = this.map0.get([j, i])
+                const tile1 = this.map1.get([j, i])
+                const tile2 = this.map2.get([j, i])
+
+                if (tile0 === 0 && tile1 === 0 && tile2 === 0) {
+                    array[i][j] = 115 //Set to value that doesn't exist 
+                    //in TC array to show empty space
+                } else {
+                    const layeredTiles = [tile0, tile1, tile2]
+                    const nonZeroTiles = []
+                    for (let i = 0; i < 3; i++) {
+                        if (layeredTiles[i] !== 0) {
+                            nonZeroTiles.push(this.mapValueToPathfindingValue(layeredTiles[i]))
+                        }
+                    }
+                    let max = 0
+                    for (let i = 0; i < nonZeroTiles.length; i++) {
+                        max = Math.max(max, nonZeroTiles[i])
+                    }
+                    array[i][j] = max
+                }
             }
         }
         return array
+
     }
 
     /**
@@ -306,44 +332,9 @@ export default class Map extends Entity {
      * The pathing algorithm uses a maxWalkable value, so anything above 4 for example
      * is "unwalkable". This method changes walkable tiles (doors which are 38) to
      * a lower value that the algorithm deems "walkable".
-     * This is temporary until we have a more robust solution.
      */
-    // eslint-disable-next-line complexity
     mapValueToPathfindingValue(value) {
-        switch (value) {
-            case 38:
-                return 3
-            case 148:
-                return 3
-            case 149:
-                return 3
-            case 150:
-                return 3
-            case 151:
-                return 3
-            case 162:
-                return 3
-            case 130:
-                return 3
-            case 146:
-                return 3
-            case 178:
-                return 3
-            case 177:
-                return 3
-            case 179:
-                return 3
-            case 147:
-                return 3
-            case 163:
-                return 3
-            case 161:
-                return 3
-            case 0:
-                return 100
-            default:
-                return value
-        }
+        return TC[value]
     }
 
     update() {}
