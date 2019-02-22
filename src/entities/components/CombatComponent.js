@@ -6,6 +6,7 @@ export default class CombatComponent extends Component {
         super(entity)
         this.attributeComponent = this.entity.getComponent(AttributeComponent)
         this.dmgTimer = 0
+        this.combatTarget = false
     }
 
     /**
@@ -17,16 +18,37 @@ export default class CombatComponent extends Component {
         if (this.checkDead()) {
             this.entity.game.removeEntityByRef(this.entity)
         }
+        if (this.combatTarget && this.dmgTimer <= 0) {
+            this.meleeAttack()
+            this.dmgTimer = 3
+        }
+    }
+
+    /**
+     * Sets the current combat target to attack
+     * 
+     * @param {Entity} foe The Entity to begin attacking
+     */
+    setCombatTarget(foe) {
+        this.combatTarget = foe
+    }
+
+    /**
+     * Unsets the current combat target
+     */
+    unsetCombatTarget() {
+        this.combatTarget = false
     }
 
     /**
      * Initiates a melee attack from this Entity to Entity foe
-     * 
-     * @param {Entity} foe The Entity being attacked
      */
-    meleeAttack(foeCombatComponent) {
+    meleeAttack() {
         const dmg = this.calculatePhysicalDamage()
-        foeCombatComponent.applyPhysicalDamage(dmg)
+        const killed = this.combatTarget.applyPhysicalDamage(dmg)
+        if (killed) {
+            this.unsetCombatTarget()
+        }
     }
 
     /**
@@ -36,7 +58,10 @@ export default class CombatComponent extends Component {
      */
     magicAttack(foeCombatComponent) {
         const dmg = this.calculateMagicDamage()
-        foeCombatComponent.applyMagicDamage(dmg)
+        const killed = foeCombatComponent.applyMagicDamage(dmg)
+        if (killed) {
+            this.unsetCombatTarget()
+        }
     }
 
     /**
@@ -45,17 +70,15 @@ export default class CombatComponent extends Component {
      * @returns {number} the damage to apply
      */
     calculatePhysicalDamage(modifiers = {}) {
-        const appliedSTR = modifiers.STR + this.attributeComponent.STR || this.attributeComponent.STR
-        const appliedATK = modifiers.AttackPower + this.attributeComponent.AttackPower || this.attributeComponent.AttackPower
-        const dmg = Math.random(appliedSTR / 3 + appliedATK)
-        return (dmg * appliedSTR / 3)
+        const appliedStr = modifiers.Str + this.attributeComponent.Str || this.attributeComponent.Str
+        const appliedAtk = modifiers.Atk + this.attributeComponent.Atk || this.attributeComponent.Atk
+        return Math.random() * appliedStr + appliedAtk
     }
 
     calculateMagicDamage(modifiers) {
-        const appliedINT = modifiers.INT + this.attributeComponent.INT || this.attributeComponent.INT
-        const appliedSP = modifiers.SpellPower + this.attributeComponent.SpellPower || this.attributeComponent.SpellPower
-        const dmg = Math.random(appliedINT / 3 + appliedSP)
-        return (dmg * appliedINT / 3)
+        const appliedInt = modifiers.Int + this.attributeComponent.Int || this.attributeComponent.Int
+        const appliedMatk = modifiers.Matk + this.attributeComponent.Matk || this.attributeComponent.Matk
+        return Math.random() * appliedInt + appliedMatk
     }
 
     /**
@@ -66,21 +89,16 @@ export default class CombatComponent extends Component {
      * @returns {boolean} true if entity is killed, false if still alive
      */
     applyPhysicalDamage(damage) {
-        //damage is reduced by defense rate
-        damage = Math.floor(damage - this.attributeComponent.Def)
-        //if greater than 0, apply it.
-        if (damage >= 0) {
-            this.displayDamage = true
-            this.damageColor = 'red'
-            this.lastDamage = damage
-            this.attributeComponent.HP -= damage
-            this.dmgTimer = 1.5
-
-            //check if dead
-            if (this.checkDead()) {
-                this.entity.game.removeEntityByRef(this.entity)
-                return true
-            }
+        damage = Math.max(0, damage)
+        damage = damage * damage / (damage + this.attributeComponent.Def)
+        this.displayDamage = true
+        this.damageColor = 'red'
+        this.lastDamage = damage
+        this.attributeComponent.HP -= damage
+        //check if dead
+        if (this.checkDead()) {
+            this.entity.game.removeEntityByRef(this.entity)
+            return true
         }
         return false
     }
@@ -93,20 +111,17 @@ export default class CombatComponent extends Component {
      * @returns {boolean} true if entity is killed, false if still alive
      */
     applyMagicDamage(damage) {
-        //reduce damage by magic def rate
-        damage = Math.floor(damage - this.attributeComponent.Mdef)
-        //if greater than 0, apply it.
-        if (damage >= 0) {
-            this.displayDamage = true
-            this.damageColor = 'blue'
-            this.lastDamage = damage
-            this.attributeComponent.HP = this.attributeComponent.HP - damage
-            this.dmgTimer = 1.5
-            if (this.checkDead()) {
-                this.entity.game.removeEntityByRef(this.entity)
-                return true
-            }
+        damage = Math.max(0, damage)
+        damage = damage * damage / (damage + this.attributeComponent.Mdef)
+        this.displayDamage = true
+        this.damageColor = 'blue'
+        this.lastDamage = damage
+        this.attributeComponent.HP = this.attributeComponent.HP - damage
+        if (this.checkDead()) {
+            this.entity.game.removeEntityByRef(this.entity)
+            return true
         }
+
         return false
     }
 

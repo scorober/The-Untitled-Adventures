@@ -3,6 +3,7 @@ import AnimationComponent from './AnimationComponent.js'
 import AStarPathfinding from '../../utils/AStarPathfinding.js'
 import Map from '../../world/Map.js'
 import { DIRECTIONS, ANIMATIONS as ANIMS } from '../../utils/Const.js'
+import Vector from '../../utils/Vector.js'
 
 export default class MovementComponent extends Component {
     /**
@@ -84,7 +85,7 @@ export default class MovementComponent extends Component {
         } else {
             dx = dx / distance
             dy = dy / distance
-            this.move({ x: dx, y: dy })
+            this.move(new Vector(dx, dy))
             this.direction = this.calculateDirection(dx, dy)
         }
     }
@@ -127,8 +128,7 @@ export default class MovementComponent extends Component {
     setPathfindingTarget(tile) {
         const currentTile = this.getCurrentTile()
         const pathfinder = new AStarPathfinding(this.entity.game.getWorld(), [currentTile.x, currentTile.y], [tile.x, tile.y])
-        const path = pathfinder.calculatePath()
-        this.path = path.map((pathTile) => { return { x: pathTile[0], y: pathTile[1] } })
+        this.path = pathfinder.calculatePath()
     }
 
 
@@ -181,14 +181,14 @@ export default class MovementComponent extends Component {
         const entityTile = Map.worldToTilePosition(entity, this.entity.game.getTileSize())
         switch (this.entity.getComponent(MovementComponent).direction) {
             case DIRECTIONS.North:
-                return { x: entityTile.x, y: entityTile.y + 1 }
+                return new Vector(entityTile.x, entityTile.y + 1)
             case DIRECTIONS.South:
-                return { x: entityTile.x, y: entityTile.y - 1 }
+                return new Vector(entityTile.x, entityTile.y - 1)
             case DIRECTIONS.East:
-                return { x: entityTile.x - 1, y: entityTile.y }
+                return new Vector(entityTile.x - 1, entityTile.y)
             case DIRECTIONS.West:
             default:
-                return { x: entityTile.x + 1, y: entityTile.y }
+                return new Vector(entityTile.x + 1, entityTile.y)
         }
     }
 

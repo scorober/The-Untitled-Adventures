@@ -18,6 +18,7 @@ import LightningBehaviorComponent from './LightningBehaviorComponent.js'
 import FreezeBehaviorComponent from './FreezeBehaviorComponent.js'
 import CollisionComponent from './CollisionComponent.js'
 import InteractionComponent from './InteractionComponent/InteractionComponent.js'
+import Vector from '../../utils/Vector.js'
 
 export default class PlayerInputComponent extends Component {
     /**
@@ -34,8 +35,12 @@ export default class PlayerInputComponent extends Component {
      * Called each update cycle
      */
     update() {
-        this.checkRightClick()
-        this.checkLeftClick()
+        if (this.entity.game.inputManager.hasRightClick()) {
+            this.handleRightClick()
+        }
+        if (this.entity.game.inputManager.hasLeftClick()) {
+            this.handleLeftClick()
+        }
         if (this.entity.game.inputManager.downKeys[KEYS.KeyD]) {
             const direction = this.entity.getComponent(MovementComponent).direction
             this.entity.getComponent(AnimationComponent).setDirectionalAnimation(direction, {
@@ -52,40 +57,38 @@ export default class PlayerInputComponent extends Component {
         this.coolDown += this.entity.game.clockTick * 500
     }
 
-    checkRightClick() {
-        if (this.entity.game.inputManager.hasRightClick()) {
-            const clickPos = this.entity.game.inputManager.getRightClick()
-            const entities = this.entity.game.getCurrentScene().entities
-            for (let i = 0; i < entities.length; i++) {
-                const collisionComponent = entities[i].getComponent(CollisionComponent)
-                const interactionComponent = entities[i].getComponent(InteractionComponent)
-                if (collisionComponent && interactionComponent && collisionComponent.checkCollisionScreen(clickPos)) {
-                    interactionComponent.setRightClick()
-                    return
-                } else if (interactionComponent) {
-                    interactionComponent.unsetRightClick()
-                }
+    handleRightClick() {
+        const clickPos = this.entity.game.inputManager.getRightClick()
+        const entities = this.entity.game.getCurrentScene().entities
+        for (let i = 0; i < entities.length; i++) {
+            const collisionComponent = entities[i].getComponent(CollisionComponent)
+            const interactionComponent = entities[i].getComponent(InteractionComponent)
+            if (collisionComponent && interactionComponent && collisionComponent.checkCollisionScreen(clickPos)) {
+                interactionComponent.setRightClick()
+                return
+            } else if (interactionComponent) {
+                interactionComponent.unsetRightClick()
             }
-            this.handleRightClick(clickPos)
         }
+        this.handleMoveCommand(clickPos)
+
     }
 
-    checkLeftClick() {
-        if (this.entity.game.inputManager.hasLeftClick()) {
-            const clickPos = this.entity.game.inputManager.getLeftClick()
-            const entities = this.entity.game.getCurrentScene().entities
-            for (let i = 0; i < entities.length; i++) {
-                const collisionComponent = entities[i].getComponent(CollisionComponent)
-                if (collisionComponent.checkCollisionScreen(clickPos)) {
-                    entities[i].setLeftClick()
-                    return
-                } else {
-                    entities[i].unsetLeftClick()
-                }
+    handleLeftClick() {
+        const clickPos = this.entity.game.inputManager.getLeftClick()
+        const entities = this.entity.game.getCurrentScene().entities
+        for (let i = 0; i < entities.length; i++) {
+            const collisionComponent = entities[i].getComponent(CollisionComponent)
+            if (collisionComponent.checkCollisionScreen(clickPos)) {
+                entities[i].setLeftClick()
+                return
+            } else {
+                entities[i].unsetLeftClick()
             }
-            this.handleLeftClick(clickPos)
         }
+        // Do something else if the clicked area is not an entity?
     }
+
 
     /**
      * Checks if player input creates a new spell and adds it to the current scene.
@@ -156,13 +159,13 @@ export default class PlayerInputComponent extends Component {
      * Calculates tile index position from click position and informs this Entity's MovementComponent
      * @param {Object} clickPos The click position to pathfind to.
      */
-    handleRightClick(clickPos) {
+    handleMoveCommand(clickPos) {
         const cam = this.entity.game.camera
         const tileSize = this.entity.game.sceneManager.currentScene.map.tileSize
-        const targetTile = Map.worldToTilePosition({
-            x: cam.xView + clickPos.x,
-            y: cam.yView + clickPos.y
-        }, tileSize)
+        const targetTile = Map.worldToTilePosition(new Vector(
+            cam.xView + clickPos.x,
+            cam.yView + clickPos.y
+        ), tileSize)
         this.entity.getComponent(MovementComponent).setPathfindingTarget(targetTile)
     }
 
@@ -170,10 +173,10 @@ export default class PlayerInputComponent extends Component {
      * Returns an offset off the caster for the spells animation to originate.
      */
     getEffectOffsetPos() {
-        const pos = {
-            x: this.entity.x,
-            y: this.entity.y
-        }
+        const pos = new Vector(
+            this.entity.x,
+            this.entity.y
+        )
         const direction = this.entity.getComponent(MovementComponent).direction
         if (direction === DIRECTIONS.West) {
             pos.x -= 20

@@ -1,5 +1,5 @@
 import { CTX_EVENTS } from './utils/Const.js'
-import Vector from './utils/Vector.js';
+import Vector from './utils/Vector.js'
 
 export default class InputManager {
     constructor() {

@@ -54,7 +54,7 @@ export default class LightningBehaviorComponent extends Component {
         //TODO fix random ranges based on direction
         const dx = this.rng.int(-50, 50)
         const dy = this.rng.int(-50, 50)
-        const charge = new Entity(this.entity.game, {x: this.v.x + dx, y: this.v.y + dy})
+        const charge = new Entity(this.entity.game, new Vector(this.v.x + dx, this.v.y + dy))
         charge.addComponent(new AnimationComponent(charge, LightningData.AnimationConfig))
         const cb = () => {
             charge.removeFromWorld = true
@@ -65,7 +65,7 @@ export default class LightningBehaviorComponent extends Component {
 
     //TODO do damage, attach to attack component.
     impact() {
-        
+
     }
 
 }

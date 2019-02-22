@@ -18,9 +18,12 @@ export default {
     Attributes: {
         HP: 30,
         Mana: 10,
+        Str: 5,
+        Int: 5,
         Atk: 10,
-        Def: 15,
-        Mdef: 3,
+        Matk: 10,
+        Def: 25,
+        Mdef: 25,
         Speed: 180,
         Name: 'PLAYER',
         isCombat : true

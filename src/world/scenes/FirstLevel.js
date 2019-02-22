@@ -79,7 +79,7 @@ export default class FirstLevel extends Scene {
         this.setPlayer(playerCharacter)
         this.addEntity(playerCharacter)
         this.addEntity(archer)
-        // /this.addEntity(marriott)
+        this.addEntity(marriott)
         this.addEntity(game.camera)
         this.game.camera.setFollowedEntity(playerCharacter)
 
@@ -119,6 +119,7 @@ export default class FirstLevel extends Scene {
         pc.addComponent(new AttributeComponent(pc, PlayerCharacterData.Attributes))
         pc.addComponent(new MovementComponent(pc, PlayerCharacterData.Attributes))
         pc.addComponent(new CollisionComponent(pc, PlayerCharacterData.AnimationConfig))
+        pc.addComponent(new MarriottInteractionComponent(pc))
         pc.addComponent(new CombatComponent(pc))
         pc.addComponent(new PlayerInputComponent(pc))
         return pc

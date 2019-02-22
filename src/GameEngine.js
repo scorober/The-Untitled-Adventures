@@ -106,16 +106,10 @@ export default class GameEngine {
     }
 
     screenToWorld(pos) {
-        return {
-            x: pos.x + this.camera.xView,
-            y: pos.y + this.camera.yView
-        }
+        return new Vector(pos.x + this.camera.xView, pos.y + this.camera.yView)
     }
     worldToScreen(pos) {
-        return {
-            x: pos.x - this.camera.xView,
-            y: pos.y - this.camera.yView
-        }
+        return new Vector(pos.x - this.camera.xView, pos.y - this.camera.yView)
     }
     getCurrentScene() {
         if (this.sceneManager) {

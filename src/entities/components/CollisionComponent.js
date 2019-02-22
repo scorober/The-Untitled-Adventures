@@ -3,6 +3,7 @@ import { STATES } from '../../utils/Const.js'
 import { HitCircle } from '../../utils/Collision.js'
 import Map from '../../world/Map.js'
 import AnimationComponent from './AnimationComponent.js'
+import Vector from '../../utils/Vector.js'
 
 export default class CollisionComponent extends Component {
     constructor(entity) {
@@ -43,7 +44,7 @@ export default class CollisionComponent extends Component {
         const currentAnim = this.entity.getComponent(AnimationComponent).getCurrentAnimation()
         const height = currentAnim.getHeight()
         const width = currentAnim.getWidth()
-        const hitboxScreenPos = this.entity.game.worldToScreen({ x: this.entity.x, y: this.entity.y - height / 2 }) // get position on screen
+        const hitboxScreenPos = this.entity.game.worldToScreen(new Vector(this.entity.x, this.entity.y - height / 2)) // get position on screen
         const dist = vector.distance(hitboxScreenPos)
         if (dist < this.hitbox.radius) {
             const distY = vector.absdistanceY(hitboxScreenPos)
