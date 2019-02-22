@@ -11,6 +11,7 @@ import AttributeComponent from './AttributeComponent.js'
 import CollisionComponent from './CollisionComponent.js'
 import EnemyInteractionComponent from './InteractionComponent/EnemyInteractionComponent.js'
 import CombatComponent from './CombatComponent.js'
+import { STATES } from '../../utils/Const.js';
 
 export default class SpawnComponentBehavior extends Component {
     /**
@@ -18,7 +19,7 @@ export default class SpawnComponentBehavior extends Component {
      * @param {Scene} scene The scene this spawn component will add mobs to.
      * @param {Object} spawnConfig Spawn configuration for this spawner.
      */
-    constructor(entity, scene, spawnConfig, radius, difficulty) {
+    constructor(entity, scene, spawnConfig, radius, difficulty, room) {
         super(entity)
         this.v = Vector.vectorFromEntity(entity)
         this.scene = scene
@@ -33,6 +34,7 @@ export default class SpawnComponentBehavior extends Component {
         this.mages = 0
         this.archers = 0
         this.robots = 0
+        this.room = room
         this.getMobs()
         this.generateMobs()
     }
@@ -44,9 +46,8 @@ export default class SpawnComponentBehavior extends Component {
      */
     update() {
         if (this.active === false) {
-            const player = this.scene.getPlayer()
-            const v = new Vector(player.x, player.y)
-            if (v.distance(this.v) < 500) {
+            const opened = this.scene.map.getRoom(this.room).states[STATES.Opened]
+            if (opened) {
                 this.active = true
             }
         }

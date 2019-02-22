@@ -1,6 +1,6 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
-import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, TILE_COLLISION as TC } from '../utils/Const.js'
+import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, TILE_COLLISION as TC, STATES } from '../utils/Const.js'
 import Vector from '../utils/Vector.js'
 
 export default class Map extends Entity {
@@ -24,6 +24,7 @@ export default class Map extends Entity {
         this.scene = scene
         this.spawners = [] //Array of spawner positions and radii.
         this.exits = [] //Array of door positions and room they enter.
+        this.rooms = []
         this.buildMap()
     }
 
@@ -54,9 +55,15 @@ export default class Map extends Entity {
             this.buildWalls(piece)
             this.buildRoom(piece)
             this.buildExits(piece)
-            
+
+            piece.states = {
+                [STATES.Opened]: false,
+                [STATES.Upgraded]: false,
+                [STATES.Cleared]: false
+            }
             // this.removeAllExits()
             // this.openRoomExits(1)
+            this.rooms.push(piece)
         }
     }
 
@@ -151,7 +158,8 @@ export default class Map extends Entity {
                         center[0] * this.tileSize,
                         center[1] * this.tileSize
                     ),
-                    r: this.getRadius(piece)
+                    r: this.getRadius(piece),
+                    room: piece.id
                 })
                 break
             case ROOMS.Treasure:
@@ -447,4 +455,14 @@ export default class Map extends Entity {
         const size = Math.min(piece.size[0], piece.size[1])
         return Math.floor((size - 6) / 2 * 64)
     }
+
+    /**
+     * Index of room in array is equal to id - 1.
+     * @param {Number} id 
+     */
+    getRoom(id) {
+        return this.rooms[id - 1]
+    }
+
+
 }

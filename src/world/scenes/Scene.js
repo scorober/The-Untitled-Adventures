@@ -11,6 +11,9 @@ export default class Scene {
         this.highlightedEntity = {}
         this.timeElapsed = 0
         this.timeBuffer = 0
+
+        this.pacified = true
+        this.swarm = false
     }
 
     /**
@@ -167,4 +170,15 @@ export default class Scene {
     generateMap(dungeon) {
         this.dungeon = dungeon
     }
+
+    setSwarmed() {
+        this.swarm = true
+        this.pacified = false
+    }
+    
+    setPacified() {
+        this.pacified = true
+        this.swarm = false
+    }
+
 }

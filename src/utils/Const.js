@@ -35,6 +35,11 @@ export const STATES = {
     IsHovered : Symbol(),
     IsCombat : Symbol(),
     IsAttacking : Symbol(),
+    Opened: Symbol(),
+    Upgraded: Symbol(),
+    Cleared: Symbol(),
+    Pacified: Symbol(),
+    Swarm: Symbol()
 }
 
 export const ANIMATIONS = {
