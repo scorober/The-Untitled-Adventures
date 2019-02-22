@@ -82,10 +82,10 @@ export default class SpawnComponentBehavior extends Component {
         for (let i = 0; i < this.mages; i++) {
             const angle = this.rng.float() * Math.PI * 2
             const r = this.rng.int(10, this.radius)
-            const mage = new Entity(this.entity.game, {
-                x: this.entity.x + Math.cos(angle) * r,
-                y: this.entity.y + Math.sin(angle) * r
-            }, MageData.Attributes)
+            const mage = new Entity(this.entity.game, new Vector(
+                this.entity.x + Math.cos(angle) * r,
+                this.entity.y + Math.sin(angle) * r
+            ), MageData.Attributes)
             mage.addComponent(new MovementComponent(mage, MageData.Attributes))
             mage.addComponent(new AnimationComponent(mage, MageData.AnimationConfig))
             this.mobs.push(mage)
@@ -93,10 +93,10 @@ export default class SpawnComponentBehavior extends Component {
         for (let i = 0; i < this.archers; i++) {
             const angle = this.rng.float() * Math.PI * 2
             const r = this.rng.int(10, this.radius)
-            const archer = new Entity(this.entity.game, {
-                x: this.entity.x + Math.cos(angle) * r,
-                y: this.entity.y + Math.sin(angle) * r
-            }, ArcherData.Attributes)
+            const archer = new Entity(this.entity.game, new Vector(
+                this.entity.x + Math.cos(angle) * r,
+                this.entity.y + Math.sin(angle) * r
+            ), ArcherData.Attributes)
             archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
             archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
             this.mobs.push(archer)
@@ -104,10 +104,10 @@ export default class SpawnComponentBehavior extends Component {
         for (let i = 0; i < this.robots; i++) {
             const angle = this.rng.float() * Math.PI * 2
             const r = this.rng.int(10, this.radius)
-            const robot = new Entity(this.entity.game, {
-                x: this.entity.x + Math.cos(angle) * r,
-                y: this.entity.y + Math.sin(angle) * r
-            }, RobotData.Attributes)
+            const robot = new Entity(this.entity.game, new Vector(
+                this.entity.x + Math.cos(angle) * r,
+                this.entity.y + Math.sin(angle) * r
+            ), RobotData.Attributes)
             robot.addComponent(new MovementComponent(robot, RobotData.Attributes))
             robot.addComponent(new AnimationComponent(robot, RobotData.AnimationConfig))
             this.mobs.push(robot)

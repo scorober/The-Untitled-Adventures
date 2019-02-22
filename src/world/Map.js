@@ -1,6 +1,7 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
 import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, TILE_COLLISION as TC } from '../utils/Const.js'
+import Vector from '../utils/Vector.js'
 
 export default class Map extends Entity {
     /**
@@ -27,10 +28,10 @@ export default class Map extends Entity {
     }
 
     getStartPos() {
-        return {
-            x: this.dungeon.start_pos[0] * this.tileSize,
-            y: this.dungeon.start_pos[1] * this.tileSize + 100
-        }
+        return new Vector(
+            this.dungeon.start_pos[0] * this.tileSize,
+            this.dungeon.start_pos[1] * this.tileSize
+        )
     }
 
     buildMap() {
@@ -67,7 +68,7 @@ export default class Map extends Entity {
      */
     createObject(map, pos, object) {
         for (let row = 0; row < object.length; row++) {
-            for (let col = 0; col <object[0].length; col++) {
+            for (let col = 0; col < object[0].length; col++) {
                 const point = [pos[0] + col, pos[1] + row]
                 map.set(point, object[row][col])
             }
@@ -146,10 +147,10 @@ export default class Map extends Entity {
             case ROOMS.Any:
                 this.createObject(this.map1, this.alterPos(center, -1, -1), MI.Rug)
                 this.spawners.push({
-                    pos: {
-                        x: center[0] * this.tileSize,
-                        y: center[1] * this.tileSize,
-                    },
+                    pos: new Vector(
+                        center[0] * this.tileSize,
+                        center[1] * this.tileSize
+                    ),
                     r: this.getRadius(piece)
                 })
                 break
@@ -337,8 +338,8 @@ export default class Map extends Entity {
         return TC[value]
     }
 
-    update() {}
-    
+    update() { }
+
     draw() {
         for (let c = 0; c < this.cols; c++) {
             for (let r = 0; r < this.rows; r++) {
@@ -371,7 +372,7 @@ export default class Map extends Entity {
         const cam = this.game.camera
         const width = this.game.ctx.canvas.width
         const height = this.game.ctx.canvas.height
-        const centerTile = Map.worldToTilePosition({ x: cam.xView + width / 2, y: cam.yView + height / 2 }, this.tileSize)
+        const centerTile = Map.worldToTilePosition(new Vector(cam.xView + width / 2, cam.yView + height / 2), this.tileSize)
         const tilesWide = Math.ceil(width / this.tileSize)
         const tilesTall = Math.ceil(height / this.tileSize)
         const tileInView = this.tileInView(c, r, centerTile, tilesWide + 2, tilesTall + 2)
@@ -401,10 +402,10 @@ export default class Map extends Entity {
     }
 
     static tileToWorldPosition(obj, tileSize) {
-        return {
-            x: obj.x * tileSize,
-            y: obj.y * tileSize
-        }
+        return new Vector(
+            obj.x * tileSize,
+            obj.y * tileSize
+        )
     }
 
     /**
@@ -412,10 +413,10 @@ export default class Map extends Entity {
      * to 
      */
     static worldToTilePosition(obj, tileSize) {
-        return {
-            x: Math.floor((obj.x + tileSize / 2) / 64),
-            y: Math.floor((obj.y + tileSize / 2) / 64)
-        }
+        return new Vector(
+            Math.floor((obj.x + tileSize / 2) / 64),
+            Math.floor((obj.y + tileSize / 2) / 64)
+        )
     }
 
     /**

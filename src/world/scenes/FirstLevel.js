@@ -5,7 +5,6 @@ import Background from '../Background.js'
 import Entity from '../../entities/Entity.js'
 import { ASSET_PATHS, SPAWNERS } from '../../utils/Const.js'
 
-
 import PlayerCharacterData from '../../entities/characters/PlayerCharacterDefaultData.js'
 import ArcherData from '../../entities/characters/ArcherDefaultData.js'
 import MarriottData from '../../entities/characters/MarriottDefaultData.js'
@@ -17,14 +16,12 @@ import AnimationComponent from '../../entities/components/AnimationComponent.js'
 import SpawnerBehaviorComponent from '../../entities/components/SpawnerBehaviorComponent.js'
 import CollisionComponent from '../../entities/components/CollisionComponent.js'
 import AttributeComponent from '../../entities/components/AttributeComponent.js'
+import CombatComponent from '../../entities/components/CombatComponent.js'
 import SpawnerData from '../../entities/effects/SpawnerDefaultData.js'
 import EnemyInteractionComponent from '../../entities/components/InteractionComponent/EnemyInteractionComponent.js'
 import MarriottInteractionComponent from '../../entities/components/InteractionComponent/MarriottInteractionComponent.js'
 
-
-
 export default class FirstLevel extends Scene {
-
     constructor(game) {
         super(game)
         this.name = 'level1'
@@ -119,18 +116,21 @@ export default class FirstLevel extends Scene {
         archer.addComponent(new AttributeComponent(archer, ArcherData.Attributes))
         archer.addComponent(new CollisionComponent(archer, ArcherData.AnimationConfig))
         archer.addComponent(new EnemyInteractionComponent(archer))
+        archer.addComponent(new CombatComponent(archer))
         archer.getComponent(MovementComponent).setFollowTarget(playerCharacter)
         return archer
     }
 
     createPlayerCharacter(game, start) {
-        const playerCharacter = new Entity(game, start, PlayerCharacterData.Attributes)
-        playerCharacter.addComponent(new AnimationComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
-        playerCharacter.addComponent(new AttributeComponent(playerCharacter, PlayerCharacterData.Attributes))
-        playerCharacter.addComponent(new MovementComponent(playerCharacter, PlayerCharacterData.Attributes))
-        playerCharacter.addComponent(new CollisionComponent(playerCharacter, PlayerCharacterData.AnimationConfig))
-        playerCharacter.addComponent(new PlayerInputComponent(playerCharacter))
-        return playerCharacter
+        const pc = new Entity(game, start, PlayerCharacterData.Attributes)
+        pc.addComponent(new AnimationComponent(pc, PlayerCharacterData.AnimationConfig))
+        pc.addComponent(new AttributeComponent(pc, PlayerCharacterData.Attributes))
+        pc.addComponent(new MovementComponent(pc, PlayerCharacterData.Attributes))
+        pc.addComponent(new CollisionComponent(pc, PlayerCharacterData.AnimationConfig))
+        pc.addComponent(new MarriottInteractionComponent(pc))
+        pc.addComponent(new CombatComponent(pc))
+        pc.addComponent(new PlayerInputComponent(pc))
+        return pc
     }
 
     /**
@@ -152,5 +152,4 @@ export default class FirstLevel extends Scene {
         this.drawEntities()
         this.drawMapTop()
     }
-
 }

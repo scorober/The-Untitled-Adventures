@@ -1,8 +1,9 @@
 import Entity from './Entity.js'
+import Vector from '../utils/Vector.js'
 
 export default class Camera extends Entity {
     constructor(game) {
-        super(game, { x: 0, y: 0 })
+        super(game, new Vector(0, 0))
         this.xView = 0
         this.yView = 0
     }

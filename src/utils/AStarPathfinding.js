@@ -1,3 +1,5 @@
+import Vector from './Vector.js'
+
 export default class AStarPathfinding {
     constructor(world, pathStart, pathEnd) {
         this.world = world
@@ -56,7 +58,7 @@ export default class AStarPathfinding {
             if (myNode.worldIndex === mypathEnd.worldIndex) {
                 myPath = closedNodes[closedNodes.push(myNode) - 1]
                 do {
-                    result.push([myPath.x, myPath.y])
+                    result.push(new Vector(myPath.x, myPath.y))
                     myPath = myPath.parentNode
                 }
                 while (myPath != null)
