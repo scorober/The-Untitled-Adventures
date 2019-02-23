@@ -100,8 +100,10 @@ export default class CombatComponent extends Component {
             this.entity.game.addScore(this.attributeComponent.Name)
             console.log(this.entity.game.sceneManager.getScene('scoredisplay').scores[0].Name)
             this.entity.game.removeEntityByRef(this.entity)
-            this.entity.game.sceneManager.change('scoredisplay' )
-            return true
+            if(this.attributeComponent.Name === 'PLAYER') {
+                this.entity.game.sceneManager.change('scoredisplay' )
+            }
+                return true
         }
         return false
     }
