@@ -3,3 +3,4 @@ package-lock.json
 _config.yml
 .prettierrc
 .idea/
+.DS_Store

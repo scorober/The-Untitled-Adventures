@@ -42,8 +42,8 @@ export default class EnemyInteractionComponent extends InteractionComponent {
         if (enemyCombatComponent) {
             const player = this.entity.game.getCurrentScene().getPlayer()
             const playerCombatComponent = player.getComponent(CombatComponent)
-            playerCombatComponent.setCombatTarget(enemyCombatComponent)
-            enemyCombatComponent.setCombatTarget(playerCombatComponent)
+            playerCombatComponent.setCombatTarget(this.entity)
+            enemyCombatComponent.setCombatTarget(player)
         }
     }
 
