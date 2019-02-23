@@ -149,13 +149,13 @@ export default class GameEngine {
      */
     addScore(name) {
         // Score = null;
-        const scene = this.sceneManager.currentScene
+        const scene = this.sceneManager.getScene('scoredisplay')
         if (name === 'ARCHER') {
             const Score = {
                 Name: 'Archer_Kill',
                 Time: this.timer.gameTime,
                 Duration: null,
-                Lvl: scene.lvl,
+                lvl: scene.lvl,
                 Score: 400 * Math.sqrt(this.lvl)
             }
             scene.scores.push(Score)
@@ -164,7 +164,7 @@ export default class GameEngine {
                 Name: 'Mage_Kill',
                 Time: this.timer.gameTime,
                 Duration: null,
-                Lvl: scene.lvl,
+                lvl: scene.lvl,
                 Score: 700 * Math.sqrt(this.lvl)
             }
             scene.scores.push(Score)
@@ -173,7 +173,7 @@ export default class GameEngine {
                 Name: 'Robot_Kill',
                 Time: this.timer.gameTime,
                 Duration: null,
-                Lvl: scene.lvl,
+                lvl: scene.lvl,
                 Score: 550 * Math.sqrt(this.lvl)
             }
             scene.scores.push(Score)

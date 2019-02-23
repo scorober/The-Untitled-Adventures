@@ -114,10 +114,6 @@ export default class Scene {
             const entity = this.entities[i]
             if (entity) { //Removed entities are still in array and being called on??
                 if (entity.removeFromWorld === true) {
-                    // this.addScore(entity)
-                    // this.scr++
-                    // console.log('score: ' + this.scr)
-                    
                     this.removeEntity(i)
                 } else {
                     entity.update()
