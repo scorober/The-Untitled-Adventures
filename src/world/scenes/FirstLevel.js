@@ -25,8 +25,9 @@ import DoorInteractionComponent from '../../entities/components/InteractionCompo
 
 export default class FirstLevel extends Scene {
     constructor(game) {
-        super(game)
+        super(game, 1)
         this.name = 'level1'
+        
         //Initialize a dungeon with options, possibly move to the scene superclass w/ parameters.
         const dungeon = new Dungeon({
             size: [2000, 2000],
