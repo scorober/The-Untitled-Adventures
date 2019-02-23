@@ -16,7 +16,6 @@ export default class CombatComponent extends Component {
     update() {
         this.dmgTimer -= this.entity.game.clockTick
         if (this.checkDead()) {
-            // this.game.en
             this.entity.game.removeEntityByRef(this.entity)
         }
         if (this.combatTarget && this.dmgTimer <= 0) {
@@ -100,8 +99,8 @@ export default class CombatComponent extends Component {
         if (this.checkDead()) {
             this.entity.game.addScore(this.attributeComponent.Name)
             console.log(this.entity.game.sceneManager.getScene('scoredisplay').scores[0].Name)
-            
             this.entity.game.removeEntityByRef(this.entity)
+            this.entity.game.sceneManager.change('scoredisplay' )
             return true
         }
         return false

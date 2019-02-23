@@ -177,6 +177,8 @@ export default class GameEngine {
                 Score: 550 * Math.sqrt(this.lvl)
             }
             scene.scores.push(Score)
+        // } else if (name === 'PLAYER' || name === 'MARIOTT') {
+        //     this.sceneManager.change('scores')
         }
     }
 }

@@ -18,21 +18,27 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.menuLevel = MenuLevels.MAIN
         this.menus = {}
         this.scores = []
-        for(let j = 0; j < 4; j++) {
-            this.scores.push({
-                Name: 'Mage_Kill',
-                Time: 2,
-                Duration: null,
-                lvl: j,
-                Score: 700 * Math.sqrt(1)
-            })
-            this.scores.push({
-                Name: 'Archer_Kill',
-                Time: 7,
-                Duration: null,
-                lvl: 1,
-                Score: 400 * Math.sqrt(1)
-            })
+        // for(let j = 0; j < 40; j++) {
+        //     this.scores.push({
+        //         Name: 'Mage_Kill',
+        //         Time: 2,
+        //         Duration: null,
+        //         lvl: j,
+        //         Score: 700 * Math.sqrt(1)
+        //     })
+        //     this.scores.push({
+        //         Name: 'Archer_Kill',
+        //         Time: 7,
+        //         Duration: null,
+        //         lvl: 1,
+        //         Score: 400 * Math.sqrt(1)
+        //     })
+        // }
+        this.params = {
+            GAME : game,
+            MANAGER: this,
+            XBASE: game.surfaceWidth / 2,
+            YBASE: game.surfaceHeight / 2 + 20,
         }
         this.defaultTextStyles = {
             FONT: '14px terminal',
@@ -47,28 +53,26 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.offset = 0
         this.lineSize = 17
         this.max = Math.floor(game.surfaceHeight / this.lineSize) - 4
-        this.timeInt = 0.05
+        this.timeInt = 0.1
         this.count = this.max
-
+        this.index = 0
         this.scoreText = []
         this.updateText()
-        this.FInalSCore = 0
-        this.getFinalScore()
+        this.FinalSCore = 0
         this.timeBuffer = 0
-        this.totalScore = [
-            {TIME: 1, TEXT: this.FInalSCore, W: 240, H: game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'},
-            {TIME: 1, TEXT: 'TOTAL SCORE:', W: 100, H: game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'}
-        ]
-        for(let i = 0; i < (game.surfaceWidth/14); i++) {
-            this.totalScore.push({TIME: 1, TEXT: '_', W: i * 14, H: game.surfaceHeight - 40, COLOR: 'white', FONT: '14px terminal'})
-        }
+        this.totalScore = []
     }
 
     update() {
         super.update()
         this.timeBuffer += this.game.clockTick
-        if(this.timeBuffer > this.timeInt && this.count < this.scores.length){
-            if((this.timeElapsed - 1)/this.timeInt > this.max) {
+        if(this.timeBuffer > this.timeInt) {
+            if(this.index < this.scores.length) {
+                this.FinalSCore += this.scores[this.index].Score
+                this.updateFinalScore()
+                this.index++
+            }
+            if((this.timeElapsed - 1)/this.timeInt > this.max && this.count < this.scores.length) {
                 this.offset += this.lineSize
                 console.log(this.max + ' - ' + ' - ' + this.offset)
                 super.draw()
@@ -113,11 +117,20 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
     
     }
 
-    getFinalScore() {
-        for(let i = 0; i < this.scores.length;i++) {
-            this.FInalSCore += this.scores[i].Score
+    updateFinalScore() {
+        this.totalScore = []
+        this.totalScore.push({TIME: 1, TEXT: this.FinalSCore, W: 240, H: this.game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'})
+        this.totalScore.push({TIME: 1, TEXT: 'TOTAL SCORE:', W: 100, H: this.game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'})
+        
+        for(let i = 0; i < (this.game.surfaceWidth/14); i++) {
+            this.totalScore.push({TIME: 1, TEXT: '_', W: i * 14, H: this.game.surfaceHeight - 40, COLOR: 'white', FONT: '14px terminal'})
         }
     }
+    // getFinalScore(indexTo) {
+    //     for(let i = 0; i <= indexTo; i++) {
+    //         this.FinalSCore += this.scores[i].Score
+    //     }
+    // }
     checkKeys(){
         return (this.game.inputManager.downKeys[KEYS.Enter]) ? 0
             : (this.game.inputManager.downKeys[KEYS.ArrowUp]
@@ -126,7 +139,6 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
                     || this.game.inputManager.downKeys[KEYS.KeyS]) ? 1
                     : null
     }
-
 }
 
 // class BaseLevel {
