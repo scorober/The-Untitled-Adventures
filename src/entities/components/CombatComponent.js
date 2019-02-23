@@ -103,7 +103,7 @@ export default class CombatComponent extends Component {
             if(this.attributeComponent.Name === 'PLAYER') {
                 this.entity.game.sceneManager.change('scoredisplay' )
             }
-                return true
+            return true
         }
         return false
     }
