@@ -22,6 +22,7 @@ import EnemyInteractionComponent from '../../entities/components/InteractionComp
 import MarriottInteractionComponent from '../../entities/components/InteractionComponent/MarriottInteractionComponent.js'
 import Vector from '../../utils/Vector.js'
 import DoorInteractionComponent from '../../entities/components/InteractionComponent/DoorInteractionComponent.js'
+import PlayerCharacterCombatComponent from '../../entities/components/PlayerCharacterCombatComponent.js'
 
 export default class FirstLevel extends Scene {
     constructor(game) {
@@ -82,12 +83,12 @@ export default class FirstLevel extends Scene {
 
         const playerCharacter = this.createPlayerCharacter(game, start)
         const archer = this.createArcher(game, start, playerCharacter)
-        const marriott = this.createMarriott(game, start, playerCharacter)
+        //const marriott = this.createMarriott(game, start, playerCharacter)
 
         this.setPlayer(playerCharacter)
         this.addEntity(playerCharacter)
         this.addEntity(archer)
-        this.addEntity(marriott)
+        //this.addEntity(marriott)
         this.addEntity(game.camera)
         this.game.camera.setFollowedEntity(playerCharacter)
 
@@ -154,7 +155,7 @@ export default class FirstLevel extends Scene {
         pc.addComponent(new MovementComponent(pc, PlayerCharacterData.Attributes))
         pc.addComponent(new CollisionComponent(pc))
         pc.addComponent(new MarriottInteractionComponent(pc))
-        pc.addComponent(new CombatComponent(pc))
+        pc.addComponent(new PlayerCharacterCombatComponent(pc))
         pc.addComponent(new PlayerInputComponent(pc))
         return pc
     }
