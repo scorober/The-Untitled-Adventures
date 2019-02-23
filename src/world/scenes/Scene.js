@@ -12,6 +12,7 @@ export default class Scene {
         this.timeElapsed = 0
         this.timeBuffer = 0
         this.scores = []
+        this.scr = 0
         this.level = lvl
     }
 
@@ -114,8 +115,9 @@ export default class Scene {
             const entity = this.entities[i]
             if (entity) { //Removed entities are still in array and being called on??
                 if (entity.removeFromWorld === true) {
-                    this.addScore(entity)
-                    console.log('score: ' + this.scores)
+                    // this.addScore(entity)
+                    // this.scr++
+                    // console.log('score: ' + this.scr)
                     
                     this.removeEntity(i)
                 } else {
@@ -172,41 +174,4 @@ export default class Scene {
         this.dungeon = dungeon
     }
 
-    /**
-     * Generates score object from entity and ads it to the score board.
-     * 
-     * @param  entity 
-     */
-    addScore(entity) {
-        // Score = null;
-        console.log('here')
-        if (entity.UUID.includes('ARCHER')) {
-            const Score = {
-                Name: 'Archer_Kill',
-                Time: this.game.timer.gameTime,
-                Duration: null,
-                Lvl: this.lvl,
-                Score: 400
-            }
-            this.scores.push(Score)
-        } else if (entity.UUID.includes('MAGE')) {
-            const Score = {
-                Name: 'Mage_Kill',
-                Time: this.game.timer.gameTime,
-                Duration: null,
-                Lvl: this.lvl,
-                Score: 700
-            }
-            this.scores.push(Score)
-        } else if (entity.UUID.includes('ROBOT')) {
-            const Score = {
-                Name: 'Robot_Kill',
-                Time: this.game.timer.gameTime,
-                Duration: null,
-                Lvl: this.lvl,
-                Score: 550
-            }
-            this.scores.push(Score)
-        }
-    }
 }

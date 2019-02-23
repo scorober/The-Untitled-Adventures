@@ -15,6 +15,8 @@ export default class GameEngine {
         this.surfaceWidth = null
         this.surfaceHeight = null
         this.requestAnimFrame = this.getPlatformRAF().bind(window)
+        // this.scores = []
+        // this.scr = 0
     }
 
     getPlatformRAF() {
@@ -139,5 +141,50 @@ export default class GameEngine {
 
     getEntityByXYInWorld(pos) {
         return this.sceneManager.getCollidablesXYWorld(new Vector(pos.x, pos.y))
+    }
+
+    
+    /**
+     * Generates score object from entity and ads it to the score board.
+     * 
+     * @param  entity 
+     */
+    addScore(name) {
+        // Score = null;
+        const scene = this.sceneManager.currentScene
+        console.log('here : ' + name + '  ' + scene)
+        if (name === 'ARCHER') {
+            const Score = {
+                Name: 'Archer_Kill',
+                Time: this.timer.gameTime,
+                Duration: null,
+                Lvl: scene.lvl,
+                Score: 400
+            }
+            scene.scr += 400 * Math.sqrt(this.lvl)
+            scene.scores.push(Score)
+        } else if (name === 'MAGE') {
+            const Score = {
+                Name: 'Mage_Kill',
+                Time: this.timer.gameTime,
+                Duration: null,
+                Lvl: scene.lvl,
+                Score: 700
+            }
+            scene.scr += 700 * Math.sqrt(this.lvl)
+            scene.scores.push(Score)
+        } else if (name == 'ROBOT') {
+            const Score = {
+                Name: 'Robot_Kill',
+                Time: this.timer.gameTime,
+                Duration: null,
+                Lvl: scene.lvl,
+                Score: 550
+            }
+            this.scr += 550 * Math.sqrt(this.lvl)
+            scene.scores.push(Score)
+        }
+        console.log(scene.scr)
+        
     }
 }

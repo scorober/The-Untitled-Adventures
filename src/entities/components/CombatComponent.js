@@ -98,6 +98,9 @@ export default class CombatComponent extends Component {
         this.attributeComponent.HP -= damage
         //check if dead
         if (this.checkDead()) {
+            this.entity.game.addScore(this.attributeComponent.Name)
+            console.log(this.entity.game.getCurrentScene().scores[0].Name + ' : ' + this.entity.game.getCurrentScene().scr)
+            
             this.entity.game.removeEntityByRef(this.entity)
             return true
         }
