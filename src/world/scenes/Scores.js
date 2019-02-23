@@ -18,7 +18,7 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.menuLevel = MenuLevels.MAIN
         this.menus = {}
         this.scores = []
-        for(let j = 0; j < 100; j++) {
+        for(let j = 0; j < 4; j++) {
             this.scores.push({
                 Name: 'Mage_Kill',
                 Time: 2,
@@ -47,19 +47,27 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.offset = 0
         this.lineSize = 17
         this.max = Math.floor(game.surfaceHeight / this.lineSize) - 4
-        this.timeInt = 0.1
+        this.timeInt = 0.05
+        this.count = this.max
 
         this.scoreText = []
         this.updateText()
         this.FInalSCore = 0
         this.getFinalScore()
         this.timeBuffer = 0
+        this.totalScore = [
+            {TIME: 1, TEXT: this.FInalSCore, W: 240, H: game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'},
+            {TIME: 1, TEXT: 'TOTAL SCORE:', W: 100, H: game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'}
+        ]
+        for(let i = 0; i < (game.surfaceWidth/14); i++) {
+            this.totalScore.push({TIME: 1, TEXT: '_', W: i * 14, H: game.surfaceHeight - 40, COLOR: 'white', FONT: '14px terminal'})
+        }
     }
 
     update() {
         super.update()
         this.timeBuffer += this.game.clockTick
-        if(this.timeBuffer > this.timeInt){
+        if(this.timeBuffer > this.timeInt && this.count < this.scores.length){
             if((this.timeElapsed - 1)/this.timeInt > this.max) {
                 this.offset += this.lineSize
                 console.log(this.max + ' - ' + ' - ' + this.offset)
@@ -73,6 +81,7 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
     draw() {
         super.draw()
         this.drawText(this.scoreText)
+        this.drawText(this.totalScore)
     }
 
     drawText(text){
