@@ -15,6 +15,7 @@ export default class GameEngine {
         this.surfaceWidth = null
         this.surfaceHeight = null
         this.requestAnimFrame = this.getPlatformRAF().bind(window)
+        this.scores = []
     }
 
     getPlatformRAF() {
@@ -153,32 +154,33 @@ export default class GameEngine {
         if (name === 'ARCHER') {
             const Score = {
                 Name: 'Archer_Kill',
-                Time: this.timer.gameTime,
+                Time: Math.floor(this.timer.gameTime),
                 Duration: null,
-                lvl: scene.lvl,
-                Score: 400 * Math.sqrt(this.lvl)
+                // lvl: this.sceneManager.getCurrentScene().level,
+                lvl: 1,
+                Score: Math.floor(400 * Math.sqrt(2))
             }
             scene.scores.push(Score)
         } else if (name === 'MAGE') {
             const Score = {
                 Name: 'Mage_Kill',
-                Time: this.timer.gameTime,
+                Time: Math.floor(this.timer.gameTime),
                 Duration: null,
-                lvl: scene.lvl,
-                Score: 700 * Math.sqrt(this.lvl)
+                // lvl: this.sceneManager.getCurrentScene().level,
+                lvl: 1,
+                Score: Math.floor(700 * Math.sqrt(2))
             }
             scene.scores.push(Score)
         } else if (name == 'ROBOT') {
             const Score = {
                 Name: 'Robot_Kill',
-                Time: this.timer.gameTime,
+                Time: Math.floor(this.timer.gameTime),
                 Duration: null,
-                lvl: scene.lvl,
-                Score: 550 * Math.sqrt(this.lvl)
+                // lvl: this.sceneManager.getCurrentScene().level,
+                lvl: 1,
+                Score: Math.floor(550 * Math.sqrt(2))
             }
             scene.scores.push(Score)
-        // } else if (name === 'PLAYER' || name === 'MARIOTT') {
-        //     this.sceneManager.change('scores')
         }
     }
 }

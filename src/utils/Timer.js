@@ -14,4 +14,8 @@ export default class Timer {
         this.gameTime += gameDelta
         return gameDelta
     }
+
+    getGameTIme() {
+        return this.gameTime
+    }
 }
