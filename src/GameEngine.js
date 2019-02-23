@@ -15,8 +15,6 @@ export default class GameEngine {
         this.surfaceWidth = null
         this.surfaceHeight = null
         this.requestAnimFrame = this.getPlatformRAF().bind(window)
-        // this.scores = []
-        // this.scr = 0
     }
 
     getPlatformRAF() {
@@ -152,16 +150,14 @@ export default class GameEngine {
     addScore(name) {
         // Score = null;
         const scene = this.sceneManager.currentScene
-        console.log('here : ' + name + '  ' + scene)
         if (name === 'ARCHER') {
             const Score = {
                 Name: 'Archer_Kill',
                 Time: this.timer.gameTime,
                 Duration: null,
                 Lvl: scene.lvl,
-                Score: 400
+                Score: 400 * Math.sqrt(this.lvl)
             }
-            scene.scr += 400 * Math.sqrt(this.lvl)
             scene.scores.push(Score)
         } else if (name === 'MAGE') {
             const Score = {
@@ -169,9 +165,8 @@ export default class GameEngine {
                 Time: this.timer.gameTime,
                 Duration: null,
                 Lvl: scene.lvl,
-                Score: 700
+                Score: 700 * Math.sqrt(this.lvl)
             }
-            scene.scr += 700 * Math.sqrt(this.lvl)
             scene.scores.push(Score)
         } else if (name == 'ROBOT') {
             const Score = {
@@ -179,12 +174,9 @@ export default class GameEngine {
                 Time: this.timer.gameTime,
                 Duration: null,
                 Lvl: scene.lvl,
-                Score: 550
+                Score: 550 * Math.sqrt(this.lvl)
             }
-            this.scr += 550 * Math.sqrt(this.lvl)
             scene.scores.push(Score)
         }
-        console.log(scene.scr)
-        
     }
 }

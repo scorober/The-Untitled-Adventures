@@ -12,7 +12,6 @@ export default class Scene {
         this.timeElapsed = 0
         this.timeBuffer = 0
         this.scores = []
-        this.scr = 0
         this.level = lvl
     }
 
