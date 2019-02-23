@@ -10,7 +10,7 @@ export default {
     Attributes: {
         Damage: 10,
         Radius: 15,
-        Speed: 900
+        Speed: 300
     },
 
     AnimationConfig: {
@@ -62,10 +62,12 @@ export default {
             [ANIMS.Impact]: {
                 frames: 11,
                 rate: AR.Impact,
+                
                 options: {
                     width: 192,
                     height: 192,
                     maxFrames: 11,
+                    scale: .5,
                     yOffset: yOffset
                 }
             }

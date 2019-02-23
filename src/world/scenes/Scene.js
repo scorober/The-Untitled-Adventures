@@ -108,21 +108,25 @@ export default class Scene {
      * Update entities details, location, etc
      */
     updateEntities() {
+        let enemyCount = 0
         const entitiesCount = this.entities.length
         if(entitiesCount){
             this.entities.sort((a,b) => a.y - b.y)
         }
         for (let i = 0; i < entitiesCount; i++) {
             const entity = this.entities[i]
-            if (entity) { //Removed entities are still in array and being called on??
+            if (entity) {
                 if (entity.removeFromWorld === true) {
                     this.removeEntity(i)
                 } else {
                     entity.update()
                 }
+                if (this.checkEnemy(entity.UUID)) {
+                    enemyCount++
+                }
             }
         }
-
+        this.checkMapState(enemyCount)
     }
 
     /**
@@ -181,4 +185,15 @@ export default class Scene {
         this.swarm = false
     }
 
+    checkEnemy(str) {
+        return str.includes('MAGE') || str.includes('ARCHER') || str.includes('ROBOT')
+    }
+
+    checkMapState(enemyCount) {
+        if (enemyCount === 0 && this.swarm === true) {
+            this.setPacified()
+        } else if (enemyCount > 0) {
+            this.setSwarmed()
+        }
+    }
 }

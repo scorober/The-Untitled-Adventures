@@ -9,7 +9,7 @@ const yOffset = 20
 export default {
     Attributes: {
         Damage: 10,
-        Speed: 380
+        Speed: 100
     },
     AnimationConfig: {
         Scale: 1,

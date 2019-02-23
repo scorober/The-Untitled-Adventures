@@ -29,8 +29,9 @@ export default class AnimationFactory {
         options = Object.assign({}, defaults, options)
         const width = options.width ? options.width : this.width
         const height = options.height ? options.height : this.height
+        const scale = options.scale ? options.scale : this.scale
         if (this.startY + width <= this.spritesheet.height) {
-            const animation = new Animation(this.spritesheet, width, height, this.startY, frameCount, options.yOffset, rate, options.loop, this.scale, options.maxFrames)
+            const animation = new Animation(this.spritesheet, width, height, this.startY, frameCount, options.yOffset, rate, options.loop, scale, options.maxFrames)
             this.startY += height
             this.row += 1
             return animation
