@@ -13,13 +13,13 @@ export default class PlayerCharacterCombatComponent extends CombatComponent {
      */
     doAttackAnimation() {
         const movementComponent = this.entity.getComponent(MovementComponent)
+        movementComponent.setFacing(this.combatTarget)
         this.entity.getComponent(AnimationComponent).setDirectionalAnimation(movementComponent.direction, {
             north: ANIMS.OversizeNorth,
             east: ANIMS.OversizeEast,
             south: ANIMS.OversizeSouth,
             west: ANIMS.OversizeWest
         }, () => {
-            console.log('callback called')
             this.entity.getComponent(AnimationComponent).setDirectionalAnimation(movementComponent.direction, {
                 north: ANIMS.StandNorth,
                 east: ANIMS.StandEast,

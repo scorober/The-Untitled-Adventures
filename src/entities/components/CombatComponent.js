@@ -130,7 +130,6 @@ export default class CombatComponent extends Component {
             south: ANIMS.AttackSouth,
             west: ANIMS.AttackWest
         }, () => {
-            console.log('callback called')
             this.entity.getComponent(AnimationComponent).setDirectionalAnimation(movementComponent.direction, {
                 north: ANIMS.StandNorth,
                 east: ANIMS.StandEast,
