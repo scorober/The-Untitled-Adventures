@@ -28,16 +28,6 @@ export default class MovementComponent extends Component {
     update() {
         if (this.path.length > 0) {
             this.handlePathMovement()
-
-        } else if (this.moving) {
-            this.moving = false
-            this.entity.getComponent(AnimationComponent).setDirectionalAnimation(this.direction, {
-                north: ANIMS.StandNorth,
-                east: ANIMS.StandEast,
-                south: ANIMS.StandSouth,
-                west: ANIMS.StandWest
-
-            })
         }
         if (this.following) {
             this.handleFollowing()
@@ -74,11 +64,11 @@ export default class MovementComponent extends Component {
         let dy = tilePosition.y - this.entity.y
         const distance = Math.sqrt(dx * dx + dy * dy)
         if (distance < 10) {
-            if (this.path.length > 0) {
-                this.path.splice(0, 1)
-            } else {
+            this.path.splice(0, 1)
+            if (this.path.length < 1) {
                 this.moving = false
                 this.setStandingAnimation()
+                return
             }
         }
         dx = dx / distance
@@ -147,6 +137,16 @@ export default class MovementComponent extends Component {
         this.path = pathfinder.calculatePath()
     }
 
+    setFacing(entity) {
+        console.log('setting facing')
+        const otherMovementComponent = entity.getComponent(MovementComponent)
+        if (otherMovementComponent) {
+            const dx = this.entity.x - otherMovementComponent.entity.x
+            const dy = this.entity.y - otherMovementComponent.entity.y
+            const directionToFace = this.calculateDirection(dx, dy)
+            this.setDirection(directionToFace)
+        }
+    }
 
 
     /**

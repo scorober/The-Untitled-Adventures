@@ -128,10 +128,10 @@ export const ANIMATION_RATES = {
 }
 
 export const DIRECTIONS = {
-    North: Symbol(),
-    West: Symbol(),
-    South: Symbol(),
-    East: Symbol(),
+    North: Symbol('north'),
+    West: Symbol('west'),
+    South: Symbol('south'),
+    East: Symbol('east'),
 
     /** Map specific directions */
     NorthWest: Symbol(),

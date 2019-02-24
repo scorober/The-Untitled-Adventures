@@ -57,7 +57,8 @@ export default {
                 options: {
                     yOffset: yOffset,
                     width: attackWidth,
-                    height: attackHeight
+                    height: attackHeight,
+                    loop: false
                 }
             },
             [ANIMS.AttackEast]: {
@@ -66,7 +67,8 @@ export default {
                 options: {
                     yOffset: yOffset,
                     width: attackWidth,
-                    height: attackHeight
+                    height: attackHeight,
+                    loop: false
                 }
             },
             // Copy of AttackWest
@@ -78,7 +80,8 @@ export default {
                 options: {
                     yOffset: yOffset,
                     width: attackWidth,
-                    height: attackHeight
+                    height: attackHeight,
+                    loop: false
                 }
             },
             // Copy of AttackEast
@@ -88,7 +91,8 @@ export default {
                 options: {
                     yOffset: yOffset,
                     width: attackWidth,
-                    height: attackHeight
+                    height: attackHeight,
+                    loop: false
                 }
             },
             // Standing

@@ -61,7 +61,7 @@ export default class EnemyInteractionComponent extends InteractionComponent {
     }
 
     unsetRightClick() {
-        this.unsetAttacking()
+        //this.unsetAttacking()
     }
 
     setLeftClick() {

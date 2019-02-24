@@ -22,21 +22,47 @@ export default class CombatComponent extends Component {
         if (this.checkDead()) {
             this.entity.game.removeEntityByRef(this.entity)
         }
-        if (this.canMeleeAttack()) {
+        if (this.hasCombatTarget() && this.inRange() && this.timerCooled() && this.notMoving()) {
             this.meleeAttack()
-            this.dmgTimer = 3
         }
     }
+
 
     /**
      * Checks if it is possible to execute a melee attack
      */
     canMeleeAttack() {
-        const hasCombatTarget = this.combatTarget !== false && this.combatTarget !== null
-        const timerCooled = this.dmgTimer <= 0
-        const distance = Vector.vectorFromEntity(this.combatTarget).distance(Vector.vectorFromEntity(this.entity))
-        const isClose = distance < 128
-        return hasCombatTarget && timerCooled && isClose
+    }
+
+    /**
+     * Checks if this Entity has a combat target
+     * @returns {boolean}
+     */
+    hasCombatTarget() {
+        return this.combatTarget !== false && this.combatTarget !== null
+    }
+
+    /**
+     * Checks if the attack timer is cooled.
+     * @returns {boolean}
+     */
+    timerCooled() {
+        return this.dmgTimer <= 0
+    }
+
+    notMoving() {
+        const movementComponent = this.entity.getComponent(MovementComponent)
+        if (movementComponent) {
+            return movementComponent.moving === false
+        }
+    }
+
+    /**
+     * Checks if the Entity is in range of combat
+     * @returns {boolean}
+     */
+    inRange() {
+        return Vector.vectorFromEntity(this.combatTarget).distance(Vector.vectorFromEntity(this.entity)) < 80
     }
 
     /**
@@ -46,12 +72,23 @@ export default class CombatComponent extends Component {
      */
     setCombatTarget(foe) {
         this.combatTarget = foe
+        const movementComponent = this.entity.getComponent(MovementComponent)
+        if (movementComponent) {
+            movementComponent.setFollowTarget(this.combatTarget)
+        }
     }
 
     /**
      * Unsets the current combat target
      */
     unsetCombatTarget() {
+        const movementComponent = this.entity.getComponent(MovementComponent)
+        if (this.hasCombatTarget() && movementComponent) {
+            const currentFollowTarget = movementComponent.followTarget
+            if (currentFollowTarget && currentFollowTarget.getUUID() === this.combatTarget.getUUID()) {
+                movementComponent.stopFollowing()
+            }
+        }
         this.combatTarget = false
     }
 
@@ -64,7 +101,8 @@ export default class CombatComponent extends Component {
         if (killed) {
             this.unsetCombatTarget()
         }
-        this.setAttackAnimation()
+        this.dmgTimer = 3
+        this.doAttackAnimation()
     }
 
     /**
@@ -83,13 +121,22 @@ export default class CombatComponent extends Component {
     /**
      * Sets the cooresponding attack animation for Entities
      */
-    setAttackAnimation() {
+    doAttackAnimation() {
         const movementComponent = this.entity.getComponent(MovementComponent)
+        movementComponent.setFacing(this.combatTarget)
         this.entity.getComponent(AnimationComponent).setDirectionalAnimation(movementComponent.direction, {
             north: ANIMS.AttackNorth,
             east: ANIMS.AttackEast,
             south: ANIMS.AttackSouth,
             west: ANIMS.AttackWest
+        }, () => {
+            console.log('callback called')
+            this.entity.getComponent(AnimationComponent).setDirectionalAnimation(movementComponent.direction, {
+                north: ANIMS.StandNorth,
+                east: ANIMS.StandEast,
+                south: ANIMS.StandSouth,
+                west: ANIMS.StandWest
+            })
         })
     }
 
@@ -134,8 +181,8 @@ export default class CombatComponent extends Component {
             this.entity.game.addScore(this.attributeComponent.Name)
             // console.log(this.entity.game.sceneManager.getScene('scoredisplay').scores[0].Name)
             this.entity.game.removeEntityByRef(this.entity)
-            if(this.attributeComponent.Name === 'PLAYER') {
-                this.entity.game.sceneManager.change('scoredisplay' )
+            if (this.attributeComponent.Name === 'PLAYER') {
+                this.entity.game.sceneManager.change('scoredisplay')
                 this.entity.game.sceneManager.currentScene.updateText()
                 // console.log(this.entity.game.sceneManager.currentScene.scores[0].Name)
             }
