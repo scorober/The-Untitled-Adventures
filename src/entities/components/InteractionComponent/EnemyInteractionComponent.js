@@ -32,8 +32,8 @@ export default class EnemyInteractionComponent extends InteractionComponent {
             ctx.textAlign = 'center'
             ctx.font = fontSize + 'px arcade'
             ctx.fillStyle = 'red'
-            ctx.fillText(attributeComponent.Name, screenPos.x, screenPos.y + height / 2 - currentAnimation.yOffset)
-            ctx.fillText('HP:' + HP, screenPos.x, screenPos.y + height / 2 - currentAnimation.yOffset + fontSize + 3)
+            ctx.fillText(attributeComponent.Name, screenPos.x + currentAnimation.offset.x, screenPos.y + height / 2 - currentAnimation.offset.y)
+            ctx.fillText('HP:' + HP, screenPos.x + currentAnimation.offset.x, screenPos.y + height / 2 - currentAnimation.offset.y + fontSize + 3)
         }
     }
 

@@ -141,8 +141,8 @@ export default class MovementComponent extends Component {
         console.log('setting facing')
         const otherMovementComponent = entity.getComponent(MovementComponent)
         if (otherMovementComponent) {
-            const dx = this.entity.x - otherMovementComponent.entity.x
-            const dy = this.entity.y - otherMovementComponent.entity.y
+            const dx = otherMovementComponent.entity.x - this.entity.x
+            const dy = otherMovementComponent.entity.y - this.entity.y
             const directionToFace = this.calculateDirection(dx, dy)
             this.setDirection(directionToFace)
         }

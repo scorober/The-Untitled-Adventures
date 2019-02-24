@@ -10,6 +10,8 @@ import {
 // Values defined here for use in export object
 const attackWidth = 288
 const attackHeight = 192
+const attackYOffset = -4
+const attackXOffset = -24
 const height = 192
 const width = 192
 const yOffset = 20
@@ -24,7 +26,7 @@ const yOffset = 20
 export default {
     // Attributes Component Configuration
     Attributes: {
-        HP: 30,
+        HP: 300,
         Mana: 10,
         Str: 5,
         Int: 5,
@@ -53,9 +55,10 @@ export default {
         AnimationData: {
             [ANIMS.AttackWest]: {
                 frames: 16,
-                rate: AR.Shoot,
+                rate: AR.Attack,
                 options: {
-                    yOffset: yOffset,
+                    yOffset: attackYOffset,
+                    xOffset: attackXOffset,
                     width: attackWidth,
                     height: attackHeight,
                     loop: false
@@ -63,9 +66,10 @@ export default {
             },
             [ANIMS.AttackEast]: {
                 frames: 16,
-                rate: AR.Shoot,
+                rate: AR.Attack,
                 options: {
-                    yOffset: yOffset,
+                    yOffset: attackYOffset,
+                    xOffset: attackXOffset * -1,
                     width: attackWidth,
                     height: attackHeight,
                     loop: false
@@ -76,9 +80,10 @@ export default {
                 frames: 16,
                 goBackRows: 2,
                 goBackHeight: 2 * attackHeight,
-                rate: AR.Shoot,
+                rate: AR.Attack,
                 options: {
-                    yOffset: yOffset,
+                    yOffset: attackYOffset,
+                    xOffset: attackXOffset,
                     width: attackWidth,
                     height: attackHeight,
                     loop: false
@@ -87,9 +92,10 @@ export default {
             // Copy of ShootEast
             [ANIMS.AttackSouth]: {
                 frames: 16,
-                rate: AR.Shoot,
+                rate: AR.Attack,
                 options: {
-                    yOffset: yOffset,
+                    yOffset: attackYOffset,
+                    xOffset: attackXOffset * -1,
                     width: attackWidth,
                     height: attackHeight,
                     loop: false
