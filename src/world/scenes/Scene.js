@@ -120,10 +120,11 @@ export default class Scene {
                     this.removeEntity(i)
                 } else {
                     entity.update()
+                    if (this.checkEnemy(entity.UUID)) {
+                        enemyCount++
+                    }
                 }
-                if (this.checkEnemy(entity.UUID)) {
-                    enemyCount++
-                }
+
             }
         }
         this.checkMapState(enemyCount)
@@ -192,7 +193,7 @@ export default class Scene {
     checkMapState(enemyCount) {
         if (enemyCount === 0 && this.swarm === true) {
             this.setPacified()
-        } else if (enemyCount > 0) {
+        } else if (enemyCount > 0 && this.pacified === true) {
             this.setSwarmed()
         }
     }
