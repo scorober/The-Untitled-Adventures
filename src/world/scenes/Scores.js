@@ -18,7 +18,7 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.menuLevel = MenuLevels.MAIN
         this.menus = {}
         this.scores = []
-        for(let j = 0; j < 50; j++) {
+        for(let j = 0; j <  0; j++) {
             this.scores.push({
                 Name: '_Kill',
                 Time: 2,
@@ -61,16 +61,20 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.updateText()
         this.FinalSCore = 0
         this.timeBuffer = 0
-        this.totalScore = []
+        this.totalScore = [
+            {TIME: 1, TEXT: 0, W: 380, H: this.game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'}
+        ]
         this.titleText = [
             {TIME: 1, TEXT: 'Task', W: 20, H: 30 , COLOR: 'white', FONT: '14px terminal'},
             {TIME: 1, TEXT: 'Time Stamp', W: 120, H: 30, COLOR: 'white', FONT: '14px terminal'},
             {TIME: 1, TEXT: 'Task Duration', W: 200, H: 30, COLOR: 'white', FONT: '14px terminal'},
             {TIME: 1, TEXT: 'Level', W: 300, H: 30, COLOR: 'white', FONT: '14px terminal'},
             {TIME: 1, TEXT: 'Score', W: 360, H: 30, COLOR: 'white', FONT: '14px terminal'},
+            {TIME: 1, TEXT: 'TOTAL SCORE:', W: 150, H: this.game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'},
         ]
         for(let i = 0; i < (this.game.surfaceWidth/14); i++) {
             this.titleText.push({TIME: 1, TEXT: '_', W: i * 14, H: 35, COLOR: 'white', FONT: '14px terminal'})
+            this.titleText.push({TIME: 1, TEXT: '_', W: i * 14, H: this.game.surfaceHeight - 45, COLOR: 'white', FONT: '14px terminal'})
         }
     }
 
@@ -131,12 +135,8 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
 
     updateFinalScore() {
         this.totalScore = []
-        this.totalScore.push({TIME: 1, TEXT: this.FinalSCore, W: 240, H: this.game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'})
-        this.totalScore.push({TIME: 1, TEXT: 'TOTAL SCORE:', W: 100, H: this.game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'})
+        this.totalScore.push({TIME: 1, TEXT: this.FinalSCore, W: 380, H: this.game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'})
         
-        for(let i = 0; i < (this.game.surfaceWidth/14); i++) {
-            this.totalScore.push({TIME: 1, TEXT: '_', W: i * 14, H: this.game.surfaceHeight - 45, COLOR: 'white', FONT: '14px terminal'})
-        }
     }
     // getFinalScore(indexTo) {
     //     for(let i = 0; i <= indexTo; i++) {
