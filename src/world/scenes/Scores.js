@@ -18,16 +18,16 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.menuLevel = MenuLevels.MAIN
         this.menus = {}
         this.scores = []
-        for(let j = 0; j <  0; j++) {
+        for(let j = 0; j < 50; j++) {
             this.scores.push({
-                Name: '_Kill',
+                Name: 'MAGE_Kill',
                 Time: 2,
                 Duration: 10,
                 lvl: j,
                 Score: 700 * Math.sqrt(1)
             })
             this.scores.push({
-                Name: '_Kill',
+                Name: 'ARCHER_Kill',
                 Time: 7,
                 Duration: null,
                 lvl: 1,
@@ -67,14 +67,20 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.titleText = [
             {TIME: 1, TEXT: 'Task', W: 20, H: 30 , COLOR: 'white', FONT: '14px terminal'},
             {TIME: 1, TEXT: 'Time Stamp', W: 120, H: 30, COLOR: 'white', FONT: '14px terminal'},
-            {TIME: 1, TEXT: 'Task Duration', W: 200, H: 30, COLOR: 'white', FONT: '14px terminal'},
+            {TIME: 1, TEXT: 'Task Duration', W: 205, H: 30, COLOR: 'white', FONT: '14px terminal'},
             {TIME: 1, TEXT: 'Level', W: 300, H: 30, COLOR: 'white', FONT: '14px terminal'},
-            {TIME: 1, TEXT: 'Score', W: 360, H: 30, COLOR: 'white', FONT: '14px terminal'},
+            {TIME: 1, TEXT: 'Score', W: 350, H: 30, COLOR: 'white', FONT: '14px terminal'},
             {TIME: 1, TEXT: 'TOTAL SCORE:', W: 150, H: this.game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'},
         ]
         for(let i = 0; i < (this.game.surfaceWidth/14); i++) {
             this.titleText.push({TIME: 1, TEXT: '_', W: i * 14, H: 35, COLOR: 'white', FONT: '14px terminal'})
             this.titleText.push({TIME: 1, TEXT: '_', W: i * 14, H: this.game.surfaceHeight - 45, COLOR: 'white', FONT: '14px terminal'})
+        }
+        for(let i = 0; i <= this.max + 3; i++) {
+            this.titleText.push({TIME: 1 , TEXT: ':', W: 110, H: 20 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
+            this.titleText.push({TIME: 1 , TEXT: ':', W: 195, H: 20 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
+            this.titleText.push({TIME: 1 , TEXT: ':', W: 290, H: 20 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
+            this.titleText.push({TIME: 1 , TEXT: ':', W: 340, H: 20 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
         }
     }
 
@@ -128,14 +134,14 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
                 this.scoreText.push({TIME: 1 + i*this.timeInt, TEXT: this.scores[i].Duration, W: 250, H: 60 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
             }
             this.scoreText.push({TIME: 1 + i*this.timeInt, TEXT: this.scores[i].lvl, W: 310, H: 60 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
-            this.scoreText.push({TIME: 1 + i*this.timeInt, TEXT: (this.scores[i].Score).toString(), W: 380, H: 60 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
+            this.scoreText.push({TIME: 1 + i*this.timeInt, TEXT: (this.scores[i].Score).toString(), W: 360, H: 60 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
         }
     
     }
 
     updateFinalScore() {
         this.totalScore = []
-        this.totalScore.push({TIME: 1, TEXT: this.FinalSCore, W: 380, H: this.game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'})
+        this.totalScore.push({TIME: 1, TEXT: this.FinalSCore, W: 360, H: this.game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'})
         
     }
     // getFinalScore(indexTo) {
