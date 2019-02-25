@@ -18,32 +18,8 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.menuLevel = MenuLevels.MAIN
         this.menus = {}
         this.scores = []
-        for(let j = 0; j < 50; j++) {
-            this.scores.push({
-                Name: 'MAGE_Kill',
-                Time: 2,
-                Duration: 10,
-                lvl: j,
-                Score: 700 * Math.sqrt(1)
-            })
-            this.scores.push({
-                Name: 'ARCHER_Kill',
-                Time: 7,
-                Duration: null,
-                lvl: 1,
-                Score: 400 * Math.sqrt(1)
-            })
-        }
-        this.params = {
-            GAME : game,
-            MANAGER: this,
-            XBASE: game.surfaceWidth / 2,
-            YBASE: game.surfaceHeight / 2 + 20,
-        }
-        this.defaultTextStyles = {
-            FONT: '14px terminal',
-            BASECOLOR: 'white'
-        }
+        this.generateFakeScore()
+        
         
         this.bgAnimation = new Animation(game.getAsset(ASSET_PATHS.TitleAnimation), 960, 540, 50, 1, 0.1, 50, true, 1)
         this.timeElapsed = 0
@@ -58,31 +34,34 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.index = 0
         this.offsetPrint = 0
         this.scoreText = []
+        this.gameOverText = []
+        this.initGOT()
+        this.titleText = []
+        this.initTT()
+        this.replayText = []
+        this.initRT()
         this.updateText()
         this.FinalSCore = 0
         this.timeBuffer = 0
         this.totalScore = [
             {TIME: 1, TEXT: 0, W: 380, H: this.game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'}
         ]
-        this.titleText = [
-            {TIME: 1, TEXT: 'Task', W: 20, H: 30 , COLOR: 'white', FONT: '14px terminal'},
-            {TIME: 1, TEXT: 'Time Stamp', W: 120, H: 30, COLOR: 'white', FONT: '14px terminal'},
-            {TIME: 1, TEXT: 'Task Duration', W: 205, H: 30, COLOR: 'white', FONT: '14px terminal'},
-            {TIME: 1, TEXT: 'Level', W: 300, H: 30, COLOR: 'white', FONT: '14px terminal'},
-            {TIME: 1, TEXT: 'Score', W: 350, H: 30, COLOR: 'white', FONT: '14px terminal'},
-            {TIME: 1, TEXT: 'TOTAL SCORE:', W: 150, H: this.game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'},
-        ]
-        for(let i = 0; i < (this.game.surfaceWidth/14); i++) {
-            this.titleText.push({TIME: 1, TEXT: '_', W: i * 14, H: 35, COLOR: 'white', FONT: '14px terminal'})
-            this.titleText.push({TIME: 1, TEXT: '_', W: i * 14, H: this.game.surfaceHeight - 45, COLOR: 'white', FONT: '14px terminal'})
+        
+
+        this.params = {
+            GAME : game,
+            MANAGER: this,
+            XBASE: game.surfaceWidth / 2,
+            YBASE: game.surfaceHeight / 2 + 20,
         }
-        for(let i = 0; i <= this.max + 3; i++) {
-            this.titleText.push({TIME: 1 , TEXT: ':', W: 110, H: 20 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
-            this.titleText.push({TIME: 1 , TEXT: ':', W: 195, H: 20 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
-            this.titleText.push({TIME: 1 , TEXT: ':', W: 290, H: 20 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
-            this.titleText.push({TIME: 1 , TEXT: ':', W: 340, H: 20 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
+        this.defaultTextStyles = {
+            FONT: '14px terminal',
+            BASECOLOR: 'white'
         }
+        
+        
     }
+
 
     update() {
         super.update()
@@ -105,9 +84,14 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
 
     draw() {
         super.draw()
+        this.drawText(this.gameOverText)
         this.drawText(this.scoreText)
         this.drawText(this.totalScore)
         this.drawText(this.titleText)
+        
+        if((this.timeElapsed - 1)/this.timeInt > this.scores.length) {
+            this.drawText(this.replayText)
+        }
     }
 
     drawText(text){
@@ -141,14 +125,10 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
 
     updateFinalScore() {
         this.totalScore = []
-        this.totalScore.push({TIME: 1, TEXT: this.FinalSCore, W: 360, H: this.game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'})
+        this.totalScore.push({TIME: 1, TEXT: this.FinalSCore, W: 351, H: this.game.surfaceHeight - 15, COLOR: 'white', FONT: '18px terminal'})
         
     }
-    // getFinalScore(indexTo) {
-    //     for(let i = 0; i <= indexTo; i++) {
-    //         this.FinalSCore += this.scores[i].Score
-    //     }
-    // }
+    
     checkKeys(){
         return (this.game.inputManager.downKeys[KEYS.Enter]) ? 0
             : (this.game.inputManager.downKeys[KEYS.ArrowUp]
@@ -164,6 +144,79 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         }
 
     }
+    
+    initGOT() {
+        this.gameOverText = [
+            {TIME: 0, TEXT: 'GAME', W: 605, H: 350 , COLOR: 'white', FONT: '50px terminal'},
+            {TIME: 0, TEXT: 'OVER', W: 613, H: 400 , COLOR: 'white', FONT: '50px terminal'},
+        ]
+        for(let i = 0; i <= 16; i++) {
+            this.gameOverText.push({TIME: 0, TEXT: '_', W: 560 + i * 14, H: 290 , COLOR: 'white', FONT: '14px terminal'})
+            this.gameOverText.push({TIME: 0, TEXT: '_', W: 560 + i * 14, H: 425 , COLOR: 'white', FONT: '14px terminal'})
+        }
+        for(let i = 0; i < 7; i++) {
+            this.gameOverText.push({TIME: 0, TEXT: '|', W: 560, H: 310 + i * 18, COLOR: 'white', FONT: '14px terminal'})
+            this.gameOverText.push({TIME: 0, TEXT: '|', W: 789, H: 310 + i * 18, COLOR: 'white', FONT: '14px terminal'})
+            
+        }
+    }
+
+    initTT() {
+        this.titleText = [
+            {TIME: 1, TEXT: 'Task', W: 40, H: 25 , COLOR: 'white', FONT: '14px terminal'},
+            {TIME: 1, TEXT: 'Time Stamp', W: 120, H: 25, COLOR: 'white', FONT: '14px terminal'},
+            {TIME: 1, TEXT: 'Task Duration', W: 205, H: 25, COLOR: 'white', FONT: '14px terminal'},
+            {TIME: 1, TEXT: 'Level', W: 300, H: 25, COLOR: 'white', FONT: '14px terminal'},
+            {TIME: 1, TEXT: 'Score', W: 350, H: 25, COLOR: 'white', FONT: '14px terminal'},
+            {TIME: 1, TEXT: 'TOTAL SCORE', W: 150, H: this.game.surfaceHeight - 15, COLOR: 'white', FONT: '18px terminal'},
+        ]
+        for(let i = 0; i < (this.game.surfaceWidth/14); i++) {
+            this.titleText.push({TIME: 1, TEXT: '_', W: i * 14, H: 35, COLOR: 'white', FONT: '14px terminal'})
+            this.titleText.push({TIME: 1, TEXT: '_', W: i * 14, H: this.game.surfaceHeight - 45, COLOR: 'white', FONT: '14px terminal'})
+        }
+        for(let i = 0; i <= this.max + 3; i++) {
+            this.titleText.push({TIME: 1 , TEXT: ':', W: 110, H: 20 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
+            this.titleText.push({TIME: 1 , TEXT: ':', W: 195, H: 20 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
+            this.titleText.push({TIME: 1 , TEXT: ':', W: 290, H: 20 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
+            this.titleText.push({TIME: 1 , TEXT: ':', W: 340, H: 20 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
+            this.titleText.push({TIME: 1 , TEXT: '|', W: 400, H: 20 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
+        }
+    }
+
+    initRT() {
+        this.replayText = [
+            {TIME: 0, TEXT: 'REPLAY', W: 580, H: 750 , COLOR: 'white', FONT: '50px terminal'},
+        ]
+        for(let i = 0; i <= 18; i++) {
+            this.replayText.push({TIME: 0, TEXT: '_', W: 544 + i * 14, H: 690 , COLOR: 'white', FONT: '14px terminal'})
+            this.replayText.push({TIME: 0, TEXT: '_', W: 544 + i * 14, H: 775 , COLOR: 'white', FONT: '14px terminal'})
+        }
+        for(let i = 0; i < 5; i++) {
+            this.replayText.push({TIME: 0, TEXT: '|', W: 543, H: 702 + i * 18, COLOR: 'white', FONT: '14px terminal'})
+            this.replayText.push({TIME: 0, TEXT: '|', W: 801, H: 702 + i * 18, COLOR: 'white', FONT: '14px terminal'})
+            
+        }
+    }
+    
+    generateFakeScore() {
+        for(let j = 0; j < 50; j++) {
+            this.scores.push({
+                Name: 'MAGE_Kill',
+                Time: 2,
+                Duration: 10,
+                lvl: j,
+                Score: 700 * Math.sqrt(1)
+            })
+            this.scores.push({
+                Name: 'ARCHER_Kill',
+                Time: 7,
+                Duration: null,
+                lvl: 1,
+                Score: 400 * Math.sqrt(1)
+            })
+        }
+    }
+
 }
 
 // class BaseLevel {
