@@ -98,11 +98,11 @@ export default class CombatComponent extends Component {
     meleeAttack() {
         const dmg = this.calculatePhysicalDamage()
         const killed = this.combatTarget.getComponent(CombatComponent).applyPhysicalDamage(dmg)
+        this.dmgTimer = 3
+        this.doAttackAnimation()
         if (killed) {
             this.unsetCombatTarget()
         }
-        this.dmgTimer = 3
-        this.doAttackAnimation()
     }
 
     /**
@@ -178,12 +178,10 @@ export default class CombatComponent extends Component {
         //check if dead
         if (this.checkDead()) {
             this.entity.game.addScore(this.attributeComponent.Name)
-            // console.log(this.entity.game.sceneManager.getScene('scoredisplay').scores[0].Name)
             this.entity.game.removeEntityByRef(this.entity)
             if (this.attributeComponent.Name === 'PLAYER') {
                 this.entity.game.sceneManager.change('scoredisplay')
                 this.entity.game.sceneManager.currentScene.updateText()
-                // console.log(this.entity.game.sceneManager.currentScene.scores[0].Name)
             }
             return true
         }

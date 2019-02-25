@@ -138,7 +138,6 @@ export default class MovementComponent extends Component {
     }
 
     setFacing(entity) {
-        console.log('setting facing')
         const otherMovementComponent = entity.getComponent(MovementComponent)
         if (otherMovementComponent) {
             const dx = otherMovementComponent.entity.x - this.entity.x
@@ -195,6 +194,28 @@ export default class MovementComponent extends Component {
     getTileBehind(entity) {
         const entityTile = Map.worldToTilePosition(entity, this.entity.game.getTileSize())
         switch (entity.getComponent(MovementComponent).direction) {
+            case DIRECTIONS.North:
+                return new Vector(entityTile.x, entityTile.y + 1)
+            case DIRECTIONS.South:
+                return new Vector(entityTile.x, entityTile.y - 1)
+            case DIRECTIONS.East:
+                return new Vector(entityTile.x - 1, entityTile.y)
+            case DIRECTIONS.West:
+            default:
+                return new Vector(entityTile.x + 1, entityTile.y)
+        }
+    }
+
+    /**
+     * Returns the nearest tile 
+     */
+    getClosestOrthogonalTile(entity) {
+        const entityTile = Map.worldToTilePosition(entity, this.entity.game.getTileSize())
+        const myTile = Map.worldToTilePosition(entity, this.entity.game.getTileSize())
+        const dx = entityTile.x - myTile.x
+        const dy = entityTile.y - myTile.y
+        const direction = this.calculateDirection(dx, dy)
+        switch (direction) {
             case DIRECTIONS.North:
                 return new Vector(entityTile.x, entityTile.y + 1)
             case DIRECTIONS.South:
