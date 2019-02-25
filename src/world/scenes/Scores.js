@@ -18,7 +18,7 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.menuLevel = MenuLevels.MAIN
         this.menus = {}
         this.scores = []
-        for(let j = 0; j < 0; j++) {
+        for(let j = 0; j < 50; j++) {
             this.scores.push({
                 Name: '_Kill',
                 Time: 2,
@@ -52,10 +52,11 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.yBase = game.surfaceHeight / 2 + 20
         this.offset = 0
         this.lineSize = 17
-        this.max = Math.floor(game.surfaceHeight / this.lineSize) - 4
+        this.max = Math.floor(game.surfaceHeight / this.lineSize) - 6
         this.timeInt = 0.1
         this.count = this.max
         this.index = 0
+        this.offsetPrint = 0
         this.scoreText = []
         this.updateText()
         this.FinalSCore = 0
@@ -85,6 +86,7 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
             if((this.timeElapsed - 1)/this.timeInt > this.max && this.count < this.scores.length) {
                 this.offset += this.lineSize
                 super.draw()
+                this.offsetPrint++
                 this.updateText()
             }
             this.timeBuffer -= this.timeInt
@@ -115,7 +117,7 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
     updateText() {
         this.scoreText = []
         this.count++
-        for(let i = 0; i < this.scores.length; i++) {
+        for(let i = this.offsetPrint; i < this.scores.length; i++) {
             this.scoreText.push({TIME: 1 + i*this.timeInt, TEXT: this.scores[i].Name, W: 20, H: 60 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
             this.scoreText.push({TIME: 1 + i*this.timeInt, TEXT: this.scores[i].Time, W: 150, H: 60 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
             if(this.scores[i].duration != null) {
@@ -133,7 +135,7 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.totalScore.push({TIME: 1, TEXT: 'TOTAL SCORE:', W: 100, H: this.game.surfaceHeight - 20, COLOR: 'white', FONT: '14px terminal'})
         
         for(let i = 0; i < (this.game.surfaceWidth/14); i++) {
-            this.totalScore.push({TIME: 1, TEXT: '_', W: i * 14, H: this.game.surfaceHeight - 40, COLOR: 'white', FONT: '14px terminal'})
+            this.totalScore.push({TIME: 1, TEXT: '_', W: i * 14, H: this.game.surfaceHeight - 45, COLOR: 'white', FONT: '14px terminal'})
         }
     }
     // getFinalScore(indexTo) {
