@@ -74,7 +74,7 @@ export default class CombatComponent extends Component {
         this.combatTarget = foe
         const movementComponent = this.entity.getComponent(MovementComponent)
         if (movementComponent) {
-            movementComponent.setFollowTarget(this.combatTarget)
+            movementComponent.setAttackFollowTarget(this.combatTarget)
         }
     }
 
