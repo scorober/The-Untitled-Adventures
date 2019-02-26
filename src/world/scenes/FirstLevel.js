@@ -24,6 +24,7 @@ import Vector from '../../utils/Vector.js'
 import DoorInteractionComponent from '../../entities/components/InteractionComponent/DoorInteractionComponent.js'
 import PlayerCharacterCombatComponent from '../../entities/components/PlayerCharacterCombatComponent.js'
 import MageDefaultData from '../../entities/characters/MageDefaultData.js';
+import StairInteractionComponent from '../../entities/components/InteractionComponent/StairInteractionComponent.js';
 
 export default class FirstLevel extends Scene {
     constructor(game) {
@@ -100,6 +101,18 @@ export default class FirstLevel extends Scene {
     createMapEntities(game, map) {
         this.createSpawners(game, map)
         this.createExits(game, map)
+        this.createStairs(game, map)
+    }
+
+    createStairs(game, map) {
+        console.log(map)
+        for (const tiles of map.levelExit) {
+            const tileBox = map.getDoorBox(tiles)
+            const exit = new Entity(game, new Vector(tileBox.x, tileBox.y))
+            exit.addComponent(new StairInteractionComponent(exit, tiles))
+            exit.addComponent(new CollisionComponent(exit, tileBox))
+            this.addEntity(exit)
+        }
     }
 
     createExits(game, map) {
