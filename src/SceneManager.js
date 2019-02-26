@@ -107,17 +107,13 @@ export default class SceneManager {
 
     getCollidablesXYWorld(pos) {
         const ret = []
-        console.log('POS::')
-        console.log(pos)
-        console.log('ENTITIES:')
         for (let i = 0; i < this.currentScene.entities.length; i++) {
             const entity = this.currentScene.entities[i]
             const collisionComponent = entity.getComponent(CollisionComponent)
-            console.log(entity)
             if (collisionComponent) {
+                console.log(collisionComponent)
                 const collides = collisionComponent.checkCollisionWorld(pos)
                 if (collides) {
-                    console.log('collided!!!!!!!!!!!!!!!!!!')
                     ret.push(entity)
                 }
             }

@@ -24,6 +24,7 @@ import Vector from '../../utils/Vector.js'
 import DoorInteractionComponent from '../../entities/components/InteractionComponent/DoorInteractionComponent.js'
 import PlayerCharacterCombatComponent from '../../entities/components/PlayerCharacterCombatComponent.js'
 import MageDefaultData from '../../entities/characters/MageDefaultData.js';
+import DoorData from '../../entities/effects/DoorDefaultData.js'
 
 export default class FirstLevel extends Scene {
     constructor(game) {
@@ -107,6 +108,7 @@ export default class FirstLevel extends Scene {
         for (const exit of map.exits) {
             const doorBox = map.getDoorBox(exit.tiles)
             const door = new Entity(game, new Vector(doorBox.x, doorBox.y))
+            door.addComponent(new AttributeComponent(door, DoorData.Attributes))
             door.addComponent(new DoorInteractionComponent(door, exit.tiles, exit.destination, exit. room))
             door.addComponent(new CollisionComponent(door, doorBox))
             this.addEntity(door)
@@ -118,6 +120,7 @@ export default class FirstLevel extends Scene {
         for (const mapSpawner of map.spawners) {
             const spawner = new Entity(game, mapSpawner.pos)
             spawner.addComponent(new AnimationComponent(spawner, SpawnerData.AnimationConfig))
+            spawner.addComponent(new AttributeComponent(spawner, SpawnerData.Attributes))
             spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, SPAWNERS.Mage, mapSpawner.r, 4))
             this.addEntity(spawner)
         }

@@ -5,6 +5,7 @@ import AnimationComponent from './AnimationComponent.js'
 import { ANIMATIONS as ANIMS } from '../../utils/Const.js'
 import CollisionComponent from './CollisionComponent.js';
 import CombatComponent from './CombatComponent.js';
+import AttributeComponent from './AttributeComponent.js';
 
 export default class ProjectileBehavior extends Component {
     /**
@@ -43,6 +44,9 @@ export default class ProjectileBehavior extends Component {
         this.v = Vector.vectorFromEntity(this.entity)
         if (this.v.distance(this.target) < 20) {
             const cb = () => {
+                // console.log(this.caster.getComponent(AttributeComponent))
+                this.entity.addComponent(new AttributeComponent(this.entity, this.caster.getComponent(AttributeComponent)))
+                // console.log(this.entity.getComponent(AttributeComponent))
                 this.entity.addComponent(new CollisionComponent(this.entity))
                 this.entity.addComponent(new CombatComponent(this.caster))
                 this.impact()
@@ -60,16 +64,18 @@ export default class ProjectileBehavior extends Component {
      * Call on an attack or Attribute component from the caster to do damage.
      */
     impact() {
+        console.log(this.v)
         let e = this.entity.game.getEntityByXYInWorld(this.v)
 
-        console.log(e)
+        // console.log(e)
         for(let i = 0; i < e.length; i++){ //apply AOE damage to all entities that got hit
             
             let next = e[i]
             
-            console.log(next)
+            // console.log(next)
             if((next.UUID !== this.caster.UUID && next.UUID !== this.entity.UUID) && next.UUID.includes('ARCHER')){
                 this.entity.getComponent(CombatComponent).magicAttack(next)
+                console.log('attacked?')
             }
         }
     }
