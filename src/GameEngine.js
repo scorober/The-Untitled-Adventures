@@ -145,6 +145,7 @@ export default class GameEngine {
         return this.sceneManager.getCollidablesXYWorld(new Vector(pos.x, pos.y))
     }
 
+
     
     /**
      * Generates score object from entity and ads it to the score board.

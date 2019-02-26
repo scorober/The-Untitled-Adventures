@@ -95,9 +95,6 @@ export default class FirstLevel extends Scene {
         this.game.camera.setFollowedEntity(playerCharacter)
 
         this.createMapEntities(game, map)
-
-
-
     }
 
     createMapEntities(game, map) {

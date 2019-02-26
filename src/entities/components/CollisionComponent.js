@@ -93,20 +93,15 @@ export default class CollisionComponent extends Component {
     }
 
     /**
-     * Uses the SCREEN-TO-WORLD converter in the game engine to determine if an entity is at a certain location.
-     *
      * @param vector
-     * @returns {boolean}
+     * @returns {boolean} True if collides.
      */
     checkCollisionWorld(vector) {
-        const ret = { collides: false, distance: null }
-        const dist = vector.distance(this)
-        if (dist < this.size) {
-            ret.distance = dist
-            const distY = vector.absdistanceY(this)
-            const distX = vector.absdistanceX(this)
-            ret.collides = distX < this.width && distY < this.height
+        const dist = vector.distance(vector)
+        if (dist < this.hitbox.radius) {
+            const distY = vector.absdistanceY(vector)
+            const distX = vector.absdistanceX(vector)
+            return (distX < this.width && distY < this.height)
         }
-        return ret
     }
 }

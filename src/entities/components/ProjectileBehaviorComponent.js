@@ -3,6 +3,8 @@ import Vector from '../../utils/Vector.js'
 import MovementComponent from './MovementComponent.js'
 import AnimationComponent from './AnimationComponent.js'
 import { ANIMATIONS as ANIMS } from '../../utils/Const.js'
+import CollisionComponent from './CollisionComponent.js';
+import CombatComponent from './CombatComponent.js';
 
 export default class ProjectileBehavior extends Component {
     /**
@@ -14,8 +16,9 @@ export default class ProjectileBehavior extends Component {
      * @param {Vector} target  Target of the projectile
      * @param {boolean} initial  True if this projectile has an initial animation
      */
-    constructor(entity, target, hasInitialAnimation) {
+    constructor(entity, target, hasInitialAnimation, caster) {
         super(entity)
+        this.caster = caster
         this.v = Vector.vectorFromEntity(entity)
         this.target = new Vector(target.x, target.y)
         const t = new Vector(target.x, target.y)
@@ -40,6 +43,8 @@ export default class ProjectileBehavior extends Component {
         this.v = Vector.vectorFromEntity(this.entity)
         if (this.v.distance(this.target) < 20) {
             const cb = () => {
+                this.entity.addComponent(new CollisionComponent(this.entity))
+                this.entity.addComponent(new CombatComponent(this.caster))
                 this.impact()
                 this.entity.removeFromWorld = true
             }
@@ -55,6 +60,17 @@ export default class ProjectileBehavior extends Component {
      * Call on an attack or Attribute component from the caster to do damage.
      */
     impact() {
+        let e = this.entity.game.getEntityByXYInWorld(this.v)
 
+        console.log(e)
+        for(let i = 0; i < e.length; i++){ //apply AOE damage to all entities that got hit
+            
+            let next = e[i]
+            
+            console.log(next)
+            if((next.UUID !== this.caster.UUID && next.UUID !== this.entity.UUID) && next.UUID.includes('ARCHER')){
+                this.entity.getComponent(CombatComponent).magicAttack(next)
+            }
+        }
     }
 }

@@ -103,7 +103,7 @@ export default class PlayerInputComponent extends Component {
             const fireball = new Entity(this.entity.game, origin)
             fireball.addComponent(new AnimationComponent(fireball, FireballData.AnimationConfig))
             fireball.addComponent(new MovementComponent(fireball, FireballData.Attributes))
-            fireball.addComponent(new ProjectileBehaviorComponent(fireball, target, true))
+            fireball.addComponent(new ProjectileBehaviorComponent(fireball, target, true, this.entity))
             this.entity.game.sceneManager.currentScene.addEntity(fireball)
             this.coolDown = 0
         }

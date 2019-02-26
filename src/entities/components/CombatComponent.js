@@ -105,14 +105,27 @@ export default class CombatComponent extends Component {
         }
     }
 
-    /**
+    // /**
+    //  * Initiates a magic attack from this Entity to Entity foe
+    //  * 
+    //  * @param {Entity} foe  The Entity being attacked
+    //  */
+    // magicAttack() {
+    //     const dmg = this.calculateMagicDamage()
+    //     const killed = this.combatTarget.getComponent(CombatComponent).applyMagicDamage(dmg)
+    //     if (killed) {
+    //         this.unsetCombatTarget()
+    //     }
+    // }
+
+        /**
      * Initiates a magic attack from this Entity to Entity foe
      * 
      * @param {Entity} foe  The Entity being attacked
      */
-    magicAttack() {
+    magicAttack(foe) {
         const dmg = this.calculateMagicDamage()
-        const killed = this.combatTarget.getComponent(CombatComponent).applyMagicDamage(dmg)
+        const killed = foe.getComponent(CombatComponent).applyMagicDamage(dmg)
         if (killed) {
             this.unsetCombatTarget()
         }
@@ -155,7 +168,7 @@ export default class CombatComponent extends Component {
      *
      * @returns {number} the damage to apply
      */
-    calculateMagicDamage(modifiers) {
+    calculateMagicDamage(modifiers = {}) {
         const appliedInt = modifiers.Int + this.attributeComponent.Int || this.attributeComponent.Int
         const appliedMatk = modifiers.Matk + this.attributeComponent.Matk || this.attributeComponent.Matk
         return Math.random() * appliedInt + appliedMatk
