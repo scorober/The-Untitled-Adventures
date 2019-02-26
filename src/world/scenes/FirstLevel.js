@@ -29,7 +29,7 @@ export default class FirstLevel extends Scene {
     constructor(game) {
         super(game, 1)
         this.name = 'level1'
-        
+
         //Initialize a dungeon with options, possibly move to the scene superclass w/ parameters.
         const dungeon = new Dungeon({
             size: [2000, 2000],
@@ -80,17 +80,14 @@ export default class FirstLevel extends Scene {
 
         const map = new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon, this)
         this.setMap(map)
-        this.setBackground(new Background(game, game.getAsset(ASSET_PATHS.Background)))
         const start = this.map.getStartPos()
 
         const playerCharacter = this.createPlayerCharacter(game, start)
-        const archer = this.createArcher(game, start, playerCharacter)
-        //const marriott = this.createMarriott(game, start, playerCharacter)
+        const marriott = this.createMarriott(game, start, playerCharacter)
 
         this.setPlayer(playerCharacter)
         this.addEntity(playerCharacter)
-        this.addEntity(archer)
-        //this.addEntity(marriott)
+        this.addEntity(marriott)
         this.addEntity(game.camera)
         this.game.camera.setFollowedEntity(playerCharacter)
 
@@ -106,11 +103,11 @@ export default class FirstLevel extends Scene {
     }
 
     createExits(game, map) {
-        
+
         for (const exit of map.exits) {
             const doorBox = map.getDoorBox(exit.tiles)
             const door = new Entity(game, new Vector(doorBox.x, doorBox.y))
-            door.addComponent(new DoorInteractionComponent(door, exit.tiles, exit.destination, exit. room))
+            door.addComponent(new DoorInteractionComponent(door, exit.tiles, exit.destination, exit.room))
             door.addComponent(new CollisionComponent(door, doorBox))
             this.addEntity(door)
         }

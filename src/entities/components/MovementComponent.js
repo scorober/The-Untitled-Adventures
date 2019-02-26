@@ -18,6 +18,7 @@ export default class MovementComponent extends Component {
 
         this.followTarget = null
         this.followTargetLastPos = null
+        this.followFunction = this.getTileBehind
         this.following = false
         this.moving = false
     }
@@ -46,7 +47,7 @@ export default class MovementComponent extends Component {
         const followTargetPos = Map.worldToTilePosition(this.followTarget, this.entity.game.getTileSize())
         if (this.followTargetLastPos == null || this.followTargetLastPos.x != followTargetPos.x || this.followTargetLastPos.y != followTargetPos.y) {
             this.followTargetLastPos = followTargetPos
-            this.setPathfindingTarget(this.getTileBehind(this.followTarget))
+            this.setPathfindingTarget(this.followFunction(this.followTarget))
         }
     }
 
@@ -155,6 +156,17 @@ export default class MovementComponent extends Component {
     setFollowTarget(entity) {
         this.followTarget = entity
         this.following = true
+        this.followFunction = this.getTileBehind
+    }
+
+    /**
+     * Sets the attack-follow target and sets following to true
+     * @param {Entity} entity The Entity to follow
+     */
+    setAttackFollowTarget(entity) {
+        this.followTarget = entity
+        this.following = true
+        this.followFunction = this.getClosestOrthogonalTile
     }
 
     /**
@@ -211,7 +223,7 @@ export default class MovementComponent extends Component {
      */
     getClosestOrthogonalTile(entity) {
         const entityTile = Map.worldToTilePosition(entity, this.entity.game.getTileSize())
-        const myTile = Map.worldToTilePosition(entity, this.entity.game.getTileSize())
+        const myTile = Map.worldToTilePosition(this.entity, this.entity.game.getTileSize())
         const dx = entityTile.x - myTile.x
         const dy = entityTile.y - myTile.y
         const direction = this.calculateDirection(dx, dy)

@@ -52,7 +52,7 @@ export default class SpawnComponentBehavior extends Component {
         }
         if (this.active) {
             this.spawnTimer++
-            if (this.spawnTimer >= 400) {
+            if (this.spawnTimer >= 100) {
                 this.addMob()
             }
         }

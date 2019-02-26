@@ -7,6 +7,7 @@ import { ANIMATIONS as ANIMS, ANIMATION_RATES as AR, ASSET_PATHS } from '../../u
 
 const height = 64
 const yOffset = 8
+const xOffset = 0
 
 
 /** 
@@ -47,22 +48,22 @@ export default {
             [ANIMS.WalkNorth]: {
                 frames: 9,
                 rate: AR.Walk,
-                options: { yOffset: yOffset, loop: false }
+                options: { yOffset: yOffset, xOffset: xOffset }
             },
             [ANIMS.WalkWest]: {
                 frames: 9,
                 rate: AR.Walk,
-                options: { yOffset: yOffset, loop: false }
+                options: { yOffset: yOffset, xOffset: xOffset }
             },
             [ANIMS.WalkSouth]: {
                 frames: 9,
                 rate: AR.Walk,
-                options: { yOffset: yOffset, loop: false }
+                options: { yOffset: yOffset, xOffset: xOffset }
             },
             [ANIMS.WalkEast]: {
                 frames: 9,
                 rate: AR.Walk,
-                options: { yOffset: yOffset, loop: false }
+                options: { yOffset: yOffset, xOffset: xOffset }
             },
             [ANIMS.StandNorth]: {
                 goBackRows: 4,
@@ -71,6 +72,7 @@ export default {
                 rate: AR.Stand,
                 options: {
                     yOffset: yOffset,
+                    xOffset: xOffset,
                     maxFrames: 2
                 }
             },
@@ -78,21 +80,24 @@ export default {
                 frames: 2,
                 rate: AR.Stand,
                 options: {
-                    yOffset: yOffset
+                    yOffset: yOffset,
+                    xOffset: xOffset
                 }
             },
             [ANIMS.StandSouth]: {
                 frames: 2,
                 rate: AR.Stand,
                 options: {
-                    yOffset: yOffset
+                    yOffset: yOffset,
+                    xOffset: xOffset
                 }
             },
             [ANIMS.StandEast]: {
                 frames: 2,
                 rate: AR.Stand,
                 options: {
-                    yOffset: yOffset
+                    yOffset: yOffset,
+                    xOffset: xOffset
                 }
             },
             [ANIMS.SitDownEast]: {
@@ -100,6 +105,7 @@ export default {
                 rate: AR.Sit,
                 options: {
                     yOffset: yOffset,
+                    xOffset: xOffset,
                     loop: false
                 }
             },
@@ -108,6 +114,7 @@ export default {
                 rate: AR.Sit,
                 options: {
                     yOffset: yOffset,
+                    xOffset: xOffset,
                     loop: false
                 }
             },
@@ -116,6 +123,7 @@ export default {
                 rate: AR.Sit,
                 options: {
                     yOffset: yOffset,
+                    xOffset: xOffset,
                     loop: false
                 }
             },
@@ -124,6 +132,7 @@ export default {
                 rate: AR.Sit,
                 options: {
                     yOffset: yOffset,
+                    xOffset: xOffset,
                     loop: false
                 }
             }
