@@ -77,6 +77,11 @@ export default class Entity {
         return false
     }
 
+    /** Gets the UUID identification string for this Entity */
+    getUUID() {
+        return this.UUID
+    }
+
 
     getDefaultStates() {
         const states = []

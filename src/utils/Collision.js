@@ -18,7 +18,7 @@ export class CollisionLayer {
      * @param entity the entity to check collision for
      * @returns {*[]}
      */
-    getCollidableArray(entity){
+    getCollidableArray(entity) {
 
         return this.collidables.filter(e =>
             (e.UUID !== entity.UUID) && (entity.location.distance(e.hitbox.location) <= (entity.radius + e.hitbox.radius + 1))
@@ -41,8 +41,6 @@ export class CollisionLayer {
             if (e.UUID !== entity.UUID) {
                 const distance = destination.distance(e.hitbox.location)
                 const rads = entity.hitbox.radius + e.hitbox.radius + 0.5
-                //console.log('distance:', distance)
-                //console.log('rads: ', rads)
                 if (distance <= rads) {
                     return true
                 }
@@ -54,9 +52,9 @@ export class CollisionLayer {
 }
 
 //TODO: Implement other shapes like box? Can be used together.
-export class HitCircle{
+export class HitCircle {
 
-    constructor(radius, x, y){
+    constructor(radius, x, y) {
         this.radius = radius
         this.location = new Vector(x, y)
     }
@@ -66,7 +64,7 @@ export class HitCircle{
      * @param x
      * @param y
      */
-    update(x, y){
+    update(x, y) {
         this.location.x = x
         this.location.y = y
     }

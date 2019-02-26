@@ -47,22 +47,22 @@ export default {
             [ANIMS.WalkNorth]: {
                 frames: 9,
                 rate: AR.Walk,
-                options: { yOffset: yOffset, }
+                options: { yOffset: yOffset, loop: false }
             },
             [ANIMS.WalkWest]: {
                 frames: 9,
                 rate: AR.Walk,
-                options: { yOffset: yOffset, }
+                options: { yOffset: yOffset, loop: false }
             },
             [ANIMS.WalkSouth]: {
                 frames: 9,
                 rate: AR.Walk,
-                options: { yOffset: yOffset, }
+                options: { yOffset: yOffset, loop: false }
             },
             [ANIMS.WalkEast]: {
                 frames: 9,
                 rate: AR.Walk,
-                options: { yOffset: yOffset, }
+                options: { yOffset: yOffset, loop: false }
             },
             [ANIMS.StandNorth]: {
                 goBackRows: 4,
