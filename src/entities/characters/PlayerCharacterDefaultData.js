@@ -41,10 +41,10 @@ export default {
             [AR.Stand]: 0.6,
             [AR.Death]: 0.15,
             [AR.Spellcast]: 0.15,
-            [AR.Thrust]: 0.15,
-            [AR.Slash]: 0.15,
-            [AR.Shoot]: 0.15,
-            [AR.Oversize]: 0.2
+            [AR.Thrust]: 0.1,
+            [AR.Slash]: 0.08,
+            [AR.Shoot]: 0.1,
+            [AR.Oversize]: 0.1
         },
         AnimationData: {
             [ANIMS.SpellcastNorth]: {

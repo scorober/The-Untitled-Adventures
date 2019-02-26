@@ -70,10 +70,10 @@ export const ANIMATIONS = {
     OversizeEast: Symbol(),
 
     /** NPC animations */
-    AttackWest: Symbol(),
-    AttackEast: Symbol(),
-    AttackNorth: Symbol(),
-    AttackSouth: Symbol(),
+    AttackWest: Symbol('AttackWest'),
+    AttackEast: Symbol('AttackEast'),
+    AttackNorth: Symbol('AttackNorth'),
+    AttackSouth: Symbol('AttackSouth'),
 
     /** Marriott-specific animations */
     SitDownWest: Symbol(),
