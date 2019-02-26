@@ -10,6 +10,8 @@ import {
 // Values defined here for use in export object
 const attackWidth = 384
 const attackHeight = 192
+const attackYOffset = -28
+const attackXOffset = 0
 const height = 192
 const width = 192
 const yOffset = 20
@@ -55,7 +57,8 @@ export default {
                 frames: 17,
                 rate: AR.Attack,
                 options: {
-                    yOffset: yOffset,
+                    yOffset: attackYOffset,
+                    xOffset: attackXOffset,
                     width: attackWidth,
                     height: attackHeight,
                     loop: false
@@ -65,7 +68,8 @@ export default {
                 frames: 17,
                 rate: AR.Attack,
                 options: {
-                    yOffset: yOffset,
+                    yOffset: attackYOffset,
+                    xOffset: attackXOffset * -1,
                     width: attackWidth,
                     height: attackHeight,
                     loop: false
@@ -78,7 +82,8 @@ export default {
                 goBackHeight: 2 * attackHeight,
                 rate: AR.Attack,
                 options: {
-                    yOffset: yOffset,
+                    yOffset: attackYOffset,
+                    xOffset: attackXOffset,
                     width: attackWidth,
                     height: attackHeight,
                     lopp: false
@@ -89,7 +94,8 @@ export default {
                 frames: 17,
                 rate: AR.Attack,
                 options: {
-                    yOffset: yOffset,
+                    yOffset: attackYOffset,
+                    xOffset: attackXOffset,
                     width: attackWidth,
                     height: attackHeight,
                     loop: false

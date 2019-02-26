@@ -10,6 +10,8 @@ import {
 // Values defined here for use in export object
 const attackWidth = 384
 const attackHeight = 192
+const attackYOffset = -38
+const attackXOffset = 0
 const height = 192
 const width = 192
 const yOffset = 10
@@ -56,16 +58,22 @@ export default {
                 frames: 16,
                 rate: AR.Attack,
                 options: {
-                    yOffset: yOffset,
+                    yOffset: attackYOffset,
+                    xOffset: attackXOffset,
                     width: attackWidth,
+                    height: attackHeight,
+                    loop: false
                 }
             },
             [ANIMS.AttackEast]: {
                 frames: 16,
                 rate: AR.Attack,
                 options: {
-                    yOffset: yOffset,
+                    yOffset: attackYOffset,
+                    xOffset: attackXOffset * -1,
                     width: attackWidth,
+                    height: attackHeight,
+                    loop: false
                 }
             },
             // Copy of ShootWest
@@ -75,8 +83,11 @@ export default {
                 goBackHeight: 2 * attackHeight,
                 rate: AR.Attack,
                 options: {
-                    yOffset: yOffset,
+                    yOffset: attackYOffset,
+                    xOffset: attackXOffset,
                     width: attackWidth,
+                    height: attackHeight,
+                    loop: false
                 }
             },
             // Copy of ShootEast
@@ -84,8 +95,11 @@ export default {
                 frames: 16,
                 rate: AR.Attack,
                 options: {
-                    yOffset: yOffset,
+                    yOffset: attackYOffset,
+                    xOffset: attackXOffset * -1,
                     width: attackWidth,
+                    height: attackHeight,
+                    loop: false
                 }
             },
             // Standing

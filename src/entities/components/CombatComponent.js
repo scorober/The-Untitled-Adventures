@@ -177,12 +177,7 @@ export default class CombatComponent extends Component {
         this.attributeComponent.HP -= damage
         //check if dead
         if (this.checkDead()) {
-            this.entity.game.addScore(this.attributeComponent.Name)
-            this.entity.game.removeEntityByRef(this.entity)
-            if (this.attributeComponent.Name === 'PLAYER') {
-                this.entity.game.sceneManager.change('scoredisplay')
-                this.entity.game.sceneManager.currentScene.updateText()
-            }
+            this.removeByCombat()
             return true
         }
         return false
@@ -203,7 +198,7 @@ export default class CombatComponent extends Component {
         this.lastDamage = damage
         this.attributeComponent.HP = this.attributeComponent.HP - damage
         if (this.checkDead()) {
-            this.entity.game.removeEntityByRef(this.entity)
+            this.removeByCombat()
             return true
         }
 
@@ -217,4 +212,12 @@ export default class CombatComponent extends Component {
         return this.attributeComponent.HP <= 0 || this.entity.removeFromWorld
     }
 
+    removeByCombat() {
+        this.entity.game.addScore(this.attributeComponent.Name)
+        this.entity.game.removeEntityByRef(this.entity)
+        if (this.attributeComponent.Name === 'PLAYER') {
+            this.entity.game.sceneManager.change('scoredisplay')
+            this.entity.game.sceneManager.currentScene.updateText()
+        }
+    }
 }

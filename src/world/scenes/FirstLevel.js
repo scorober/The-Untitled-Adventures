@@ -23,6 +23,7 @@ import MarriottInteractionComponent from '../../entities/components/InteractionC
 import Vector from '../../utils/Vector.js'
 import DoorInteractionComponent from '../../entities/components/InteractionComponent/DoorInteractionComponent.js'
 import PlayerCharacterCombatComponent from '../../entities/components/PlayerCharacterCombatComponent.js'
+import MageDefaultData from '../../entities/characters/MageDefaultData.js';
 
 export default class FirstLevel extends Scene {
     constructor(game) {
@@ -139,7 +140,7 @@ export default class FirstLevel extends Scene {
 
     createArcher(game, start, playerCharacter) {
         const archer = new Entity(game, start, ArcherData.Attributes)
-        archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
+        archer.addComponent(new AnimationComponent(archer, MageDefaultData.AnimationConfig))
         archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
         archer.addComponent(new AttributeComponent(archer, ArcherData.Attributes))
         archer.addComponent(new CollisionComponent(archer))
