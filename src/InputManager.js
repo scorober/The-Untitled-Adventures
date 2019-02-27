@@ -56,6 +56,7 @@ export default class InputManager {
             e => { this.downKeys[e.code] = false },
             false
         )
+        
     }
 
     getXandY(e) {

@@ -1,10 +1,10 @@
 export default class Animation {
-    constructor(spritesheet, frameWidth, frameHeight, startY, frames, yOffset, frameDuration, loop, scale) {
+    constructor(spritesheet, frameWidth, frameHeight, startY, frames, offset, frameDuration, loop, scale) {
         this.spritesheet = spritesheet
         this.frameWidth = frameWidth
         this.frameHeight = frameHeight
         this.startY = startY
-        this.yOffset = yOffset
+        this.offset = offset
         this.frameDuration = frameDuration
         this.frames = frames
         this.loop = loop
@@ -58,7 +58,7 @@ export default class Animation {
         offscreenCtx.drawImage(thirdCanvas, - (this.frameWidth * this.scale / 2), - (this.frameHeight * this.scale / 2))
         offscreenCtx.restore()
         thirdCtx.clearRect(0,0, size, size)
-        game.ctx.drawImage(offscreenCanvas,  (x - (this.frameWidth * this.scale / 2)) - game.camera.xView,(y - (this.frameHeight * this.scale)) + this.yOffset - game.camera.yView)
+        game.ctx.drawImage(offscreenCanvas,  (x - (this.frameWidth * this.scale / 2)) + this.offset.x - game.camera.xView, (y - (this.frameHeight * this.scale)) + this.offset.y - game.camera.yView)
 
     }
 

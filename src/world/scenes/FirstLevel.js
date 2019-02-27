@@ -22,35 +22,36 @@ import EnemyInteractionComponent from '../../entities/components/InteractionComp
 import MarriottInteractionComponent from '../../entities/components/InteractionComponent/MarriottInteractionComponent.js'
 import Vector from '../../utils/Vector.js'
 import DoorInteractionComponent from '../../entities/components/InteractionComponent/DoorInteractionComponent.js'
+import PlayerCharacterCombatComponent from '../../entities/components/PlayerCharacterCombatComponent.js'
+import MageDefaultData from '../../entities/characters/MageDefaultData.js'
+import StairInteractionComponent from '../../entities/components/InteractionComponent/StairInteractionComponent.js'
+import ChiefDefaultData from '../../entities/characters/ChiefDefaultData.js'
+import WolfDefaultData from '../../entities/characters/WolfDefaultData.js'
 
 export default class FirstLevel extends Scene {
     constructor(game) {
-        super(game)
+        super(game, 1)
         this.name = 'level1'
+
         //Initialize a dungeon with options, possibly move to the scene superclass w/ parameters.
         const dungeon = new Dungeon({
             size: [2000, 2000],
             // seed: 'abcd', //omit for generated seed
             rooms: {
                 initial: {
-                    min_size: [12, 12], //Floor size
-                    max_size: [12, 12],
+                    min_size: [14, 18], //Floor size
+                    max_size: [14, 18],
                     max_exits: 4,
                     position: [100, 100] //OPTIONAL pos of initial room 
                 },
                 any: {
                     min_size: [15, 15],
-                    max_size: [25, 27],
+                    max_size: [20, 23],
                     max_exits: 4
                 },
-                spawn: {
-                    min_size: [15, 15],
-                    max_size: [25, 25],
-                    max_exits: 4
-                },
-                empty: {
-                    min_size: [15, 15],
-                    max_size: [25, 25],
+                corridor: { 
+                    min_size: [26, 12],
+                    max_size: [26, 12],
                     max_exits: 4
                 },
                 exit: {
@@ -59,10 +60,16 @@ export default class FirstLevel extends Scene {
                     max_exits: 1
                 },
                 treasure: {
-                    min_size: [12, 12],
-                    max_size: [21, 12],
+                    min_size: [20, 16],
+                    max_size: [20, 16],
                     max_exits: 3
+                },
+                maze: {
+                    min_size: [18, 18],
+                    max_size: [18, 18], 
+                    max_exits: 4
                 }
+
             },
             max_corridor_length: 15,
             min_corridor_length: 15,
@@ -77,19 +84,19 @@ export default class FirstLevel extends Scene {
 
         const map = new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon, this)
         this.setMap(map)
-        this.setBackground(new Background(game, game.getAsset(ASSET_PATHS.Background)))
         const start = this.map.getStartPos()
 
         const playerCharacter = this.createPlayerCharacter(game, start)
-        const archer = this.createArcher(game, start, playerCharacter)
         const marriott = this.createMarriott(game, start, playerCharacter)
 
         this.setPlayer(playerCharacter)
         this.addEntity(playerCharacter)
-        this.addEntity(archer)
         this.addEntity(marriott)
         this.addEntity(game.camera)
         this.game.camera.setFollowedEntity(playerCharacter)
+
+        const test = this.createArcher(game, start, playerCharacter)
+        // this.addEntity(test)
 
         this.createMapEntities(game, map)
 
@@ -100,14 +107,25 @@ export default class FirstLevel extends Scene {
     createMapEntities(game, map) {
         this.createSpawners(game, map)
         this.createExits(game, map)
+        this.createStairs(game, map)
+    }
+
+    createStairs(game, map) {
+        for (const tiles of map.levelExit) {
+            const tileBox = map.getDoorBox(tiles)
+            const exit = new Entity(game, new Vector(tileBox.x, tileBox.y))
+            exit.addComponent(new StairInteractionComponent(exit, tiles))
+            exit.addComponent(new CollisionComponent(exit, tileBox))
+            this.addEntity(exit)
+        }
     }
 
     createExits(game, map) {
-        
+
         for (const exit of map.exits) {
             const doorBox = map.getDoorBox(exit.tiles)
             const door = new Entity(game, new Vector(doorBox.x, doorBox.y))
-            door.addComponent(new DoorInteractionComponent(door, exit.tiles, exit.destination, exit. room))
+            door.addComponent(new DoorInteractionComponent(door, exit.tiles, exit.destination, exit.room))
             door.addComponent(new CollisionComponent(door, doorBox))
             this.addEntity(door)
         }
@@ -136,8 +154,8 @@ export default class FirstLevel extends Scene {
     }
 
     createArcher(game, start, playerCharacter) {
-        const archer = new Entity(game, start, ArcherData.Attributes)
-        archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
+        const archer = new Entity(game, start)
+        archer.addComponent(new AnimationComponent(archer, WolfDefaultData.AnimationConfig))
         archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
         archer.addComponent(new AttributeComponent(archer, ArcherData.Attributes))
         archer.addComponent(new CollisionComponent(archer))
@@ -154,7 +172,7 @@ export default class FirstLevel extends Scene {
         pc.addComponent(new MovementComponent(pc, PlayerCharacterData.Attributes))
         pc.addComponent(new CollisionComponent(pc))
         pc.addComponent(new MarriottInteractionComponent(pc))
-        pc.addComponent(new CombatComponent(pc))
+        pc.addComponent(new PlayerCharacterCombatComponent(pc))
         pc.addComponent(new PlayerInputComponent(pc))
         return pc
     }

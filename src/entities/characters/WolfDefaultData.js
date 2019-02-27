@@ -8,14 +8,16 @@ import {
  * ANIMATIONS
  */
 // Values defined here for use in export object
-const attackWidth = 384
+const attackWidth = 288
 const attackHeight = 192
-const attackYOffset = -38
-const attackXOffset = 0
+const attackYOffset = 24
+const attackXOffset = -24
+const impactSize = 192
 const height = 192
 const width = 192
-const yOffset = 10
-const impactSize = 244
+const yOffset = 20
+const portraitX = 232
+const portraitY = 176
 
 
 /** 
@@ -27,7 +29,7 @@ const impactSize = 244
 export default {
     // Attributes Component Configuration
     Attributes: {
-        HP: 20,
+        HP: 10,
         Mana: 10,
         Str: 5,
         Int: 5,
@@ -36,7 +38,7 @@ export default {
         Def: 10,
         Mdef: 3,
         Speed: 50,
-        Name: 'ROBOT',
+        Name: 'WOLF',
         isCombat: true,
     },
     // Animation Component Configuration
@@ -45,17 +47,18 @@ export default {
         Width: 192,
         Height: 192,
         Scale: 0.5,
-        Spritesheet: ASSET_PATHS.Robot,
+        Spritesheet: ASSET_PATHS.Wolf,
         InitialAnimation: ANIMS.StandEast,
         AnimationRates: {
-            [AR.Walk]: 0.08,
+            [AR.Walk]: 0.04,
             [AR.Stand]: 0.6,
             [AR.Attack]: 0.15,
-            [AR.Impact]: 0.1
+            [AR.Impact]: 0.1,
+            [AR.Portrait]: 1
         },
         AnimationData: {
             [ANIMS.AttackWest]: {
-                frames: 16,
+                frames: 15,
                 rate: AR.Attack,
                 options: {
                     yOffset: attackYOffset,
@@ -66,7 +69,7 @@ export default {
                 }
             },
             [ANIMS.AttackEast]: {
-                frames: 16,
+                frames: 15,
                 rate: AR.Attack,
                 options: {
                     yOffset: attackYOffset,
@@ -78,7 +81,7 @@ export default {
             },
             // Copy of ShootWest
             [ANIMS.AttackNorth]: {
-                frames: 16,
+                frames: 15,
                 goBackRows: 2,
                 goBackHeight: 2 * attackHeight,
                 rate: AR.Attack,
@@ -92,7 +95,7 @@ export default {
             },
             // Copy of ShootEast
             [ANIMS.AttackSouth]: {
-                frames: 16,
+                frames: 15,
                 rate: AR.Attack,
                 options: {
                     yOffset: attackYOffset,
@@ -102,52 +105,89 @@ export default {
                     loop: false
                 }
             },
+
             // Standing
             [ANIMS.StandWest]: {
-                frames: 8,
+                frames: 12,
                 rate: AR.Stand,
                 options: {
+                    width: width,
+                    height: height,
                     yOffset: yOffset,
                 }
             },
             [ANIMS.StandEast]: {
-                frames: 8,
+                frames: 12,
                 rate: AR.Stand,
                 options: {
+                    width: width,
+                    height: height,
                     yOffset: yOffset,
                 }
             },
+
             // Copy of StandWest
             [ANIMS.StandNorth]: {
-                frames: 8,
+                frames: 12,
                 goBackRows: 2,
                 goBackHeight: 2 * height,
                 rate: AR.Stand,
                 options: {
+                    width: width,
+                    height: height,
                     yOffset: yOffset,
                 }
             },
             // Copy of StandEast
             [ANIMS.StandSouth]: {
-                frames: 8,
+                frames: 12,
                 rate: AR.Stand,
                 options: {
+                    width: width,
+                    height: height,
                     yOffset: yOffset,
                 }
 
             },
+            [ANIMS.Impact]: {
+                frames: 11,
+                rate: AR.Impact,
+                options: {
+                    loop: false,
+                    width: impactSize,
+                    height: impactSize,
+                    maxFrames: 12
+                }
+            },
+
+            [ANIMS.Portrait]: {
+                frames: 2,
+                rate: AR.Portrait,
+                options: {
+                    loop: false,
+                    width: portraitX,
+                    height: portraitY
+                }
+              
+
+            },
+
             // Walking
             [ANIMS.WalkWest]: {
-                frames: 9,
+                frames: 12,
                 rate: AR.Walk,
                 options: {
+                    width: width,
+                    height: height,
                     yOffset: yOffset,
                 }
             },
             [ANIMS.WalkEast]: {
-                frames: 9,
+                frames: 12,
                 rate: AR.Walk,
                 options: {
+                    width: width,
+                    height: height,
                     yOffset: yOffset,
                 }
             },
@@ -155,34 +195,26 @@ export default {
             [ANIMS.WalkSouth]: {
                 goBackRows: 2,
                 goBackHeight: 2 * height,
-                frames: 9,
+                frames: 12,
                 rate: AR.Walk,
                 options: {
+                    width: width,
+                    height: height,
                     yOffset: yOffset,
                 }
             },
             // Copy of WalkEast
             [ANIMS.WalkNorth]: {
-                frames: 9,
+                frames: 12,
                 width: width,
                 height: height,
                 rate: AR.Walk,
                 options: {
+                    width: width,
+                    height: height,
                     yOffset: yOffset,
                 }
-            },
-            // Impact
-            [ANIMS.Impact]: {
-                frames: 10,
-                rate: AR.Impact,
-                options: {
-                    loop: false,
-                    maxFrames: 12,
-                    width: impactSize,
-                    height: impactSize 
-                }
-            },
-
+            }
         }
     }
 }

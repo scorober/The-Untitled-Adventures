@@ -19,6 +19,7 @@ import FreezeBehaviorComponent from './FreezeBehaviorComponent.js'
 import CollisionComponent from './CollisionComponent.js'
 import InteractionComponent from './InteractionComponent/InteractionComponent.js'
 import Vector from '../../utils/Vector.js'
+import CombatComponent from './CombatComponent.js'
 
 export default class PlayerInputComponent extends Component {
     /**
@@ -70,6 +71,8 @@ export default class PlayerInputComponent extends Component {
                 interactionComponent.unsetRightClick()
             }
         }
+        const combatComponent = this.entity.getComponent(CombatComponent)
+        combatComponent.unsetCombatTarget()
         this.handleMoveCommand(clickPos)
 
     }

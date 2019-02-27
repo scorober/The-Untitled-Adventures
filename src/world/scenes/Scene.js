@@ -3,7 +3,7 @@
  */
 
 export default class Scene {
-    constructor(game) {
+    constructor(game, lvl) {
         this.game = game
         this.entities = []
         this.map = null
@@ -11,9 +11,12 @@ export default class Scene {
         this.highlightedEntity = {}
         this.timeElapsed = 0
         this.timeBuffer = 0
-
         this.pacified = true
         this.swarm = false
+        this.scores = []
+        this.level = lvl
+        this.mobCount = 0
+        this.killCount = 0
     }
 
     /**
@@ -21,7 +24,6 @@ export default class Scene {
      * Currently just updates a timer that tracks how long the current scene is active.
      */
     update() {
-
         this.timeElapsed += this.game.clockTick
     }
     draw() { }
@@ -108,7 +110,6 @@ export default class Scene {
      * Update entities details, location, etc
      */
     updateEntities() {
-        let enemyCount = 0
         const entitiesCount = this.entities.length
         if(entitiesCount){
             this.entities.sort((a,b) => a.y - b.y)
@@ -120,14 +121,10 @@ export default class Scene {
                     this.removeEntity(i)
                 } else {
                     entity.update()
-                    if (this.checkEnemy(entity.UUID)) {
-                        enemyCount++
-                    }
                 }
-
             }
         }
-        this.checkMapState(enemyCount)
+        this.checkMapState()
     }
 
     /**
@@ -176,7 +173,19 @@ export default class Scene {
         this.dungeon = dungeon
     }
 
-    setSwarmed() {
+    countMob() {
+        this.mobCount++
+    }
+
+    addMobs(mobs) {
+        if (this.mobCount === 0) {
+            this.setSwarm()
+        }
+        this.mobCount += mobs
+    }
+
+    setSwarm() {
+        this.baseCount = this.game.sceneManager.scenes['scoredisplay'].scores.length
         this.swarm = true
         this.pacified = false
     }
@@ -184,17 +193,18 @@ export default class Scene {
     setPacified() {
         this.pacified = true
         this.swarm = false
+        this.mobCount = 0
     }
 
     checkEnemy(str) {
         return str.includes('MAGE') || str.includes('ARCHER') || str.includes('ROBOT')
     }
 
-    checkMapState(enemyCount) {
-        if (enemyCount === 0 && this.swarm === true) {
+    checkMapState() {
+        //TODO check against a known spawn amount of mobs for this cycle and player's killcount?
+        const killCount = this.game.sceneManager.scenes['scoredisplay'].scores.length
+        if (killCount === this.baseCount + this.mobCount) {
             this.setPacified()
-        } else if (enemyCount > 0 && this.pacified === true) {
-            this.setSwarmed()
         }
     }
 }

@@ -15,8 +15,13 @@ export default class GameEngine {
         this.surfaceWidth = null
         this.surfaceHeight = null
         this.requestAnimFrame = this.getPlatformRAF().bind(window)
+        this.scores = []
     }
 
+    /**
+     * Returns the Request Animation Frame method for the current browser/platform
+     * @returns {Function}
+     */
     getPlatformRAF() {
         return window.requestAnimationFrame ||
             window.webkitRequestAnimationFrame ||
@@ -66,7 +71,6 @@ export default class GameEngine {
     }
 
     draw() {
-        //console.log('rect cler')
         this.ctx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight)
         this.ctx.save()
         this.sceneManager.draw()
@@ -139,5 +143,64 @@ export default class GameEngine {
 
     getEntityByXYInWorld(pos) {
         return this.sceneManager.getCollidablesXYWorld(new Vector(pos.x, pos.y))
+    }
+
+    
+    /**
+     * Generates score object from entity and ads it to the score board.
+     * 
+     * @param  entity 
+     */
+    addScore(name, kill) {
+        // Score = null;
+        const scene = this.sceneManager.getScene('scoredisplay')
+        if(kill) {
+            scene.killCount++
+            if (name === 'ARCHER') {
+                const Score = {
+                    Name: 'Archer_Kill',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: null,
+                    // lvl: this.sceneManager.getCurrentScene().level,
+                    lvl: 1,
+                    Score: Math.floor(400 * Math.sqrt(2))
+                }
+                scene.scores.push(Score)
+            } else if (name === 'MAGE') {
+                const Score = {
+                    Name: 'Mage_Kill',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: null,
+                    // lvl: this.sceneManager.getCurrentScene().level,
+                    lvl: 1,
+                    Score: Math.floor(700 * Math.sqrt(2))
+                }
+                scene.scores.push(Score)
+            } else if (name == 'ROBOT') {
+                const Score = {
+                    Name: 'Robot_Kill',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: null,
+                    // lvl: this.sceneManager.getCurrentScene().level,
+                    lvl: 1,
+                    Score: Math.floor(550 * Math.sqrt(2))
+                }
+                scene.scores.push(Score)
+            }
+        } else {
+            scene.state++
+            
+            if(name == 'END') {
+                const Score = {
+                    Name: 'LEVEL_END',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: this.timer.gameTime,// this.timer.,
+                    // lvl: this.sceneManager.getCurrentScene().level,
+                    lvl: 1,
+                    Score: Math.floor(1000 * Math.sqrt(2) / Math.sqrt(this.timer.gameTime))
+                }
+                scene.scores.push(Score)
+            }
+        }
     }
 }

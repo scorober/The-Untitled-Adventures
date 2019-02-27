@@ -18,6 +18,7 @@ export default class MovementComponent extends Component {
 
         this.followTarget = null
         this.followTargetLastPos = null
+        this.followFunction = this.getTileBehind
         this.following = false
         this.moving = false
     }
@@ -27,23 +28,7 @@ export default class MovementComponent extends Component {
      */
     update() {
         if (this.path.length > 0) {
-            this.moving = true
             this.handlePathMovement()
-            this.entity.getComponent(AnimationComponent).setDirectionalAnimation(this.direction, {
-                north: ANIMS.WalkNorth,
-                east: ANIMS.WalkEast,
-                south: ANIMS.WalkSouth,
-                west: ANIMS.WalkWest
-            })
-        } else if (this.moving) {
-            this.moving = false
-            this.entity.getComponent(AnimationComponent).setDirectionalAnimation(this.direction, {
-                north: ANIMS.StandNorth,
-                east: ANIMS.StandEast,
-                south: ANIMS.StandSouth,
-                west: ANIMS.StandWest
-
-            })
         }
         if (this.following) {
             this.handleFollowing()
@@ -62,7 +47,7 @@ export default class MovementComponent extends Component {
         const followTargetPos = Map.worldToTilePosition(this.followTarget, this.entity.game.getTileSize())
         if (this.followTargetLastPos == null || this.followTargetLastPos.x != followTargetPos.x || this.followTargetLastPos.y != followTargetPos.y) {
             this.followTargetLastPos = followTargetPos
-            this.setPathfindingTarget(this.getTileBehind(this.followTarget))
+            this.setPathfindingTarget(this.followFunction(this.followTarget))
         }
     }
 
@@ -72,22 +57,47 @@ export default class MovementComponent extends Component {
      * Updates this.direction
      */
     handlePathMovement() {
+        this.moving = true
         const tile = this.path[0]
-        const tilePosition = Map.tileToWorldPosition(tile, this.entity.game.sceneManager.currentScene.map.tileSize)
-        // dx and dy are the x and y distances between this Entity and the tile in world position (pixels)
-        let dx = tilePosition.x - this.entity.x
-        let dy = tilePosition.y - this.entity.y
-        const distance = Math.sqrt(dx * dx + dy * dy)
-        if (distance < this.entity.game.getTileSize() / 2) {
-            if (this.path.length > 0) {
+        if(this.entity.game.sceneManager.currentScene.name === 'level1'){// === this.entity.game.sceneManager.getScene('firstLevel')){
+            const tilePosition = Map.tileToWorldPosition(tile, this.entity.game.sceneManager.currentScene.map.tileSize)
+            let dx = tilePosition.x - this.entity.x
+            let dy = tilePosition.y - this.entity.y
+            const distance = Math.sqrt(dx * dx + dy * dy)
+            if (distance < 10) {
                 this.path.splice(0, 1)
+                if (this.path.length < 1) {
+                    this.moving = false
+                    this.setStandingAnimation()
+                    return
+                }
             }
-        } else {
             dx = dx / distance
             dy = dy / distance
             this.move(new Vector(dx, dy))
             this.direction = this.calculateDirection(dx, dy)
+            this.setWalkingAnimation()
         }
+        // dx and dy are the x and y distances between this Entity and the tile in world position (pixels)
+        
+    }
+
+    setWalkingAnimation() {
+        this.entity.getComponent(AnimationComponent).setDirectionalAnimation(this.direction, {
+            north: ANIMS.WalkNorth,
+            east: ANIMS.WalkEast,
+            south: ANIMS.WalkSouth,
+            west: ANIMS.WalkWest
+        })
+    }
+
+    setStandingAnimation() {
+        this.entity.getComponent(AnimationComponent).setDirectionalAnimation(this.direction, {
+            north: ANIMS.StandNorth,
+            east: ANIMS.StandEast,
+            south: ANIMS.StandSouth,
+            west: ANIMS.StandWest
+        })
     }
 
     /**
@@ -131,6 +141,15 @@ export default class MovementComponent extends Component {
         this.path = pathfinder.calculatePath()
     }
 
+    setFacing(entity) {
+        const otherMovementComponent = entity.getComponent(MovementComponent)
+        if (otherMovementComponent) {
+            const dx = otherMovementComponent.entity.x - this.entity.x
+            const dy = otherMovementComponent.entity.y - this.entity.y
+            const directionToFace = this.calculateDirection(dx, dy)
+            this.setDirection(directionToFace)
+        }
+    }
 
 
     /**
@@ -140,6 +159,17 @@ export default class MovementComponent extends Component {
     setFollowTarget(entity) {
         this.followTarget = entity
         this.following = true
+        this.followFunction = this.getTileBehind
+    }
+
+    /**
+     * Sets the attack-follow target and sets following to true
+     * @param {Entity} entity The Entity to follow
+     */
+    setAttackFollowTarget(entity) {
+        this.followTarget = entity
+        this.following = true
+        this.followFunction = this.getClosestOrthogonalTile
     }
 
     /**
@@ -174,12 +204,11 @@ export default class MovementComponent extends Component {
 
     /**
      * Calculates the tile relative to this Entity's direction
-     * If that tile is not available, calculates another tile near the Entity
      * Note: Could result in block-ins for the PlayerCharacter
      */
     getTileBehind(entity) {
         const entityTile = Map.worldToTilePosition(entity, this.entity.game.getTileSize())
-        switch (this.entity.getComponent(MovementComponent).direction) {
+        switch (entity.getComponent(MovementComponent).direction) {
             case DIRECTIONS.North:
                 return new Vector(entityTile.x, entityTile.y + 1)
             case DIRECTIONS.South:
@@ -189,6 +218,47 @@ export default class MovementComponent extends Component {
             case DIRECTIONS.West:
             default:
                 return new Vector(entityTile.x + 1, entityTile.y)
+        }
+    }
+
+    /**
+     * Returns the nearest tile 
+     */
+    getClosestOrthogonalTile(entity) {
+        const entityTile = Map.worldToTilePosition(entity, this.entity.game.getTileSize())
+        const myTile = Map.worldToTilePosition(this.entity, this.entity.game.getTileSize())
+        const dx = entityTile.x - myTile.x
+        const dy = entityTile.y - myTile.y
+        const direction = this.calculateDirection(dx, dy)
+        switch (direction) {
+            case DIRECTIONS.North:
+                return new Vector(entityTile.x, entityTile.y + 1)
+            case DIRECTIONS.South:
+                return new Vector(entityTile.x, entityTile.y - 1)
+            case DIRECTIONS.East:
+                return new Vector(entityTile.x - 1, entityTile.y)
+            case DIRECTIONS.West:
+            default:
+                return new Vector(entityTile.x + 1, entityTile.y)
+        }
+    }
+
+    /**
+     * Calculates the tile relative to this Entity's direction
+     * Note: Could result in block-ins for the PlayerCharacter
+     */
+    getTileFacing(entity) {
+        const entityTile = Map.worldToTilePosition(entity, this.entity.game.getTileSize())
+        switch (entity.getComponent(MovementComponent).direction) {
+            case DIRECTIONS.North:
+                return new Vector(entityTile.x, entityTile.y - 1)
+            case DIRECTIONS.South:
+                return new Vector(entityTile.x, entityTile.y + 1)
+            case DIRECTIONS.East:
+                return new Vector(entityTile.x + 1, entityTile.y)
+            case DIRECTIONS.West:
+            default:
+                return new Vector(entityTile.x - 1, entityTile.y)
         }
     }
 

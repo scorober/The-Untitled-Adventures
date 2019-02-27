@@ -16,7 +16,7 @@ const oversizedYOffset = 64
 export default {
     // Attributes Component Configuration
     Attributes: {
-        HP: 30,
+        HP: 120,
         Mana: 10,
         Str: 5,
         Int: 5,
@@ -26,7 +26,7 @@ export default {
         Mdef: 25,
         Speed: 180,
         Name: 'PLAYER',
-        isCombat : true
+        isCombat: true
     },
     // Animation Component Configuration
     AnimationConfig: {
@@ -41,51 +41,51 @@ export default {
             [AR.Stand]: 0.6,
             [AR.Death]: 0.15,
             [AR.Spellcast]: 0.15,
-            [AR.Thrust]: 0.15,
-            [AR.Slash]: 0.15,
-            [AR.Shoot]: 0.15,
+            [AR.Thrust]: 0.1,
+            [AR.Slash]: 0.08,
+            [AR.Shoot]: 0.1,
             [AR.Oversize]: 0.1
         },
         AnimationData: {
             [ANIMS.SpellcastNorth]: {
                 frames: 7,
                 rate: AR.Spellcast,
-                options: { yOffset: yOffset }
+                options: { yOffset: yOffset, loop: false }
             },
             [ANIMS.SpellcastWest]: {
                 frames: 7,
                 rate: AR.Spellcast,
-                options: { yOffset: yOffset }
+                options: { yOffset: yOffset, loop: false }
             },
             [ANIMS.SpellcastSouth]: {
                 frames: 7,
                 rate: AR.Spellcast,
-                options: { yOffset: yOffset }
+                options: { yOffset: yOffset, loop: false }
             },
             [ANIMS.SpellcastEast]: {
                 frames: 7,
                 rate: AR.Spellcast,
-                options: { yOffset: yOffset }
+                options: { yOffset: yOffset, loop: false }
             },
             [ANIMS.ThrustNorth]: {
                 frames: 8,
                 rate: AR.Thrust,
-                options: { yOffset: yOffset }
+                options: { yOffset: yOffset, loop: false }
             },
             [ANIMS.ThrustWest]: {
                 frames: 8,
                 rate: AR.Thrust,
-                options: { yOffset: yOffset }
+                options: { yOffset: yOffset, loop: false }
             },
             [ANIMS.ThrustSouth]: {
                 frames: 8,
                 rate: AR.Thrust,
-                options: { yOffset: yOffset }
+                options: { yOffset: yOffset, loop: false }
             },
             [ANIMS.ThrustEast]: {
                 frames: 8,
                 rate: AR.Thrust,
-                options: { yOffset: yOffset }
+                options: { yOffset: yOffset, loop: false }
             },
             // Walk cycle
             [ANIMS.WalkNorth]: {
@@ -112,22 +112,22 @@ export default {
             [ANIMS.SlashNorth]: {
                 frames: 6,
                 rate: AR.Slash,
-                options: { yOffset: yOffset }
+                options: { yOffset: yOffset, loop: false }
             },
             [ANIMS.SlashWest]: {
                 frames: 6,
                 rate: AR.Slash,
-                options: { yOffset: yOffset }
+                options: { yOffset: yOffset, loop: false }
             },
             [ANIMS.SlashSouth]: {
                 frames: 6,
                 rate: AR.Slash,
-                options: { yOffset: yOffset }
+                options: { yOffset: yOffset, loop: false }
             },
             [ANIMS.SlashEast]: {
                 frames: 6,
                 rate: AR.Slash,
-                options: { yOffset: yOffset }
+                options: { yOffset: yOffset, loop: false }
             },
 
             // Standing (modified slashing)
@@ -178,34 +178,34 @@ export default {
             [ANIMS.DeathSouth]: {
                 frames: 6,
                 rate: AR.Death,
-                options: { yOffset: yOffset }
+                options: { yOffset: yOffset,loop: false }
             },
             // Oversized animations
             [ANIMS.OversizeNorth]: {
                 optional: true,
                 frames: 6,
                 rate: AR.Oversize,
-                options: { yOffset: oversizedYOffset, width: 192, height: 192 }
+                options: { yOffset: oversizedYOffset, width: 192, height: 192, loop: false }
             },
             [ANIMS.OversizeWest]: {
                 optional: true,
                 frames: 6,
                 rate: AR.Oversize,
-                options: { yOffset: oversizedYOffset, width: 192, height: 192 }
+                options: { yOffset: oversizedYOffset, width: 192, height: 192, loop: false }
 
             },
             [ANIMS.OversizeSouth]: {
                 optional: true,
                 frames: 6,
                 rate: AR.Oversize,
-                options: { yOffset: oversizedYOffset, width: 192, height: 192 }
+                options: { yOffset: oversizedYOffset, width: 192, height: 192, loop: false }
 
             },
             [ANIMS.OversizeEast]: {
                 optional: true,
                 frames: 6,
                 rate: AR.Oversize,
-                options: { yOffset: oversizedYOffset, width: 192, height: 192 }
+                options: { yOffset: oversizedYOffset, width: 192, height: 192, loop: false }
             }
         }
     }

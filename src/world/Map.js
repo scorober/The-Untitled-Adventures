@@ -1,6 +1,6 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
-import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, TILE_COLLISION as TC, STATES } from '../utils/Const.js'
+import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, TILE_COLLISION as TC, STATES, ROOM_TILES as RT } from '../utils/Const.js'
 import Vector from '../utils/Vector.js'
 
 export default class Map extends Entity {
@@ -25,9 +25,13 @@ export default class Map extends Entity {
         this.spawners = [] //Array of spawner positions and radii.
         this.exits = [] //Array of door positions and room they enter.
         this.rooms = []
+        this.levelExit = []
         this.buildMap()
     }
 
+    /**
+     * Returns the world starting vector to place the player.
+     */
     getStartPos() {
         return new Vector(
             this.dungeon.start_pos[0] * this.tileSize,
@@ -35,6 +39,9 @@ export default class Map extends Entity {
         )
     }
 
+    /**
+     * Build all map tiles.
+     */
     buildMap() {
         const rooms = this.dungeon.room_count
         const size = [this.dungeon.size[0] + rooms, this.dungeon.size[1] + rooms]
@@ -118,7 +125,7 @@ export default class Map extends Entity {
         const p = this.generateRoomProperties(piece)
 
         //Set floor
-        this.map0.set_square(p.innerPos, p.innerSize, 4, true)
+        this.map0.set_square(p.innerPos, p.innerSize, 1, true)
 
         //North
         this.map0.set_horizontal_line(this.alterPos(p.outerPos, 1, 0), p.innerSize[0] - 1, MI.WallNorth[0][0])
@@ -140,18 +147,21 @@ export default class Map extends Entity {
         this.createObject(this.map0, p.posSE, MI.ICornerSE)
     }
 
-    // eslint-disable-next-line complexity
+ 
     /**
      * Builds objects in tagged rooms.
      * @param {Piece} piece Room objects will be built in.
      */
+    // eslint-disable-next-line complexity
     buildRoom(piece) {
+        const pos = this.alterPos(this.generateRoomProperties(piece).innerPos, 1, 1)
         const center = piece.global_pos(piece.get_center_pos())
         switch (piece.tag) {
             case ROOMS.Initial:
-                this.createObject(this.map1, center, MI.ChestClosed)
+                this.createRoomByLayout(pos, RT.Initial)
                 break
             case ROOMS.Any:
+                //SPAWNER ROOMS
                 this.createObject(this.map1, this.alterPos(center, -1, -1), MI.Rug)
                 this.spawners.push({
                     pos: new Vector(
@@ -163,13 +173,39 @@ export default class Map extends Entity {
                 })
                 break
             case ROOMS.Treasure:
-                this.createObject(this.map1, center, MI.ChestOpen)
+                this.createRoomByLayout(pos, RT.Treasure)
                 break
             case ROOMS.Exit:
+                //TODO create room layout and get correct tiles.
                 this.createObject(this.map1, center, MI.StairsN)
+                const tiles = []
+                tiles.push(center)
+                tiles.push(this.alterPos(center, 1, 0))
+                tiles.push(this.alterPos(center, 0, 1))
+                tiles.push(this.alterPos(center, 1, 1))
+                tiles.push(this.alterPos(center, 0, 2))
+                tiles.push(this.alterPos(center, 1, 2))
+                this.levelExit.push(tiles)
                 break
+            case ROOMS.Maze:
+                this.createRoomByLayout(pos, RT.Maze)
+                break
+            case ROOMS.Corridor:
+                this.createRoomByLayout(pos, RT.Corridor)
         }
     }
+
+    /**
+     * Creates a room by layout on each map layer.
+     * @param {Array} pos Dungeon position array where upper left corner of layout starts. 
+     * @param {Object} obj Room tiles object with 2d arrays representing each map layer. 
+     */
+    createRoomByLayout(pos, obj) {
+        this.createObject(this.map0, pos, obj.floor)
+        this.createObject(this.map1, pos, obj.object0)
+        this.createObject(this.map2, pos, obj.object1)
+        this.createObject(this.map3, pos, obj.top)
+    } 
 
     
     /**
@@ -254,7 +290,7 @@ export default class Map extends Entity {
      */
     openExit(tiles) {
         for (let i = 0; i < tiles.length; i++) {
-            this.map2.set(tiles[i], 13)
+            this.map2.set(tiles[i], 1)
         }
     }
 
@@ -409,7 +445,7 @@ export default class Map extends Entity {
             const tileY = r * this.tileSize - this.game.camera.yView
             this.game.ctx.drawImage(
                 this.tileAtlas,
-                ((tile - 1) % this.setLength * this.tileSize),
+                ((tile - 1) % this.setLength * this.tileSize) ,
                 Math.floor((tile - 1) / this.setLength) * this.tileSize,
                 this.tileSize,
                 this.tileSize,
