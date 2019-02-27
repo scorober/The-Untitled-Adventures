@@ -7,6 +7,7 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.game = game
         this.name = 'scoredisplay'
         this.scores = []
+        this.killCount = 0
         this.state = 'YOU DIED'
         
         this.timeElapsed = 0

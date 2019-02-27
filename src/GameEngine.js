@@ -151,39 +151,42 @@ export default class GameEngine {
      * 
      * @param  entity 
      */
-    addScore(name) {
+    addScore(name, kill) {
         // Score = null;
         const scene = this.sceneManager.getScene('scoredisplay')
-        if (name === 'ARCHER') {
-            const Score = {
-                Name: 'Archer_Kill',
-                Time: Math.floor(this.timer.gameTime),
-                Duration: null,
-                // lvl: this.sceneManager.getCurrentScene().level,
-                lvl: 1,
-                Score: Math.floor(400 * Math.sqrt(2))
+        if(kill) {
+            scene.killCount++
+            if (name === 'ARCHER') {
+                const Score = {
+                    Name: 'Archer_Kill',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: null,
+                    // lvl: this.sceneManager.getCurrentScene().level,
+                    lvl: 1,
+                    Score: Math.floor(400 * Math.sqrt(2))
+                }
+                scene.scores.push(Score)
+            } else if (name === 'MAGE') {
+                const Score = {
+                    Name: 'Mage_Kill',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: null,
+                    // lvl: this.sceneManager.getCurrentScene().level,
+                    lvl: 1,
+                    Score: Math.floor(700 * Math.sqrt(2))
+                }
+                scene.scores.push(Score)
+            } else if (name == 'ROBOT') {
+                const Score = {
+                    Name: 'Robot_Kill',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: null,
+                    // lvl: this.sceneManager.getCurrentScene().level,
+                    lvl: 1,
+                    Score: Math.floor(550 * Math.sqrt(2))
+                }
+                scene.scores.push(Score)
             }
-            scene.scores.push(Score)
-        } else if (name === 'MAGE') {
-            const Score = {
-                Name: 'Mage_Kill',
-                Time: Math.floor(this.timer.gameTime),
-                Duration: null,
-                // lvl: this.sceneManager.getCurrentScene().level,
-                lvl: 1,
-                Score: Math.floor(700 * Math.sqrt(2))
-            }
-            scene.scores.push(Score)
-        } else if (name == 'ROBOT') {
-            const Score = {
-                Name: 'Robot_Kill',
-                Time: Math.floor(this.timer.gameTime),
-                Duration: null,
-                // lvl: this.sceneManager.getCurrentScene().level,
-                lvl: 1,
-                Score: Math.floor(550 * Math.sqrt(2))
-            }
-            scene.scores.push(Score)
         }
     }
 }
