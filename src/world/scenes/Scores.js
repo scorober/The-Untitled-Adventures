@@ -94,7 +94,7 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         for(let i = this.offsetPrint; i < this.scores.length; i++) {
             this.scoreText.push({TIME: 1 + i*this.timeInt, TEXT: this.scores[i].Name, W: this.width * 1/11 - this.txtOffset, H: 60 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
             this.scoreText.push({TIME: 1 + i*this.timeInt, TEXT: this.scores[i].Time, W: this.width * 2/11 - this.txtOffset, H: 60 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
-            if(this.scores[i].duration != null) {
+            if(this.scores[i].Type === 'C') {
                 this.scoreText.push({TIME: 1 + i*this.timeInt, TEXT: this.scores[i].Duration, W: this.width * 3/11 - this.txtOffset, H: 60 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
             }
             this.scoreText.push({TIME: 1 + i*this.timeInt, TEXT: this.scores[i].lvl, W: this.width * 4/11 - this.txtOffset, H: 60 + i * this.lineSize - this.offset, COLOR: 'white', FONT: '14px terminal'})
