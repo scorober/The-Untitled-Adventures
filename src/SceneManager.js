@@ -25,9 +25,10 @@ export default class SceneManager {
         this.addScene(firstlevel.name, firstlevel)
         this.addScene(title.name, title)
         this.addScene(scores.name, scores)
-        this.currentScene = scores
+        this.currentScene = firstlevel
     }
 
+    
     /**
      * Adds ascene to the collection of scenes
      * @param name the name of the new scene

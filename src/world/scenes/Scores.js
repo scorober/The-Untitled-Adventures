@@ -4,21 +4,17 @@ import { KEYS, ASSET_PATHS} from '../../utils/Const.js'
 
 
 
-/**
- * API:
- *    timeElapsed = running clock
- *    selectedItem = the currently highlighted menu option
- *    menuLevel = the active menu
- */
 export default class TitleMeScoreDIsplayScenenuScene extends Scene {
 
     constructor(game) {
         super(game)
+        this.game = game
         this.name = 'scoredisplay'
         this.menuLevel = MenuLevels.MAIN
         this.menus = {}
         this.scores = []
         this.generateFakeScore()
+        this.state = 'YOU DIED'
         
         
         this.bgAnimation = new Animation(game.getAsset(ASSET_PATHS.TitleAnimation), 960, 540, 50, 1, 0.1, 50, true, 1)
@@ -43,27 +39,11 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.initRT()
         this.updateText()
         this.FinalSCore = 0
+        this.buttonHover = false
         this.timeBuffer = 0
         this.totalScore = [
             {TIME: 1, TEXT: 0, W: this.width * 5/11 - this.txtOffset, H: this.game.surfaceHeight - 15, COLOR: 'white', FONT: '18px terminal'}
         ]
-        
-
-        this.params = {
-            GAME : game,
-            MANAGER: this,
-            XBASE: game.surfaceWidth / 2,
-            YBASE: game.surfaceHeight / 2 + 20,
-        }
-        this.defaultTextStyles = {
-            FONT: '14px terminal',
-            BASECOLOR: 'white'
-        }
-        
-        // this.game.ctx.addEventListener('resize', function () {
-        //     this.draw()
-        // })
-        
     }
 
 
@@ -84,6 +64,7 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
             }
             this.timeBuffer -= this.timeInt
         }
+        this.checkButton()
     }
 
     draw() {
@@ -147,13 +128,23 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         
     }
     
-    checkKeys(){
-        return (this.game.inputManager.downKeys[KEYS.Enter]) ? 0
-            : (this.game.inputManager.downKeys[KEYS.ArrowUp]
-                || this.game.inputManager.downKeys[KEYS.KeyW]) ? -1
-                : (this.game.inputManager.downKeys[KEYS.ArrowDown]
-                    || this.game.inputManager.downKeys[KEYS.KeyS]) ? 1
-                    : null
+    checkButton() {
+        this.mouse = this.game.inputManager.mousePosition
+        if(this.mouse !== null) {
+            if(this.mouse.x > (this.width * 3 / 4 - 150) && this.mouse.x < (this.width * 3 / 4 + 150) && this.mouse.y > (this.height * 3 / 4 - 50) && this.mouse.y < (this.height * 3 / 4 + 50)) {
+                this.buttonHover = true
+                this.initRT()
+                this.clickOnButton()
+            } else {
+                this.buttonHover = false
+                this.initRT()
+            }
+        }
+    }
+    clickOnButton() {
+        if(this.game.inputManager.newLeftClick) {
+            this.game.sceneManager.init(this.game)
+        }
     }
 
     addScores(scoresPassed) {
@@ -167,7 +158,19 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.gameOverText = [
             {TIME: 0, TEXT: 'GAME', W: this.width * 3 / 4, H: this.height * 1/4 + 25 , COLOR: 'white', FONT: '50px terminal'},
             {TIME: 0, TEXT: 'OVER', W: this.width * 3 / 4, H: this.height * 1/4 - 25 , COLOR: 'white', FONT: '50px terminal'},
+            {TIME: 0.5, TEXT: this.state, W: this.width * 3 / 4, H: this.height * 2/4, COLOR: 'white', FONT: '50px terminal'},
+            {TIME: 0, TEXT: 'GAME', W: this.width * 3 / 4 + 1, H: this.height * 1/4 + 25 + 2, COLOR: 'gray', FONT: '50px terminal'},
+            {TIME: 0, TEXT: 'OVER', W: this.width * 3 / 4 + 1, H: this.height * 1/4 - 25 + 2, COLOR: 'gray', FONT: '50px terminal'},
+            {TIME: 0.5, TEXT: this.state, W: this.width * 3 / 4 + 1, H: this.height * 2/4 + 2, COLOR: 'gray', FONT: '50px terminal'},
+            
+            {TIME: 0, TEXT: '0 _ 0', W: this.width * 3 / 4, H: this.height * 5/8 , COLOR: 'white', FONT: '60px terminal'},
+            {TIME: 0, TEXT: '0 _ 0', W: this.width * 3 / 4 + 1, H: this.height * 5/8 + 2, COLOR: 'gray', FONT: '60px terminal'},
         ]
+        
+        if(this.state === 'YOU DIED') {
+            this.gameOverText.push({TIME: 1, TEXT: 'X_X', W: this.width * 3 / 4, H: this.height * 5/8 , COLOR: 'white', FONT: '70px terminal'})
+            this.gameOverText.push({TIME: 1, TEXT: 'X_X', W: this.width * 3 / 4 + 2, H: this.height * 5/8 + 2, COLOR: 'gray', FONT: '70px terminal'})
+        }
         for(let i = 0; i <= 16 ; i++) {
             this.gameOverText.push({TIME: 0, TEXT: '_', W: this.width * 3 / 4 + (i - 8) * 14, H: this.height * 1/4 - 90 , COLOR: 'white', FONT: '14px terminal'})
             this.gameOverText.push({TIME: 0, TEXT: '_', W: this.width * 3 / 4 + (i - 8) * 14, H: this.height * 1/4 + 55, COLOR: 'white', FONT: '14px terminal'})
@@ -207,6 +210,9 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.replayText = [
             {TIME: 0, TEXT: 'REPLAY', W: this.width * 3 / 4, H: this.height *3/4 , COLOR: 'white', FONT: '50px terminal'},
         ]
+        if(!this.buttonHover) {
+            this.replayText.push({TIME: 0, TEXT: 'REPLAY', W: this.width * 3 / 4 + 2, H: this.height *3/4 + 2, COLOR: 'gray', FONT: '50px terminal'})
+        }
         for(let i = 0; i <= 18; i++) {
             this.replayText.push({TIME: 0, TEXT: '_', W: this.width * 3 / 4 + (i - 9) * 14, H: this.height * 3 / 4 + 30, COLOR: 'white', FONT: '14px terminal'})
             this.replayText.push({TIME: 0, TEXT: '_', W: this.width * 3 / 4 + (i - 9) * 14, H: this.height * 3 / 4 - 65, COLOR: 'white', FONT: '14px terminal'})
@@ -218,6 +224,8 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         }
     }
     
+    
+
     generateFakeScore() {
         for(let j = 0; j < 0; j++) {
             this.scores.push({
