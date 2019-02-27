@@ -178,6 +178,9 @@ export default class Map extends Entity {
                 tiles.push(this.alterPos(center, 1, 2))
                 this.levelExit.push(tiles)
                 break
+            case ROOMS.Maze:
+                this.createRoomByLayout(this.alterPos(p.innerPos,1, 1), RT.Maze)
+                break
         }
     }
 

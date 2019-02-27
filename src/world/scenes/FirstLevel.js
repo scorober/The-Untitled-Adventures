@@ -47,16 +47,22 @@ export default class FirstLevel extends Scene {
                     max_size: [25, 27],
                     max_exits: 4
                 },
-                exit: {
-                    min_size: [15, 15],
-                    max_size: [20, 20],
-                    max_exits: 1
-                },
-                treasure: {
-                    min_size: [20, 16],
-                    max_size: [20, 16],
-                    max_exits: 3
+                // exit: {
+                //     min_size: [15, 15],
+                //     max_size: [20, 20],
+                //     max_exits: 1
+                // },
+                // treasure: {
+                //     min_size: [20, 16],
+                //     max_size: [20, 16],
+                //     max_exits: 3
+                // },
+                maze: {
+                    min_size: [18, 18],
+                    max_size: [18, 18], 
+                    max_exits: 4
                 }
+
             },
             max_corridor_length: 15,
             min_corridor_length: 15,
@@ -64,7 +70,7 @@ export default class FirstLevel extends Scene {
             symmetric_rooms: true, // exits must be in the center of a wall if true. Setting true will make design easier
             interconnects: 1, //extra corridors to connect rooms and make circular paths. not 100% guaranteed
             max_interconnect_length: 10,
-            room_count: 20
+            room_count: 2
         })
 
         dungeon.generate()
