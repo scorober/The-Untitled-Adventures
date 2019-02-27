@@ -181,6 +181,8 @@ export default class Map extends Entity {
             case ROOMS.Maze:
                 this.createRoomByLayout(this.alterPos(p.innerPos,1, 1), RT.Maze)
                 break
+            case ROOMS.Corridor:
+                this.createRoomByLayout(this.alterPos(p.innerPos, 1, 1), RT.Corridor)
         }
     }
 
