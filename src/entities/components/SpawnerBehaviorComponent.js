@@ -35,8 +35,6 @@ export default class SpawnComponentBehavior extends Component {
         this.archers = 0
         this.robots = 0
         this.room = room
-        this.getMobs()
-        this.generateMobs()
     }
 
 
@@ -47,10 +45,11 @@ export default class SpawnComponentBehavior extends Component {
     update() {
         if (this.active === false) {
             const opened = this.scene.map.getRoom(this.room).states[STATES.Opened]
-            
+
             if (opened) {
+                this.getMobs()
+                this.generateMobs()
                 this.active = true
-                this.scene.setSwarmed()
             }
         }
         if (this.active) {
@@ -80,6 +79,9 @@ export default class SpawnComponentBehavior extends Component {
         this.mages = Math.ceil(this.cfg.mage * this.difficulty)
         this.archers = Math.ceil(this.cfg.archer * this.difficulty)
         this.robots = Math.ceil(this.cfg.robot * this.difficulty)
+
+        const totalMobs = this.mages + this.archers + this.robots
+        this.scene.addMobs(totalMobs)
     }
 
     /**

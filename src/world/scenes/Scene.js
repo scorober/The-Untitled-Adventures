@@ -181,9 +181,15 @@ export default class Scene {
         this.mobCount++
     }
 
-    setSwarmed() {
-        this.killCount = this.game.sceneManager.scenes['scoredisplay'].scores.length
-        console.log()
+    addMobs(mobs) {
+        if (this.mobCount === 0) {
+            this.setSwarm()
+        }
+        this.mobCount += mobs
+    }
+
+    setSwarm() {
+        this.baseCount = this.game.sceneManager.scenes['scoredisplay'].scores.length
         this.swarm = true
         this.pacified = false
     }
@@ -191,6 +197,7 @@ export default class Scene {
     setPacified() {
         this.pacified = true
         this.swarm = false
+        this.mobCount = 0
     }
 
     checkEnemy(str) {
@@ -199,7 +206,8 @@ export default class Scene {
 
     checkMapState(enemyCount) {
         //TODO check against a known spawn amount of mobs for this cycle and player's killcount?
-        if (enemyCount === 0 && this.swarm === true) {
+        const killCount = this.game.sceneManager.scenes['scoredisplay'].scores.length
+        if (killCount === this.baseCount + this.mobCount) {
             this.setPacified()
         }
     }
