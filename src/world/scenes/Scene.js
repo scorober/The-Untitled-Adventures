@@ -187,7 +187,7 @@ export default class Scene {
     }
 
     setSwarm() {
-        this.baseCount = this.game.sceneManager.scenes['scoredisplay'].scores.length
+        this.baseCount = this.game.sceneManager.scenes['scoredisplay'].killCount
         this.swarm = true
         this.pacified = false
         this.currentRoomEnterTime = this.game.timer.gameTime
