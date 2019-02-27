@@ -165,7 +165,7 @@ export default class Map extends Entity {
                 })
                 break
             case ROOMS.Treasure:
-                this.createTreasureRoom(this.alterPos(p.innerPos, 1, 1))
+                this.createRoomByLayout(this.alterPos(p.innerPos, 1, 1), RT.Treasure)
                 break
             case ROOMS.Exit:
                 this.createObject(this.map1, center, MI.StairsN)
@@ -181,13 +181,12 @@ export default class Map extends Entity {
         }
     }
 
-    createTreasureRoom(pos) {
-        this.createObject(this.map0, pos, RT.Treasure.floor)
-        this.createObject(this.map1, pos, RT.Treasure.object0)
-        this.createObject(this.map2, pos, RT.Treasure.object1)
-        this.createObject(this.map3, pos, RT.Treasure.top)
-
-    }
+    createRoomByLayout(pos, obj) {
+        this.createObject(this.map0, pos, obj.floor)
+        this.createObject(this.map1, pos, obj.object0)
+        this.createObject(this.map2, pos, obj.object1)
+        this.createObject(this.map3, pos, obj.top)
+    } 
 
     
     /**
