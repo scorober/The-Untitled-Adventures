@@ -1,4 +1,5 @@
 import Animation from './Animation.js'
+import Vector from './utils/Vector.js'
 
 export default class AnimationFactory {
     /**
@@ -24,14 +25,16 @@ export default class AnimationFactory {
     getNextRow(frameCount, rate, options = {}) {
         const defaults = {
             loop: true,
-            yOffset: 0 
+            yOffset: 0,
+            xOffset: 0
         }
         options = Object.assign({}, defaults, options)
         const width = options.width ? options.width : this.width
         const height = options.height ? options.height : this.height
         const scale = options.scale ? options.scale : this.scale
         if (this.startY + width <= this.spritesheet.height) {
-            const animation = new Animation(this.spritesheet, width, height, this.startY, frameCount, options.yOffset, rate, options.loop, scale, options.maxFrames)
+            const offset = new Vector(options.xOffset, options.yOffset)
+            const animation = new Animation(this.spritesheet, width, height, this.startY, frameCount, offset, rate, options.loop, this.scale, options.maxFrames)
             this.startY += height
             this.row += 1
             return animation

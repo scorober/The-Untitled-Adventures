@@ -3,7 +3,7 @@
  */
 
 export default class Scene {
-    constructor(game) {
+    constructor(game, lvl) {
         this.game = game
         this.entities = []
         this.map = null
@@ -11,9 +11,10 @@ export default class Scene {
         this.highlightedEntity = {}
         this.timeElapsed = 0
         this.timeBuffer = 0
-
         this.pacified = true
         this.swarm = false
+        this.scores = []
+        this.level = lvl
     }
 
     /**
@@ -21,7 +22,6 @@ export default class Scene {
      * Currently just updates a timer that tracks how long the current scene is active.
      */
     update() {
-
         this.timeElapsed += this.game.clockTick
     }
     draw() { }

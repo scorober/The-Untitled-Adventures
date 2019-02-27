@@ -75,10 +75,10 @@ export const ANIMATIONS = {
     OversizeEast: Symbol(),
 
     /** NPC animations */
-    AttackWest: Symbol(),
-    AttackEast: Symbol(),
-    AttackNorth: Symbol(),
-    AttackSouth: Symbol(),
+    AttackWest: Symbol('AttackWest'),
+    AttackEast: Symbol('AttackEast'),
+    AttackNorth: Symbol('AttackNorth'),
+    AttackSouth: Symbol('AttackSouth'),
 
     /** Marriott-specific animations */
     SitDownWest: Symbol(),
@@ -133,10 +133,10 @@ export const ANIMATION_RATES = {
 }
 
 export const DIRECTIONS = {
-    North: Symbol(),
-    West: Symbol(),
-    South: Symbol(),
-    East: Symbol(),
+    North: Symbol('north'),
+    West: Symbol('west'),
+    South: Symbol('south'),
+    East: Symbol('east'),
 
     /** Map specific directions */
     NorthWest: Symbol(),

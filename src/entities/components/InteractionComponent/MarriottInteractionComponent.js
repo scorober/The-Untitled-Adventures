@@ -38,9 +38,9 @@ export default class MarriottInteractionComponent extends InteractionComponent {
             ctx.textAlign = 'center'
             ctx.font = fontSize + 'px arcade'
             ctx.fillStyle = 'black'
-            ctx.fillText(attributeComponent.Name, screenPos.x, screenPos.y + height / 2 - currentAnimation.yOffset - 10)
+            ctx.fillText(attributeComponent.Name, screenPos.x + currentAnimation.offset.x, screenPos.y + height / 2 - currentAnimation.offset.y - 10)
             ctx.fillStyle = 'red'
-            ctx.fillText('HP:' + HP, screenPos.x, screenPos.y + height / 2 - currentAnimation.yOffset + fontSize + 3 - 10)
+            ctx.fillText('HP:' + HP, screenPos.x + currentAnimation.offset.x, screenPos.y + height / 2 - currentAnimation.offset.y + fontSize + 3 - 10)
         }
     }
 

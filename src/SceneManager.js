@@ -5,6 +5,7 @@ import FirstLevel from './world/scenes/FirstLevel.js'
 import TitleMenuScene from './world/scenes/TitleMenu.js'
 import { HitCircle, CollisionLayer } from './utils/Collision.js'
 import CollisionComponent from './entities/components/CollisionComponent.js'
+import ScoreDIsplayScene from './world/scenes/Scores.js'
 
 export default class SceneManager {
 
@@ -20,11 +21,14 @@ export default class SceneManager {
         this.collisionLayer = new CollisionLayer()
         const firstlevel = new FirstLevel(game)
         const title = new TitleMenuScene(game)
+        const scores = new ScoreDIsplayScene(game)
         this.addScene(firstlevel.name, firstlevel)
         this.addScene(title.name, title)
+        this.addScene(scores.name, scores)
         this.currentScene = firstlevel
     }
 
+    
     /**
      * Adds ascene to the collection of scenes
      * @param name the name of the new scene
@@ -66,7 +70,10 @@ export default class SceneManager {
         const params = {}
         this.currentScene.exit()  //exit old scene
         this.currentScene = this.getScene(name)
-        this.currentScene.enter(params) //enter new scene
+        // this.currentScene.enter(params) //enter new scene
+        if(this.currentScene !== this.scenes['scores']) {
+            this.currentScene.enter(params) //enter new scene
+        } 
     }
 
     /**

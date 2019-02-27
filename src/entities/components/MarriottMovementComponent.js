@@ -8,14 +8,15 @@ export default class MarriottMovementComponent extends MovementComponent {
     constructor(entity, attributes) {
         super(entity, attributes)
         this.sitStandAnimating = false
+        this.marriottMoving = false
     }
-
 
     update() {
         if (this.sitStandAnimating === false) {
             if (this.path.length > 0) {
                 // If just started moving and not currently animation
-                if (this.moving === false) {
+                if (this.marriottMoving === false) {
+                    this.marriottMoving = true
                     this.handleStanding()
                     return
                 }
@@ -27,7 +28,8 @@ export default class MarriottMovementComponent extends MovementComponent {
                     west: ANIMS.WalkWest
                 })
             }
-            else if (this.moving) {
+            else if (this.marriottMoving) {
+                this.marriottMoving = false
                 // If just stopped moving (because there's no more path data), but this.moving still true, and not currently animating
                 this.handleSitting()
                 return
