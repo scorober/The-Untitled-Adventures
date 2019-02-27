@@ -147,11 +147,12 @@ export default class Map extends Entity {
      * @param {Piece} piece Room objects will be built in.
      */
     buildRoom(piece) {
-        const p = this.generateRoomProperties(piece)
+        const pos = this.alterPos(this.generateRoomProperties(piece).innerPos, 1, 1)
         const center = piece.global_pos(piece.get_center_pos())
         switch (piece.tag) {
             case ROOMS.Initial:
                 this.createObject(this.map1, center, MI.ChestClosed)
+                this.createRoomByLayout(pos, RT.Initial)
                 break
             case ROOMS.Any:
                 this.createObject(this.map1, this.alterPos(center, -1, -1), MI.Rug)
@@ -165,7 +166,7 @@ export default class Map extends Entity {
                 })
                 break
             case ROOMS.Treasure:
-                this.createRoomByLayout(this.alterPos(p.innerPos, 1, 1), RT.Treasure)
+                this.createRoomByLayout(pos, RT.Treasure)
                 break
             case ROOMS.Exit:
                 this.createObject(this.map1, center, MI.StairsN)
@@ -179,10 +180,10 @@ export default class Map extends Entity {
                 this.levelExit.push(tiles)
                 break
             case ROOMS.Maze:
-                this.createRoomByLayout(this.alterPos(p.innerPos,1, 1), RT.Maze)
+                this.createRoomByLayout(pos, RT.Maze)
                 break
             case ROOMS.Corridor:
-                this.createRoomByLayout(this.alterPos(p.innerPos, 1, 1), RT.Corridor)
+                this.createRoomByLayout(pos, RT.Corridor)
         }
     }
 

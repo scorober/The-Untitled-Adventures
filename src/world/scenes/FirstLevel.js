@@ -37,8 +37,8 @@ export default class FirstLevel extends Scene {
             // seed: 'abcd', //omit for generated seed
             rooms: {
                 initial: {
-                    min_size: [12, 12], //Floor size
-                    max_size: [12, 12],
+                    min_size: [14, 18], //Floor size
+                    max_size: [14, 18],
                     max_exits: 4,
                     position: [100, 100] //OPTIONAL pos of initial room 
                 },
