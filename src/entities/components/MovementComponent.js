@@ -59,24 +59,27 @@ export default class MovementComponent extends Component {
     handlePathMovement() {
         this.moving = true
         const tile = this.path[0]
-        const tilePosition = Map.tileToWorldPosition(tile, this.entity.game.getTileSize())
-        // dx and dy are the x and y distances between this Entity and the tile in world position (pixels)
-        let dx = tilePosition.x - this.entity.x
-        let dy = tilePosition.y - this.entity.y
-        const distance = Math.sqrt(dx * dx + dy * dy)
-        if (distance < 10) {
-            this.path.splice(0, 1)
-            if (this.path.length < 1) {
-                this.moving = false
-                this.setStandingAnimation()
-                return
+        if(this.entity.game.sceneManager.currentScene.name === 'level1'){// === this.entity.game.sceneManager.getScene('firstLevel')){
+            const tilePosition = Map.tileToWorldPosition(tile, this.entity.game.sceneManager.currentScene.map.tileSize)
+            let dx = tilePosition.x - this.entity.x
+            let dy = tilePosition.y - this.entity.y
+            const distance = Math.sqrt(dx * dx + dy * dy)
+            if (distance < 10) {
+                this.path.splice(0, 1)
+                if (this.path.length < 1) {
+                    this.moving = false
+                    this.setStandingAnimation()
+                    return
+                }
             }
+            dx = dx / distance
+            dy = dy / distance
+            this.move(new Vector(dx, dy))
+            this.direction = this.calculateDirection(dx, dy)
+            this.setWalkingAnimation()
         }
-        dx = dx / distance
-        dy = dy / distance
-        this.move(new Vector(dx, dy))
-        this.direction = this.calculateDirection(dx, dy)
-        this.setWalkingAnimation()
+        // dx and dy are the x and y distances between this Entity and the tile in world position (pixels)
+        
     }
 
     setWalkingAnimation() {

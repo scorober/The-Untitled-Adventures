@@ -213,7 +213,7 @@ export default class CombatComponent extends Component {
     }
 
     removeByCombat() {
-        this.entity.game.addScore(this.attributeComponent.Name)
+        this.entity.game.addScore(this.attributeComponent.Name, true)
         this.entity.game.removeEntityByRef(this.entity)
         if (this.attributeComponent.Name === 'PLAYER') {
             this.entity.game.sceneManager.change('scoredisplay')

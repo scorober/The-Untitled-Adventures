@@ -25,6 +25,7 @@ export default class Map extends Entity {
         this.spawners = [] //Array of spawner positions and radii.
         this.exits = [] //Array of door positions and room they enter.
         this.rooms = []
+        this.levelExit = []
         this.buildMap()
     }
 
@@ -168,6 +169,14 @@ export default class Map extends Entity {
                 break
             case ROOMS.Exit:
                 this.createObject(this.map1, center, MI.StairsN)
+                const tiles = []
+                tiles.push(center)
+                tiles.push(this.alterPos(center, 1, 0))
+                tiles.push(this.alterPos(center, 0, 1))
+                tiles.push(this.alterPos(center, 1, 1))
+                tiles.push(this.alterPos(center, 0, 2))
+                tiles.push(this.alterPos(center, 1, 2))
+                this.levelExit.push(tiles)
                 break
         }
     }
