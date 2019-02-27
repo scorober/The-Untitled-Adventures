@@ -159,18 +159,8 @@ export default class GameEngine {
             const Score = this.addKillScore(name)
             if(Score != null) scene.scores.push(Score)
         } else {
-            scene.state++
-            
-            if(name == 'END') {
-                const Score = {
-                    Name: 'LEVEL_END',
-                    Time: Math.floor(this.timer.gameTime),
-                    Duration: this.timer.gameTime,
-                    lvl: 1,
-                    Score: Math.floor(1000 * Math.sqrt(2) / Math.sqrt(this.timer.gameTime))
-                }
-                scene.scores.push(Score)
-            }
+            const Score = this.addNonKill(name, scene)
+            if(Score != null) scene.scores.push(Score)
         }
     }
 
@@ -183,7 +173,8 @@ export default class GameEngine {
                     Time: Math.floor(this.timer.gameTime),
                     Duration: null,
                     lvl: 1,
-                    Score: Math.floor(400 * Math.sqrt(2))
+                    Score: Math.floor(400 * Math.sqrt(2)),
+                    Type: 'E'
                 }
                 break
             case 'MAGE':
@@ -192,7 +183,8 @@ export default class GameEngine {
                     Time: Math.floor(this.timer.gameTime),
                     Duration: null,
                     lvl: 1,
-                    Score: Math.floor(700 * Math.sqrt(2))
+                    Score: Math.floor(700 * Math.sqrt(2)),
+                    Type: 'E'
                 }
                 break
             case 'ROBOT':
@@ -201,7 +193,8 @@ export default class GameEngine {
                     Time: Math.floor(this.timer.gameTime),
                     Duration: null,
                     lvl: 1,
-                    Score: Math.floor(850 * Math.sqrt(2))
+                    Score: Math.floor(850 * Math.sqrt(2)),
+                    Type: 'E'
                 }
                 break
             case 'CHIEF':
@@ -210,7 +203,8 @@ export default class GameEngine {
                     Time: Math.floor(this.timer.gameTime),
                     Duration: null,
                     lvl: 1,
-                    Score: Math.floor(430 * Math.sqrt(2))
+                    Score: Math.floor(430 * Math.sqrt(2)),
+                    Type: 'E'
                 }
                 break
             case 'KNIGHT':
@@ -219,7 +213,8 @@ export default class GameEngine {
                     Time: Math.floor(this.timer.gameTime),
                     Duration: null,
                     lvl: 1,
-                    Score: Math.floor(480 * Math.sqrt(2))
+                    Score: Math.floor(480 * Math.sqrt(2)),
+                    Type: 'E'
                 }
                 break
             case 'WARRIOR':
@@ -228,7 +223,8 @@ export default class GameEngine {
                     Time: Math.floor(this.timer.gameTime),
                     Duration: null,
                     lvl: 1,
-                    Score: Math.floor(550 * Math.sqrt(2))
+                    Score: Math.floor(550 * Math.sqrt(2)),
+                    Type: 'E'
                 }
                 break
             case 'WOLF':
@@ -237,8 +233,39 @@ export default class GameEngine {
                     Time: Math.floor(this.timer.gameTime),
                     Duration: null,
                     lvl: 1,
-                    Score: Math.floor(440 * Math.sqrt(2))
+                    Score: Math.floor(440 * Math.sqrt(2)),
+                    Type: 'E'
                 }
+                break
+            default:
+                return null
+        }
+        return Score
+    }
+
+    addNonKill(name, scene) {
+        let Score
+        switch (name) {
+            case 'ROOM':
+                Score = {
+                    Name: 'LEVEL_END',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: this.sceneManager.currentScene.currentRoomTimeLapse,
+                    lvl: 1,
+                    Score: Math.floor(1000 * Math.sqrt(2) / Math.sqrt(this.sceneManager.currentScene.currentRoomTimeLapse)),
+                    Type: 'C'
+                }
+                break
+            case  'END':
+                Score = {
+                    Name: 'LEVEL_END',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: this.timer.gameTime,
+                    lvl: 1,
+                    Score: Math.floor(1000 * Math.sqrt(2) / Math.sqrt(this.timer.gameTime)),
+                    Type: 'C'
+                }
+                scene.state++
                 break
             default:
                 return null
