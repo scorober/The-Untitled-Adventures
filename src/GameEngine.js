@@ -192,7 +192,7 @@ export default class GameEngine {
                 const Score = {
                     Name: 'Robot_Kill',
                     Time: Math.floor(this.timer.gameTime),
-                    Duration: this.timer.,
+                    Duration: null,// this.timer.,
                     // lvl: this.sceneManager.getCurrentScene().level,
                     lvl: 1,
                     Score: Math.floor(550 * Math.sqrt(2))
