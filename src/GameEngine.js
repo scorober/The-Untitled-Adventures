@@ -188,14 +188,16 @@ export default class GameEngine {
                 scene.scores.push(Score)
             }
         } else {
+            scene.state++
+            
             if(name == 'END') {
                 const Score = {
-                    Name: 'Robot_Kill',
+                    Name: 'LEVEL_END',
                     Time: Math.floor(this.timer.gameTime),
-                    Duration: null,// this.timer.,
+                    Duration: this.timer.gameTime,// this.timer.,
                     // lvl: this.sceneManager.getCurrentScene().level,
                     lvl: 1,
-                    Score: Math.floor(550 * Math.sqrt(2))
+                    Score: Math.floor(1000 * Math.sqrt(2) / Math.sqrt(this.timer.gameTime))
                 }
                 scene.scores.push(Score)
             }

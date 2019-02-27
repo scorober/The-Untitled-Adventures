@@ -8,7 +8,7 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.name = 'scoredisplay'
         this.scores = []
         this.killCount = 0
-        this.state = 'YOU DIED'
+        this.state = 0
         
         this.timeElapsed = 0
         this.width = game.surfaceWidth
@@ -40,6 +40,10 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
 
     update() {
         super.update()
+        if(this.state != 0) {
+            this.initGOT()
+            this.state = 0
+        }
         this.timeBuffer += this.game.clockTick
         if(this.timeBuffer > this.timeInt) {
             if(this.index < this.scores.length) {
@@ -135,18 +139,17 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.gameOverText = [
             {TIME: 0, TEXT: 'GAME', W: this.width * 3 / 4, H: this.height * 1/4 + 25 , COLOR: 'white', FONT: '50px terminal'},
             {TIME: 0, TEXT: 'OVER', W: this.width * 3 / 4, H: this.height * 1/4 - 25 , COLOR: 'white', FONT: '50px terminal'},
-            {TIME: 0.5, TEXT: this.state, W: this.width * 3 / 4, H: this.height * 2/4, COLOR: 'white', FONT: '50px terminal'},
             {TIME: 0, TEXT: 'GAME', W: this.width * 3 / 4 + 1, H: this.height * 1/4 + 25 + 2, COLOR: 'gray', FONT: '50px terminal'},
             {TIME: 0, TEXT: 'OVER', W: this.width * 3 / 4 + 1, H: this.height * 1/4 - 25 + 2, COLOR: 'gray', FONT: '50px terminal'},
-            {TIME: 0.5, TEXT: this.state, W: this.width * 3 / 4 + 1, H: this.height * 2/4 + 2, COLOR: 'gray', FONT: '50px terminal'},
-            
             {TIME: 0, TEXT: '0 _ 0', W: this.width * 3 / 4, H: this.height * 5/8 , COLOR: 'white', FONT: '60px terminal'},
             {TIME: 0, TEXT: '0 _ 0', W: this.width * 3 / 4 + 1, H: this.height * 5/8 + 2, COLOR: 'gray', FONT: '60px terminal'},
-        ]
         
-        if(this.state === 'YOU DIED') {
-            this.gameOverText.push({TIME: 1, TEXT: 'X_X', W: this.width * 3 / 4, H: this.height * 5/8 , COLOR: 'white', FONT: '70px terminal'})
-            this.gameOverText.push({TIME: 1, TEXT: 'X_X', W: this.width * 3 / 4 + 2, H: this.height * 5/8 + 2, COLOR: 'gray', FONT: '70px terminal'})
+        ]
+
+        if(this.state === 0) {
+            this.initDied()
+        } else {
+            this.initComplete()
         }
         for(let i = 0; i <= 16 ; i++) {
             this.gameOverText.push({TIME: 0, TEXT: '_', W: this.width * 3 / 4 + (i - 8) * 14, H: this.height * 1/4 - 90 , COLOR: 'white', FONT: '14px terminal'})
@@ -157,6 +160,19 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
             this.gameOverText.push({TIME: 0, TEXT: '|', W: this.width * 3 / 4 + 7 + (8 * 14), H: this.height * 1 / 4 + (i - 4) * 18, COLOR: 'white', FONT: '14px terminal'})
             
         }
+    }
+
+    initDied() {
+        this.gameOverText.push({TIME: 0.5, TEXT: 'YOU DIED', W: this.width * 3 / 4, H: this.height * 2/4, COLOR: 'white', FONT: '50px terminal'})
+        this.gameOverText.push({TIME: 0.5, TEXT: 'YOU DIED', W: this.width * 3 / 4 + 1, H: this.height * 2/4 + 2, COLOR: 'gray', FONT: '50px terminal'})
+            
+        this.gameOverText.push({TIME: 1, TEXT: 'X_X', W: this.width * 3 / 4, H: this.height * 5/8 , COLOR: 'white', FONT: '70px terminal'})
+        this.gameOverText.push({TIME: 1, TEXT: 'X_X', W: this.width * 3 / 4 + 2, H: this.height * 5/8 + 2, COLOR: 'gray', FONT: '70px terminal'})
+    }
+
+    initComplete() {
+        this.gameOverText.push({TIME: 0.5, TEXT: 'LEVEL COMPLETED', W: this.width * 3 / 4, H: this.height * 2/4, COLOR: 'white', FONT: '50px terminal'})
+        this.gameOverText.push({TIME: 0.5, TEXT: 'LEVEL COMPLETED', W: this.width * 3 / 4 + 1, H: this.height * 2/4 + 2, COLOR: 'gray', FONT: '50px terminal'})
     }
 
     initTT() {

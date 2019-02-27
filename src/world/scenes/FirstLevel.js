@@ -74,7 +74,7 @@ export default class FirstLevel extends Scene {
             symmetric_rooms: true, // exits must be in the center of a wall if true. Setting true will make design easier
             interconnects: 1, //extra corridors to connect rooms and make circular paths. not 100% guaranteed
             max_interconnect_length: 10,
-            room_count: 20
+            room_count: 5
         })
 
         dungeon.generate()
