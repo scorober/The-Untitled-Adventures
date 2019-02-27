@@ -27,13 +27,13 @@ const impactSize = 244
 export default {
     // Attributes Component Configuration
     Attributes: {
-        HP: 30,
+        HP: 20,
         Mana: 10,
         Str: 5,
         Int: 5,
         Atk: 10,
         Matk: 5,
-        Def: 15,
+        Def: 10,
         Mdef: 3,
         Speed: 50,
         Name: 'ROBOT',
