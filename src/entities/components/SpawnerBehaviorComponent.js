@@ -7,10 +7,15 @@ import AnimationComponent from './AnimationComponent.js'
 import ArcherData from '../../entities/characters/ArcherDefaultData.js'
 import RobotData from '../../entities/characters/RobotDefaultData.js'
 import MageData from '../../entities/characters/MageDefaultData.js'
+import ChiefData from '../../entities/characters/ChiefDefaultData.js'
+import WolfData from '../characters/WolfDefaultData.js'
+import KnightData from '../characters/KnightDefaultData.js'
+import WarriorData from '../characters/WarriorDefaultData.js'
 import AttributeComponent from './AttributeComponent.js'
 import CollisionComponent from './CollisionComponent.js'
 import EnemyInteractionComponent from './InteractionComponent/EnemyInteractionComponent.js'
 import CombatComponent from './CombatComponent.js'
+import { STATES } from '../../utils/Const.js'
 
 export default class SpawnComponentBehavior extends Component {
     /**
@@ -18,7 +23,7 @@ export default class SpawnComponentBehavior extends Component {
      * @param {Scene} scene The scene this spawn component will add mobs to.
      * @param {Object} spawnConfig Spawn configuration for this spawner.
      */
-    constructor(entity, scene, spawnConfig, radius, difficulty) {
+    constructor(entity, scene, spawnConfig, radius, difficulty, room) {
         super(entity)
         this.v = Vector.vectorFromEntity(entity)
         this.scene = scene
@@ -33,8 +38,7 @@ export default class SpawnComponentBehavior extends Component {
         this.mages = 0
         this.archers = 0
         this.robots = 0
-        this.getMobs()
-        this.generateMobs()
+        this.room = room
     }
 
 
@@ -44,9 +48,11 @@ export default class SpawnComponentBehavior extends Component {
      */
     update() {
         if (this.active === false) {
-            const player = this.scene.getPlayer()
-            const v = new Vector(player.x, player.y)
-            if (v.distance(this.v) < 500) {
+            const opened = this.scene.map.getRoom(this.room).states[STATES.Opened]
+
+            if (opened) {
+                this.getMobs()
+                this.generateMobs()
                 this.active = true
             }
         }
@@ -77,6 +83,9 @@ export default class SpawnComponentBehavior extends Component {
         this.mages = Math.ceil(this.cfg.mage * this.difficulty)
         this.archers = Math.ceil(this.cfg.archer * this.difficulty)
         this.robots = Math.ceil(this.cfg.robot * this.difficulty)
+
+        const totalMobs = this.mages + this.archers + this.robots
+        this.scene.addMobs(totalMobs)
     }
 
     /**
@@ -129,5 +138,72 @@ export default class SpawnComponentBehavior extends Component {
             robot.addComponent(new CombatComponent(robot))
             this.mobs.push(robot)
         }
+
+        for (let i = 0; i < this.robots; i++) {
+            const angle = this.rng.float() * Math.PI * 2
+            const r = this.rng.int(10, this.radius)
+            const chief = new Entity(this.entity.game, new Vector(
+                this.entity.x + Math.cos(angle) * r,
+                this.entity.y + Math.sin(angle) * r
+            ), ChiefData.Attributes)
+            chief.addComponent(new AnimationComponent(chief, ChiefData.AnimationConfig))
+            chief.addComponent(new MovementComponent(chief, ChiefData.Attributes))
+            chief.addComponent(new AttributeComponent(chief, ChiefData.Attributes))
+            chief.addComponent(new CollisionComponent(chief))
+            chief.addComponent(new EnemyInteractionComponent(chief))
+            chief.addComponent(new CombatComponent(chief))
+            this.mobs.push(chief)
+        }
+        
+        
+        for (let i = 0; i < this.robots; i++) {
+            const angle = this.rng.float() * Math.PI * 2
+            const r = this.rng.int(10, this.radius)
+            const wolf = new Entity(this.entity.game, new Vector(
+                this.entity.x + Math.cos(angle) * r,
+                this.entity.y + Math.sin(angle) * r
+            ), WolfData.Attributes)
+            wolf.addComponent(new AnimationComponent(wolf, WolfData.AnimationConfig))
+            wolf.addComponent(new MovementComponent(wolf, WolfData.Attributes))
+            wolf.addComponent(new AttributeComponent(wolf, WolfData.Attributes))
+            wolf.addComponent(new CollisionComponent(wolf))
+            wolf.addComponent(new EnemyInteractionComponent(wolf))
+            wolf.addComponent(new CombatComponent(wolf))
+            this.mobs.push(wolf)
+        }
+
+        for (let i = 0; i < this.robots; i++) {
+            const angle = this.rng.float() * Math.PI * 2
+            const r = this.rng.int(10, this.radius)
+            const knight = new Entity(this.entity.game, new Vector(
+                this.entity.x + Math.cos(angle) * r,
+                this.entity.y + Math.sin(angle) * r
+            ), KnightData.Attributes)
+            knight.addComponent(new AnimationComponent(knight, KnightData.AnimationConfig))
+            knight.addComponent(new MovementComponent(knight, KnightData.Attributes))
+            knight.addComponent(new AttributeComponent(knight, KnightData.Attributes))
+            knight.addComponent(new CollisionComponent(knight))
+            knight.addComponent(new EnemyInteractionComponent(knight))
+            knight.addComponent(new CombatComponent(knight))
+            this.mobs.push(knight)
+        }
+
+        
+        for (let i = 0; i < this.robots; i++) {
+            const angle = this.rng.float() * Math.PI * 2
+            const r = this.rng.int(10, this.radius)
+            const warrior = new Entity(this.entity.game, new Vector(
+                this.entity.x + Math.cos(angle) * r,
+                this.entity.y + Math.sin(angle) * r
+            ), WarriorData.Attributes)
+            warrior.addComponent(new AnimationComponent(warrior, WarriorData.AnimationConfig))
+            warrior.addComponent(new MovementComponent(warrior, WarriorData.Attributes))
+            warrior.addComponent(new AttributeComponent(warrior, WarriorData.Attributes))
+            warrior.addComponent(new CollisionComponent(warrior))
+            warrior.addComponent(new EnemyInteractionComponent(warrior))
+            warrior.addComponent(new CombatComponent(warrior))
+            this.mobs.push(warrior)
+        }
+
     }
 }

@@ -11,8 +11,12 @@ export default class Scene {
         this.highlightedEntity = {}
         this.timeElapsed = 0
         this.timeBuffer = 0
+        this.pacified = true
+        this.swarm = false
         this.scores = []
         this.level = lvl
+        this.mobCount = 0
+        this.killCount = 0
     }
 
     /**
@@ -112,7 +116,7 @@ export default class Scene {
         }
         for (let i = 0; i < entitiesCount; i++) {
             const entity = this.entities[i]
-            if (entity) { //Removed entities are still in array and being called on??
+            if (entity) {
                 if (entity.removeFromWorld === true) {
                     this.removeEntity(i)
                 } else {
@@ -120,7 +124,7 @@ export default class Scene {
                 }
             }
         }
-
+        this.checkMapState()
     }
 
     /**
@@ -169,4 +173,38 @@ export default class Scene {
         this.dungeon = dungeon
     }
 
+    countMob() {
+        this.mobCount++
+    }
+
+    addMobs(mobs) {
+        if (this.mobCount === 0) {
+            this.setSwarm()
+        }
+        this.mobCount += mobs
+    }
+
+    setSwarm() {
+        this.baseCount = this.game.sceneManager.scenes['scoredisplay'].scores.length
+        this.swarm = true
+        this.pacified = false
+    }
+    
+    setPacified() {
+        this.pacified = true
+        this.swarm = false
+        this.mobCount = 0
+    }
+
+    checkEnemy(str) {
+        return str.includes('MAGE') || str.includes('ARCHER') || str.includes('ROBOT')
+    }
+
+    checkMapState() {
+        //TODO check against a known spawn amount of mobs for this cycle and player's killcount?
+        const killCount = this.game.sceneManager.scenes['scoredisplay'].scores.length
+        if (killCount === this.baseCount + this.mobCount) {
+            this.setPacified()
+        }
+    }
 }
