@@ -119,7 +119,6 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
     }
     clickOnButton() {
         if(this.game.inputManager.newLeftClick) {
-            
             this.game.sceneManager.init(this.game)
         }
     }

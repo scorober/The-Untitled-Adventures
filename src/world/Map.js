@@ -1,6 +1,6 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
-import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, TILE_COLLISION as TC, STATES } from '../utils/Const.js'
+import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, TILE_COLLISION as TC, STATES, ASSET_PATHS, ROOM_TILES as RT } from '../utils/Const.js'
 import Vector from '../utils/Vector.js'
 
 export default class Map extends Entity {
@@ -118,7 +118,7 @@ export default class Map extends Entity {
         const p = this.generateRoomProperties(piece)
 
         //Set floor
-        this.map0.set_square(p.innerPos, p.innerSize, 4, true)
+        this.map0.set_square(p.innerPos, p.innerSize, 1, true)
 
         //North
         this.map0.set_horizontal_line(this.alterPos(p.outerPos, 1, 0), p.innerSize[0] - 1, MI.WallNorth[0][0])
@@ -146,6 +146,7 @@ export default class Map extends Entity {
      * @param {Piece} piece Room objects will be built in.
      */
     buildRoom(piece) {
+        const p = this.generateRoomProperties(piece)
         const center = piece.global_pos(piece.get_center_pos())
         switch (piece.tag) {
             case ROOMS.Initial:
@@ -163,12 +164,20 @@ export default class Map extends Entity {
                 })
                 break
             case ROOMS.Treasure:
-                this.createObject(this.map1, center, MI.ChestOpen)
+                this.createTreasureRoom(this.alterPos(p.innerPos, 1, 1))
                 break
             case ROOMS.Exit:
                 this.createObject(this.map1, center, MI.StairsN)
                 break
         }
+    }
+
+    createTreasureRoom(pos) {
+        this.createObject(this.map0, pos, RT.Treasure.floor)
+        this.createObject(this.map1, pos, RT.Treasure.object0)
+        this.createObject(this.map2, pos, RT.Treasure.object1)
+        this.createObject(this.map3, pos, RT.Treasure.top)
+
     }
 
     
@@ -254,7 +263,7 @@ export default class Map extends Entity {
      */
     openExit(tiles) {
         for (let i = 0; i < tiles.length; i++) {
-            this.map2.set(tiles[i], 13)
+            this.map2.set(tiles[i], 1)
         }
     }
 
@@ -409,7 +418,7 @@ export default class Map extends Entity {
             const tileY = r * this.tileSize - this.game.camera.yView
             this.game.ctx.drawImage(
                 this.tileAtlas,
-                ((tile - 1) % this.setLength * this.tileSize),
+                ((tile - 1) % this.setLength * this.tileSize) ,
                 Math.floor((tile - 1) / this.setLength) * this.tileSize,
                 this.tileSize,
                 this.tileSize,

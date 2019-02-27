@@ -59,7 +59,7 @@ export default class MovementComponent extends Component {
     handlePathMovement() {
         this.moving = true
         const tile = this.path[0]
-        const tilePosition = Map.tileToWorldPosition(tile, this.entity.game.sceneManager.currentScene.map.tileSize)
+        const tilePosition = Map.tileToWorldPosition(tile, this.entity.game.getTileSize())
         // dx and dy are the x and y distances between this Entity and the tile in world position (pixels)
         let dx = tilePosition.x - this.entity.x
         let dy = tilePosition.y - this.entity.y
