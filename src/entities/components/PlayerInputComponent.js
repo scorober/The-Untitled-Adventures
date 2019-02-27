@@ -19,7 +19,9 @@ import FreezeBehaviorComponent from './FreezeBehaviorComponent.js'
 import CollisionComponent from './CollisionComponent.js'
 import InteractionComponent from './InteractionComponent/InteractionComponent.js'
 import Vector from '../../utils/Vector.js'
-import CombatComponent from './CombatComponent.js';
+import CombatComponent from './CombatComponent.js'
+import PlayerData from '../characters/PlayerCharacterDefaultData.js'
+import AttributeComponent from '../components/AttributeComponent.js'
 
 export default class PlayerInputComponent extends Component {
     /**
@@ -104,6 +106,9 @@ export default class PlayerInputComponent extends Component {
             fireball.addComponent(new AnimationComponent(fireball, FireballData.AnimationConfig))
             fireball.addComponent(new MovementComponent(fireball, FireballData.Attributes))
             fireball.addComponent(new ProjectileBehaviorComponent(fireball, target, true, this.entity))
+            fireball.addComponent(new AttributeComponent(fireball, PlayerData.Attributes))
+            fireball.addComponent(new CollisionComponent(fireball))
+            fireball.addComponent(new CombatComponent(fireball))
             this.entity.game.sceneManager.currentScene.addEntity(fireball)
             this.coolDown = 0
         }

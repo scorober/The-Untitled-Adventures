@@ -1,7 +1,6 @@
 import Component from './Component.js'
 import { STATES } from '../../utils/Const.js'
 import { HitCircle } from '../../utils/Collision.js'
-import Map from '../../world/Map.js'
 import AnimationComponent from './AnimationComponent.js'
 import Vector from '../../utils/Vector.js'
 
@@ -22,7 +21,7 @@ export default class CollisionComponent extends Component {
     }
 
     update() {
-        const pos = Map.worldToTilePosition(this.entity, this.entity.game.getTileSize())
+        const pos = Vector.vectorFromEntity(this.entity)
         this.hitbox.update(pos.x, pos.y)
     }
 
@@ -68,7 +67,7 @@ export default class CollisionComponent extends Component {
             const currentAnim = this.entity.getComponent(AnimationComponent).getCurrentAnimation()
             const height = currentAnim.getHeight()
             const width = currentAnim.getWidth()
-            const hitboxScreenPos = this.entity.game.worldToScreen(new Vector(this.entity.x, this.entity.y - height / 2)) // get position on screen
+            const hitboxScreenPos = this.entity.game.worldToScreen(this.hitbox.location) // get position on screen
             const dist = vector.distance(hitboxScreenPos)
             if (dist < this.hitbox.radius) {
                 const distY = vector.absdistanceY(hitboxScreenPos)
@@ -79,6 +78,36 @@ export default class CollisionComponent extends Component {
 
     }
 
+    /**
+     * @param vector
+     * @returns {boolean} True if collides.
+     */
+    checkCollisionWorld(vector) {
+        if (!this.isStatic) {
+            const currentAnim = this.entity.getComponent(AnimationComponent).getCurrentAnimation()
+            const height = currentAnim.getHeight()
+            const width = currentAnim.getWidth()
+            const hitboxScreenPos = this.hitbox.location
+            // console.log(this)
+            
+            const dist = vector.distance(hitboxScreenPos)
+            console.log('Stuff:')
+            console.log(dist)
+            console.log(this.hitbox.radius)
+            console.log(dist < this.hitbox.radius)
+            if (dist < this.hitbox.radius) {
+                
+                const distY = vector.absdistanceY(hitboxScreenPos)
+                const distX = vector.absdistanceX(hitboxScreenPos)
+                console.log(distX)
+                console.log(distY)
+                console.log(this.width)
+                console.log(this.height)
+                return (distX < this.width && distY < this.height)
+            }
+        }
+     
+    }
 
     checkStaticCollisionScreen(vector) {
         const hitboxScreenPos = this.entity.game.worldToScreen(
@@ -92,16 +121,5 @@ export default class CollisionComponent extends Component {
         }
     }
 
-    /**
-     * @param vector
-     * @returns {boolean} True if collides.
-     */
-    checkCollisionWorld(vector) {
-        const dist = vector.distance(vector)
-        if (dist < this.hitbox.radius) {
-            const distY = vector.absdistanceY(vector)
-            const distX = vector.absdistanceX(vector)
-            return (distX < this.width && distY < this.height)
-        }
-    }
+
 }

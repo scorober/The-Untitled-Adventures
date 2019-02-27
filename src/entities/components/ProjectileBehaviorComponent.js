@@ -3,9 +3,9 @@ import Vector from '../../utils/Vector.js'
 import MovementComponent from './MovementComponent.js'
 import AnimationComponent from './AnimationComponent.js'
 import { ANIMATIONS as ANIMS } from '../../utils/Const.js'
-import CollisionComponent from './CollisionComponent.js';
-import CombatComponent from './CombatComponent.js';
-import AttributeComponent from './AttributeComponent.js';
+import CollisionComponent from './CollisionComponent.js'
+import CombatComponent from './CombatComponent.js'
+import AttributeComponent from './AttributeComponent.js'
 
 export default class ProjectileBehavior extends Component {
     /**
@@ -27,12 +27,13 @@ export default class ProjectileBehavior extends Component {
         this.dir = t.subtract(this.v).normalized()
         this.animComp = this.entity.getComponent(AnimationComponent)
         this.animComp.setAngle(this.angle)
+        this.isImpacted = false
         if (hasInitialAnimation) {
             this.animComp.setAnimation(ANIMS.Initial, () => {
                 this.animComp.setAnimation(ANIMS.Projectile)
             })
         } else {
-            this.animComp.setAnimation(ANIMS.Projectile)
+            this.animComp.setAnimation(ANIMS.Projectile, this.impact)
         }
     }
 
@@ -42,19 +43,18 @@ export default class ProjectileBehavior extends Component {
      */
     update() {
         this.v = Vector.vectorFromEntity(this.entity)
-        if (this.v.distance(this.target) < 20) {
-            const cb = () => {
-                // console.log(this.caster.getComponent(AttributeComponent))
-                this.entity.addComponent(new AttributeComponent(this.entity, this.caster.getComponent(AttributeComponent)))
-                // console.log(this.entity.getComponent(AttributeComponent))
-                this.entity.addComponent(new CollisionComponent(this.entity))
-                this.entity.addComponent(new CombatComponent(this.caster))
+
+        if (!this.isImpacted) {
+            if (this.v.distance(this.target) < 20) {
+                this.isImpacted = true
                 this.impact()
-                this.entity.removeFromWorld = true
+                const cb = () => { 
+                    this.entity.removeFromWorld = true
+                }
+                this.animComp.setAnimation(ANIMS.Impact, cb)
+            } else {
+                this.entity.getComponent(MovementComponent).move(this.dir)
             }
-            this.animComp.setAnimation(ANIMS.Impact, cb)
-        } else {
-            this.entity.getComponent(MovementComponent).move(this.dir)
         }
     }
 
@@ -64,18 +64,12 @@ export default class ProjectileBehavior extends Component {
      * Call on an attack or Attribute component from the caster to do damage.
      */
     impact() {
-        console.log(this.v)
-        let e = this.entity.game.getEntityByXYInWorld(this.v)
-
-        // console.log(e)
-        for(let i = 0; i < e.length; i++){ //apply AOE damage to all entities that got hit
-            
-            let next = e[i]
-            
-            // console.log(next)
+        const e = this.entity.game.getEntityByXYInWorld(this.v)
+        console.log(e)
+        for(let i = 0; i < e.length; i++) { //apply AOE damage to all entities that got hit
+            const next = e[i]
             if((next.UUID !== this.caster.UUID && next.UUID !== this.entity.UUID) && next.UUID.includes('ARCHER')){
                 this.entity.getComponent(CombatComponent).magicAttack(next)
-                console.log('attacked?')
             }
         }
     }

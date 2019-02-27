@@ -111,9 +111,10 @@ export default class SceneManager {
             const entity = this.currentScene.entities[i]
             const collisionComponent = entity.getComponent(CollisionComponent)
             if (collisionComponent) {
-                console.log(collisionComponent)
+                // TODO always coming back undefined
                 const collides = collisionComponent.checkCollisionWorld(pos)
                 if (collides) {
+                    
                     ret.push(entity)
                 }
             }
