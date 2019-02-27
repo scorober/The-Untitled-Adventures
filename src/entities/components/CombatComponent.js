@@ -3,7 +3,7 @@ import AttributeComponent from './AttributeComponent.js'
 import Vector from '../../utils/Vector.js'
 import AnimationComponent from './AnimationComponent.js'
 import { ANIMATIONS as ANIMS } from '../../utils/Const.js'
-import MovementComponent from './MovementComponent.js';
+import MovementComponent from './MovementComponent.js'
 
 export default class CombatComponent extends Component {
     constructor(entity) {

@@ -23,7 +23,7 @@ import MarriottInteractionComponent from '../../entities/components/InteractionC
 import Vector from '../../utils/Vector.js'
 import DoorInteractionComponent from '../../entities/components/InteractionComponent/DoorInteractionComponent.js'
 import PlayerCharacterCombatComponent from '../../entities/components/PlayerCharacterCombatComponent.js'
-import MageDefaultData from '../../entities/characters/MageDefaultData.js';
+import MageDefaultData from '../../entities/characters/MageDefaultData.js'
 
 export default class FirstLevel extends Scene {
     constructor(game) {
