@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import Timer from './utils/Timer.js'
 import InputManager from './InputManager.js'
 import SceneManager from './SceneManager.js'
@@ -152,41 +153,11 @@ export default class GameEngine {
      * @param  entity 
      */
     addScore(name, kill) {
-        // Score = null;
         const scene = this.sceneManager.getScene('scoredisplay')
         if(kill) {
             scene.killCount++
-            if (name === 'ARCHER') {
-                const Score = {
-                    Name: 'Archer_Kill',
-                    Time: Math.floor(this.timer.gameTime),
-                    Duration: null,
-                    // lvl: this.sceneManager.getCurrentScene().level,
-                    lvl: 1,
-                    Score: Math.floor(400 * Math.sqrt(2))
-                }
-                scene.scores.push(Score)
-            } else if (name === 'MAGE') {
-                const Score = {
-                    Name: 'Mage_Kill',
-                    Time: Math.floor(this.timer.gameTime),
-                    Duration: null,
-                    // lvl: this.sceneManager.getCurrentScene().level,
-                    lvl: 1,
-                    Score: Math.floor(700 * Math.sqrt(2))
-                }
-                scene.scores.push(Score)
-            } else if (name == 'ROBOT') {
-                const Score = {
-                    Name: 'Robot_Kill',
-                    Time: Math.floor(this.timer.gameTime),
-                    Duration: null,
-                    // lvl: this.sceneManager.getCurrentScene().level,
-                    lvl: 1,
-                    Score: Math.floor(550 * Math.sqrt(2))
-                }
-                scene.scores.push(Score)
-            }
+            const Score = this.addKillScore(name)
+            if(Score != null) scene.scores.push(Score)
         } else {
             scene.state++
             
@@ -194,8 +165,7 @@ export default class GameEngine {
                 const Score = {
                     Name: 'LEVEL_END',
                     Time: Math.floor(this.timer.gameTime),
-                    Duration: this.timer.gameTime,// this.timer.,
-                    // lvl: this.sceneManager.getCurrentScene().level,
+                    Duration: this.timer.gameTime,
                     lvl: 1,
                     Score: Math.floor(1000 * Math.sqrt(2) / Math.sqrt(this.timer.gameTime))
                 }
@@ -203,4 +173,77 @@ export default class GameEngine {
             }
         }
     }
+
+    addKillScore(name) {
+        let Score = null
+        switch (name) {
+            case 'ARCHER':
+                Score = {
+                    Name: 'Archer_Kill',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: null,
+                    lvl: 1,
+                    Score: Math.floor(400 * Math.sqrt(2))
+                }
+                break
+            case 'MAGE':
+                Score = {
+                    Name: 'Mage_Kill',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: null,
+                    lvl: 1,
+                    Score: Math.floor(700 * Math.sqrt(2))
+                }
+                break
+            case 'ROBOT':
+                Score = {
+                    Name: 'Robot_Kill',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: null,
+                    lvl: 1,
+                    Score: Math.floor(850 * Math.sqrt(2))
+                }
+                break
+            case 'CHIEF':
+                Score = {
+                    Name: 'Chief_Kill',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: null,
+                    lvl: 1,
+                    Score: Math.floor(430 * Math.sqrt(2))
+                }
+                break
+            case 'KNIGHT':
+                Score = {
+                    Name: 'Knight_Kill',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: null,
+                    lvl: 1,
+                    Score: Math.floor(480 * Math.sqrt(2))
+                }
+                break
+            case 'WARRIOR':
+                Score = {
+                    Name: 'Robot_Kill',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: null,
+                    lvl: 1,
+                    Score: Math.floor(550 * Math.sqrt(2))
+                }
+                break
+            case 'WOLF':
+                Score = {
+                    Name: 'Wolf_kill',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: null,
+                    lvl: 1,
+                    Score: Math.floor(440 * Math.sqrt(2))
+                }
+                break
+            default:
+                return null
+        }
+        return Score
+    }
+    
 }
