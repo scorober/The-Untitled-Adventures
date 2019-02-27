@@ -32,8 +32,8 @@ export default class EnemyInteractionComponent extends InteractionComponent {
             ctx.textAlign = 'center'
             ctx.font = fontSize + 'px arcade'
             ctx.fillStyle = 'red'
-            ctx.fillText(attributeComponent.Name, screenPos.x, screenPos.y + height / 2 - currentAnimation.yOffset)
-            ctx.fillText('HP:' + HP, screenPos.x, screenPos.y + height / 2 - currentAnimation.yOffset + fontSize + 3)
+            ctx.fillText(attributeComponent.Name, screenPos.x + currentAnimation.offset.x, screenPos.y + height / 2 - currentAnimation.offset.y)
+            ctx.fillText('HP:' + HP, screenPos.x + currentAnimation.offset.x, screenPos.y + height / 2 - currentAnimation.offset.y + fontSize + 3)
         }
     }
 
@@ -42,8 +42,8 @@ export default class EnemyInteractionComponent extends InteractionComponent {
         if (enemyCombatComponent) {
             const player = this.entity.game.getCurrentScene().getPlayer()
             const playerCombatComponent = player.getComponent(CombatComponent)
-            playerCombatComponent.setCombatTarget(enemyCombatComponent)
-            enemyCombatComponent.setCombatTarget(playerCombatComponent)
+            playerCombatComponent.setCombatTarget(this.entity)
+            enemyCombatComponent.setCombatTarget(player)
         }
     }
 
@@ -61,7 +61,7 @@ export default class EnemyInteractionComponent extends InteractionComponent {
     }
 
     unsetRightClick() {
-        this.unsetAttacking()
+        //this.unsetAttacking()
     }
 
     setLeftClick() {

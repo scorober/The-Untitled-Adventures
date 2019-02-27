@@ -49,8 +49,8 @@ export default class CollisionComponent extends Component {
         const animation = this.animationComponent.getCurrentAnimation()
         const width = animation.getWidth()
         const height = animation.getHeight()
-        const yOffset = animation.yOffset
-        const xOffset = 0 // This is not currently a thing in Animation
+        const yOffset = animation.offset.y
+        const xOffset = animation.offset.x
         const radius = Math.max(width, height) / 2
         this.hitbox = new HitCircle(radius, this.entity.x + xOffset, this.entity.y - height + yOffset)
     }

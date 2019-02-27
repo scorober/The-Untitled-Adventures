@@ -89,6 +89,8 @@ export default class AStarPathfinding {
                 closedNodes.push(myNode)
             }
         } // keep iterating until until the Open list is empty
+        // Return all except the first element
+        // (We don't need to move to the tile we're already on)
         return result
     }
     // eslint-disable-next-line complexity

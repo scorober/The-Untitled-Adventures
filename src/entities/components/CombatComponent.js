@@ -1,5 +1,9 @@
 import Component from './Component.js'
 import AttributeComponent from './AttributeComponent.js'
+import Vector from '../../utils/Vector.js'
+import AnimationComponent from './AnimationComponent.js'
+import { ANIMATIONS as ANIMS } from '../../utils/Const.js'
+import MovementComponent from './MovementComponent.js';
 
 export default class CombatComponent extends Component {
     constructor(entity) {
@@ -18,10 +22,47 @@ export default class CombatComponent extends Component {
         if (this.checkDead()) {
             this.entity.game.removeEntityByRef(this.entity)
         }
-        if (this.combatTarget && this.dmgTimer <= 0) {
+        if (this.hasCombatTarget() && this.inRange() && this.timerCooled() && this.notMoving()) {
             this.meleeAttack()
-            this.dmgTimer = 3
         }
+    }
+
+
+    /**
+     * Checks if it is possible to execute a melee attack
+     */
+    canMeleeAttack() {
+    }
+
+    /**
+     * Checks if this Entity has a combat target
+     * @returns {boolean}
+     */
+    hasCombatTarget() {
+        return this.combatTarget !== false && this.combatTarget !== null
+    }
+
+    /**
+     * Checks if the attack timer is cooled.
+     * @returns {boolean}
+     */
+    timerCooled() {
+        return this.dmgTimer <= 0
+    }
+
+    notMoving() {
+        const movementComponent = this.entity.getComponent(MovementComponent)
+        if (movementComponent) {
+            return movementComponent.moving === false
+        }
+    }
+
+    /**
+     * Checks if the Entity is in range of combat
+     * @returns {boolean}
+     */
+    inRange() {
+        return Vector.vectorFromEntity(this.combatTarget).distance(Vector.vectorFromEntity(this.entity)) < 80
     }
 
     /**
@@ -31,12 +72,23 @@ export default class CombatComponent extends Component {
      */
     setCombatTarget(foe) {
         this.combatTarget = foe
+        const movementComponent = this.entity.getComponent(MovementComponent)
+        if (movementComponent) {
+            movementComponent.setAttackFollowTarget(this.combatTarget)
+        }
     }
 
     /**
      * Unsets the current combat target
      */
     unsetCombatTarget() {
+        const movementComponent = this.entity.getComponent(MovementComponent)
+        if (this.hasCombatTarget() && movementComponent) {
+            const currentFollowTarget = movementComponent.followTarget
+            if (currentFollowTarget && currentFollowTarget.getUUID() === this.combatTarget.getUUID()) {
+                movementComponent.stopFollowing()
+            }
+        }
         this.combatTarget = false
     }
 
@@ -45,7 +97,9 @@ export default class CombatComponent extends Component {
      */
     meleeAttack() {
         const dmg = this.calculatePhysicalDamage()
-        const killed = this.combatTarget.applyPhysicalDamage(dmg)
+        const killed = this.combatTarget.getComponent(CombatComponent).applyPhysicalDamage(dmg)
+        this.dmgTimer = 3
+        this.doAttackAnimation()
         if (killed) {
             this.unsetCombatTarget()
         }
@@ -56,12 +110,33 @@ export default class CombatComponent extends Component {
      * 
      * @param {Entity} foe  The Entity being attacked
      */
-    magicAttack(foeCombatComponent) {
+    magicAttack() {
         const dmg = this.calculateMagicDamage()
-        const killed = foeCombatComponent.applyMagicDamage(dmg)
+        const killed = this.combatTarget.getComponent(CombatComponent).applyMagicDamage(dmg)
         if (killed) {
             this.unsetCombatTarget()
         }
+    }
+
+    /**
+     * Sets the cooresponding attack animation for Entities
+     */
+    doAttackAnimation() {
+        const movementComponent = this.entity.getComponent(MovementComponent)
+        movementComponent.setFacing(this.combatTarget)
+        this.entity.getComponent(AnimationComponent).setDirectionalAnimation(movementComponent.direction, {
+            north: ANIMS.AttackNorth,
+            east: ANIMS.AttackEast,
+            south: ANIMS.AttackSouth,
+            west: ANIMS.AttackWest
+        }, () => {
+            this.entity.getComponent(AnimationComponent).setDirectionalAnimation(movementComponent.direction, {
+                north: ANIMS.StandNorth,
+                east: ANIMS.StandEast,
+                south: ANIMS.StandSouth,
+                west: ANIMS.StandWest
+            })
+        })
     }
 
     /**
@@ -75,6 +150,11 @@ export default class CombatComponent extends Component {
         return Math.random() * appliedStr + appliedAtk
     }
 
+    /**
+     * Calculates the damage output of this entity so it can be applied onto it's target
+     *
+     * @returns {number} the damage to apply
+     */
     calculateMagicDamage(modifiers) {
         const appliedInt = modifiers.Int + this.attributeComponent.Int || this.attributeComponent.Int
         const appliedMatk = modifiers.Matk + this.attributeComponent.Matk || this.attributeComponent.Matk
@@ -97,14 +177,7 @@ export default class CombatComponent extends Component {
         this.attributeComponent.HP -= damage
         //check if dead
         if (this.checkDead()) {
-            this.entity.game.addScore(this.attributeComponent.Name)
-            // console.log(this.entity.game.sceneManager.getScene('scoredisplay').scores[0].Name)
-            this.entity.game.removeEntityByRef(this.entity)
-            if(this.attributeComponent.Name === 'PLAYER') {
-                this.entity.game.sceneManager.change('scoredisplay' )
-                this.entity.game.sceneManager.currentScene.updateText()
-                // console.log(this.entity.game.sceneManager.currentScene.scores[0].Name)
-            }
+            this.removeByCombat()
             return true
         }
         return false
@@ -125,15 +198,26 @@ export default class CombatComponent extends Component {
         this.lastDamage = damage
         this.attributeComponent.HP = this.attributeComponent.HP - damage
         if (this.checkDead()) {
-            this.entity.game.removeEntityByRef(this.entity)
+            this.removeByCombat()
             return true
         }
 
         return false
     }
 
+    /**
+     * Performs a check to see if this Entity is dead
+     */
     checkDead() {
         return this.attributeComponent.HP <= 0 || this.entity.removeFromWorld
     }
 
+    removeByCombat() {
+        this.entity.game.addScore(this.attributeComponent.Name)
+        this.entity.game.removeEntityByRef(this.entity)
+        if (this.attributeComponent.Name === 'PLAYER') {
+            this.entity.game.sceneManager.change('scoredisplay')
+            this.entity.game.sceneManager.currentScene.updateText()
+        }
+    }
 }

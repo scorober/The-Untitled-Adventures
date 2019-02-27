@@ -18,6 +18,10 @@ export default class GameEngine {
         this.scores = []
     }
 
+    /**
+     * Returns the Request Animation Frame method for the current browser/platform
+     * @returns {Function}
+     */
     getPlatformRAF() {
         return window.requestAnimationFrame ||
             window.webkitRequestAnimationFrame ||
@@ -67,7 +71,6 @@ export default class GameEngine {
     }
 
     draw() {
-        //console.log('rect cler')
         this.ctx.clearRect(0, 0, this.surfaceWidth, this.surfaceHeight)
         this.ctx.save()
         this.sceneManager.draw()
