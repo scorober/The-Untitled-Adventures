@@ -65,25 +65,11 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         this.drawText(this.titleText)
         
         if((this.timeElapsed - 1)/this.timeInt > this.scores.length) {
-            this.drawTextButton(this.replayText)
+            this.drawText(this.replayText)
         }
     }
 
     drawText(text){
-        for(const i in text){
-            const t = text[i]
-            if(t.TIME === undefined
-                || t.TIME === 0
-                || this.timeElapsed > t.TIME){
-                this.game.ctx.textAlign = t.ALIGN || 'center'
-                this.game.ctx.font = t.FONT
-                this.game.ctx.fillStyle = t.COLOR
-                this.game.ctx.fillText(t.TEXT, t.W, t.H)
-            }
-        }
-    }
-
-    drawTextButton(text){
         for(const i in text){
             const t = text[i]
             if(t.TIME === undefined
@@ -213,14 +199,4 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
             
         }
     }   
-}
-
-const MenuLevels = {
-    MAIN: 1,
-    START: 2,
-    OPTIONS: 3,
-    HIGHSCORE: 4,
-    EXIT: 5,
-    NEWGAME: 6,
-    SELECTCHAR: 7,
 }
