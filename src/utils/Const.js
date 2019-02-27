@@ -10,6 +10,11 @@ export const ASSET_PATHS = {
     Effect32: './assets/img/effects_y32.png',
     TitleAnimation: './assets/img/animated_title_bg.png',
     Spawner: './assets/img/vending.png',
+    Knight: './assets/img/knight-full.png',
+    Chief: './assets/img/skele-chief-full.png',
+    Wolf: './assets/img/wolf-full.png',
+    Warrior: './assets/img/skele-warrior.png',
+
 
     ScottsChar: './assets/img/scotts-char.png',
     Fireball: './assets/img/fireball.png',
@@ -74,10 +79,11 @@ export const ANIMATIONS = {
     OversizeEast: Symbol(),
 
     /** NPC animations */
-    AttackWest: Symbol('AttackWest'),
-    AttackEast: Symbol('AttackEast'),
-    AttackNorth: Symbol('AttackNorth'),
-    AttackSouth: Symbol('AttackSouth'),
+    AttackWest: Symbol(),
+    AttackEast: Symbol(),
+    AttackNorth: Symbol(),
+    AttackSouth: Symbol(),
+    Portrait: Symbol(),
 
     /** Marriott-specific animations */
     SitDownWest: Symbol(),
@@ -128,7 +134,9 @@ export const ANIMATION_RATES = {
     Impact: Symbol(),
 
     /** Spawner specific rate */
-    Console: Symbol()
+    Console: Symbol(),
+
+    Portrait: Symbol()
 }
 
 export const DIRECTIONS = {

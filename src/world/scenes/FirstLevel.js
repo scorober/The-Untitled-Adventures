@@ -25,6 +25,8 @@ import DoorInteractionComponent from '../../entities/components/InteractionCompo
 import PlayerCharacterCombatComponent from '../../entities/components/PlayerCharacterCombatComponent.js'
 import MageDefaultData from '../../entities/characters/MageDefaultData.js'
 import StairInteractionComponent from '../../entities/components/InteractionComponent/StairInteractionComponent.js'
+import ChiefDefaultData from '../../entities/characters/ChiefDefaultData.js'
+import WolfDefaultData from '../../entities/characters/WolfDefaultData.js'
 
 export default class FirstLevel extends Scene {
     constructor(game) {
@@ -44,10 +46,10 @@ export default class FirstLevel extends Scene {
                 },
                 any: {
                     min_size: [15, 15],
-                    max_size: [25, 27],
+                    max_size: [20, 23],
                     max_exits: 4
                 },
-                corridor: {
+                corridor: { 
                     min_size: [26, 12],
                     max_size: [26, 12],
                     max_exits: 4
@@ -92,6 +94,9 @@ export default class FirstLevel extends Scene {
         this.addEntity(marriott)
         this.addEntity(game.camera)
         this.game.camera.setFollowedEntity(playerCharacter)
+
+        const test = this.createArcher(game, start, playerCharacter)
+        // this.addEntity(test)
 
         this.createMapEntities(game, map)
 
@@ -149,8 +154,8 @@ export default class FirstLevel extends Scene {
     }
 
     createArcher(game, start, playerCharacter) {
-        const archer = new Entity(game, start, ArcherData.Attributes)
-        archer.addComponent(new AnimationComponent(archer, MageDefaultData.AnimationConfig))
+        const archer = new Entity(game, start)
+        archer.addComponent(new AnimationComponent(archer, WolfDefaultData.AnimationConfig))
         archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
         archer.addComponent(new AttributeComponent(archer, ArcherData.Attributes))
         archer.addComponent(new CollisionComponent(archer))
