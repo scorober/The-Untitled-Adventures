@@ -15,6 +15,8 @@ export default class Scene {
         this.swarm = false
         this.scores = []
         this.level = lvl
+        this.mobCount = 0
+        this.killCount = 0
     }
 
     /**
@@ -175,7 +177,13 @@ export default class Scene {
         this.dungeon = dungeon
     }
 
+    countMob() {
+        this.mobCount++
+    }
+
     setSwarmed() {
+        this.killCount = this.game.sceneManager.scenes['scoredisplay'].scores.length
+        console.log()
         this.swarm = true
         this.pacified = false
     }
@@ -190,10 +198,9 @@ export default class Scene {
     }
 
     checkMapState(enemyCount) {
+        //TODO check against a known spawn amount of mobs for this cycle and player's killcount?
         if (enemyCount === 0 && this.swarm === true) {
             this.setPacified()
-        } else if (enemyCount > 0) {
-            this.setSwarmed()
         }
     }
 }

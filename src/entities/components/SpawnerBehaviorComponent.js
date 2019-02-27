@@ -47,8 +47,10 @@ export default class SpawnComponentBehavior extends Component {
     update() {
         if (this.active === false) {
             const opened = this.scene.map.getRoom(this.room).states[STATES.Opened]
+            
             if (opened) {
                 this.active = true
+                this.scene.setSwarmed()
             }
         }
         if (this.active) {
