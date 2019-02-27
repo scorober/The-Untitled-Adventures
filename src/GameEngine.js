@@ -187,6 +187,18 @@ export default class GameEngine {
                 }
                 scene.scores.push(Score)
             }
+        } else {
+            if(name == 'END') {
+                const Score = {
+                    Name: 'Robot_Kill',
+                    Time: Math.floor(this.timer.gameTime),
+                    Duration: this.timer.,
+                    // lvl: this.sceneManager.getCurrentScene().level,
+                    lvl: 1,
+                    Score: Math.floor(550 * Math.sqrt(2))
+                }
+                scene.scores.push(Score)
+            }
         }
     }
 }
