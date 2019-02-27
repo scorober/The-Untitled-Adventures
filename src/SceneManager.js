@@ -25,7 +25,7 @@ export default class SceneManager {
         this.addScene(firstlevel.name, firstlevel)
         this.addScene(title.name, title)
         this.addScene(scores.name, scores)
-        this.currentScene = firstlevel
+        this.currentScene = scores
     }
 
     

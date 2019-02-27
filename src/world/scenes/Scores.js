@@ -1,8 +1,4 @@
 import Scene from './Scene.js'
-import Animation from '../../Animation.js'
-import { KEYS, ASSET_PATHS} from '../../utils/Const.js'
-
-
 
 export default class TitleMeScoreDIsplayScenenuScene extends Scene {
 
@@ -10,16 +6,10 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
         super(game)
         this.game = game
         this.name = 'scoredisplay'
-        this.menuLevel = MenuLevels.MAIN
-        this.menus = {}
         this.scores = []
-        this.generateFakeScore()
         this.state = 'YOU DIED'
         
-        
-        this.bgAnimation = new Animation(game.getAsset(ASSET_PATHS.TitleAnimation), 960, 540, 50, 1, 0.1, 50, true, 1)
         this.timeElapsed = 0
-        this.selectedItem = 0
         this.width = game.surfaceWidth
         this.height = game.surfaceHeight
         this.offset = 0
@@ -222,129 +212,8 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
             this.replayText.push({TIME: 0, TEXT: '|', W: this.width * 3 / 4 + 7 + (9 * 14), H: this.height * 3 / 4 + (i - 3) * 18 + 7, COLOR: 'white', FONT: '14px terminal'})
             
         }
-    }
-    
-    
-
-    generateFakeScore() {
-        for(let j = 0; j < 0; j++) {
-            this.scores.push({
-                Name: 'MAGE_Kill',
-                Time: 2,
-                Duration: 10,
-                lvl: j,
-                Score: 700 * Math.sqrt(1)
-            })
-            this.scores.push({
-                Name: 'ARCHER_Kill',
-                Time: 7,
-                Duration: null,
-                lvl: 1,
-                Score: 400 * Math.sqrt(1)
-            })
-        }
-    }
-
+    }   
 }
-
-// class BaseLevel {
-//     constructor(params){
-//         this.bgAnimation = null
-//         this.spritesheet = params.SPRITESHEET
-//         this.manager = params.MANAGER
-//         this.optionSelected = 0
-//         this.menuOptions = ['']
-
-//         this.defaultFont = this.manager.defaultTextStyles.FONT
-//         this.defaultBaseColor = this.manager.defaultTextStyles.BASECOLOR
-//         this.defaultSelectedColor = this.manager.defaultTextStyles.SELECTEDCOLOR
-
-//     }
-//     draw(){
-
-//         if(this.bgAnimation !== null) {
-//             const game = this.getGame()
-//             this.bgAnimation.drawFrame(game, game.surfaceWidth / 2, game.surfaceHeight / 1.5) //draw animation
-//         }
-//         // this.drawText(this.manager.scoreText)
-//         // this.drawText(this.menuOptions) //draw menu options
-
-//     }
-//     //Default update method
-//     update(){
-//         //tpm debug hack
-//         const oldtime = this.manager.timeElapsed
-//         this.manager.timeElapsed = 100
-//         if(this.manager.timeElapsed > 4.5 ) {
-//             const key = this.manager.checkKeys()
-//             if(null !== key){
-//                 if(0 === key){
-//                     this.manager.change(this.getMenuLevel())
-//                 }
-//                 else {
-//                     this.menuOptions[this.optionSelected].COLOR = this.defaultBaseColor
-//                     this.optionSelected = this.verifyKeyPos(key)
-//                 }
-//             }
-//             this.menuOptions[this.optionSelected].COLOR = this.defaultSelectedColor
-//         }
-//         this.manager.timeElapsed = oldtime
-//     }
-//     enter(){}
-//     exit(){}
-//     getGame(){return this.manager.game}
-//     getElapsedTime(){return this.manager.timeElapsed}
-//     getTick(){return this.manager.clockTick}
-//     getSelectedItem(){return this.manager.selectedItem}
-//     setSelectedItem(item){this.manager.selectedItem = item} //TODO: verify item?
-//     updatescoreText(text){
-//         if(null === text){
-//             this.manager.scoreText = null
-//         }else{
-//             this.manager.scoreText = text
-//         }
-//     }
-//     drawText(text){this.manager.drawText(text)}
-//     getDefaultTextOptions(){return this.manager.defaultTextStyles}
-// }
-
-// class MainLevel extends BaseLevel{
-
-//     constructor(params) {
-//         super(params)
-//         this.level = MenuLevels.MAIN
-
-        
-
-//         this.menuOptions = [
-//             {TIME: 3, TEXT: 'START', W: params.XBASE, H: params.YBASE + 5, COLOR: this.defaultBaseColor, FONT: '30px arcade'},
-//             {TIME: 3.4, TEXT: 'OPTIONS', W: params.XBASE, H: params.YBASE + 40, COLOR: this.defaultBaseColor, FONT: '30px arcade'},
-//             {TIME: 3.8, TEXT: 'HIGH SCORES', W: params.XBASE, H: params.YBASE + 75, COLOR: this.defaultBaseColor, FONT: '30px arcade'},
-//             {TIME: 4.2, TEXT: 'EXIT', W: params.XBASE, H: params.YBASE + 105, COLOR: this.defaultBaseColor, FONT: '30px arcade'}
-
-//         ]
-//     }
-
-
-//     verifyKeyPos(key){
-//         key += this.optionSelected
-//         return this.optionSelected = (key < 0) ? 3 //if user hit 'up' at top option, loop to bot
-//             : this.optionSelected = (key > 3) ? 0 //if user hit 'down' on bottom, loop  to top
-//                 : key //otherwise keep value as is
-//     }
-
-//     getMenuLevel(){
-//         return (this.optionSelected === 0) ? MenuLevels.START
-//             : (this.optionSelected === 1) ? MenuLevels.OPTIONS
-//                 : (this.optionSelected === 2) ? MenuLevels.HIGHSCORE
-//                     : this.optionSelected === 3 ? MenuLevels.EXIT
-//                         : MenuLevels.START
-//     }
-//     exit(){
-//         this.manager.scoreText[0].TIME = 0
-//         this.manager.scoreText[1].TIME = 0
-//     }
-// }
 
 const MenuLevels = {
     MAIN: 1,
