@@ -30,6 +30,8 @@ export default class SceneManager {
     }
 
     
+
+    
     /**
      * Adds ascene to the collection of scenes
      * @param name the name of the new scene

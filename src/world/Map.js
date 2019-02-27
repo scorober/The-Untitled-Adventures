@@ -1,6 +1,6 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
-import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, TILE_COLLISION as TC, STATES, ASSET_PATHS, ROOM_TILES as RT } from '../utils/Const.js'
+import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, TILE_COLLISION as TC, STATES, ROOM_TILES as RT } from '../utils/Const.js'
 import Vector from '../utils/Vector.js'
 
 export default class Map extends Entity {

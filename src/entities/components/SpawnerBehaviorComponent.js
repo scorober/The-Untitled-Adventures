@@ -11,7 +11,7 @@ import AttributeComponent from './AttributeComponent.js'
 import CollisionComponent from './CollisionComponent.js'
 import EnemyInteractionComponent from './InteractionComponent/EnemyInteractionComponent.js'
 import CombatComponent from './CombatComponent.js'
-import { STATES } from '../../utils/Const.js';
+import { STATES } from '../../utils/Const.js'
 
 export default class SpawnComponentBehavior extends Component {
     /**

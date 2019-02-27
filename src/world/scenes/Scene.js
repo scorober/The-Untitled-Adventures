@@ -110,7 +110,6 @@ export default class Scene {
      * Update entities details, location, etc
      */
     updateEntities() {
-        let enemyCount = 0
         const entitiesCount = this.entities.length
         if(entitiesCount){
             this.entities.sort((a,b) => a.y - b.y)
@@ -123,12 +122,9 @@ export default class Scene {
                 } else {
                     entity.update()
                 }
-                if (this.checkEnemy(entity.UUID)) {
-                    enemyCount++
-                }
             }
         }
-        this.checkMapState(enemyCount)
+        this.checkMapState()
     }
 
     /**
@@ -204,7 +200,7 @@ export default class Scene {
         return str.includes('MAGE') || str.includes('ARCHER') || str.includes('ROBOT')
     }
 
-    checkMapState(enemyCount) {
+    checkMapState() {
         //TODO check against a known spawn amount of mobs for this cycle and player's killcount?
         const killCount = this.game.sceneManager.scenes['scoredisplay'].scores.length
         if (killCount === this.baseCount + this.mobCount) {
