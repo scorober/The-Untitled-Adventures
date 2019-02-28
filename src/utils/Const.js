@@ -251,18 +251,40 @@ export const KEYS = {
 export const SPAWNERS = {
     Mage: {
         mage: .60,
-        archer: .10,
-        robot: .30
+        archer: 0,
+        robot: .1,
+        warrior: 0,
+        chief: .2,
+        wolf: .05,
+        knight: 0.05
+
     },
     Archer: {
-        mage: .10,
+        mage: 0,
         archer: .60,
-        robot: .30
+        robot: .2,
+        warrior: .1,
+        chief: 0,
+        wolf: .05,
+        knight: 0.05
     },
     Robot: {
-        mage: 20,
-        archer: 15,
-        robot: 65
+        mage: 0,
+        archer: .2,
+        robot: .6,
+        warrior: 0,
+        chief: 0,
+        wolf: .1,
+        knight: 0.1
+    },
+    Chief: {
+        mage: 0,
+        archer: .15,
+        robot: 0,
+        warrior: .15,
+        chief: .6,
+        wolf: .05,
+        knight: 0.05
     }
 }
 

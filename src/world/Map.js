@@ -1,7 +1,8 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
-import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, TILE_COLLISION as TC, STATES, ROOM_TILES as RT } from '../utils/Const.js'
+import { MAP_ITEMS as MI, SPAWNERS as ST, ROOMS, RIGHT, LEFT, TOP, BOTTOM, TILE_COLLISION as TC, STATES, ROOM_TILES as RT } from '../utils/Const.js'
 import Vector from '../utils/Vector.js'
+import Random from '../utils/Random.js'
 
 export default class Map extends Entity {
     /**
@@ -26,9 +27,13 @@ export default class Map extends Entity {
         this.exits = [] //Array of door positions and room they enter.
         this.rooms = []
         this.levelExit = []
+        this.rng = new Random()
         this.buildMap()
     }
 
+    /**
+     * Returns the world starting vector to place the player.
+     */
     getStartPos() {
         return new Vector(
             this.dungeon.start_pos[0] * this.tileSize,
@@ -36,6 +41,9 @@ export default class Map extends Entity {
         )
     }
 
+    /**
+     * Build all map tiles.
+     */
     buildMap() {
         const rooms = this.dungeon.room_count
         const size = [this.dungeon.size[0] + rooms, this.dungeon.size[1] + rooms]
@@ -141,20 +149,21 @@ export default class Map extends Entity {
         this.createObject(this.map0, p.posSE, MI.ICornerSE)
     }
 
-    // eslint-disable-next-line complexity
+ 
     /**
      * Builds objects in tagged rooms.
      * @param {Piece} piece Room objects will be built in.
      */
+    // eslint-disable-next-line complexity
     buildRoom(piece) {
         const pos = this.alterPos(this.generateRoomProperties(piece).innerPos, 1, 1)
         const center = piece.global_pos(piece.get_center_pos())
         switch (piece.tag) {
             case ROOMS.Initial:
-                this.createObject(this.map1, center, MI.ChestClosed)
                 this.createRoomByLayout(pos, RT.Initial)
                 break
             case ROOMS.Any:
+                //SPAWNER ROOMS
                 this.createObject(this.map1, this.alterPos(center, -1, -1), MI.Rug)
                 this.spawners.push({
                     pos: new Vector(
@@ -162,13 +171,15 @@ export default class Map extends Entity {
                         center[1] * this.tileSize
                     ),
                     r: this.getRadius(piece),
-                    room: piece.id
+                    room: piece.id,
+                    type: this.getRandomSpawnerType()
                 })
                 break
             case ROOMS.Treasure:
                 this.createRoomByLayout(pos, RT.Treasure)
                 break
             case ROOMS.Exit:
+                //TODO create room layout and get correct tiles.
                 this.createObject(this.map1, center, MI.StairsN)
                 const tiles = []
                 tiles.push(center)
@@ -187,6 +198,11 @@ export default class Map extends Entity {
         }
     }
 
+    /**
+     * Creates a room by layout on each map layer.
+     * @param {Array} pos Dungeon position array where upper left corner of layout starts. 
+     * @param {Object} obj Room tiles object with 2d arrays representing each map layer. 
+     */
     createRoomByLayout(pos, obj) {
         this.createObject(this.map0, pos, obj.floor)
         this.createObject(this.map1, pos, obj.object0)
@@ -194,7 +210,10 @@ export default class Map extends Entity {
         this.createObject(this.map3, pos, obj.top)
     } 
 
-    
+    getRandomSpawnerType() {
+        const keys = Object.keys(ST)
+        return ST[keys[this.rng.int(0, keys.length)]]
+    }
     /**
      * Builds exits for each piece in a room.
      * @param {Piece} piece Room that generates exits.
