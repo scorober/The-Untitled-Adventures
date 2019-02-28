@@ -51,7 +51,7 @@ export default class SpawnComponentBehavior extends Component {
      * Spawns mobs at a steady pace. In random order from mobs array.
      */
     update() {
-        if (this.active === false) {
+        if (this.active === false && this.scene.map.getRoom(this.room)) {
             const opened = this.scene.map.getRoom(this.room).states[STATES.Opened]
 
             if (opened) {
