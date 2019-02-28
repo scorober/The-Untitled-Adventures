@@ -152,8 +152,7 @@ export default class TitleMeScoreDIsplayScenenuScene extends Scene {
 
     clickOnButton() {
         if (this.game.inputManager.newLeftClick) {
-            this.game.reInit(this.game.ctx)
-            // this.game.update()
+            this.game.reInit()
         }
     }
   

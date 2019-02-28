@@ -48,11 +48,7 @@ export default class GameEngine {
         
     }
 
-    reInit(ctx) {
-        // this.inputManager = new InputManager()
-        // this.ctx = ctx
-        // this.surfaceWidth = this.ctx.canvas.width
-        // this.surfaceHeight = this.ctx.canvas.height
+    reInit() {
         this.timer = new Timer()
         this.sceneManager = new SceneManager()
         this.camera = new Camera(this)
