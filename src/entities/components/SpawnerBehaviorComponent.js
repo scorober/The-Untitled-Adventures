@@ -38,6 +38,10 @@ export default class SpawnComponentBehavior extends Component {
         this.mages = 0
         this.archers = 0
         this.robots = 0
+        this.warriors = 0
+        this.chiefs = 0
+        this.wolves = 0
+        this.knights = 0
         this.room = room
     }
 
@@ -83,14 +87,19 @@ export default class SpawnComponentBehavior extends Component {
         this.mages = Math.ceil(this.cfg.mage * this.difficulty)
         this.archers = Math.ceil(this.cfg.archer * this.difficulty)
         this.robots = Math.ceil(this.cfg.robot * this.difficulty)
-
-        const totalMobs = this.mages + this.archers + this.robots
+        this.wolves = Math.ceil(this.cfg.wolf * this.difficulty)
+        this.knights = Math.ceil(this.cfg.knight * this.difficulty)
+        this.chiefs = Math.ceil(this.cfg.chief * this.difficulty)
+        this.warriors = Math.ceil(this.cfg.warrior * this.difficulty)
+        const totalMobs = this.mages + this.archers + this.robots + this.warriors + this.knights + this.chiefs + this.wolves
+        console.log(totalMobs)
         this.scene.addMobs(totalMobs)
     }
 
     /**
      * Pushes the count of each mob type into mobs array.
      */
+    // eslint-disable-next-line complexity
     generateMobs() {
         for (let i = 0; i < this.mages; i++) {
             const angle = this.rng.float() * Math.PI * 2
@@ -139,7 +148,7 @@ export default class SpawnComponentBehavior extends Component {
             this.mobs.push(robot)
         }
 
-        for (let i = 0; i < this.robots; i++) {
+        for (let i = 0; i < this.chiefs; i++) {
             const angle = this.rng.float() * Math.PI * 2
             const r = this.rng.int(10, this.radius)
             const chief = new Entity(this.entity.game, new Vector(
@@ -156,7 +165,7 @@ export default class SpawnComponentBehavior extends Component {
         }
         
         
-        for (let i = 0; i < this.robots; i++) {
+        for (let i = 0; i < this.wolves; i++) {
             const angle = this.rng.float() * Math.PI * 2
             const r = this.rng.int(10, this.radius)
             const wolf = new Entity(this.entity.game, new Vector(
@@ -172,7 +181,7 @@ export default class SpawnComponentBehavior extends Component {
             this.mobs.push(wolf)
         }
 
-        for (let i = 0; i < this.robots; i++) {
+        for (let i = 0; i < this.knights; i++) {
             const angle = this.rng.float() * Math.PI * 2
             const r = this.rng.int(10, this.radius)
             const knight = new Entity(this.entity.game, new Vector(
@@ -189,7 +198,7 @@ export default class SpawnComponentBehavior extends Component {
         }
 
         
-        for (let i = 0; i < this.robots; i++) {
+        for (let i = 0; i < this.warriors; i++) {
             const angle = this.rng.float() * Math.PI * 2
             const r = this.rng.int(10, this.radius)
             const warrior = new Entity(this.entity.game, new Vector(

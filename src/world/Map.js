@@ -1,7 +1,8 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
-import { MAP_ITEMS as MI, ROOMS, RIGHT, LEFT, TOP, BOTTOM, TILE_COLLISION as TC, STATES, ROOM_TILES as RT } from '../utils/Const.js'
+import { MAP_ITEMS as MI, SPAWNERS as ST, ROOMS, RIGHT, LEFT, TOP, BOTTOM, TILE_COLLISION as TC, STATES, ROOM_TILES as RT } from '../utils/Const.js'
 import Vector from '../utils/Vector.js'
+import Random from '../utils/Random.js'
 
 export default class Map extends Entity {
     /**
@@ -26,6 +27,7 @@ export default class Map extends Entity {
         this.exits = [] //Array of door positions and room they enter.
         this.rooms = []
         this.levelExit = []
+        this.rng = new Random()
         this.buildMap()
     }
 
@@ -169,7 +171,8 @@ export default class Map extends Entity {
                         center[1] * this.tileSize
                     ),
                     r: this.getRadius(piece),
-                    room: piece.id
+                    room: piece.id,
+                    type: this.getRandomSpawnerType()
                 })
                 break
             case ROOMS.Treasure:
@@ -207,7 +210,10 @@ export default class Map extends Entity {
         this.createObject(this.map3, pos, obj.top)
     } 
 
-    
+    getRandomSpawnerType() {
+        const keys = Object.keys(ST)
+        return ST[keys[this.rng.int(0, keys.length)]]
+    }
     /**
      * Builds exits for each piece in a room.
      * @param {Piece} piece Room that generates exits.
