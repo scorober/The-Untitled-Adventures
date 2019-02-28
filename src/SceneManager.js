@@ -51,6 +51,10 @@ export default class SceneManager {
         return this.scenes[name]
     }
 
+    removeScene(name) {
+        return this.scenes.splice(name, 1)
+    }
+
     /**
      * Calls update func for active scene
      */
