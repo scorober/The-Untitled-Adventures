@@ -45,8 +45,22 @@ export default class GameEngine {
         this.camera = new Camera(this)
         this.sceneManager.init(this)
         this.startInput()
+        
     }
 
+    reInit(ctx) {
+        // this.inputManager = new InputManager()
+        // this.ctx = ctx
+        // this.surfaceWidth = this.ctx.canvas.width
+        // this.surfaceHeight = this.ctx.canvas.height
+        this.timer = new Timer()
+        this.sceneManager = new SceneManager()
+        this.camera = new Camera(this)
+        this.sceneManager.init(this)
+        this.startInput()
+        this.scores = []
+        this.start()
+    }
     resizeCanvas(width, height) {
         this.ctx.canvas.width = width
         this.ctx.canvas.height = height
@@ -148,9 +162,11 @@ export default class GameEngine {
 
     
     /**
-     * Generates score object from entity and ads it to the score board.
+     * Creates score items and saves them into the score scene. Updates kill count or scene
+     * state accordingly.
      * 
-     * @param  entity 
+     * @param {*name of score item} name 
+     * @param {*boolean of whether its a mob kill action} kill 
      */
     addScore(name, kill) {
         const scene = this.sceneManager.getScene('scoredisplay')
@@ -164,6 +180,10 @@ export default class GameEngine {
         }
     }
 
+    /**
+     * Creates and returns score object of a mob kill action.
+     * @param {*name of mob killed} name 
+     */
     addKillScore(name) {
         let Score = null
         switch (name) {
@@ -236,6 +256,13 @@ export default class GameEngine {
         return Score
     }
 
+    /**
+     * Creates and returns score object of a non-mob kill action. Increment score scene's state if
+     * level is finished.
+     * 
+     * @param {*name of score item} name 
+     * @param {*score scene to increment scene state if level finsihed} scene 
+     */
     addNonKill(name, scene) {
         let Score
         switch (name) {
