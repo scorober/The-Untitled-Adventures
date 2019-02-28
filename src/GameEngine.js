@@ -171,7 +171,6 @@ export default class GameEngine {
                 Score = {
                     Name: 'Archer_Kill',
                     Time: Math.floor(this.timer.gameTime),
-                    Duration: null,
                     lvl: 1,
                     Score: Math.floor(400 * Math.sqrt(2)),
                     Type: 'E'
@@ -181,7 +180,6 @@ export default class GameEngine {
                 Score = {
                     Name: 'Mage_Kill',
                     Time: Math.floor(this.timer.gameTime),
-                    Duration: null,
                     lvl: 1,
                     Score: Math.floor(700 * Math.sqrt(2)),
                     Type: 'E'
@@ -191,7 +189,6 @@ export default class GameEngine {
                 Score = {
                     Name: 'Robot_Kill',
                     Time: Math.floor(this.timer.gameTime),
-                    Duration: null,
                     lvl: 1,
                     Score: Math.floor(850 * Math.sqrt(2)),
                     Type: 'E'
@@ -201,7 +198,6 @@ export default class GameEngine {
                 Score = {
                     Name: 'Chief_Kill',
                     Time: Math.floor(this.timer.gameTime),
-                    Duration: null,
                     lvl: 1,
                     Score: Math.floor(430 * Math.sqrt(2)),
                     Type: 'E'
@@ -211,7 +207,6 @@ export default class GameEngine {
                 Score = {
                     Name: 'Knight_Kill',
                     Time: Math.floor(this.timer.gameTime),
-                    Duration: null,
                     lvl: 1,
                     Score: Math.floor(480 * Math.sqrt(2)),
                     Type: 'E'
@@ -221,7 +216,6 @@ export default class GameEngine {
                 Score = {
                     Name: 'Robot_Kill',
                     Time: Math.floor(this.timer.gameTime),
-                    Duration: null,
                     lvl: 1,
                     Score: Math.floor(550 * Math.sqrt(2)),
                     Type: 'E'
@@ -231,7 +225,6 @@ export default class GameEngine {
                 Score = {
                     Name: 'Wolf_kill',
                     Time: Math.floor(this.timer.gameTime),
-                    Duration: null,
                     lvl: 1,
                     Score: Math.floor(440 * Math.sqrt(2)),
                     Type: 'E'
