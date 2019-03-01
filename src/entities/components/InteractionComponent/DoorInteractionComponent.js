@@ -19,10 +19,10 @@ export default class DoorInteractionComponent extends InteractionComponent {
     }
 
     setRightClick() {
-        console.log(this.entity.game.sceneManager.currentScene)
         if (this.entity.game.sceneManager.currentScene.pacified) {
             this.entity.game.sceneManager.currentScene.map.openExit(this.tiles)
             this.entity.game.sceneManager.currentScene.map.getRoom(this.destination).states[STATES.Opened] = true
+            this.entity.game.sceneManager.currentScene.map.getRoom(this.room).states[STATES.Opened] = true
             this.entity.removeFromWorld = true
         }
     }
