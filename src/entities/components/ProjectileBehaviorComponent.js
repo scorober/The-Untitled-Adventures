@@ -33,7 +33,7 @@ export default class ProjectileBehavior extends Component {
         this.isImpact = false;
 
 
-        //TODO: if fireball, (q key)
+        //TODO: if (this is a fireball) { ... (q key)
         //this.entity.game.soundManager.FIRECAST();
         //elif arrow (e key)
         //this.entity.game.soundManager.ARROWCAST();
