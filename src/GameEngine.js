@@ -16,7 +16,6 @@ export default class GameEngine {
         this.surfaceWidth = null
         this.surfaceHeight = null
         this.requestAnimFrame = this.getPlatformRAF().bind(window)
-        this.scores = []
     }
 
     /**
@@ -54,7 +53,6 @@ export default class GameEngine {
         this.camera = new Camera(this)
         this.sceneManager.init(this)
         this.startInput()
-        this.scores = []
         this.start()
     }
     resizeCanvas(width, height) {
