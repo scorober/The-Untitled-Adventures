@@ -9,7 +9,7 @@ export default class ProjectileBehavior extends Component {
      * This component moves a projectile and switches animations.
      * Projectiles can have 3 stages. (Initial, Projectile, and Impact)
      * Projectiles must have projectile and impact animations, initial is optional.
-     * 
+     *
      * @param {Entity} entity A reference to the Entity this Component is attached to.
      * @param {Vector} target  Target of the projectile
      * @param {boolean} initial  True if this projectile has an initial animation
@@ -30,6 +30,15 @@ export default class ProjectileBehavior extends Component {
         } else {
             this.animComp.setAnimation(ANIMS.Projectile)
         }
+        this.isImpact = false;
+
+
+        //TODO: if fireball, (q key)
+        //this.entity.game.soundManager.FIRECAST();
+        //elif arrow (e key)
+        //this.entity.game.soundManager.ARROWCAST();
+        //elif explosion spell thing (w key)
+        this.entity.game.soundManager.ENERGYCAST();
     }
 
     /**
@@ -40,9 +49,10 @@ export default class ProjectileBehavior extends Component {
         this.v = Vector.vectorFromEntity(this.entity)
         if (this.v.distance(this.target) < 20) {
             const cb = () => {
-                this.impact()
                 this.entity.removeFromWorld = true
             }
+            if(!this.isImpact)
+                this.impact() //this needs to be here or else it won't happen until after the animation ends
             this.animComp.setAnimation(ANIMS.Impact, cb)
         } else {
             this.entity.getComponent(MovementComponent).move(this.dir)
@@ -55,6 +65,12 @@ export default class ProjectileBehavior extends Component {
      * Call on an attack or Attribute component from the caster to do damage.
      */
     impact() {
-
+        this.isImpact = true;
+        //TODO: if fireball, (q key)
+        //this.entity.game.soundManager.FIREIMPACT();
+        //elif arrow (e key)
+        //this.entity.game.soundManager.ARROWIMPACT();
+        //elif explosion spell thing (w key)
+        this.entity.game.soundManager.ENERGYIMPACT();
     }
 }
