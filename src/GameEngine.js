@@ -10,6 +10,7 @@ export default class GameEngine {
         this.sceneManager = null
         this.inputManager = null
         this.assetManager = null
+        this.soundManager = null
         this.camera = null //TODO: define this by scene? Not all scenes will need this and it will probably change between scenes. Otherwise leave it.
         this.timer = null
         this.ctx = null
