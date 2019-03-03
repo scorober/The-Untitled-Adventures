@@ -2,7 +2,7 @@ import Room from './Room.js'
 
 export default class Corridor extends Room {
     // eslint-disable-next-line complexity
-    constructor(options) {
+    constructor(options, id) {
         options = Object.assign({}, {
             length: 2,
             facing: 0,
@@ -11,7 +11,7 @@ export default class Corridor extends Room {
 
         options.size = (options.facing === 0 || options.facing === 180) ? [1, options.length] : [options.length, 1]
 
-        super(options)
+        super(options, id)
 
         const w = this.size[0] - 1
         const h = this.size[1] - 1

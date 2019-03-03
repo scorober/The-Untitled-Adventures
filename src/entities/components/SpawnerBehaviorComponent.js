@@ -51,7 +51,7 @@ export default class SpawnComponentBehavior extends Component {
      * Spawns mobs at a steady pace. In random order from mobs array.
      */
     update() {
-        if (this.active === false) {
+        if (this.active === false && this.scene.map.getRoom(this.room)) {
             const opened = this.scene.map.getRoom(this.room).states[STATES.Opened]
 
             if (opened) {
@@ -92,7 +92,6 @@ export default class SpawnComponentBehavior extends Component {
         this.chiefs = Math.ceil(this.cfg.chief * this.difficulty)
         this.warriors = Math.ceil(this.cfg.warrior * this.difficulty)
         const totalMobs = this.mages + this.archers + this.robots + this.warriors + this.knights + this.chiefs + this.wolves
-        console.log(totalMobs)
         this.scene.addMobs(totalMobs)
     }
 
