@@ -3,7 +3,7 @@ import GameEngine from './src/GameEngine.js'
 import { ASSET_PATHS } from './src/utils/Const.js'
 
 const assetManager = new AssetManager()
-const soundManager = new SoundManager();
+const soundManager = new SoundManager()
 assetManager.downloadBulk(Object.values(ASSET_PATHS), function () {
     const canvas = document.getElementById('gameWorld')
     canvas.width = window.innerWidth

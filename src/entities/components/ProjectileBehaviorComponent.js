@@ -30,7 +30,7 @@ export default class ProjectileBehavior extends Component {
         } else {
             this.animComp.setAnimation(ANIMS.Projectile)
         }
-        this.isImpact = false;
+        this.isImpact = false
 
 
         //TODO: if (this is a fireball) { ... (q key)
@@ -38,7 +38,7 @@ export default class ProjectileBehavior extends Component {
         //elif arrow (e key)
         //this.entity.game.soundManager.ARROWCAST();
         //elif explosion spell thing (w key)
-        this.entity.game.soundManager.ENERGYCAST();
+        this.entity.game.soundManager.ENERGYCAST()
     }
 
     /**
@@ -65,12 +65,12 @@ export default class ProjectileBehavior extends Component {
      * Call on an attack or Attribute component from the caster to do damage.
      */
     impact() {
-        this.isImpact = true;
+        this.isImpact = true
         //TODO: if fireball, (q key)
         //this.entity.game.soundManager.FIREIMPACT();
         //elif arrow (e key)
         //this.entity.game.soundManager.ARROWIMPACT();
         //elif explosion spell thing (w key)
-        this.entity.game.soundManager.ENERGYIMPACT();
+        this.entity.game.soundManager.ENERGYIMPACT()
     }
 }
