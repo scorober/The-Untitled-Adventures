@@ -92,7 +92,6 @@ export default class SpawnComponentBehavior extends Component {
         this.chiefs = Math.ceil(this.cfg.chief * this.difficulty)
         this.warriors = Math.ceil(this.cfg.warrior * this.difficulty)
         const totalMobs = this.mages + this.archers + this.robots + this.warriors + this.knights + this.chiefs + this.wolves
-        console.log(totalMobs)
         this.scene.addMobs(totalMobs)
     }
 
