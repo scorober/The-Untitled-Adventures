@@ -1,9 +1,8 @@
 import Scene from './Scene.js'
 import Map from '../Map.js'
 import Dungeon from '../generators/Dungeon.js'
-import Background from '../Background.js'
 import Entity from '../../entities/Entity.js'
-import { ASSET_PATHS, SPAWNERS } from '../../utils/Const.js'
+import { ASSET_PATHS } from '../../utils/Const.js'
 
 import PlayerCharacterData from '../../entities/characters/PlayerCharacterDefaultData.js'
 import ArcherData from '../../entities/characters/ArcherDefaultData.js'
@@ -27,6 +26,9 @@ import MageDefaultData from '../../entities/characters/MageDefaultData.js'
 import StairInteractionComponent from '../../entities/components/InteractionComponent/StairInteractionComponent.js'
 import ChiefDefaultData from '../../entities/characters/ChiefDefaultData.js'
 import WolfDefaultData from '../../entities/characters/WolfDefaultData.js'
+
+import EquipmentComponent from '../../entities/components/EquipmentComponent.js'
+import EquippedItemsComponent from '../../entities/components/EquippedItemsComponent.js'
 
 export default class FirstLevel extends Scene {
     constructor(game) {
@@ -97,6 +99,11 @@ export default class FirstLevel extends Scene {
 
         const test = this.createArcher(game, start, playerCharacter)
         this.addEntity(test)
+
+        const testEq = new Entity(game, start)
+        testEq.addComponent(new EquipmentComponent(testEq))
+        testEq.addComponent(new CollisionComponent(testEq, {width: 15, height: 15}))
+        this.addEntity(testEq)
 
         this.createMapEntities(game, map)
 
@@ -174,6 +181,7 @@ export default class FirstLevel extends Scene {
         pc.addComponent(new MarriottInteractionComponent(pc))
         pc.addComponent(new PlayerCharacterCombatComponent(pc))
         pc.addComponent(new PlayerInputComponent(pc))
+        pc.addComponent(new EquippedItemsComponent(pc))
         return pc
     }
 
