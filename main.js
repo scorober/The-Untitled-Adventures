@@ -6,6 +6,7 @@ const assetManager = new AssetManager()
 const soundManager = new SoundManager()
 assetManager.downloadBulk(Object.values(ASSET_PATHS), function () {
     const canvas = document.getElementById('gameWorld')
+    canvas.focus()
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
     const ctx = canvas.getContext('2d')
