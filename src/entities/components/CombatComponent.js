@@ -11,6 +11,7 @@ export default class CombatComponent extends Component {
         this.attributeComponent = this.entity.getComponent(AttributeComponent)
         this.dmgTimer = 0
         this.combatTarget = false
+        this.entity.CombatComponent = this;
     }
 
     /**
@@ -19,10 +20,12 @@ export default class CombatComponent extends Component {
      */
     update() {
         this.dmgTimer -= this.entity.game.clockTick
+
         if (this.checkDead()) {
             this.entity.game.removeEntityByRef(this.entity)
         }
         if (this.hasCombatTarget() && this.inRange() && this.timerCooled() && this.notMoving()) {
+            this.entity.game.soundManager.playAttack(this.entity.UUID)
             this.meleeAttack()
         }
     }
@@ -67,7 +70,7 @@ export default class CombatComponent extends Component {
 
     /**
      * Sets the current combat target to attack
-     * 
+     *
      * @param {Entity} foe The Entity to begin attacking
      */
     setCombatTarget(foe) {
@@ -96,9 +99,10 @@ export default class CombatComponent extends Component {
      * Initiates a melee attack from this Entity to Entity foe
      */
     meleeAttack() {
+        //this.entity.game.soundManager.playAttack(this.entity.UUID)
         const dmg = this.calculatePhysicalDamage()
         const killed = this.combatTarget.getComponent(CombatComponent).applyPhysicalDamage(dmg)
-        this.dmgTimer = 3
+        this.dmgTimer = 3 //Weird, each entity's attack speed was separately defined and working like, 2 weeks ago.
         this.doAttackAnimation()
         if (killed) {
             this.unsetCombatTarget()
@@ -107,15 +111,17 @@ export default class CombatComponent extends Component {
 
     /**
      * Initiates a magic attack from this Entity to Entity foe
-     * 
+     *
      * @param {Entity} foe  The Entity being attacked
      */
     magicAttack() {
         const dmg = this.calculateMagicDamage()
         const killed = this.combatTarget.getComponent(CombatComponent).applyMagicDamage(dmg)
+
         if (killed) {
             this.unsetCombatTarget()
         }
+
     }
 
     /**
