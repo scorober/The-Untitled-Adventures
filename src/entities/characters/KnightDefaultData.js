@@ -10,8 +10,8 @@ import {
 // Values defined here for use in export object
 const attackWidth = 384
 const attackHeight = 192
-const attackYOffset = 24
-const attackXOffset = -24
+const attackYOffset = -24
+const attackXOffset = 0
 const impactSize = 240
 const height = 192
 const width = 192
@@ -29,7 +29,7 @@ const portraitY = 176
 export default {
     // Attributes Component Configuration
     Attributes: {
-        HP: 10,
+        HP: 100,
         Mana: 10,
         Str: 5,
         Int: 5,

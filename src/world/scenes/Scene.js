@@ -217,4 +217,6 @@ export default class Scene {
             this.setPacified()
         }
     }
+    enter(params){}
+    exit(){}
 }
