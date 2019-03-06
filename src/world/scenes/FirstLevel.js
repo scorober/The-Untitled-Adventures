@@ -196,4 +196,8 @@ export default class FirstLevel extends Scene {
         this.drawEntities()
         this.drawMapTop()
     }
+
+    enter(params){
+        this.game.soundManager.playMusic(2);
+    }
 }

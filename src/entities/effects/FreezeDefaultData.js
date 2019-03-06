@@ -9,7 +9,10 @@ const yOffset = 60
 export default {
     Attributes: {
         Damage: 10,
-        Speed: 600
+        Speed: 600,
+        SpellPower : 12,
+        INT : 1,
+        Name: 'FREEZE'
     },
     AnimationConfig: {
         Scale: 2,

@@ -26,7 +26,7 @@ export default class SceneManager {
         this.addScene(scores.name, scores)
         this.addScene(firstlevel.name, firstlevel)
 
-        this.currentScene = firstlevel
+        this.currentScene = title
     }
 
     
@@ -71,13 +71,14 @@ export default class SceneManager {
 
     /**
      * This function changes from one scene to another
-     * @param name the name of the scene you want to change to
+     * @param AN OPTIONAL OBJECT THAT CAN BE PASSED INTO THE NEW SCENE TO INITIALIZE IT
      */
-    change(name) {
-        const params = {}
+    change(name, params) {
+        params = params || {}
         this.currentScene.exit()  //exit old scene
         this.currentScene = this.getScene(name)
-        // this.currentScene.enter(params) //enter new scene
+
+         this.currentScene.enter(params) //enter new scene
         if(this.currentScene !== this.scenes['scores']) {
             this.currentScene.enter(params) //enter new scene
         } 

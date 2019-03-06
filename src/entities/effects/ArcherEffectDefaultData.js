@@ -9,7 +9,10 @@ const yOffset = 20
 export default {
     Attributes: {
         Damage: 10,
-        Speed: 800
+        Speed: 800,
+        Name: 'ARROW',
+        AttackPower : 3,
+        STR: 1,
     },
     AnimationConfig: {
         Scale: .75,

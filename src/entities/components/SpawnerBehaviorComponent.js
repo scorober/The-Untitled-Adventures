@@ -43,6 +43,7 @@ export default class SpawnComponentBehavior extends Component {
         this.wolves = 0
         this.knights = 0
         this.room = room
+        this.spawnedMobs = 0;
     }
 
 
@@ -68,7 +69,14 @@ export default class SpawnComponentBehavior extends Component {
         }
     }
 
-    draw() { }
+    draw() {
+        if(this.spawnedMobs > 0) {
+            const ctx = this.entity.game.ctx
+            ctx.fillStyle = 'red'
+            ctx.font = '36px arcade'
+            ctx.fillText('Spawned: ' + this.spawnedMobs.toString()+'/'+this.mobs.length, 30, 50)
+        }
+    }
 
     addMob() {
         if (this.mobs.length > 0) {
@@ -76,6 +84,8 @@ export default class SpawnComponentBehavior extends Component {
             const entity = this.mobs[index]
             this.scene.addEntity(entity)
             this.mobs.splice(index, 1)
+            this.entity.game.soundManager.spawnSound();
+            this.spawnedMobs++;
         }
         this.spawnTimer = 0
     }
