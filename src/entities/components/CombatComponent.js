@@ -11,7 +11,8 @@ export default class CombatComponent extends Component {
         this.attributeComponent = this.entity.getComponent(AttributeComponent)
         this.dmgTimer = 0
         this.combatTarget = false
-        this.entity.CombatComponent = this;
+        this.damageDisplay = this.setDamageDisplay(-1, false)
+        this.damageDisplay.timer = 0
     }
 
     /**
@@ -20,13 +21,30 @@ export default class CombatComponent extends Component {
      */
     update() {
         this.dmgTimer -= this.entity.game.clockTick
-
+        this.damageDisplay.timer -= this.entity.game.clockTick
         if (this.checkDead()) {
             this.entity.game.removeEntityByRef(this.entity)
         }
         if (this.hasCombatTarget() && this.inRange() && this.timerCooled() && this.notMoving()) {
             this.entity.game.soundManager.playAttack(this.entity.UUID)
             this.meleeAttack()
+        }
+    }
+
+    /**
+     * Draws the last damage above the entities head.
+     * TODO: This currently draws above the player's head. Find better place to display? Above victim's head?
+     */
+    draw() {
+        const ctx = this.entity.game.ctx
+        if (this.damageDisplay.timer > 0) {
+            const pos = this.entity.game.worldToScreen(this.entity)
+            ctx.font = '26px arcade'
+            ctx.textAlign = 'center'
+            ctx.fillStyle = 'black'
+            ctx.fillText(this.damageDisplay.value.toFixed(1), pos.x - 1, pos.y - 64 - 1 - (this.damageDisplay.timer * -30))
+            ctx.fillStyle = this.damageDisplay.isMagic ? 'blue' : 'red'
+            ctx.fillText(this.damageDisplay.value.toFixed(1), pos.x - 1, pos.y - 64 - (this.damageDisplay.timer * -30))
         }
     }
 
@@ -177,7 +195,7 @@ export default class CombatComponent extends Component {
     applyPhysicalDamage(damage) {
         damage = Math.max(0, damage)
         damage = damage * damage / (damage + this.attributeComponent.Def)
-        this.displayDamage = true
+        this.damageDisplay = this.setDamageDisplay(damage, false)
         this.damageColor = 'red'
         this.lastDamage = damage
         this.attributeComponent.HP -= damage
@@ -199,6 +217,7 @@ export default class CombatComponent extends Component {
     applyMagicDamage(damage) {
         damage = Math.max(0, damage)
         damage = damage * damage / (damage + this.attributeComponent.Mdef)
+        this.damageDisplay = this.setDamageDisplay(damage, true)
         this.displayDamage = true
         this.damageColor = 'blue'
         this.lastDamage = damage
@@ -209,6 +228,14 @@ export default class CombatComponent extends Component {
         }
 
         return false
+    }
+
+    setDamageDisplay(value, isMagic) {
+        return {
+            value: value,
+            timer: 1,
+            isMagic: isMagic
+        }
     }
 
     /**
