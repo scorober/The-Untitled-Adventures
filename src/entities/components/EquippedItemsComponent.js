@@ -15,19 +15,19 @@ export default class EquippedItemsComponent extends Component {
     }
 
     getEquipmentAtk() {
-        return this.getAllEquipment().reduce((accumulator, eq) => accumulator + eq.getAtk())
+        return this.getAllEquipment().reduce((accumulator, eq) => accumulator + eq.getAtk(), 0)
     }
 
     getEquipmentMatk() {
-        return this.getAllEquipment().reduce((accumulator, eq) => accumulator + eq.getMatk())
+        return this.getAllEquipment().reduce((accumulator, eq) => accumulator + eq.getMatk(), 0)
     }
 
     getEquipmentDef() {
-        return this.getAllEquipment().reduce((accumulator, eq) => accumulator + eq.getDef())
+        return this.getAllEquipment().reduce((accumulator, eq) => accumulator + eq.getDef(), 0)
     }
 
     getEquipmentMdef() {
-        return this.getAllEquipment().reduce((accumulator, eq) => accumulator + eq.getMdef())
+        return this.getAllEquipment().reduce((accumulator, eq) => accumulator + eq.getMdef(), 0)
     }
 
     getHead() {

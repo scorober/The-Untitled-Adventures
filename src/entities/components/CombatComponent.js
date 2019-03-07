@@ -4,6 +4,7 @@ import Vector from '../../utils/Vector.js'
 import AnimationComponent from './AnimationComponent.js'
 import { ANIMATIONS as ANIMS } from '../../utils/Const.js'
 import MovementComponent from './MovementComponent.js'
+import EquippedItemsComponent from './EquippedItemsComponent.js'
 
 export default class CombatComponent extends Component {
     constructor(entity) {
@@ -23,6 +24,7 @@ export default class CombatComponent extends Component {
         this.dmgTimer -= this.entity.game.clockTick
         this.damageDisplay.timer -= this.entity.game.clockTick
         if (this.checkDead()) {
+            this.entity.game.getCurrentScene().spawnReward(this.entity)
             this.entity.game.removeEntityByRef(this.entity)
         }
         if (this.hasCombatTarget() && this.inRange() && this.timerCooled() && this.notMoving()) {
@@ -169,8 +171,13 @@ export default class CombatComponent extends Component {
      * @returns {number} the damage to apply
      */
     calculatePhysicalDamage(modifiers = {}) {
-        const appliedStr = modifiers.Str + this.attributeComponent.Str || this.attributeComponent.Str
-        const appliedAtk = modifiers.Atk + this.attributeComponent.Atk || this.attributeComponent.Atk
+        Object.assign(modifiers, { Str: 0, Atk: 0 }, modifiers)
+        const equippedItems = this.entity.getComponent(EquippedItemsComponent)
+        if (equippedItems) {
+            modifiers.Atk += equippedItems.getEquipmentAtk()
+        }
+        const appliedStr = modifiers.Str + this.attributeComponent.Str
+        const appliedAtk = modifiers.Atk + this.attributeComponent.Atk
         return Math.random() * appliedStr + appliedAtk
     }
 
@@ -179,9 +186,14 @@ export default class CombatComponent extends Component {
      *
      * @returns {number} the damage to apply
      */
-    calculateMagicDamage(modifiers) {
-        const appliedInt = modifiers.Int + this.attributeComponent.Int || this.attributeComponent.Int
-        const appliedMatk = modifiers.Matk + this.attributeComponent.Matk || this.attributeComponent.Matk
+    calculateMagicDamage(modifiers = {}) {
+        Object.assign(modifiers, { Int: 0, Matk: 0 }, modifiers)
+        const equippedItems = this.entity.getComponent(EquippedItemsComponent)
+        if (equippedItems) {
+            modifiers.Matk += equippedItems.getEquipmentMatk()
+        }
+        const appliedInt = modifiers.Int + this.attributeComponent.Int
+        const appliedMatk = modifiers.Matk + this.attributeComponent.Matk
         return Math.random() * appliedInt + appliedMatk
     }
 
@@ -193,8 +205,13 @@ export default class CombatComponent extends Component {
      * @returns {boolean} true if entity is killed, false if still alive
      */
     applyPhysicalDamage(damage) {
+        const modifiers = { Def: 0 }
+        const equippedItems = this.entity.getComponent(EquippedItemsComponent)
+        if (equippedItems) {
+            modifiers.Def += equippedItems.getEquipmentDef()
+        }
         damage = Math.max(0, damage)
-        damage = damage * damage / (damage + this.attributeComponent.Def)
+        damage = damage * damage / (damage + this.attributeComponent.Def + modifiers.Def)
         this.damageDisplay = this.setDamageDisplay(damage, false)
         this.damageColor = 'red'
         this.lastDamage = damage
@@ -215,8 +232,13 @@ export default class CombatComponent extends Component {
      * @returns {boolean} true if entity is killed, false if still alive
      */
     applyMagicDamage(damage) {
+        const modifiers = { Mdef: 0 }
+        const equippedItems = this.entity.getComponent(EquippedItemsComponent)
+        if (equippedItems) {
+            modifiers.Mdef += equippedItems.getEquipmentMdef()
+        }
         damage = Math.max(0, damage)
-        damage = damage * damage / (damage + this.attributeComponent.Mdef)
+        damage = damage * damage / (damage + this.attributeComponent.Mdef + modifiers.Mdef)
         this.damageDisplay = this.setDamageDisplay(damage, true)
         this.displayDamage = true
         this.damageColor = 'blue'

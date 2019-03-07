@@ -7,7 +7,6 @@ export default class AttributeComponent extends Component {
         this.displayDamage = true
         this.isCombat = attributes.isCombat || false
         this.dmgTimer = 0
-        this.entity.AttributeComponent = this;
     }
 
 

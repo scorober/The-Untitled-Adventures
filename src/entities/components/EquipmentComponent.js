@@ -1,5 +1,4 @@
 import InteractionComponent from './InteractionComponent/InteractionComponent.js'
-import Vector from '../../utils/Vector.js'
 import EquippedItemsComponent from './EquippedItemsComponent.js'
 
 export default class EquipmentComponent extends InteractionComponent {
@@ -11,9 +10,7 @@ export default class EquipmentComponent extends InteractionComponent {
             atk: 2,
             def: 2,
             matk: 1,
-            mdef: 2,
-            width: 15,
-            height: 15
+            mdef: 2
         }
         Object.assign(this, defaults, config)
     }
@@ -27,10 +24,6 @@ export default class EquipmentComponent extends InteractionComponent {
         if (this.hovered) {
             this.drawMouseover()
         }
-        const screenPos = this.entity.game.worldToScreen(new Vector(this.entity.x, this.entity.y)) // get position on screen
-        const ctx = this.entity.game.ctx
-        ctx.fillStyle = 'white'
-        ctx.fillRect(screenPos.x, screenPos.y, this.width, this.height)
         
     }
 

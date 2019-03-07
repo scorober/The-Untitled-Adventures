@@ -11,17 +11,19 @@ export default class AnimationComponent extends Component {
      */
     constructor(entity, config) {
         super(entity)
+        this.animations = []
         if (config.AnimationData) {
             this.animations = this.getAnimations(config)
             this.setAnimation(config.InitialAnimation)
         } else {
-            this.animations['static'] = new Animation(config.Spritesheet,
+            const asset = this.entity.game.getAsset(config.Spritesheet)
+            this.animations['static'] = new Animation(asset,
                 config.Width, config.Height,
                 /*startY*/ 0,
                 /*frames*/ 1,
-                /*offset*/ 0,
-                /*rate*/ 0,
-                /*loop*/ false,
+                /*offset*/ { x: 0, y: 0 },
+                /*rate*/ 1,
+                /*loop*/ true,
                 config.Scale)
             this.setAnimation('static')
         }
