@@ -24,6 +24,14 @@ export const ASSET_PATHS = {
     ArcherEffects: './assets/img/archerEffects.png',
     Lightning: './assets/img/lightning.png',
     Freeze: './assets/img/freeze.png',
+
+
+
+    EquipmentChest: './assets/img/equipment_chest.png',
+    EquipmentFeet: './assets/img/equipment_feet.png',
+    EquipmentHands: './assets/img/equipment_hands.png',
+    EquipmentHead: './assets/img/equipment_head.png',
+    EquipmentWeapon: './assets/img/equipment_weapon.png',
 }
 
 export const STATES = {

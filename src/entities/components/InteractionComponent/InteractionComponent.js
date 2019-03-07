@@ -11,11 +11,12 @@ export default class InteractionComponent extends Component {
     }
 
     update() {
+        super.update()
         this.hovered = this.checkMouseover()
     }
 
     draw() {
-
+        super.draw()
     }
 
     checkMouseover() {
@@ -26,18 +27,14 @@ export default class InteractionComponent extends Component {
     }
 
     setRightClick() {
-        throw 'InteractionComponent subclass must implement setRightClick()'
     }
 
     unsetRightClick() {
-        throw 'InteractionComponent subclass must implement unsetRightClick()'
     }
 
     setLeftClick() {
-        throw 'InteractionComponent subclass must implement setLeftClick()'
     }
 
     unsetLeftClick() {
-        throw 'InteractionComponent subclass must implement unsetLeftClick()'
     }
 }

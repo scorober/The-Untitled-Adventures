@@ -1,9 +1,8 @@
 import Scene from './Scene.js'
 import Map from '../Map.js'
 import Dungeon from '../generators/Dungeon.js'
-import Background from '../Background.js'
 import Entity from '../../entities/Entity.js'
-import { ASSET_PATHS, SPAWNERS } from '../../utils/Const.js'
+import { ASSET_PATHS } from '../../utils/Const.js'
 
 import PlayerCharacterData from '../../entities/characters/PlayerCharacterDefaultData.js'
 import ArcherData from '../../entities/characters/ArcherDefaultData.js'
@@ -23,10 +22,11 @@ import MarriottInteractionComponent from '../../entities/components/InteractionC
 import Vector from '../../utils/Vector.js'
 import DoorInteractionComponent from '../../entities/components/InteractionComponent/DoorInteractionComponent.js'
 import PlayerCharacterCombatComponent from '../../entities/components/PlayerCharacterCombatComponent.js'
-import MageDefaultData from '../../entities/characters/MageDefaultData.js'
 import StairInteractionComponent from '../../entities/components/InteractionComponent/StairInteractionComponent.js'
-import ChiefDefaultData from '../../entities/characters/ChiefDefaultData.js'
 import WolfDefaultData from '../../entities/characters/WolfDefaultData.js'
+
+import EquipmentComponent from '../../entities/components/EquipmentComponent.js'
+import EquippedItemsComponent from '../../entities/components/EquippedItemsComponent.js'
 
 export default class FirstLevel extends Scene {
     constructor(game) {
@@ -96,11 +96,27 @@ export default class FirstLevel extends Scene {
         this.game.camera.setFollowedEntity(playerCharacter)
 
         const test = this.createArcher(game, start, playerCharacter)
-        // this.addEntity(test)
+        this.addEntity(test)
 
         this.createMapEntities(game, map)
 
-
+        const testEq = new Entity(game, start)
+        testEq.addComponent(new EquipmentComponent(testEq, {
+            name: 'Thunderfury of the Windseeker',
+            type: 'weapon',
+            atk: 3,
+            def: 0,
+            matk: 2,
+            mdef: 1
+        }))
+        testEq.addComponent(new AnimationComponent(testEq, {
+            Spritesheet: ASSET_PATHS.EquipmentWeapon,
+            Width: 32,
+            Height: 32,
+            Scale: 1.5
+        }))
+        testEq.addComponent(new CollisionComponent(testEq))
+        this.addItem(testEq)
 
     }
 
@@ -174,7 +190,81 @@ export default class FirstLevel extends Scene {
         pc.addComponent(new MarriottInteractionComponent(pc))
         pc.addComponent(new PlayerCharacterCombatComponent(pc))
         pc.addComponent(new PlayerInputComponent(pc))
+        pc.addComponent(new EquippedItemsComponent(pc))
         return pc
+    }
+
+    /**
+     * Spawns some random equipment at given entity location
+     */
+    spawnReward(entity) {
+        const eq = new Entity(entity.game, new Vector(entity.x, entity.y))
+        const namePrefixes = ['Swoll', 'Bizarre', 'Dynamic', 'Fascinating', 'Filty', 'Whimsical', 'Flowing', 'Bubbling']
+        const nameSuffixes = ['of Reaching', 'of Decisions', 'of the Jungle', 'of Emptiness', 'of Punishment', 'of Sailing', 'of Strength']
+        const eqMap = [{
+            asset: ASSET_PATHS.EquipmentChest,
+            type: 'head',
+            name: ' Tunic ',
+            atkMod: 0,
+            defMod: 2,
+            matkMod: 0,
+            mdefMod: 2
+        },
+        {
+            asset: ASSET_PATHS.EquipmentFeet,
+            type: 'feet',
+            name: ' Sandals ',
+            atkMod: 0,
+            defMod: 1,
+            matkMod: 0,
+            mdefMod: 2
+        },
+        {
+            asset: ASSET_PATHS.EquipmentHands,
+            type: 'hands',
+            name: ' Handwraps ',
+            atkMod: 1,
+            defMod: 1,
+            matkMod: 1,
+            mdefMod: 0
+        },
+        {
+            asset: ASSET_PATHS.EquipmentHead,
+            type: 'head',
+            name: ' Cap ',
+            atkMod: 0,
+            defMod: 1,
+            matkMod: 1,
+            mdefMod: 1
+        },
+        {
+            asset: ASSET_PATHS.EquipmentWeapon,
+            type: 'weapon',
+            name: ' Sword ',
+            atkMod: 3,
+            defMod: 0,
+            matkMod: 1,
+            mdefMod: 0
+        }]
+        const thisEquip = eqMap[Math.min(Math.floor(Math.random() * eqMap.length), eqMap.length - 1)]
+        const thisPrefix = namePrefixes[Math.min(Math.floor(Math.random() * namePrefixes.length), namePrefixes.length - 1)]
+        const thisSuffix = nameSuffixes[Math.min(Math.floor(Math.random() * nameSuffixes.length), nameSuffixes.length - 1)]
+        eq.addComponent(new EquipmentComponent(eq, {
+            name: thisPrefix + thisEquip.name + thisSuffix,
+            type: thisEquip.type,
+            atk: Math.floor(Math.random() * 2 * thisEquip.atkMod),
+            def: Math.floor(Math.random() * 2 * thisEquip.defMod),
+            matk: Math.floor(Math.random() * 2 * thisEquip.matkMod),
+            mdef: Math.floor(Math.random() * 2 * thisEquip.mdefMod)
+        }))
+        eq.addComponent(new AnimationComponent(eq, {
+            Spritesheet: thisEquip.asset,
+            Width: 32,
+            Height: 32,
+            Scale: 1
+        }))
+        eq.addComponent(new CollisionComponent(eq))
+        this.addItem(eq)
     }
 
     /**
@@ -197,7 +287,7 @@ export default class FirstLevel extends Scene {
         this.drawMapTop()
     }
 
-    enter(params){
-        this.game.soundManager.playMusic(2);
+    enter(){
+        this.game.soundManager.playMusic(2)
     }
 }

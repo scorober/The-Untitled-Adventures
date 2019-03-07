@@ -7,27 +7,11 @@ export default class AttributeComponent extends Component {
         this.displayDamage = true
         this.isCombat = attributes.isCombat || false
         this.dmgTimer = 0
-        this.entity.AttributeComponent = this;
     }
 
 
     update() {
 
-    }
-
-    /**
-     * Draws the last damage above the entities head.
-     * TODO: This currently draws above the player's head. Find better place to display? Above victim's head?
-     */
-    draw() {
-        const ctx = this.entity.game.ctx
-        if (this.isCombat && this.displayDamage && this.lastDamage != null && this.dmgTimer > 0) {
-            const pos = this.entity.game.worldToScreen(this.entity)
-            ctx.font = '36px arcade'
-            ctx.fillStyle = this.damageColor || 'red'
-            ctx.textAlign = 'center'
-            ctx.fillText(this.lastDamage, pos.x, pos.y - 64)
-        }
     }
 
     /**

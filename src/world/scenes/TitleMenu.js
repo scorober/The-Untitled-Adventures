@@ -9,7 +9,7 @@ export default class TitleMenuScene extends Scene {
         super(game)
         this.name='titlemenu'
         this.ctx = game.ctx
-        this.isMusicPlaying = false;
+        this.isMusicPlaying = false
 
         const sheet = game.getAsset(ASSET_PATHS.TitleAnimation)
         const background = new Animation(sheet, 960, 540, 50, 1, 0.1, 50, true, 1)
@@ -37,11 +37,11 @@ export default class TitleMenuScene extends Scene {
     }
     playMusic(){
         this.isMusicPlaying = true
-        this.game.soundManager.playMusic(1);
+        this.game.soundManager.playMusic(1)
     }
 
     exit(){
-        this.game.soundManager.stopMusic();
+        this.game.soundManager.stopMusic()
     }
 
     update() {

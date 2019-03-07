@@ -4,6 +4,7 @@ import Vector from '../../utils/Vector.js'
 import AnimationComponent from './AnimationComponent.js'
 import { ANIMATIONS as ANIMS } from '../../utils/Const.js'
 import MovementComponent from './MovementComponent.js'
+import EquippedItemsComponent from './EquippedItemsComponent.js'
 
 export default class CombatComponent extends Component {
     constructor(entity) {
@@ -11,7 +12,8 @@ export default class CombatComponent extends Component {
         this.attributeComponent = this.entity.getComponent(AttributeComponent)
         this.dmgTimer = 0
         this.combatTarget = false
-        this.entity.CombatComponent = this;
+        this.damageDisplay = this.setDamageDisplay(-1, false)
+        this.damageDisplay.timer = 0
     }
 
     /**
@@ -20,13 +22,31 @@ export default class CombatComponent extends Component {
      */
     update() {
         this.dmgTimer -= this.entity.game.clockTick
-
+        this.damageDisplay.timer -= this.entity.game.clockTick
         if (this.checkDead()) {
+            this.entity.game.getCurrentScene().spawnReward(this.entity)
             this.entity.game.removeEntityByRef(this.entity)
         }
         if (this.hasCombatTarget() && this.inRange() && this.timerCooled() && this.notMoving()) {
             this.entity.game.soundManager.playAttack(this.entity.UUID)
             this.meleeAttack()
+        }
+    }
+
+    /**
+     * Draws the last damage above the entities head.
+     * TODO: This currently draws above the player's head. Find better place to display? Above victim's head?
+     */
+    draw() {
+        const ctx = this.entity.game.ctx
+        if (this.damageDisplay.timer > 0) {
+            const pos = this.entity.game.worldToScreen(this.entity)
+            ctx.font = '26px arcade'
+            ctx.textAlign = 'center'
+            ctx.fillStyle = 'black'
+            ctx.fillText(this.damageDisplay.value.toFixed(1), pos.x - 1, pos.y - 64 - 1 - (this.damageDisplay.timer * -30))
+            ctx.fillStyle = this.damageDisplay.isMagic ? 'blue' : 'red'
+            ctx.fillText(this.damageDisplay.value.toFixed(1), pos.x - 1, pos.y - 64 - (this.damageDisplay.timer * -30))
         }
     }
 
@@ -151,8 +171,13 @@ export default class CombatComponent extends Component {
      * @returns {number} the damage to apply
      */
     calculatePhysicalDamage(modifiers = {}) {
-        const appliedStr = modifiers.Str + this.attributeComponent.Str || this.attributeComponent.Str
-        const appliedAtk = modifiers.Atk + this.attributeComponent.Atk || this.attributeComponent.Atk
+        Object.assign(modifiers, { Str: 0, Atk: 0 }, modifiers)
+        const equippedItems = this.entity.getComponent(EquippedItemsComponent)
+        if (equippedItems) {
+            modifiers.Atk += equippedItems.getEquipmentAtk()
+        }
+        const appliedStr = modifiers.Str + this.attributeComponent.Str
+        const appliedAtk = modifiers.Atk + this.attributeComponent.Atk
         return Math.random() * appliedStr + appliedAtk
     }
 
@@ -161,9 +186,14 @@ export default class CombatComponent extends Component {
      *
      * @returns {number} the damage to apply
      */
-    calculateMagicDamage(modifiers) {
-        const appliedInt = modifiers.Int + this.attributeComponent.Int || this.attributeComponent.Int
-        const appliedMatk = modifiers.Matk + this.attributeComponent.Matk || this.attributeComponent.Matk
+    calculateMagicDamage(modifiers = {}) {
+        Object.assign(modifiers, { Int: 0, Matk: 0 }, modifiers)
+        const equippedItems = this.entity.getComponent(EquippedItemsComponent)
+        if (equippedItems) {
+            modifiers.Matk += equippedItems.getEquipmentMatk()
+        }
+        const appliedInt = modifiers.Int + this.attributeComponent.Int
+        const appliedMatk = modifiers.Matk + this.attributeComponent.Matk
         return Math.random() * appliedInt + appliedMatk
     }
 
@@ -175,9 +205,14 @@ export default class CombatComponent extends Component {
      * @returns {boolean} true if entity is killed, false if still alive
      */
     applyPhysicalDamage(damage) {
+        const modifiers = { Def: 0 }
+        const equippedItems = this.entity.getComponent(EquippedItemsComponent)
+        if (equippedItems) {
+            modifiers.Def += equippedItems.getEquipmentDef()
+        }
         damage = Math.max(0, damage)
-        damage = damage * damage / (damage + this.attributeComponent.Def)
-        this.displayDamage = true
+        damage = damage * damage / (damage + this.attributeComponent.Def + modifiers.Def)
+        this.damageDisplay = this.setDamageDisplay(damage, false)
         this.damageColor = 'red'
         this.lastDamage = damage
         this.attributeComponent.HP -= damage
@@ -197,8 +232,14 @@ export default class CombatComponent extends Component {
      * @returns {boolean} true if entity is killed, false if still alive
      */
     applyMagicDamage(damage) {
+        const modifiers = { Mdef: 0 }
+        const equippedItems = this.entity.getComponent(EquippedItemsComponent)
+        if (equippedItems) {
+            modifiers.Mdef += equippedItems.getEquipmentMdef()
+        }
         damage = Math.max(0, damage)
-        damage = damage * damage / (damage + this.attributeComponent.Mdef)
+        damage = damage * damage / (damage + this.attributeComponent.Mdef + modifiers.Mdef)
+        this.damageDisplay = this.setDamageDisplay(damage, true)
         this.displayDamage = true
         this.damageColor = 'blue'
         this.lastDamage = damage
@@ -209,6 +250,14 @@ export default class CombatComponent extends Component {
         }
 
         return false
+    }
+
+    setDamageDisplay(value, isMagic) {
+        return {
+            value: value,
+            timer: 1,
+            isMagic: isMagic
+        }
     }
 
     /**

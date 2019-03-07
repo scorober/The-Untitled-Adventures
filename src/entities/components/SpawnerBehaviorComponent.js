@@ -43,7 +43,7 @@ export default class SpawnComponentBehavior extends Component {
         this.wolves = 0
         this.knights = 0
         this.room = room
-        this.spawnedMobs = 0;
+        this.spawnedMobs = 0
     }
 
 
@@ -84,8 +84,8 @@ export default class SpawnComponentBehavior extends Component {
             const entity = this.mobs[index]
             this.scene.addEntity(entity)
             this.mobs.splice(index, 1)
-            this.entity.game.soundManager.spawnSound();
-            this.spawnedMobs++;
+            this.entity.game.soundManager.spawnSound()
+            this.spawnedMobs++
         }
         this.spawnTimer = 0
     }
