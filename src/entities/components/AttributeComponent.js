@@ -41,6 +41,7 @@ export default class AttributeComponent extends Component {
         // Assign to `this` all properties in `defaultAttributes`, followed by all properties
         // in `attr`, with `attr` and all later listed objects overriding what's in `defaultAttributes`
         Object.assign(this, defaultAttributes, attr)
+        this.HPFull = this.HP
         this.entity.UUID = this.Name + this.entity.UUID
     }
 }
@@ -49,6 +50,7 @@ const defaultAttributes = {
     XpYield: 0,
     GoldYield: 0,
     HP: 9999999999, //default = basically immortal (all defined entities should have their HP defined). This is just for camera etc
+    HPFull: 0 ,
     Mana: 0,
     Str: 0,
     Int: 0,

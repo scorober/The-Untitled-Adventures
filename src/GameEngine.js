@@ -263,7 +263,7 @@ export default class GameEngine {
         switch (name) {
             case 'ROOM':
                 Score = {
-                    Name: 'LEVEL_END',
+                    Name: 'ROOM_CLEARED',
                     Time: Math.floor(this.timer.gameTime),
                     Duration: this.sceneManager.currentScene.currentRoomTimeLapse,
                     lvl: 1,
@@ -275,7 +275,7 @@ export default class GameEngine {
                 Score = {
                     Name: 'LEVEL_END',
                     Time: Math.floor(this.timer.gameTime),
-                    Duration: this.timer.gameTime,
+                    Duration: this.timer.gameTime.toFixed(2),
                     lvl: 1,
                     Score: Math.floor(1000 * Math.sqrt(2) / Math.sqrt(this.timer.gameTime)),
                     Type: 'C'
