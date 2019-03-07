@@ -138,7 +138,11 @@ export default class MovementComponent extends Component {
     setPathfindingTarget(tile) {
         const currentTile = this.getCurrentTile()
         const pathfinder = new AStarPathfinding(this.entity.game.getWorld(), [currentTile.x, currentTile.y], [tile.x, tile.y])
-        this.path = pathfinder.calculatePath()
+        const path = pathfinder.calculatePath()
+        if (path.length > 1) {
+            path.splice(0, 1)
+        }
+        this.path = path
     }
 
     setFacing(entity) {

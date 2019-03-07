@@ -2,12 +2,10 @@ import Array2d from '../../utils/Array2d.js'
 import Rectangle from '../../utils/Rectangle.js'
 import { iter_adjacent, intersects, array_test, iter_2d, iter_range } from '../../utils/Index.js'
 
-let next_piece_id = 0
-
 //base dungeon piece class, to be extended
 export default class Piece {
 
-    constructor(options) {
+    constructor(options, id) {
 
         options = Object.assign({
             size: [1, 1],
@@ -21,7 +19,7 @@ export default class Piece {
 
         this.options = options
 
-        this.id = next_piece_id++
+        this.id = id
         this.walls = new Array2d(this.size, true)
         this.perimeter = []
         this.exits = []

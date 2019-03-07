@@ -17,6 +17,8 @@ export default class Scene {
         this.level = lvl
         this.mobCount = 0
         this.killCount = 0
+        this.currentRoomEnterTime = 0
+        this.currentRoomTimeLapse = 0
     }
 
     /**
@@ -192,12 +194,15 @@ export default class Scene {
         this.baseCount = this.game.sceneManager.scenes['scoredisplay'].killCount
         this.swarm = true
         this.pacified = false
+        this.currentRoomEnterTime = this.game.timer.gameTime
     }
     
     setPacified() {
         this.pacified = true
         this.swarm = false
         this.mobCount = 0
+        this.currentRoomTimeLapse = (this.game.timer.gameTime - this.currentRoomEnterTime).toFixed(2)
+        this.game.addScore('ROOM', false)
     }
 
     checkEnemy(str) {
@@ -207,13 +212,11 @@ export default class Scene {
     checkMapState() {
         //TODO check against a known spawn amount of mobs for this cycle and player's killcount?
         const killCount = this.game.sceneManager.scenes['scoredisplay'].killCount
-        // console.log(killCount)
-        // console.log(killCount)
-        // console.log(this.baseCount)
-        // console.log(this.mobCount)
         if (killCount === this.baseCount + this.mobCount) {
 
             this.setPacified()
         }
     }
+    enter(params){}
+    exit(){}
 }
