@@ -34,18 +34,18 @@ export default class BossLevel extends Scene {
         this.name = 'boss'
     
         const dungeon = new Dungeon({
-            size: [1000, 500],
+            size: [100000, 150],
             rooms: {
                 initial: {
-                    min_size: [14, 18], //Floor size
-                    max_size: [14, 18],
-                    max_exits: 4,
+                    min_size: [44, 14], //Floor size
+                    max_size: [44, 14],
+                    max_exits: 1,
                     position: [100, 100] //OPTIONAL pos of initial room 
                 },
                 any: {
                     min_size: [15, 15],
                     max_size: [20, 23],
-                    max_exits: 4
+                    max_exits: 2
                 }
             },
             max_corridor_length: 0,
