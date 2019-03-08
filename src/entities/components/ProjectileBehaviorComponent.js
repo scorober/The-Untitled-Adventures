@@ -18,6 +18,7 @@ export default class ProjectileBehavior extends Component {
     constructor(entity, target, hasInitialAnimation, caster) {
         super(entity)
         this.caster = caster
+        console.log(this.caster)
         this.v = Vector.vectorFromEntity(entity)
         this.target = new Vector(target.x, target.y)
         const t = new Vector(target.x, target.y)
@@ -31,7 +32,7 @@ export default class ProjectileBehavior extends Component {
                 this.animComp.setAnimation(ANIMS.Projectile)
             })
         } else {
-            this.animComp.setAnimation(ANIMS.Projectile, this.impact)
+            this.animComp.setAnimation(ANIMS.Projectile)
         }
         this.isImpact = false
 
@@ -69,6 +70,7 @@ export default class ProjectileBehavior extends Component {
      */
     impact() {
         // console.log('this.v', this.v)
+        console.log(this)
         const e = this.entity.game.getEntityByXYInWorld(this.v)
         this.isImpact = true
         // console.log(e)

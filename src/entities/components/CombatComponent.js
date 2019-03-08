@@ -142,21 +142,6 @@ export default class CombatComponent extends Component {
         }
     }
 
-    // /**
-    //  * Initiates a magic attack from this Entity to Entity foe
-    //  *
-    //  * @param {Entity} foe  The Entity being attacked
-    //  */
-    // magicAttack(foe) {
-    //     const dmg = this.calculateMagicDamage()
-    //     const killed = this.combatTarget.getComponent(CombatComponent).applyMagicDamage(dmg)
-
-    //     if (killed) {
-    //         this.unsetCombatTarget()
-    //     }
-
-    // }
-
     /**
      * Sets the cooresponding attack animation for Entities
      */

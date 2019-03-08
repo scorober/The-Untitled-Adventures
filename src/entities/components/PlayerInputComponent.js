@@ -142,7 +142,10 @@ export default class PlayerInputComponent extends Component {
             const mageEffect = new Entity(this.entity.game, origin)
             mageEffect.addComponent(new AnimationComponent(mageEffect, MageEffectData.AnimationConfig))
             mageEffect.addComponent(new MovementComponent(mageEffect, MageEffectData.Attributes))
-            mageEffect.addComponent(new ProjectileBehaviorComponent(mageEffect, target, false))
+            mageEffect.addComponent(new ProjectileBehaviorComponent(mageEffect, target, false, this.entity))
+            mageEffect.addComponent(new AttributeComponent(mageEffect, MageEffectData.Attributes))
+            mageEffect.addComponent(new CollisionComponent(mageEffect))
+            mageEffect.addComponent(new CombatComponent(mageEffect))
             this.entity.game.sceneManager.currentScene.addEntity(mageEffect)
             this.coolDown = 0
         }
@@ -152,7 +155,10 @@ export default class PlayerInputComponent extends Component {
             const archerEffect = new Entity(this.entity.game, origin)
             archerEffect.addComponent(new AnimationComponent(archerEffect, ArcherEffectData.AnimationConfig))
             archerEffect.addComponent(new MovementComponent(archerEffect, ArcherEffectData.Attributes))
-            archerEffect.addComponent(new ProjectileBehaviorComponent(archerEffect, target, false))
+            archerEffect.addComponent(new ProjectileBehaviorComponent(archerEffect, target, false, this.entity))
+            archerEffect.addComponent(new AttributeComponent(archerEffect, ArcherEffectData.Attributes))
+            archerEffect.addComponent(new CollisionComponent(archerEffect))
+            archerEffect.addComponent(new CombatComponent(archerEffect))
             this.entity.game.sceneManager.currentScene.addEntity(archerEffect)
             this.coolDown = 0
         }

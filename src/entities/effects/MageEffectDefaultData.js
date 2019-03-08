@@ -10,7 +10,10 @@ export default {
     Attributes: {
         Damage: 10,
         Radius: 15,
-        Speed: 300
+        Speed: 300,
+        SpellPower: 12,
+        INT: 1,
+        Name: 'MAGEEFFECT'
     },
 
     AnimationConfig: {

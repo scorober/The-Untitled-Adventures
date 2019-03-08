@@ -9,7 +9,8 @@ const yOffset = 20
 export default {
     Attributes: {
         Damage: 10,
-        Speed: 100
+        Speed: 100,
+        Name: 'LIGHTNING'
     },
     AnimationConfig: {
         Scale: 1,
