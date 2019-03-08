@@ -220,6 +220,7 @@ export default class Map extends Entity {
      */
     // eslint-disable-next-line complexity
     buildExits(piece) {
+        console.log(piece.id)
         for (const exit of piece.exits) {
             const tiles = []
             //Create the floor between rooms
@@ -308,6 +309,7 @@ export default class Map extends Entity {
      */
     addExit(destination, room, tiles) {
         let newExit = true
+        // console.log(room, destination)
         this.exits.forEach(function(exit) {
             if (exit.destination === room && exit.room === destination) {
                 //push tiles to existing exit

@@ -5,7 +5,7 @@ import Room from '../pieces/Room.js'
 import { FACING } from '../../utils/Const.js'
 import { shift_left, shift_right, shift } from '../../utils/Index.js'
 
-let piece_id = 0
+let piece_id = 1
 
 export default class Dungeon extends Generator {
 
@@ -33,7 +33,7 @@ export default class Dungeon extends Generator {
             room_count: 10
         }, options)
 
-        piece_id = 0
+        piece_id = 1
 
         super(options)
 
