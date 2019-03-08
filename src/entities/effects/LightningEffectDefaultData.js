@@ -34,6 +34,7 @@ export default {
                 frames: 7,
                 rate: AR.Projectile,
                 options: {
+                    scale: 0.1,
                     width: 96,
                     height: 96,
                     yOffset: yOffset

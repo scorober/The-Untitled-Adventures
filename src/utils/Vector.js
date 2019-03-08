@@ -156,6 +156,10 @@ export default class Vector {
         return deg / degrees
     }
 
+    static equals(v0, v1) {
+        return v0.x === v1.x && v0.y === v1.y
+    }
+
     //if no vector sent in, function is applied to this vector
     static vectorLength(v = this){
         return Math.sqrt(v.lengthSq())

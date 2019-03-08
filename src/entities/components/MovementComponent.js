@@ -269,4 +269,12 @@ export default class MovementComponent extends Component {
     setSpeed(speed) {
         this.speed = speed
     }
+
+    /**
+     * Halts the entity by emptying the path array and standing.
+     */
+    halt() {
+        this.path = []
+        this.setStandingAnimation()
+    }
 }

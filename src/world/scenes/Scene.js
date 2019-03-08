@@ -153,7 +153,6 @@ export default class Scene {
         const entities = this.items.concat(this.entities.sort((a, b) => a.y - b.y))
         const entitiesCount = entities.length
         for (let i = 0; i < entitiesCount; i++) {
-
             const entity = entities[i]
             entity.draw()
         }

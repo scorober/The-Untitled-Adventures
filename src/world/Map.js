@@ -27,6 +27,7 @@ export default class Map extends Entity {
         this.exits = [] //Array of door positions and room they enter.
         this.rooms = []
         this.levelExit = []
+        this.mapLayerLower = [] //Group all lower map layers together.
         this.rng = new Random()
         this.buildMap()
     }
@@ -58,6 +59,10 @@ export default class Map extends Entity {
         this.map2 = new Array2D(size, 0)
         this.map3 = new Array2D(size, 0)
 
+        this.mapLayerLower.push(this.map0)
+        this.mapLayerLower.push(this.map1)
+        this.mapLayerLower.push(this.map2)
+
         const dungeon = this.dungeon
         for (const piece of dungeon.children) {
             // console.log(piece)
@@ -70,8 +75,6 @@ export default class Map extends Entity {
                 [STATES.Upgraded]: false,
                 [STATES.Cleared]: false
             }
-            // this.removeAllExits()
-            // this.openRoomExits(1)
             this.rooms.push(piece)
         }
     }
@@ -395,7 +398,6 @@ export default class Map extends Entity {
             }
         }
         return array
-
     }
 
     /**
@@ -507,5 +509,70 @@ export default class Map extends Entity {
         return this.rooms[id - 1]
     }
 
+    /**
+     * Get the center tile of a room.
+     * @param {Number} id Id of room to find center of.  
+     */
+    getRoomCenter(id) {
+        const room = this.getRoom(id)
+        return new Vector(
+            room.global_pos(room.get_center_pos())[0],
+            room.global_pos(room.get_center_pos())[1]
+        )
+       
+    }
+
+    /**
+     * Returns a random int id out of all but initial room.
+     */
+    getRandomRoom() {
+        return this.rng.int(2, this.rooms.length)
+    }
+
+    /**
+     * Checks if two tiles are the same.
+     * @param {Vector} tile0 
+     * @param {Vector} tile1 
+     */
+    static checkSameTile(tile0, tile1) {
+        return Vector.equals(tile0, tile1)
+    }
+
+
+    /**
+     * Gets the room ID based on the position of a tile.
+     * @param {Vector} tile Tile to be checked.
+     */
+    getRoomByTile(tile) {
+        // const pos = Map.worldToTilePosition(Vector.vectorFromEntity(entity), this.tileSize)
+        for (let i = 0; i < this.rooms.length; i++) {
+            const x0 = this.rooms[i].position[0]
+            const x1 = x0 + this.rooms[i].size[0]
+            const y0 = this.rooms[i].position[1]
+            const y1 = y0 + this.rooms[i].size[1]
+            if (tile.x >= x0 && tile.x <= x1 && tile.y >= y0 && tile.y <= y1) {
+                return this.rooms[i]
+            }
+        }
+    }
+
+    static getTileByEntity(entity) {
+        return  Map.worldToTilePosition(Vector.vectorFromEntity(entity), 64)
+    }
+
+    /**
+     * Returns the highest collidable value for all tiles 
+     * that are not empty space in the lower layer.
+     * @param {Object} tile Tile being evaluated 
+     */
+    getTileCollideVal(tile) {
+        let max = 0
+        this.mapLayerLower.forEach((map) => {
+            const t = map.get([tile.x, tile.y])
+            const tmp = (t === 0) ? 0 : this.mapValueToPathfindingValue(t)
+            max = Math.max(max, tmp)
+        })
+        return max
+    }
 
 }

@@ -6,6 +6,7 @@ import {
 
 const yOffset = 80
 
+
 export default {
     Attributes: {
         Damage: 10,
@@ -71,7 +72,7 @@ export default {
                     height: 192,
                     maxFrames: 11,
                     scale: .5,
-                    yOffset: yOffset
+                    yOffset: yOffset,
                 }
             }
         }

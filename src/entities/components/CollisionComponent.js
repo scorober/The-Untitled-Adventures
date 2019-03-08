@@ -79,6 +79,9 @@ export default class CollisionComponent extends Component {
     }
 
     /**
+     * I belive this method is only used for checking projectiles on impact so far.
+     * Do distances need to be returned here?
+     * TODO add collision checks so projectiles collide in flight.
      * @param vector
      * @returns {boolean} True if collides.
      */
@@ -86,15 +89,13 @@ export default class CollisionComponent extends Component {
         if (!this.isStatic) {
             const hitboxScreenPos = this.hitbox.location
             const dist = vector.distance(hitboxScreenPos)
-            if (dist < this.hitbox.radius) {
-                // console.log(this.entity.UUID)
-                // TODO do we need these distances? 
-                const distY = vector.absdistanceY(hitboxScreenPos)
-                const distX = vector.absdistanceX(hitboxScreenPos)
-                return true
-            } else {
-                return false
-            }
+            // if (dist < this.hitbox.radius) {
+            //     // console.log(this.entity.UUID)
+            //     // TODO do we need these distances? 
+            //     const distY = vector.absdistanceY(hitboxScreenPos)
+            //     const distX = vector.absdistanceX(hitboxScreenPos)
+            // } 
+            return (dist < this.hitbox.radius)
         }
      
     }
