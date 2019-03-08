@@ -84,26 +84,16 @@ export default class CollisionComponent extends Component {
      */
     checkCollisionWorld(vector) {
         if (!this.isStatic) {
-            const currentAnim = this.entity.getComponent(AnimationComponent).getCurrentAnimation()
-            const height = currentAnim.getHeight()
-            const width = currentAnim.getWidth()
             const hitboxScreenPos = this.hitbox.location
-            // console.log(this)
-            
             const dist = vector.distance(hitboxScreenPos)
-            console.log('Stuff:')
-            console.log(dist)
-            console.log(this.hitbox.radius)
-            console.log(dist < this.hitbox.radius)
             if (dist < this.hitbox.radius) {
-                
+                // console.log(this.entity.UUID)
+                // TODO do we need these distances? 
                 const distY = vector.absdistanceY(hitboxScreenPos)
                 const distX = vector.absdistanceX(hitboxScreenPos)
-                console.log(distX)
-                console.log(distY)
-                console.log(this.width)
-                console.log(this.height)
-                return (distX < this.width && distY < this.height)
+                return true
+            } else {
+                return false
             }
         }
      

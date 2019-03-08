@@ -3,9 +3,7 @@ import Vector from '../../utils/Vector.js'
 import MovementComponent from './MovementComponent.js'
 import AnimationComponent from './AnimationComponent.js'
 import { ANIMATIONS as ANIMS } from '../../utils/Const.js'
-import CollisionComponent from './CollisionComponent.js'
 import CombatComponent from './CombatComponent.js'
-import AttributeComponent from './AttributeComponent.js'
 
 export default class ProjectileBehavior extends Component {
     /**
@@ -70,21 +68,19 @@ export default class ProjectileBehavior extends Component {
      * Call on an attack or Attribute component from the caster to do damage.
      */
     impact() {
+        // console.log('this.v', this.v)
         const e = this.entity.game.getEntityByXYInWorld(this.v)
         this.isImpact = true
         // console.log(e)
         for(let i = 0; i < e.length; i++) { //apply AOE damage to all entities that got hit
             const next = e[i]
-            if((next.UUID !== this.caster.UUID && next.UUID !== this.entity.UUID) && next.UUID.includes('ARCHER')){
-                this.entity.getComponent(CombatComponent).magicAttack(next)
+            if((next.UUID !== this.caster.UUID && next.UUID !== this.entity.UUID)){
+                console.log(next.UUID)
+                if (next.getComponent(CombatComponent)) {
+                    this.entity.getComponent(CombatComponent).magicAttack(next)
+                }
             }
         }
-     
-        //TODO: if fireball, (q key)
-        //this.entity.game.soundManager.FIREIMPACT();
-        //elif arrow (e key)
-        //this.entity.game.soundManager.ARROWIMPACT();
-        //elif explosion spell thing (w key)
         this.entity.game.soundManager.ENERGYIMPACT()
     }
 }
