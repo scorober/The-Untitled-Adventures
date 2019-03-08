@@ -65,6 +65,7 @@ export default class BossLevel extends Scene {
         this.addEntity(playerCharacter)
         this.addEntity(game.camera)
         this.game.camera.setFollowedEntity(playerCharacter)
+        this.createMapEntities(game, map)
         //Get player??
     }
 
@@ -79,5 +80,28 @@ export default class BossLevel extends Scene {
         pc.addComponent(new PlayerInputComponent(pc))
         pc.addComponent(new EquippedItemsComponent(pc))
         return pc
+    }
+    /**
+     * Updates this scene.
+     */
+    update() {
+        //NOTE: These two functions were originally done automatically in the super class, but I added them
+        //here to reduce confusion, and to allow the order they are updated/rendered to be adjusted.
+        this.updateMap()
+        this.updateEntities()
+    }
+
+    /**
+     * Draw this scene.
+     */
+    draw() {
+        this.drawBackground()
+        this.drawMap()
+        this.drawEntities()
+        this.drawMapTop()
+    }
+
+    enter(){
+        this.game.soundManager.playMusic(2)
     }
 }

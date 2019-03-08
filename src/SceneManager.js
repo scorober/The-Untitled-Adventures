@@ -6,6 +6,7 @@ import TitleMenuScene from './world/scenes/TitleMenu.js'
 import { HitCircle, CollisionLayer } from './utils/Collision.js'
 import CollisionComponent from './entities/components/CollisionComponent.js'
 import ScoreDisplayScene from './world/scenes/Scores.js'
+import BossLevel from './world/scenes/BossLevel.js';
 
 export default class SceneManager {
 
@@ -22,9 +23,11 @@ export default class SceneManager {
         const firstlevel = new FirstLevel(game)
         const title = new TitleMenuScene(game)
         const scores = new ScoreDisplayScene(game)
+        const boss = new BossLevel(game)
         this.addScene(title.name, title)
         this.addScene(scores.name, scores)
         this.addScene(firstlevel.name, firstlevel)
+        this.addScene(boss.name, boss)
 
         // this.currentScene = title
         this.currentScene = firstlevel

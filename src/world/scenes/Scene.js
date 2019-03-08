@@ -30,6 +30,7 @@ export default class Scene {
         this.killCount = 0
         this.currentRoomEnterTime = 0
         this.currentRoomTimeLapse = 0
+        this.playable = lvl ? true : false
     }
 
     /**
@@ -281,5 +282,9 @@ export default class Scene {
             spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, mapSpawner.type, mapSpawner.r, 4, mapSpawner.room))
             this.addEntity(spawner)
         }
+    }
+
+    isPlayable() {
+        return this.playable
     }
 }
