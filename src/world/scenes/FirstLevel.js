@@ -12,17 +12,17 @@ import MovementComponent from '../../entities/components/MovementComponent.js'
 import MarriottMovementComponent from '../../entities/components/MarriottMovementComponent.js'
 import PlayerInputComponent from '../../entities/components/PlayerInputComponent.js'
 import AnimationComponent from '../../entities/components/AnimationComponent.js'
-import SpawnerBehaviorComponent from '../../entities/components/SpawnerBehaviorComponent.js'
+
 import CollisionComponent from '../../entities/components/CollisionComponent.js'
 import AttributeComponent from '../../entities/components/AttributeComponent.js'
 import CombatComponent from '../../entities/components/CombatComponent.js'
-import SpawnerData from '../../entities/effects/SpawnerDefaultData.js'
+
 import EnemyInteractionComponent from '../../entities/components/InteractionComponent/EnemyInteractionComponent.js'
 import MarriottInteractionComponent from '../../entities/components/InteractionComponent/MarriottInteractionComponent.js'
 import Vector from '../../utils/Vector.js'
-import DoorInteractionComponent from '../../entities/components/InteractionComponent/DoorInteractionComponent.js'
+
 import PlayerCharacterCombatComponent from '../../entities/components/PlayerCharacterCombatComponent.js'
-import StairInteractionComponent from '../../entities/components/InteractionComponent/StairInteractionComponent.js'
+
 import WolfDefaultData from '../../entities/characters/WolfDefaultData.js'
 
 import EquipmentComponent from '../../entities/components/EquipmentComponent.js'
@@ -120,42 +120,7 @@ export default class FirstLevel extends Scene {
 
     }
 
-    createMapEntities(game, map) {
-        this.createSpawners(game, map)
-        this.createExits(game, map)
-        this.createStairs(game, map)
-    }
 
-    createStairs(game, map) {
-        for (const tiles of map.levelExit) {
-            const tileBox = map.getDoorBox(tiles)
-            const exit = new Entity(game, new Vector(tileBox.x, tileBox.y))
-            exit.addComponent(new StairInteractionComponent(exit, tiles))
-            exit.addComponent(new CollisionComponent(exit, tileBox))
-            this.addEntity(exit)
-        }
-    }
-
-    createExits(game, map) {
-
-        for (const exit of map.exits) {
-            const doorBox = map.getDoorBox(exit.tiles)
-            const door = new Entity(game, new Vector(doorBox.x, doorBox.y))
-            door.addComponent(new DoorInteractionComponent(door, exit.tiles, exit.destination, exit.room))
-            door.addComponent(new CollisionComponent(door, doorBox))
-            this.addEntity(door)
-        }
-    }
-
-
-    createSpawners(game, map) {
-        for (const mapSpawner of map.spawners) {
-            const spawner = new Entity(game, mapSpawner.pos)
-            spawner.addComponent(new AnimationComponent(spawner, SpawnerData.AnimationConfig))
-            spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, mapSpawner.type, mapSpawner.r, 4, mapSpawner.room))
-            this.addEntity(spawner)
-        }
-    }
 
 
     createMarriott(game, start, playerCharacter) {
