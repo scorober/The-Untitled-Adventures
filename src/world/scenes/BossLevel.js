@@ -34,7 +34,7 @@ export default class BossLevel extends Scene {
         this.name = 'boss'
     
         const dungeon = new Dungeon({
-            size: [2000, 20],
+            size: [2000, 50],
             rooms: {
                 initial: {
                     min_size: [44, 14], //Floor size
@@ -42,10 +42,15 @@ export default class BossLevel extends Scene {
                     max_exits: 1,
                     position: [0, 0] //OPTIONAL pos of initial room 
                 },
-                any: {
-                    min_size: [15, 15],
-                    max_size: [15, 15],
-                    max_exits: 2
+                // any: {
+                //     min_size: [15, 15],
+                //     max_size: [15, 15],
+                //     max_exits: 2
+                // },
+                boss: {
+                    min_size: [44, 44],
+                    max_size: [44, 44],
+                    max_exits: 1
                 }
             },
             max_corridor_length: 0,
@@ -56,6 +61,8 @@ export default class BossLevel extends Scene {
             max_interconnect_length: 10,
             room_count: 3
         })
+
+
         dungeon.generate()
         dungeon.print()
         const map = new Map(game, game.getAsset(ASSET_PATHS.Dungeon), 64, 16, dungeon, this)

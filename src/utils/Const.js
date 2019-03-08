@@ -447,8 +447,7 @@ export const ROOMS = {
     Initial: 'initial',
     Any: 'any',
     Maze: 'maze',
-    Corridor: 'corridor'
-
+    Corridor: 'corridor',
 }
 
 
@@ -1056,7 +1055,7 @@ export const ROOM_TILES = {
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         ]
     },
-    BossRoom: {
+    Boss: {
         floor: [
             [158, 159, 159, 159, 159, 159, 159, 159, 159, 159, 159, 159, 159, 159, 159, 160, 3, 3, 3, 3, 3, 3, 3, 158, 159, 159, 159, 159, 159, 159, 159, 159, 159, 159, 159, 159, 159, 159, 159, 160],
             [174, 175, 175, 175, 175, 175, 175, 175, 175, 175, 175, 175, 175, 175, 175, 176, 3, 3, 3, 3, 3, 3, 3, 174, 175, 175, 175, 175, 175, 175, 175, 175, 175, 175, 175, 175, 175, 175, 175, 176],
@@ -1238,6 +1237,7 @@ export const LEVEL_ROOMS = {
     },
     Boss: {
         Initial: ROOM_TILES.BossInitial,
-        Exit: ROOM_TILES.Exit
+        Exit: ROOM_TILES.Exit,
+        Boss: ROOM_TILES.Boss
     }
 }

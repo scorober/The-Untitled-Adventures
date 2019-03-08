@@ -169,6 +169,7 @@ export default class Map extends Entity {
 
         const pos = this.alterPos(this.generateRoomProperties(piece).innerPos, 1, 1)
         const center = piece.global_pos(piece.get_center_pos())
+        console.log(piece.tag)
         switch (piece.tag) {
             case ROOMS.Initial:
                 this.createRoomByLayout(pos, levelType.Initial)
@@ -207,6 +208,10 @@ export default class Map extends Entity {
                 break
             case ROOMS.Corridor:
                 this.createRoomByLayout(pos, levelType.Corridor)
+                break
+            case ROOMS.Boss:
+                this.createRoomByLayout(pos, levelType.Boss)
+                break
         }
     }
 
