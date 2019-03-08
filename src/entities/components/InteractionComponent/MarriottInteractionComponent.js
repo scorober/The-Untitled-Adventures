@@ -9,19 +9,13 @@ export default class MarriottInteractionComponent extends InteractionComponent {
     }
 
     update() {
-
+        super.update()
     }
 
     draw() {
-        super.update()
+        super.draw()
         if (this.hovered) {
             this.drawMouseover()
-        }
-        if (this.leftClick) {
-            // handle left click()
-        }
-        if (this.rightClick) {
-            // handle right click()
         }
     }
 

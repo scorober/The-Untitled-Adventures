@@ -29,9 +29,9 @@ export default class SceneManager {
         this.currentScene = title
     }
 
-    
 
-    
+
+
     /**
      * Adds ascene to the collection of scenes
      * @param name the name of the new scene
@@ -79,9 +79,9 @@ export default class SceneManager {
         this.currentScene = this.getScene(name)
 
         this.currentScene.enter(params) //enter new scene
-        if(this.currentScene !== this.scenes['scores']) {
+        if (this.currentScene !== this.scenes['scores']) {
             this.currentScene.enter(params) //enter new scene
-        } 
+        }
     }
 
     /**

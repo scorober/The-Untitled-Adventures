@@ -6,6 +6,7 @@ export default class Scene {
     constructor(game, lvl) {
         this.game = game
         this.entities = []
+        this.items = []
         this.map = null
         this.background = null
         this.highlightedEntity = {}
@@ -46,10 +47,18 @@ export default class Scene {
     }
 
     /**
+     * Adds an item to the scene's item layer to be updated and drawn
+     * @param item
+     */
+    addItem(item) {
+        this.items.push(item)
+    }
+
+    /**
      * Adds an a collidable entity to the game. Works in place of addEntity.
      * @param entity
      */
-    addCollidableEntity(entity){
+    addCollidableEntity(entity) {
         this.addEntity(entity)
         entity.setCollidable()
         this.game.sceneManager.addCollidableEntity(entity)
@@ -61,6 +70,14 @@ export default class Scene {
      */
     removeEntity(index) {
         this.entities.splice(index, 1)
+    }
+
+    /**
+     * Remove an item from scene so it is no longer updated or drawn
+     * @param item
+     */
+    removeItem(index) {
+        this.items.splice(index, 1)
     }
 
     /**
@@ -112,15 +129,14 @@ export default class Scene {
      * Update entities details, location, etc
      */
     updateEntities() {
-        const entitiesCount = this.entities.length
-        if(entitiesCount){
-            this.entities.sort((a,b) => a.y - b.y)
-        }
+        // Concat sorted Entities list to the end of items, so items draw first
+        const entities = this.items.concat(this.entities.sort((a, b) => a.y - b.y))
+        const entitiesCount = entities.length
         for (let i = 0; i < entitiesCount; i++) {
-            const entity = this.entities[i]
+            const entity = entities[i]
             if (entity) {
                 if (entity.removeFromWorld === true) {
-                    this.removeEntity(i)
+                    this.game.removeEntityByRef(entities[i])
                 } else {
                     entity.update()
                 }
@@ -133,9 +149,12 @@ export default class Scene {
      * Draw all entities in the scene.
      */
     drawEntities() {
-        const entitiesCount = this.entities.length
+        // Concat sorted Entities list to the end of items, so items draw first
+        const entities = this.items.concat(this.entities.sort((a, b) => a.y - b.y))
+        const entitiesCount = entities.length
         for (let i = 0; i < entitiesCount; i++) {
-            const entity = this.entities[i]
+
+            const entity = entities[i]
             entity.draw()
         }
     }
@@ -196,7 +215,7 @@ export default class Scene {
         this.pacified = false
         this.currentRoomEnterTime = this.game.timer.gameTime
     }
-    
+
     setPacified() {
         this.pacified = true
         this.swarm = false
@@ -217,6 +236,4 @@ export default class Scene {
             this.setPacified()
         }
     }
-    enter(params){}
-    exit(){}
 }

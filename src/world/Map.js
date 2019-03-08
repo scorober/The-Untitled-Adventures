@@ -181,6 +181,7 @@ export default class Map extends Entity {
             case ROOMS.Exit:
                 //TODO create room layout and get correct tiles.
                 this.createObject(this.map1, center, MI.StairsN)
+                // eslint-disable-next-line no-case-declarations
                 const tiles = []
                 tiles.push(center)
                 tiles.push(this.alterPos(center, 1, 0))

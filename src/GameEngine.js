@@ -45,7 +45,7 @@ export default class GameEngine {
         this.camera = new Camera(this)
         this.sceneManager.init(this)
         this.startInput()
-        
+
     }
 
     reInit() {
@@ -135,7 +135,12 @@ export default class GameEngine {
 
     removeEntityByRef(entity) {
         const scene = this.sceneManager.currentScene
-        scene.removeEntity(scene.entities.indexOf(entity))
+        if (scene.entities.indexOf(entity) > -1) {
+            scene.removeEntity(scene.entities.indexOf(entity))
+        }
+        if (scene.items.indexOf(entity) > -1) {
+            scene.removeItem(scene.items.indexOf(entity))
+        }
     }
 
     getHighlightedEntity() {
@@ -155,7 +160,7 @@ export default class GameEngine {
         return this.sceneManager.getCollidablesXYWorld(new Vector(pos.x, pos.y))
     }
 
-    
+
     /**
      * Creates score items and saves them into the score scene. Updates kill count or scene
      * state accordingly.
@@ -165,13 +170,13 @@ export default class GameEngine {
      */
     addScore(name, kill) {
         const scene = this.sceneManager.getScene('scoredisplay')
-        if(kill) {
+        if (kill) {
             scene.killCount++
             const Score = this.addKillScore(name)
-            if(Score != null) scene.scores.push(Score)
+            if (Score != null) scene.scores.push(Score)
         } else {
             const Score = this.addNonKill(name, scene)
-            if(Score != null) scene.scores.push(Score)
+            if (Score != null) scene.scores.push(Score)
         }
     }
 
@@ -263,7 +268,7 @@ export default class GameEngine {
         switch (name) {
             case 'ROOM':
                 Score = {
-                    Name: 'LEVEL_END',
+                    Name: 'ROOM_CLEARED',
                     Time: Math.floor(this.timer.gameTime),
                     Duration: this.sceneManager.currentScene.currentRoomTimeLapse,
                     lvl: 1,
@@ -271,11 +276,11 @@ export default class GameEngine {
                     Type: 'C'
                 }
                 break
-            case  'END':
+            case 'END':
                 Score = {
                     Name: 'LEVEL_END',
                     Time: Math.floor(this.timer.gameTime),
-                    Duration: this.timer.gameTime,
+                    Duration: this.timer.gameTime.toFixed(2),
                     lvl: 1,
                     Score: Math.floor(1000 * Math.sqrt(2) / Math.sqrt(this.timer.gameTime)),
                     Type: 'C'
@@ -287,5 +292,5 @@ export default class GameEngine {
         }
         return Score
     }
-    
+
 }
