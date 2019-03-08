@@ -23,7 +23,6 @@ export default class DoorInteractionComponent extends InteractionComponent {
             this.entity.game.soundManager.OPENDOOR()
             this.entity.game.sceneManager.currentScene.map.openExit(this.tiles)
             this.entity.game.sceneManager.currentScene.map.getRoom(this.destination).states[STATES.Opened] = true
-            console.log(this.entity.game.sceneManager.currentScene.map.getRoom(this.room))
             this.entity.game.sceneManager.currentScene.map.getRoom(this.room).states[STATES.Opened] = true
             this.entity.removeFromWorld = true
         }

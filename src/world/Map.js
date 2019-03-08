@@ -220,7 +220,6 @@ export default class Map extends Entity {
      */
     // eslint-disable-next-line complexity
     buildExits(piece) {
-        console.log(piece.id)
         for (const exit of piece.exits) {
             const tiles = []
             //Create the floor between rooms

@@ -198,6 +198,6 @@ export default class FirstLevel extends Scene {
     }
 
     enter(params){
-        this.game.soundManager.playMusic(2);
+        this.game.soundManager.playMusic(2)
     }
 }

@@ -78,7 +78,7 @@ export default class SceneManager {
         this.currentScene.exit()  //exit old scene
         this.currentScene = this.getScene(name)
 
-         this.currentScene.enter(params) //enter new scene
+        this.currentScene.enter(params) //enter new scene
         if(this.currentScene !== this.scenes['scores']) {
             this.currentScene.enter(params) //enter new scene
         } 

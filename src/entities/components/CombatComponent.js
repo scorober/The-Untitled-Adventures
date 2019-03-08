@@ -11,7 +11,7 @@ export default class CombatComponent extends Component {
         this.attributeComponent = this.entity.getComponent(AttributeComponent)
         this.dmgTimer = 0
         this.combatTarget = false
-        this.entity.CombatComponent = this;
+        this.entity.CombatComponent = this
     }
 
     /**
