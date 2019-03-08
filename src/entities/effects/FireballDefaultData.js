@@ -16,7 +16,10 @@ export default {
     Attributes: {
         Damage: 10,
         Radius: 15,
-        Speed: 400
+        Speed: 400,
+        SpellPower : 12,
+        INT : 1,
+        Name: 'FIREBALL'
     },
     AnimationConfig: {
         Scale: 1.3,

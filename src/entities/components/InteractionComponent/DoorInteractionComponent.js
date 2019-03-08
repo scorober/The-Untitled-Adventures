@@ -1,9 +1,12 @@
 import InteractionComponent from './InteractionComponent.js'
+import { STATES } from '../../../utils/Const.js'
 
 export default class DoorInteractionComponent extends InteractionComponent {
     constructor(entity, tiles, destination, room) {
         super(entity)
         this.tiles = tiles
+        this.destination = destination
+        this.room = room
     }
 
     
@@ -16,8 +19,12 @@ export default class DoorInteractionComponent extends InteractionComponent {
     }
 
     setRightClick() {
-        this.entity.game.sceneManager.currentScene.map.openExit(this.tiles)
-        this.entity.removeFromWorld = true
+        if (this.entity.game.sceneManager.currentScene.pacified) {
+            this.entity.game.soundManager.OPENDOOR()
+            this.entity.game.sceneManager.currentScene.map.openExit(this.tiles)
+            this.entity.game.sceneManager.currentScene.map.getRoom(this.destination).states[STATES.Opened] = true
+            this.entity.removeFromWorld = true
+        }
     }
 
     unsetRightClick() {

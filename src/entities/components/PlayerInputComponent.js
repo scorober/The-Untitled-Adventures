@@ -62,7 +62,7 @@ export default class PlayerInputComponent extends Component {
 
     handleRightClick() {
         const clickPos = this.entity.game.inputManager.getRightClick()
-        const entities = this.entity.game.getCurrentScene().entities
+        const entities = this.entity.game.getCurrentScene().items.concat(this.entity.game.getCurrentScene().entities)
         for (let i = 0; i < entities.length; i++) {
             const collisionComponent = entities[i].getComponent(CollisionComponent)
             const interactionComponent = entities[i].getComponent(InteractionComponent)

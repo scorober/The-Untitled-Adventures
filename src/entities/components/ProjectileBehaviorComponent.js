@@ -12,7 +12,7 @@ export default class ProjectileBehavior extends Component {
      * This component moves a projectile and switches animations.
      * Projectiles can have 3 stages. (Initial, Projectile, and Impact)
      * Projectiles must have projectile and impact animations, initial is optional.
-     * 
+     *
      * @param {Entity} entity A reference to the Entity this Component is attached to.
      * @param {Vector} target  Target of the projectile
      * @param {boolean} initial  True if this projectile has an initial animation
@@ -35,6 +35,15 @@ export default class ProjectileBehavior extends Component {
         } else {
             this.animComp.setAnimation(ANIMS.Projectile, this.impact)
         }
+        this.isImpact = false
+
+
+        //TODO: if (this is a fireball) { ... (q key)
+        //this.entity.game.soundManager.FIRECAST();
+        //elif arrow (e key)
+        //this.entity.game.soundManager.ARROWCAST();
+        //elif explosion spell thing (w key)
+        this.entity.game.soundManager.ENERGYCAST()
     }
 
     /**
@@ -43,18 +52,15 @@ export default class ProjectileBehavior extends Component {
      */
     update() {
         this.v = Vector.vectorFromEntity(this.entity)
-
-        if (!this.isImpacted) {
-            if (this.v.distance(this.target) < 20) {
-                this.isImpacted = true
-                this.impact()
-                const cb = () => { 
-                    this.entity.removeFromWorld = true
-                }
-                this.animComp.setAnimation(ANIMS.Impact, cb)
-            } else {
-                this.entity.getComponent(MovementComponent).move(this.dir)
+        if (this.v.distance(this.target) < 20) {
+            const cb = () => {
+                this.entity.removeFromWorld = true
             }
+            if(!this.isImpact)
+                this.impact() //this needs to be here or else it won't happen until after the animation ends
+            this.animComp.setAnimation(ANIMS.Impact, cb)
+        } else {
+            this.entity.getComponent(MovementComponent).move(this.dir)
         }
     }
 
@@ -65,12 +71,20 @@ export default class ProjectileBehavior extends Component {
      */
     impact() {
         const e = this.entity.game.getEntityByXYInWorld(this.v)
-        console.log(e)
+        this.isImpact = true
+        // console.log(e)
         for(let i = 0; i < e.length; i++) { //apply AOE damage to all entities that got hit
             const next = e[i]
             if((next.UUID !== this.caster.UUID && next.UUID !== this.entity.UUID) && next.UUID.includes('ARCHER')){
                 this.entity.getComponent(CombatComponent).magicAttack(next)
             }
         }
+     
+        //TODO: if fireball, (q key)
+        //this.entity.game.soundManager.FIREIMPACT();
+        //elif arrow (e key)
+        //this.entity.game.soundManager.ARROWIMPACT();
+        //elif explosion spell thing (w key)
+        this.entity.game.soundManager.ENERGYIMPACT()
     }
 }

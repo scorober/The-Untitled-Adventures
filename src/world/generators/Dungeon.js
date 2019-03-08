@@ -5,6 +5,7 @@ import Room from '../pieces/Room.js'
 import { FACING } from '../../utils/Const.js'
 import { shift_left, shift_right, shift } from '../../utils/Index.js'
 
+let piece_id = 0
 
 export default class Dungeon extends Generator {
 
@@ -31,6 +32,8 @@ export default class Dungeon extends Generator {
             max_interconnect_length: 10,
             room_count: 10
         }, options)
+
+        piece_id = 0
 
         super(options)
 
@@ -88,7 +91,7 @@ export default class Dungeon extends Generator {
         return new Corridor({
             length: this.random.int(this.min_corridor_length, this.max_corridor_length),
             facing: this.random.choose(FACING)
-        })
+        }, piece_id++)
     }
 
     add_interconnect() {
@@ -141,7 +144,7 @@ export default class Dungeon extends Generator {
                                 corridor = new Corridor({
                                     length,
                                     facing: exit[1]
-                                })
+                                }, piece_id++)
 
                                 if (this.join(room, corridor.perimeter[0], corridor, exit)) {
                                     this.join_exits(room2, perims[hash][0], corridor, corridor.perimeter[corridor.perimeter.length - 1])
@@ -174,7 +177,7 @@ export default class Dungeon extends Generator {
             max_exits: opts.max_exits,
             symmetric: this.symmetric_rooms,
             tag: key
-        })
+        }, piece_id++)
 
         this.room_tags.splice(this.room_tags.indexOf(key), 1)
 

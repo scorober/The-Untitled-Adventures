@@ -2,7 +2,7 @@ import Piece from './Piece.js'
 
 export default class Room extends Piece {
 
-    constructor(options) {
+    constructor(options, id) {
         /*
         note, size to be provided is size without walls.
         */
@@ -13,7 +13,7 @@ export default class Room extends Piece {
             symmetric: false //if true, 
         }, options)
 
-        super(options)
+        super(options, id)
 
         this.walls.set_square([1, 1], this.room_size, false, true)
 
