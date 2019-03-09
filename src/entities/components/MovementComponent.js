@@ -137,7 +137,6 @@ export default class MovementComponent extends Component {
      * @param {Number} y The y index of the tile to pathfind to (y values increase starting from the top going down)
      */
     setPathfindingTarget(tile) {
-        console.log(this.entity.game.getWorld())
         const currentTile = this.getCurrentTile()
         const pathfinder = new AStarPathfinding(this.entity.game.getWorld(), [currentTile.x, currentTile.y], [tile.x, tile.y])
         const path = pathfinder.calculatePath()

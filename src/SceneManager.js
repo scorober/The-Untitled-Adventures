@@ -20,17 +20,18 @@ export default class SceneManager {
     init(game) {
         this.game = game
         this.collisionLayer = new CollisionLayer()
-        // const firstlevel = new FirstLevel(game)
+        const firstlevel = new FirstLevel(game)
         const title = new TitleMenuScene(game)
         const scores = new ScoreDisplayScene(game)
         const boss = new BossLevel(game)
         this.addScene(title.name, title)
         this.addScene(scores.name, scores)
-        // this.addScene(firstlevel.name, firstlevel)
+        this.addScene(firstlevel.name, firstlevel)
         this.addScene(boss.name, boss)
 
-        // this.currentScene = title
-        this.currentScene = boss
+        this.currentScene = title
+        // this.currentScene = boss
+        // this.currentScene = firstlevel
     }
 
 

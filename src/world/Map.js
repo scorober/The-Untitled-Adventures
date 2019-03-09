@@ -24,6 +24,7 @@ export default class Map extends Entity {
         this.scene = scene
         this.mapLayerLower = [] //Group all lower map layers together.
         this.rng = new Random()
+
         if (dungeon) {
             this.dungeon = dungeon
             this.rows = dungeon.size[1]
@@ -68,7 +69,6 @@ export default class Map extends Entity {
 
         const dungeon = this.dungeon
         for (const piece of dungeon.children) {
-            // console.log(piece)
             this.buildWalls(piece)
             this.buildRoom(piece)
             this.buildExits(piece)
@@ -172,7 +172,6 @@ export default class Map extends Entity {
 
         const pos = this.alterPos(this.generateRoomProperties(piece).innerPos, 1, 1)
         const center = piece.global_pos(piece.get_center_pos())
-        console.log(piece.tag)
         switch (piece.tag) {
             case ROOMS.Initial:
                 this.createRoomByLayout(pos, levelType.Initial)
@@ -430,6 +429,7 @@ export default class Map extends Entity {
     update() { }
 
     draw() {
+        // console.log(this.game.camera)
         for (let c = 0; c < this.cols; c++) {
             for (let r = 0; r < this.rows; r++) {
                 const tile = this.map0.get([c, r])

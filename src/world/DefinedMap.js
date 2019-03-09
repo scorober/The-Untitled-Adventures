@@ -7,8 +7,6 @@ export default class DefinedMap extends Map {
         super(game, tileAtlas, tileSize, setLength, null, scene)
         this.rows = map.floor.length
         this.cols = map.floor[0].length
-        // console.log(scene)
-        // console.log(map)
         this.startPos = Map.tileToWorldPosition(map.start, tileSize)
         this.buildMap(map)
     }
@@ -29,10 +27,6 @@ export default class DefinedMap extends Map {
         this.map2 = new Array2D(map.size, 0)
         this.map3 = new Array2D(map.size, 0)
 
-        console.log(map)
-        console.log(map.size)
-        console.log(map.floor.length)
-        console.log(map.floor[0].length)
         for (let row = 0; row < map.size[1]; row++) {
             for (let col = 0; col < map.size[0]; col++) {
                 // console.log(map.floor[col][row])
@@ -42,11 +36,9 @@ export default class DefinedMap extends Map {
                 this.map3.set([col, row], map.top[row][col])
             }
         }
-        console.log('help')
         this.mapLayerLower.push(this.map0)
         this.mapLayerLower.push(this.map1)
         this.mapLayerLower.push(this.map2)
-        console.log(this.map1)
     }
 
     getStartPos() {
