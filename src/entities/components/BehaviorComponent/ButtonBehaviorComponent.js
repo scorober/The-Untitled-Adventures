@@ -1,8 +1,8 @@
-import Component from './Component.js'
-import Map from '../../world/Map.js'
+import Component from '../Component.js'
+import Map from '../../../world/Map.js'
 import {
     MAP_ITEMS
-} from '../../utils/Const.js'
+} from '../../../utils/Const.js'
 
 export default class ButtonBehaviorComponent extends Component {
     constructor(entity, scene) {

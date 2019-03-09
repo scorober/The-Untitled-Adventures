@@ -1,10 +1,10 @@
-import Component from './Component.js'
-import AnimationComponent from './AnimationComponent.js'
-import { ANIMATIONS as ANIMS } from '../../utils/Const.js'
-import Vector from '../../utils/Vector.js'
-import Map from '../../world/Map.js'
-import MovementComponent from './MovementComponent.js'
-import PlayerInputComponent from './PlayerInputComponent.js'
+import Component from '../Component.js'
+import AnimationComponent from '../AnimationComponent.js'
+import { ANIMATIONS as ANIMS } from '../../../utils/Const.js'
+import Vector from '../../../utils/Vector.js'
+import Map from '../../../world/Map.js'
+import MovementComponent from '../MovementComponent.js'
+import PlayerInputComponent from '../PlayerInputComponent.js'
 
 export default class TeleportBehaviorComponent extends Component {
     constructor(entity, targetEntity, target) {

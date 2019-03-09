@@ -1,10 +1,10 @@
-import Component from './Component.js'
-import Vector from '../../utils/Vector.js'
-import AnimationComponent from './AnimationComponent.js'
-import Random from '../../utils/Random.js'
+import Component from '../Component.js'
+import Vector from '../../../utils/Vector.js'
+import AnimationComponent from '../AnimationComponent.js'
+import Random from '../../../utils/Random.js'
 import {
     ANIMATIONS as ANIMS
-} from '../../utils/Const.js'
+} from '../../../utils/Const.js'
 
 export default class FreezeBehaviorComponent extends Component {
     /**

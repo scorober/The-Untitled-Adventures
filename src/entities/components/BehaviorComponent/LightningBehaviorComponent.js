@@ -1,13 +1,13 @@
-import Entity from '../Entity.js'
-import Component from './Component.js'
-import Vector from '../../utils/Vector.js'
-import MovementComponent from './MovementComponent.js'
-import AnimationComponent from './AnimationComponent.js'
-import Random from '../../utils/Random.js'
-import LightningData from '../effects/LightningEffectDefaultData.js'
+import Entity from '../../Entity.js'
+import Component from '../Component.js'
+import Vector from '../../../utils/Vector.js'
+import MovementComponent from '../MovementComponent.js'
+import AnimationComponent from '../AnimationComponent.js'
+import Random from '../../../utils/Random.js'
+import LightningData from '../../effects/LightningEffectDefaultData.js'
 import {
     ANIMATIONS as ANIMS
-} from '../../utils/Const.js'
+} from '../../../utils/Const.js'
 
 export default class LightningBehaviorComponent extends Component {
     /**

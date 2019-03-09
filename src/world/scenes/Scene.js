@@ -1,4 +1,4 @@
-import SpawnerBehaviorComponent from '../../entities/components/SpawnerBehaviorComponent.js'
+import SpawnerBehaviorComponent from '../../entities/components/BehaviorComponent/SpawnerBehaviorComponent.js'
 import SpawnerData from '../../entities/effects/SpawnerDefaultData.js'
 import DoorInteractionComponent from '../../entities/components/InteractionComponent/DoorInteractionComponent.js'
 import StairInteractionComponent from '../../entities/components/InteractionComponent/StairInteractionComponent.js'
@@ -7,7 +7,7 @@ import AnimationComponent from '../../entities/components/AnimationComponent.js'
 import Vector from '../../utils/Vector.js'
 import CollisionComponent from '../../entities/components/CollisionComponent.js'
 import Camera from '../../entities/Camera.js'
-import ButtonBehaviorComponent from '../../entities/components/ButtonBehaviorComponent.js'
+import ButtonBehaviorComponent from '../../entities/components/BehaviorComponent/ButtonBehaviorComponent.js'
 
 
 /**

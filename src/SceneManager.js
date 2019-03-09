@@ -29,8 +29,8 @@ export default class SceneManager {
         this.addScene(firstlevel.name, firstlevel)
         this.addScene(boss.name, boss)
 
-        // this.currentScene = title
-        this.currentScene = boss
+        this.currentScene = title
+        // this.currentScene = boss
         // this.currentScene = firstlevel
     }
 

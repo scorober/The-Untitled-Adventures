@@ -1,10 +1,10 @@
-import Component from './Component.js'
-import Vector from '../../utils/Vector.js'
-import MovementComponent from './MovementComponent.js'
-import AnimationComponent from './AnimationComponent.js'
-import { ANIMATIONS as ANIMS } from '../../utils/Const.js'
-import CombatComponent from './CombatComponent.js'
-import Map from '../../world/Map.js'
+import Component from '../Component.js'
+import Vector from '../../../utils/Vector.js'
+import MovementComponent from '../MovementComponent.js'
+import AnimationComponent from '../AnimationComponent.js'
+import { ANIMATIONS as ANIMS } from '../../../utils/Const.js'
+import CombatComponent from '../CombatComponent.js'
+import Map from '../../../world/Map.js'
 
 export default class ProjectileBehavior extends Component {
     /**
