@@ -51,7 +51,7 @@ export default class TitleMenuScene extends Scene {
         this.updateMap(tick)
 
         //wait until all words are displayed to get input
-        if(this.timeElapsed > 4){
+        if(this.timeElapsed > 4.5){
             if(!this.isMusicPlaying){this.playMusic()}
             if (this.selectedItem===0){this.selectedItem=2}//enable first option if not yet enabled
 
