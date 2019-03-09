@@ -15,21 +15,24 @@ export default class Map extends Entity {
      */
     constructor(game, tileAtlas, tileSize, setLength, dungeon, scene) {
         super(game, 0, 0)
+
         this.tileAtlas = tileAtlas
         this.tileSize = tileSize
         this.setLength = setLength
-        this.dungeon = dungeon
-        this.rows = dungeon.size[1]
-        this.cols = dungeon.size[0]
+        this.levelExit = []
         this.tiles = []
         this.scene = scene
-        this.spawners = [] //Array of spawner positions and radii.
-        this.exits = [] //Array of door positions and room they enter.
-        this.rooms = []
-        this.levelExit = []
         this.mapLayerLower = [] //Group all lower map layers together.
         this.rng = new Random()
-        this.buildMap()
+        if (dungeon) {
+            this.dungeon = dungeon
+            this.rows = dungeon.size[1]
+            this.cols = dungeon.size[0]
+            this.spawners = [] //Array of spawner positions and radii.
+            this.exits = [] //Array of door positions and room they enter.
+            this.rooms = []
+            this.buildMap()
+        }
     }
 
     /**
