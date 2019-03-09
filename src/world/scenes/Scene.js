@@ -7,6 +7,7 @@ import AnimationComponent from '../../entities/components/AnimationComponent.js'
 import Vector from '../../utils/Vector.js'
 import CollisionComponent from '../../entities/components/CollisionComponent.js'
 import Camera from '../../entities/Camera.js'
+import ButtonBehaviorComponent from '../../entities/components/ButtonBehaviorComponent.js'
 
 
 /**
@@ -289,6 +290,20 @@ export default class Scene {
             spawner.addComponent(new AnimationComponent(spawner, SpawnerData.AnimationConfig))
             spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, mapSpawner.type, mapSpawner.r, 4, mapSpawner.room))
             this.addEntity(spawner)
+        }
+    }
+
+    /**
+     * Create buttons for the map. May want to pass more info into Map.buttons array.
+     * (currently only holds the buttons position)
+     * @param {GameEngine} game 
+     * @param {Map} map 
+     */
+    createButtons(game, map) {
+        for (const button of map.buttons) {
+            const btn = new Entity(game, button)
+            btn.addComponent(new ButtonBehaviorComponent(btn, this))
+            this.addEntity(btn)
         }
     }
 

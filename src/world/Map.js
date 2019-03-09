@@ -21,6 +21,7 @@ export default class Map extends Entity {
         this.setLength = setLength
         this.levelExit = []
         this.tiles = []
+        this.buttons = []
         this.scene = scene
         this.mapLayerLower = [] //Group all lower map layers together.
         this.rng = new Random()

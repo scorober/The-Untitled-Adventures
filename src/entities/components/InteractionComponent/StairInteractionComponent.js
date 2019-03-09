@@ -17,9 +17,6 @@ export default class StairInteractionComponent extends InteractionComponent {
 
     setRightClick() {
         this.entity.game.sceneManager.change('boss')
-        // this.entity.game.addScore('END', false)
-        // this.entity.game.sceneManager.change('scoredisplay')
-        // this.entity.game.sceneManager.currentScene.updateText()
     }
 
     unsetRightClick() {

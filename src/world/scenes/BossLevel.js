@@ -23,6 +23,7 @@ export default class BossLevel extends Scene {
         this.setPlayer(playerCharacter)
         this.addEntity(playerCharacter)
         this.setCamera(playerCharacter)
+        this.createButtons(game, map)
     }
 
     createPlayerCharacter(game, start) {

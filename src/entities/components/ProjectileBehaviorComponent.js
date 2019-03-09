@@ -50,10 +50,8 @@ export default class ProjectileBehavior extends Component {
      * Moves projectile, if target is reached switches to impact anim and does damage.
      */
     update() {
-        // console.log(this.isImpact)
         this.v = Vector.vectorFromEntity(this.entity)
         if (!this.isImpact) {
-            // console.log(this.checkCollidedTile() )
             if (this.checkCollidedTile() || this.v.distance(this.target) < 20) {
                 this.impact()
             } else {

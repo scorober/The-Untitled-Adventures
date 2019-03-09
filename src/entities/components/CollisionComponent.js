@@ -90,7 +90,6 @@ export default class CollisionComponent extends Component {
             const hitboxScreenPos = this.hitbox.location
             const dist = vector.distance(hitboxScreenPos)
             // if (dist < this.hitbox.radius) {
-            //     // console.log(this.entity.UUID)
             //     // TODO do we need these distances? 
             //     const distY = vector.absdistanceY(hitboxScreenPos)
             //     const distX = vector.absdistanceX(hitboxScreenPos)

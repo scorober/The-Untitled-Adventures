@@ -30,8 +30,8 @@ export default class SceneManager {
         this.addScene(boss.name, boss)
 
         // this.currentScene = title
-        // this.currentScene = boss
-        this.currentScene = firstlevel
+        this.currentScene = boss
+        // this.currentScene = firstlevel
     }
 
 
@@ -64,7 +64,6 @@ export default class SceneManager {
      * Calls update func for active scene
      */
     update() {
-        console.log(this.currentScene)
         this.currentScene.update()
     }
 
