@@ -34,32 +34,37 @@ export default class BossLevel extends Scene {
         this.name = 'boss'
     
         const dungeon = new Dungeon({
-            size: [2000, 50],
+            size: [2000, 60],
             rooms: {
                 initial: {
                     min_size: [44, 14], //Floor size
                     max_size: [44, 14],
                     max_exits: 1,
-                    position: [0, 0] //OPTIONAL pos of initial room 
+                    // position: [0, 0] //OPTIONAL pos of initial room 
                 },
-                // any: {
-                //     min_size: [15, 15],
-                //     max_size: [15, 15],
-                //     max_exits: 2
-                // },
+                any: {
+                    min_size: [10, 10],
+                    max_size: [10, 10],
+                    max_exits: 2
+                },
                 boss: {
                     min_size: [44, 44],
                     max_size: [44, 44],
                     max_exits: 1
+                },
+                corridor: {
+                    min_size: [40, 16],
+                    max_size: [40, 16],
+                    max_exits: 2
                 }
             },
             max_corridor_length: 0,
             min_corridor_length: 0,
             corridor_density: 0, //corridors per room, remove corridors? They'll be tagged as such.
             symmetric_rooms: true, // exits must be in the center of a wall if true. Setting true will make design easier
-            interconnects: 1, //extra corridors to connect rooms and make circular paths. not 100% guaranteed
-            max_interconnect_length: 10,
-            room_count: 3
+            interconnects: 0, //extra corridors to connect rooms and make circular paths. not 100% guaranteed
+            max_interconnect_length: 0,
+            room_count: 4
         })
 
 
