@@ -22,8 +22,7 @@ export default class BossLevel extends Scene {
         const playerCharacter = this.createPlayerCharacter(game, start)
         this.setPlayer(playerCharacter)
         this.addEntity(playerCharacter)
-        this.addEntity(game.camera)
-        this.game.camera.setFollowedEntity(playerCharacter)
+        this.setCamera(playerCharacter)
     }
 
     createPlayerCharacter(game, start) {

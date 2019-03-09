@@ -6,6 +6,7 @@ import Entity from '../../entities/Entity.js'
 import AnimationComponent from '../../entities/components/AnimationComponent.js'
 import Vector from '../../utils/Vector.js'
 import CollisionComponent from '../../entities/components/CollisionComponent.js'
+import Camera from '../../entities/Camera.js';
 
 
 /**
@@ -31,6 +32,7 @@ export default class Scene {
         this.currentRoomEnterTime = 0
         this.currentRoomTimeLapse = 0
         this.playable = lvl ? true : false
+        this.camera = null
     }
 
     /**
@@ -41,6 +43,12 @@ export default class Scene {
         this.timeElapsed += this.game.clockTick
     }
     draw() { }
+
+    setCamera(entity) {
+        this.camera = new Camera(this.game)
+        this.camera.setFollowedEntity(entity)
+        this.addEntity(this.camera)
+    }
 
     /**
      * Super-most enter method for the scene hierarchy.

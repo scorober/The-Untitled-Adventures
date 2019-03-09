@@ -11,7 +11,6 @@ export default class GameEngine {
         this.inputManager = null
         this.assetManager = null
         this.soundManager = null
-        this.camera = null //TODO: define this by scene? Not all scenes will need this and it will probably change between scenes. Otherwise leave it.
         this.timer = null
         this.ctx = null
         this.surfaceWidth = null
@@ -42,7 +41,6 @@ export default class GameEngine {
         this.surfaceHeight = this.ctx.canvas.height
         this.timer = new Timer()
         this.sceneManager = new SceneManager()
-        this.camera = new Camera(this)
         this.sceneManager.init(this)
         this.startInput()
 
@@ -51,7 +49,6 @@ export default class GameEngine {
     reInit() {
         this.timer = new Timer()
         this.sceneManager = new SceneManager()
-        this.camera = new Camera(this)
         this.sceneManager.init(this)
         this.startInput()
         this.start()
@@ -115,15 +112,11 @@ export default class GameEngine {
         return 64
     }
 
-    setCamera(camera) {
-        this.camera = camera
-    }
-
     screenToWorld(pos) {
-        return new Vector(pos.x + this.camera.xView, pos.y + this.camera.yView)
+        return new Vector(pos.x + this.sceneManager.currentScene.camera.xView, pos.y + this.sceneManager.currentScene.camera.yView)
     }
     worldToScreen(pos) {
-        return new Vector(pos.x - this.camera.xView, pos.y - this.camera.yView)
+        return new Vector(pos.x - this.sceneManager.currentScene.camera.xView, pos.y - this.sceneManager.currentScene.camera.yView)
     }
     getCurrentScene() {
         if (this.sceneManager) {

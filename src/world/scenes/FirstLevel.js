@@ -92,8 +92,7 @@ export default class FirstLevel extends Scene {
         this.setPlayer(playerCharacter)
         this.addEntity(playerCharacter)
         this.addEntity(marriott)
-        this.addEntity(game.camera)
-        this.game.camera.setFollowedEntity(playerCharacter)
+        this.setCamera(playerCharacter)
         const test = this.createArcher(game, start, playerCharacter)
         this.addEntity(test)
 

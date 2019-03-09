@@ -29,8 +29,8 @@ export default class SceneManager {
         this.addScene(firstlevel.name, firstlevel)
         this.addScene(boss.name, boss)
 
-        this.currentScene = title
-        // this.currentScene = boss
+        // this.currentScene = title
+        this.currentScene = boss
         // this.currentScene = firstlevel
     }
 
@@ -64,6 +64,7 @@ export default class SceneManager {
      * Calls update func for active scene
      */
     update() {
+        console.log(this.currentScene)
         this.currentScene.update()
     }
 
@@ -126,8 +127,6 @@ export default class SceneManager {
             
             const collisionComponent = entity.getComponent(CollisionComponent)
             if (collisionComponent) {
-                // console.log(entity.x, entity.y)
-                // TODO always coming back undefined
                 const collides = collisionComponent.checkCollisionWorld(pos)
                 if (collides) {
                     

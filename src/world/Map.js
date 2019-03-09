@@ -429,7 +429,6 @@ export default class Map extends Entity {
     update() { }
 
     draw() {
-        // console.log(this.game.camera)
         for (let c = 0; c < this.cols; c++) {
             for (let r = 0; r < this.rows; r++) {
                 const tile = this.map0.get([c, r])
@@ -458,7 +457,7 @@ export default class Map extends Entity {
      * @param {*} tile Tile being drawn
      */
     drawTile(c, r, tile) {
-        const cam = this.game.camera
+        const cam = this.scene.camera
         const width = this.game.ctx.canvas.width
         const height = this.game.ctx.canvas.height
         const centerTile = Map.worldToTilePosition(new Vector(cam.xView + width / 2, cam.yView + height / 2), this.tileSize)
@@ -466,8 +465,8 @@ export default class Map extends Entity {
         const tilesTall = Math.ceil(height / this.tileSize)
         const tileInView = this.tileInView(c, r, centerTile, tilesWide + 2, tilesTall + 2)
         if (tile && tileInView) {
-            const tileX = c * this.tileSize - this.game.camera.xView
-            const tileY = r * this.tileSize - this.game.camera.yView
+            const tileX = c * this.tileSize - cam.xView
+            const tileY = r * this.tileSize - cam.yView
             this.game.ctx.drawImage(
                 this.tileAtlas,
                 ((tile - 1) % this.setLength * this.tileSize) ,

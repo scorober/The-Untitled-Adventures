@@ -190,7 +190,7 @@ export default class PlayerInputComponent extends Component {
      */
     handleMoveCommand(clickPos) {
 
-        const cam = this.entity.game.camera
+        const cam = this.entity.game.sceneManager.currentScene.camera
         const tileSize = this.entity.game.sceneManager.currentScene.map.tileSize
         const targetTile = Map.worldToTilePosition(new Vector(
             cam.xView + clickPos.x,
