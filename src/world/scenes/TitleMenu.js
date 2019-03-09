@@ -44,6 +44,7 @@ export default class TitleMenuScene extends Scene {
         this.game.soundManager.stopMusic()
     }
 
+    // eslint-disable-next-line complexity
     update() {
         const tick = this.game.clockTick
         super.update()

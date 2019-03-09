@@ -6,7 +6,7 @@ import Entity from '../../entities/Entity.js'
 import AnimationComponent from '../../entities/components/AnimationComponent.js'
 import Vector from '../../utils/Vector.js'
 import CollisionComponent from '../../entities/components/CollisionComponent.js'
-import Camera from '../../entities/Camera.js';
+import Camera from '../../entities/Camera.js'
 
 
 /**
