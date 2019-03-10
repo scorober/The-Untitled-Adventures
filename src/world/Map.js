@@ -309,6 +309,7 @@ export default class Map extends Entity {
      */
     addExit(destination, room, tiles) {
         let newExit = true
+        // console.log(room, destination)
         this.exits.forEach(function(exit) {
             if (exit.destination === room && exit.room === destination) {
                 //push tiles to existing exit
@@ -456,8 +457,8 @@ export default class Map extends Entity {
                 Math.floor((tile - 1) / this.setLength) * this.tileSize,
                 this.tileSize,
                 this.tileSize,
-                tileX - this.tileSize / 2, //Placement on canvas
-                tileY - this.tileSize / 2,
+                Math.floor(tileX - this.tileSize / 2), //Placement on canvas
+                Math.floor(tileY - this.tileSize / 2),
                 this.tileSize,
                 this.tileSize
             )
