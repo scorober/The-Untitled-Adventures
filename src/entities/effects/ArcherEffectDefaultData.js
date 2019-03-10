@@ -11,8 +11,8 @@ export default {
         Damage: 10,
         Speed: 800,
         Name: 'ARROW',
-        AttackPower : 3,
-        STR: 1,
+        INT: 3,
+        SpellPower: 12,
     },
     AnimationConfig: {
         Scale: .75,
@@ -25,10 +25,12 @@ export default {
         AnimationData: {
             [ANIMS.Impact]: {
                 frames: 12,
+
                 rate: AR.Impact,
                 options: {
                     width: 192,
                     height: 192,
+                    scale: 0.3,
                     yOffset: yOffset
                 }
             },

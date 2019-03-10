@@ -1,7 +1,6 @@
 import Component from './Component.js'
 import { STATES } from '../../utils/Const.js'
 import { HitCircle } from '../../utils/Collision.js'
-import Map from '../../world/Map.js'
 import AnimationComponent from './AnimationComponent.js'
 import Vector from '../../utils/Vector.js'
 
@@ -22,7 +21,7 @@ export default class CollisionComponent extends Component {
     }
 
     update() {
-        const pos = Map.worldToTilePosition(this.entity, this.entity.game.getTileSize())
+        const pos = Vector.vectorFromEntity(this.entity)
         this.hitbox.update(pos.x, pos.y)
     }
 
@@ -68,7 +67,7 @@ export default class CollisionComponent extends Component {
             const currentAnim = this.entity.getComponent(AnimationComponent).getCurrentAnimation()
             const height = currentAnim.getHeight()
             const width = currentAnim.getWidth()
-            const hitboxScreenPos = this.entity.game.worldToScreen(new Vector(this.entity.x, this.entity.y - height / 2)) // get position on screen
+            const hitboxScreenPos = this.entity.game.worldToScreen(this.hitbox.location) // get position on screen
             const dist = vector.distance(hitboxScreenPos)
             if (dist < this.hitbox.radius) {
                 const distY = vector.absdistanceY(hitboxScreenPos)
@@ -79,6 +78,27 @@ export default class CollisionComponent extends Component {
 
     }
 
+    /**
+     * I belive this method is only used for checking projectiles on impact so far.
+     * Do distances need to be returned here?
+     * TODO add collision checks so projectiles collide in flight.
+     * @param vector
+     * @returns {boolean} True if collides.
+     */
+    checkCollisionWorld(vector) {
+        if (!this.isStatic) {
+            const hitboxScreenPos = this.hitbox.location
+            const dist = vector.distance(hitboxScreenPos)
+            // if (dist < this.hitbox.radius) {
+            //     // console.log(this.entity.UUID)
+            //     // TODO do we need these distances? 
+            //     const distY = vector.absdistanceY(hitboxScreenPos)
+            //     const distX = vector.absdistanceX(hitboxScreenPos)
+            // } 
+            return (dist < this.hitbox.radius)
+        }
+     
+    }
 
     checkStaticCollisionScreen(vector) {
         const hitboxScreenPos = this.entity.game.worldToScreen(
@@ -92,21 +112,5 @@ export default class CollisionComponent extends Component {
         }
     }
 
-    /**
-     * Uses the SCREEN-TO-WORLD converter in the game engine to determine if an entity is at a certain location.
-     *
-     * @param vector
-     * @returns {boolean}
-     */
-    checkCollisionWorld(vector) {
-        const ret = { collides: false, distance: null }
-        const dist = vector.distance(this)
-        if (dist < this.size) {
-            ret.distance = dist
-            const distY = vector.absdistanceY(this)
-            const distX = vector.absdistanceX(this)
-            ret.collides = distX < this.width && distY < this.height
-        }
-        return ret
-    }
+
 }

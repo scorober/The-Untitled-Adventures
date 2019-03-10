@@ -26,7 +26,8 @@ export default class SceneManager {
         this.addScene(scores.name, scores)
         this.addScene(firstlevel.name, firstlevel)
 
-        this.currentScene = title
+        // this.currentScene = title
+        this.currentScene = firstlevel
     }
 
 
@@ -106,6 +107,26 @@ export default class SceneManager {
             if (collisionComponent) {
                 const collides = collisionComponent.checkCollisionScreen(pos)
                 if (collides) {
+                    ret.push(entity)
+                }
+            }
+
+        }
+        return ret
+    }
+
+    getCollidablesXYWorld(pos) {
+        const ret = []
+        for (let i = 0; i < this.currentScene.entities.length; i++) {
+            const entity = this.currentScene.entities[i]
+            
+            const collisionComponent = entity.getComponent(CollisionComponent)
+            if (collisionComponent) {
+                // console.log(entity.x, entity.y)
+                // TODO always coming back undefined
+                const collides = collisionComponent.checkCollisionWorld(pos)
+                if (collides) {
+                    
                     ret.push(entity)
                 }
             }

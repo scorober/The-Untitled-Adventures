@@ -20,9 +20,13 @@ import CollisionComponent from './CollisionComponent.js'
 import InteractionComponent from './InteractionComponent/InteractionComponent.js'
 import Vector from '../../utils/Vector.js'
 import CombatComponent from './CombatComponent.js'
+import PlayerData from '../characters/PlayerCharacterDefaultData.js'
+import AttributeComponent from '../components/AttributeComponent.js'
+import TeleportData from '../effects/TeleportDefaultData.js'
+import TeleportBehaviorComponent from '../components/TeleportBehaviorComponent.js'
 
 export default class PlayerInputComponent extends Component {
-    /**
+    /**s
      * @param {Entity} entity A reference to the Entity this Component is attached to
      * @param {Object} animationConfig Animation configuration object for this character.
      */
@@ -30,30 +34,33 @@ export default class PlayerInputComponent extends Component {
         super(entity)
         this.coolDown = 0
         this.coolEnd = 400
+        this.blocked = false
     }
 
     /**
      * Called each update cycle
      */
     update() {
-        if (this.entity.game.inputManager.hasRightClick()) {
-            this.handleRightClick()
-        }
-        if (this.entity.game.inputManager.hasLeftClick()) {
-            this.handleLeftClick()
-        }
-        if (this.entity.game.inputManager.downKeys[KEYS.KeyD]) {
-            const direction = this.entity.getComponent(MovementComponent).direction
-            this.entity.getComponent(AnimationComponent).setDirectionalAnimation(direction, {
-                north: ANIMS.OversizeNorth,
-                east: ANIMS.OversizeEast,
-                south: ANIMS.OversizeSouth,
-                west: ANIMS.OversizeWest
-            })
-        }
-        if (this.coolDown >= this.coolEnd) {
-            this.checkCastingInput()
-            this.testSpells()
+        if (!this.blocked) {
+            if (this.entity.game.inputManager.hasRightClick()) {
+                this.handleRightClick()
+            }
+            if (this.entity.game.inputManager.hasLeftClick()) {
+                this.handleLeftClick()
+            }
+            if (this.entity.game.inputManager.downKeys[KEYS.KeyD]) {
+                const direction = this.entity.getComponent(MovementComponent).direction
+                this.entity.getComponent(AnimationComponent).setDirectionalAnimation(direction, {
+                    north: ANIMS.OversizeNorth,
+                    east: ANIMS.OversizeEast,
+                    south: ANIMS.OversizeSouth,
+                    west: ANIMS.OversizeWest
+                })
+            }
+            if (this.coolDown >= this.coolEnd) {
+                this.checkCastingInput()
+                this.testSpells()
+            }
         }
         this.coolDown += this.entity.game.clockTick * 500
     }
@@ -103,7 +110,10 @@ export default class PlayerInputComponent extends Component {
             const fireball = new Entity(this.entity.game, origin)
             fireball.addComponent(new AnimationComponent(fireball, FireballData.AnimationConfig))
             fireball.addComponent(new MovementComponent(fireball, FireballData.Attributes))
-            fireball.addComponent(new ProjectileBehaviorComponent(fireball, target, true))
+            fireball.addComponent(new ProjectileBehaviorComponent(fireball, target, true, this.entity))
+            fireball.addComponent(new AttributeComponent(fireball, PlayerData.Attributes))
+            fireball.addComponent(new CollisionComponent(fireball))
+            fireball.addComponent(new CombatComponent(fireball))
             this.entity.game.sceneManager.currentScene.addEntity(fireball)
             this.coolDown = 0
         }
@@ -125,6 +135,16 @@ export default class PlayerInputComponent extends Component {
             this.entity.game.sceneManager.currentScene.addEntity(freezeEffect)
             this.coolDown = 0
         }
+        if (this.entity.game.inputManager.downKeys[KEYS.KeyY]) {
+            const origin = this.getEffectOffsetPos()
+            const target = this.getTarget()
+            const teleportEffect = new Entity(this.entity.game, origin)
+            teleportEffect.addComponent(new AnimationComponent(teleportEffect, TeleportData.AnimationConfig))
+            teleportEffect.addComponent(new TeleportBehaviorComponent(teleportEffect, this.entity, target))
+            this.entity.game.sceneManager.currentScene.addEntity(teleportEffect)
+            this.coolDown = 0
+        }
+
     }
 
     /**
@@ -137,7 +157,10 @@ export default class PlayerInputComponent extends Component {
             const mageEffect = new Entity(this.entity.game, origin)
             mageEffect.addComponent(new AnimationComponent(mageEffect, MageEffectData.AnimationConfig))
             mageEffect.addComponent(new MovementComponent(mageEffect, MageEffectData.Attributes))
-            mageEffect.addComponent(new ProjectileBehaviorComponent(mageEffect, target, false))
+            mageEffect.addComponent(new ProjectileBehaviorComponent(mageEffect, target, false, this.entity))
+            mageEffect.addComponent(new AttributeComponent(mageEffect, PlayerData.Attributes))
+            mageEffect.addComponent(new CollisionComponent(mageEffect))
+            mageEffect.addComponent(new CombatComponent(mageEffect))
             this.entity.game.sceneManager.currentScene.addEntity(mageEffect)
             this.coolDown = 0
         }
@@ -147,7 +170,10 @@ export default class PlayerInputComponent extends Component {
             const archerEffect = new Entity(this.entity.game, origin)
             archerEffect.addComponent(new AnimationComponent(archerEffect, ArcherEffectData.AnimationConfig))
             archerEffect.addComponent(new MovementComponent(archerEffect, ArcherEffectData.Attributes))
-            archerEffect.addComponent(new ProjectileBehaviorComponent(archerEffect, target, false))
+            archerEffect.addComponent(new ProjectileBehaviorComponent(archerEffect, target, false, this.entity))
+            archerEffect.addComponent(new AttributeComponent(archerEffect, PlayerData.Attributes))
+            archerEffect.addComponent(new CollisionComponent(archerEffect))
+            archerEffect.addComponent(new CombatComponent(archerEffect))
             this.entity.game.sceneManager.currentScene.addEntity(archerEffect)
             this.coolDown = 0
         }
@@ -199,5 +225,12 @@ export default class PlayerInputComponent extends Component {
     getTarget() {
         const pos = this.entity.game.inputManager.mousePosition
         return this.entity.game.screenToWorld(pos)
+    }
+
+    /**
+     * Set boolean value to block player input.
+     */
+    setBlocked(bool) {
+        this.blocked = bool
     }
 }

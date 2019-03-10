@@ -115,7 +115,9 @@ export const ANIMATIONS = {
     Initial: Symbol(),
     Effect0: Symbol(),
     Effect1: Symbol(),
-    Effect2: Symbol()
+    Effect2: Symbol(),
+    TeleportIn: Symbol(),
+    TeleportOut: Symbol()
 }
 
 export const ANIMATION_RATES = {
@@ -144,7 +146,8 @@ export const ANIMATION_RATES = {
     /** Spawner specific rate */
     Console: Symbol(),
 
-    Portrait: Symbol()
+    Portrait: Symbol(),
+    Teleport: Symbol()
 }
 
 export const DIRECTIONS = {
@@ -538,7 +541,7 @@ export const TILE_COLLISION = {
     28: 1,
     29: 1,
     30: 1,
-    31: 100,
+    31: 50,
     32: 1,
     33: 100,
     34: 100,
@@ -586,7 +589,7 @@ export const TILE_COLLISION = {
     76: 1,
     77: 1,
     78: 1,
-    79: 100,
+    79: 50,
     80: 1,
     81: 100,
     82: 100,

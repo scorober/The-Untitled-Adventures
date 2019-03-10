@@ -170,14 +170,14 @@ export default class FirstLevel extends Scene {
     }
 
     createArcher(game, start, playerCharacter) {
-        const archer = new Entity(game, start)
+        const archer = new Entity(game, { x: start.x - 300, y: start.y - 350})
         archer.addComponent(new AnimationComponent(archer, WolfDefaultData.AnimationConfig))
         archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
         archer.addComponent(new AttributeComponent(archer, ArcherData.Attributes))
         archer.addComponent(new CollisionComponent(archer))
         archer.addComponent(new EnemyInteractionComponent(archer))
         archer.addComponent(new CombatComponent(archer))
-        archer.getComponent(MovementComponent).setFollowTarget(playerCharacter)
+        // archer.getComponent(MovementComponent).setFollowTarget(playerCharacter)
         return archer
     }
 

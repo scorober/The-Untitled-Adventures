@@ -9,7 +9,8 @@ const yOffset = 20
 export default {
     Attributes: {
         Damage: 10,
-        Speed: 100
+        Speed: 100,
+        Name: 'LIGHTNING'
     },
     AnimationConfig: {
         Scale: 1,
@@ -33,6 +34,7 @@ export default {
                 frames: 7,
                 rate: AR.Projectile,
                 options: {
+                    scale: 0.1,
                     width: 96,
                     height: 96,
                     yOffset: yOffset
