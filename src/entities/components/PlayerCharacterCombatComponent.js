@@ -17,7 +17,7 @@ export default class PlayerCharacterCombatComponent extends CombatComponent {
         const hp = this.entity.getComponent(AttributeComponent).HP
         const hpFull = this.entity.getComponent(AttributeComponent).HPFull
         if(hp > 0 && hp < hpFull) {
-            const temp = (1/(hp + 1)* 0.1)
+            const temp = (1/(hp + 20)* 0.05)
             if((hp + temp) > hpFull){
                 this.entity.getComponent(AttributeComponent).HP = hpFull
             } else {
