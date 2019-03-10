@@ -1,10 +1,10 @@
-import Component from './Component.js'
-import Vector from '../../utils/Vector.js'
-import MovementComponent from './MovementComponent.js'
-import AnimationComponent from './AnimationComponent.js'
-import { ANIMATIONS as ANIMS } from '../../utils/Const.js'
-import CombatComponent from './CombatComponent.js'
-import Map from '../../world/Map.js'
+import Component from '../Component.js'
+import Vector from '../../../utils/Vector.js'
+import MovementComponent from '../MovementComponent.js'
+import AnimationComponent from '../AnimationComponent.js'
+import { ANIMATIONS as ANIMS } from '../../../utils/Const.js'
+import CombatComponent from '../CombatComponent.js'
+import Map from '../../../world/Map.js'
 
 export default class ProjectileBehavior extends Component {
     /**
@@ -50,10 +50,8 @@ export default class ProjectileBehavior extends Component {
      * Moves projectile, if target is reached switches to impact anim and does damage.
      */
     update() {
-        // console.log(this.isImpact)
         this.v = Vector.vectorFromEntity(this.entity)
         if (!this.isImpact) {
-            // console.log(this.checkCollidedTile() )
             if (this.checkCollidedTile() || this.v.distance(this.target) < 20) {
                 this.impact()
             } else {

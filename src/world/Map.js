@@ -1,6 +1,6 @@
 import Entity from '../entities/Entity.js'
 import Array2D from '../utils/Array2d.js'
-import { MAP_ITEMS as MI, SPAWNERS as ST, ROOMS, RIGHT, LEFT, TOP, BOTTOM, TILE_COLLISION as TC, STATES, ROOM_TILES as RT } from '../utils/Const.js'
+import { MAP_ITEMS as MI, SPAWNERS as ST, ROOMS, RIGHT, LEFT, TOP, BOTTOM, TILE_COLLISION as TC, STATES, ROOM_TILES as RT, LEVEL_ROOMS as LR } from '../utils/Const.js'
 import Vector from '../utils/Vector.js'
 import Random from '../utils/Random.js'
 
@@ -15,21 +15,26 @@ export default class Map extends Entity {
      */
     constructor(game, tileAtlas, tileSize, setLength, dungeon, scene) {
         super(game, 0, 0)
+
         this.tileAtlas = tileAtlas
         this.tileSize = tileSize
         this.setLength = setLength
-        this.dungeon = dungeon
-        this.rows = dungeon.size[1]
-        this.cols = dungeon.size[0]
-        this.tiles = []
-        this.scene = scene
-        this.spawners = [] //Array of spawner positions and radii.
-        this.exits = [] //Array of door positions and room they enter.
-        this.rooms = []
         this.levelExit = []
+        this.tiles = []
+        this.buttons = []
+        this.scene = scene
         this.mapLayerLower = [] //Group all lower map layers together.
         this.rng = new Random()
-        this.buildMap()
+
+        if (dungeon) {
+            this.dungeon = dungeon
+            this.rows = dungeon.size[1]
+            this.cols = dungeon.size[0]
+            this.spawners = [] //Array of spawner positions and radii.
+            this.exits = [] //Array of door positions and room they enter.
+            this.rooms = []
+            this.buildMap()
+        }
     }
 
     /**
@@ -65,7 +70,6 @@ export default class Map extends Entity {
 
         const dungeon = this.dungeon
         for (const piece of dungeon.children) {
-            // console.log(piece)
             this.buildWalls(piece)
             this.buildRoom(piece)
             this.buildExits(piece)
@@ -159,11 +163,19 @@ export default class Map extends Entity {
      */
     // eslint-disable-next-line complexity
     buildRoom(piece) {
+        //TODO CHANGE THIS
+        let levelType
+        if (this.scene.name === 'boss') {
+            levelType = LR.Boss
+        } else {
+            levelType = LR.First
+        }
+
         const pos = this.alterPos(this.generateRoomProperties(piece).innerPos, 1, 1)
         const center = piece.global_pos(piece.get_center_pos())
         switch (piece.tag) {
             case ROOMS.Initial:
-                this.createRoomByLayout(pos, RT.Initial)
+                this.createRoomByLayout(pos, levelType.Initial)
                 break
             case ROOMS.Any:
                 //SPAWNER ROOMS
@@ -179,7 +191,7 @@ export default class Map extends Entity {
                 })
                 break
             case ROOMS.Treasure:
-                this.createRoomByLayout(pos, RT.Treasure)
+                this.createRoomByLayout(pos, levelType.Treasure)
                 break
             case ROOMS.Exit:
                 //TODO create room layout and get correct tiles.
@@ -195,10 +207,14 @@ export default class Map extends Entity {
                 this.levelExit.push(tiles)
                 break
             case ROOMS.Maze:
-                this.createRoomByLayout(pos, RT.Maze)
+                this.createRoomByLayout(pos, levelType.Maze)
                 break
             case ROOMS.Corridor:
-                this.createRoomByLayout(pos, RT.Corridor)
+                this.createRoomByLayout(pos, levelType.Corridor)
+                break
+            case ROOMS.Boss:
+                this.createRoomByLayout(pos, levelType.Boss)
+                break
         }
     }
 
@@ -443,7 +459,7 @@ export default class Map extends Entity {
      * @param {*} tile Tile being drawn
      */
     drawTile(c, r, tile) {
-        const cam = this.game.camera
+        const cam = this.scene.camera
         const width = this.game.ctx.canvas.width
         const height = this.game.ctx.canvas.height
         const centerTile = Map.worldToTilePosition(new Vector(cam.xView + width / 2, cam.yView + height / 2), this.tileSize)
@@ -451,8 +467,8 @@ export default class Map extends Entity {
         const tilesTall = Math.ceil(height / this.tileSize)
         const tileInView = this.tileInView(c, r, centerTile, tilesWide + 2, tilesTall + 2)
         if (tile && tileInView) {
-            const tileX = c * this.tileSize - this.game.camera.xView
-            const tileY = r * this.tileSize - this.game.camera.yView
+            const tileX = c * this.tileSize - cam.xView
+            const tileY = r * this.tileSize - cam.yView
             this.game.ctx.drawImage(
                 this.tileAtlas,
                 ((tile - 1) % this.setLength * this.tileSize) ,

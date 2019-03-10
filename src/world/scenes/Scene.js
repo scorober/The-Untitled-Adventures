@@ -1,3 +1,15 @@
+import SpawnerBehaviorComponent from '../../entities/components/BehaviorComponent/SpawnerBehaviorComponent.js'
+import SpawnerData from '../../entities/effects/SpawnerDefaultData.js'
+import DoorInteractionComponent from '../../entities/components/InteractionComponent/DoorInteractionComponent.js'
+import StairInteractionComponent from '../../entities/components/InteractionComponent/StairInteractionComponent.js'
+import Entity from '../../entities/Entity.js'
+import AnimationComponent from '../../entities/components/AnimationComponent.js'
+import Vector from '../../utils/Vector.js'
+import CollisionComponent from '../../entities/components/CollisionComponent.js'
+import Camera from '../../entities/Camera.js'
+import ButtonBehaviorComponent from '../../entities/components/BehaviorComponent/ButtonBehaviorComponent.js'
+
+
 /**
  * Basic scene object most other scenes will extend.
  */
@@ -20,6 +32,8 @@ export default class Scene {
         this.killCount = 0
         this.currentRoomEnterTime = 0
         this.currentRoomTimeLapse = 0
+        this.playable = lvl ? true : false
+        this.camera = null
     }
 
     /**
@@ -30,6 +44,12 @@ export default class Scene {
         this.timeElapsed += this.game.clockTick
     }
     draw() { }
+
+    setCamera(entity) {
+        this.camera = new Camera(this.game)
+        this.camera.setFollowedEntity(entity)
+        this.addEntity(this.camera)
+    }
 
     /**
      * Super-most enter method for the scene hierarchy.
@@ -234,5 +254,60 @@ export default class Scene {
 
             this.setPacified()
         }
+    }
+
+    createMapEntities(game, map) {
+        this.createSpawners(game, map)
+        this.createExits(game, map)
+        this.createStairs(game, map)
+    }
+
+    createStairs(game, map) {
+        for (const tiles of map.levelExit) {
+            const tileBox = map.getDoorBox(tiles)
+            const exit = new Entity(game, new Vector(tileBox.x, tileBox.y))
+            exit.addComponent(new StairInteractionComponent(exit, tiles))
+            exit.addComponent(new CollisionComponent(exit, tileBox))
+            this.addEntity(exit)
+        }
+    }
+
+    createExits(game, map) {
+
+        for (const exit of map.exits) {
+            const doorBox = map.getDoorBox(exit.tiles)
+            const door = new Entity(game, new Vector(doorBox.x, doorBox.y))
+            door.addComponent(new DoorInteractionComponent(door, exit.tiles, exit.destination, exit.room))
+            door.addComponent(new CollisionComponent(door, doorBox))
+            this.addEntity(door)
+        }
+    }
+
+
+    createSpawners(game, map) {
+        for (const mapSpawner of map.spawners) {
+            const spawner = new Entity(game, mapSpawner.pos)
+            spawner.addComponent(new AnimationComponent(spawner, SpawnerData.AnimationConfig))
+            spawner.addComponent(new SpawnerBehaviorComponent(spawner, this, mapSpawner.type, mapSpawner.r, 4, mapSpawner.room))
+            this.addEntity(spawner)
+        }
+    }
+
+    /**
+     * Create buttons for the map. May want to pass more info into Map.buttons array.
+     * (currently only holds the buttons position)
+     * @param {GameEngine} game 
+     * @param {Map} map 
+     */
+    createButtons(game, map) {
+        for (const button of map.buttons) {
+            const btn = new Entity(game, button)
+            btn.addComponent(new ButtonBehaviorComponent(btn, this))
+            this.addEntity(btn)
+        }
+    }
+
+    isPlayable() {
+        return this.playable
     }
 }

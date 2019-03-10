@@ -14,8 +14,14 @@ export default class Animation {
         this.draw = true
     }
 
+    // eslint-disable-next-line complexity
     drawFrame(game, x, y, angle) {
         if (this.draw) {
+            
+            const cam = game.sceneManager.currentScene.camera
+
+            const xView = cam ? cam.xView : 0
+            const yView = cam ? cam.yView :0 
             this.elapsedTime += game.clockTick
             if (this.isDone()) {
                 if (this.cbCalled === false && this.cb) {
@@ -60,7 +66,7 @@ export default class Animation {
             offscreenCtx.drawImage(thirdCanvas, - (this.frameWidth * this.scale / 2), - (this.frameHeight * this.scale / 2))
             offscreenCtx.restore()
             thirdCtx.clearRect(0,0, size, size)
-            game.ctx.drawImage(offscreenCanvas,  (x - (this.frameWidth * this.scale / 2)) + this.offset.x - game.camera.xView, (y - (this.frameHeight * this.scale)) + this.offset.y - game.camera.yView)
+            game.ctx.drawImage(offscreenCanvas,  (x - (this.frameWidth * this.scale / 2)) + this.offset.x - xView, (y - (this.frameHeight * this.scale)) + this.offset.y - yView)
     
         }
         

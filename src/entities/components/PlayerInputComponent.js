@@ -1,7 +1,7 @@
 import Component from './Component.js'
 import Map from '../../world/Map.js'
 import MovementComponent from './MovementComponent.js'
-import ProjectileBehaviorComponent from './ProjectileBehaviorComponent.js'
+import ProjectileBehaviorComponent from './BehaviorComponent/ProjectileBehaviorComponent.js'
 import AnimationComponent from './AnimationComponent.js'
 import FireballData from '../effects/FireballDefaultData.js'
 import Entity from '../Entity.js'
@@ -14,8 +14,8 @@ import {
     ANIMATIONS as ANIMS,
     DIRECTIONS
 } from '../../utils/Const.js'
-import LightningBehaviorComponent from './LightningBehaviorComponent.js'
-import FreezeBehaviorComponent from './FreezeBehaviorComponent.js'
+import LightningBehaviorComponent from './BehaviorComponent/LightningBehaviorComponent.js'
+import FreezeBehaviorComponent from './BehaviorComponent/FreezeBehaviorComponent.js'
 import CollisionComponent from './CollisionComponent.js'
 import InteractionComponent from './InteractionComponent/InteractionComponent.js'
 import Vector from '../../utils/Vector.js'
@@ -23,7 +23,7 @@ import CombatComponent from './CombatComponent.js'
 import PlayerData from '../characters/PlayerCharacterDefaultData.js'
 import AttributeComponent from '../components/AttributeComponent.js'
 import TeleportData from '../effects/TeleportDefaultData.js'
-import TeleportBehaviorComponent from '../components/TeleportBehaviorComponent.js'
+import TeleportBehaviorComponent from './BehaviorComponent/TeleportBehaviorComponent.js'
 
 export default class PlayerInputComponent extends Component {
     /**s
@@ -189,7 +189,8 @@ export default class PlayerInputComponent extends Component {
      * @param {Object} clickPos The click position to pathfind to.
      */
     handleMoveCommand(clickPos) {
-        const cam = this.entity.game.camera
+
+        const cam = this.entity.game.sceneManager.currentScene.camera
         const tileSize = this.entity.game.sceneManager.currentScene.map.tileSize
         const targetTile = Map.worldToTilePosition(new Vector(
             cam.xView + clickPos.x,

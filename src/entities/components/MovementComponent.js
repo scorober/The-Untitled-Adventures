@@ -27,6 +27,7 @@ export default class MovementComponent extends Component {
      * Called each update cycle
      */
     update() {
+  
         if (this.path.length > 0) {
             this.handlePathMovement()
         }
@@ -59,7 +60,7 @@ export default class MovementComponent extends Component {
     handlePathMovement() {
         this.moving = true
         const tile = this.path[0]
-        if(this.entity.game.sceneManager.currentScene.name === 'level1'){// === this.entity.game.sceneManager.getScene('firstLevel')){
+        if(this.entity.game.sceneManager.currentScene.isPlayable()){// === this.entity.game.sceneManager.getScene('firstLevel')){
             const tilePosition = Map.tileToWorldPosition(tile, this.entity.game.sceneManager.currentScene.map.tileSize)
             let dx = tilePosition.x - this.entity.x
             let dy = tilePosition.y - this.entity.y
