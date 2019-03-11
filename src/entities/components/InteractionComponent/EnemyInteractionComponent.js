@@ -43,13 +43,15 @@ export default class EnemyInteractionComponent extends InteractionComponent {
         const animationComponent = this.entity.getComponent(AnimationComponent)
         if (attributeComponent && animationComponent) {
             const ctx = this.entity.game.ctx
+            const currentAnimation = animationComponent.getCurrentAnimation()
+            const height = currentAnimation.getHeight()
             const screenPos = this.entity.game.worldToScreen(new Vector(this.entity.x, this.entity.y)) // get position on screen
             const HP = attributeComponent.HP.toFixed(1)
             const fullHP = attributeComponent.HPFull.toFixed(1)
             ctx.fillStyle = 'Black'
-            ctx.fillRect(screenPos.x -15, screenPos.y - 60, 30, 4)
+            ctx.fillRect(screenPos.x -15, screenPos.y - height*3/4, 30, 4)
             ctx.fillStyle = 'Green'
-            ctx.fillRect(screenPos.x -15, screenPos.y - 60, 30 * (HP/fullHP),4)
+            ctx.fillRect(screenPos.x -15, screenPos.y - height*3/4, 30 * (HP/fullHP),4)
         }
     }
 
