@@ -112,11 +112,17 @@ export default class GameEngine {
         return 64
     }
 
+    getCamera() {
+        return this.sceneManager.currentScene.camera ? this.sceneManager.currentScene.camera : { xView: 0, yView: 0 }
+    }
+
     screenToWorld(pos) {
-        return new Vector(pos.x + this.sceneManager.currentScene.camera.xView, pos.y + this.sceneManager.currentScene.camera.yView)
+        const cam = this.getCamera()
+        return new Vector(pos.x + cam.xView, pos.y + cam.yView)
     }
     worldToScreen(pos) {
-        return new Vector(pos.x - this.sceneManager.currentScene.camera.xView, pos.y - this.sceneManager.currentScene.camera.yView)
+        const cam = this.getCamera()
+        return new Vector(pos.x - cam.xView, pos.y - cam.yView)
     }
     getCurrentScene() {
         if (this.sceneManager) {
