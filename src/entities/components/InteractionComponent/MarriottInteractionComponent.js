@@ -14,9 +14,10 @@ export default class MarriottInteractionComponent extends InteractionComponent {
 
     draw() {
         super.draw()
-        if (this.hovered) {
-            this.drawMouseover()
-        }
+        // if (this.hovered) {
+        //     this.drawMouseover()
+        // }
+        this.drawHealth()
     }
 
     drawMouseover() {
@@ -35,6 +36,21 @@ export default class MarriottInteractionComponent extends InteractionComponent {
             ctx.fillText(attributeComponent.Name, screenPos.x + currentAnimation.offset.x, screenPos.y + height / 2 - currentAnimation.offset.y - 10)
             ctx.fillStyle = 'red'
             ctx.fillText('HP:' + HP, screenPos.x + currentAnimation.offset.x, screenPos.y + height / 2 - currentAnimation.offset.y + fontSize + 3 - 10)
+        }
+    }
+
+    drawHealth() {
+        const attributeComponent = this.entity.getComponent(AttributeComponent)
+        const animationComponent = this.entity.getComponent(AnimationComponent)
+        if (attributeComponent && animationComponent) {
+            const ctx = this.entity.game.ctx
+            const screenPos = this.entity.game.worldToScreen(new Vector(this.entity.x, this.entity.y)) // get position on screen
+            const HP = attributeComponent.HP.toFixed(1)
+            const fullHP = attributeComponent.HPFull.toFixed(1)
+            ctx.fillStyle = 'Maroon'
+            ctx.fillRect(screenPos.x -15, screenPos.y - 60, 30, 4)
+            ctx.fillStyle = 'Blue'
+            ctx.fillRect(screenPos.x -15, screenPos.y - 60, 30 * (HP/fullHP),4)
         }
     }
 
