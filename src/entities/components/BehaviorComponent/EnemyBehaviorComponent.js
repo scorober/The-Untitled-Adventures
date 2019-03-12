@@ -15,7 +15,7 @@ export default class EnemyBehaviorComponent extends Component {
         if (player) {
             const pVec = Vector.vectorFromEntity(player)
             const dist = pVec.distance(Vector.vectorFromEntity(this.entity))
-            if (dist < this.attributeComponent.Range) {
+            if (dist < this.attributeComponent.Los) {
                 if (!this.combatComponent.hasCombatTarget()) {
                     this.combatComponent.setCombatTarget(player)
                 }

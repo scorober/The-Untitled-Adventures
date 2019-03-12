@@ -42,8 +42,11 @@ const defaultAttributes = {
     Atk: 0,
     AttackSpeed: 0,
     MoveSpeed: 0,
-    Range: 500,
+    Range: 0,
     Def: 0,
     Mdef: 0,
-    Name: 'ENTITY'
+    Name: 'ENTITY',
+    isCombat: false,
+    isMelee: true,
+    Los: 500
 }

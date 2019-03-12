@@ -34,9 +34,20 @@ export default class CombatComponent extends Component {
             this.entity.game.getCurrentScene().spawnReward(this.entity)
             this.entity.game.removeEntityByRef(this.entity)
         }
-        if (this.hasCombatTarget() && this.inRange() && this.timerCooled() && this.notMoving()) {
-            this.entity.game.soundManager.playAttack(this.entity.UUID)
-            this.meleeAttack()
+        if (this.hasCombatTarget()) {
+            if (this.attributeComponent.isMelee) {
+                if (this.inRange() && this.timerCooled() && this.notMoving()) {
+                    this.entity.game.soundManager.playAttack(this.entity.UUID)
+                    this.meleeAttack()
+                }
+            }
+            if (!this.attributeComponent.isMelee) {
+                if (this.inRange() && this.timerCooled()) {
+                    this.entity.getComponent(MovementComponent).halt()
+                    this.entity.game.soundManager.playAttack(this.entity.UUID)
+                    this.meleeAttack()
+                }
+            }
         }
     }
 
@@ -64,6 +75,9 @@ export default class CombatComponent extends Component {
         return this.hasCombatTarget() && this.inRange() && this.timerCooled() && this.notMoving()
     }
 
+    checkRangeToTarget() {
+
+    }
 
     rangeAttack() {
 

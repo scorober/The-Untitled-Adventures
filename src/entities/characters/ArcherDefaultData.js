@@ -38,6 +38,7 @@ export default {
         Range: 500,
         Name: 'ARCHER',
         isCombat: true,
+        isMelee: false
     },
     // Animation Component Configuration
     AnimationConfig: {
