@@ -7,6 +7,7 @@ import { HitCircle, CollisionLayer } from './utils/Collision.js'
 import CollisionComponent from './entities/components/CollisionComponent.js'
 import ScoreDisplayScene from './world/scenes/Scores.js'
 import BossLevel from './world/scenes/BossLevel.js'
+import Vector from './utils/Vector.js'
 
 export default class SceneManager {
 
@@ -114,7 +115,6 @@ export default class SceneManager {
                     ret.push(entity)
                 }
             }
-
         }
         return ret
     }
@@ -123,17 +123,27 @@ export default class SceneManager {
         const ret = []
         for (let i = 0; i < this.currentScene.entities.length; i++) {
             const entity = this.currentScene.entities[i]
-            
             const collisionComponent = entity.getComponent(CollisionComponent)
             if (collisionComponent) {
                 const collides = collisionComponent.checkCollisionWorld(pos)
-                if (collides) {
-                    
+                if (collides) {           
                     ret.push(entity)
                 }
             }
 
         }
         return ret
+    }
+
+    getCollidablesHitbox(entity) {
+        const ret = []
+        for (let i = 0; i < this.currentScene.entities.length; i++) {
+            const e = this.currentScene.entities[i]
+            const collisionComponent = entity.getComponent(CollisionComponent)
+            if (collisionComponent) {
+                const collides = collisionComponent.checkCollision(Vector.vectorFromEntity(e))
+            }
+        }
+        
     }
 }
