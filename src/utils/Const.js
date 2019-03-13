@@ -1288,7 +1288,7 @@ export const DEFINED_MAPS = {
         width: 144,
         height: 50,
         start: {
-            x: 7,
+            x: 120,
             y: 24
         },
         centerTiles: [

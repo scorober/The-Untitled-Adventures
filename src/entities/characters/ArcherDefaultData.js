@@ -34,7 +34,7 @@ export default {
         Matk: 5,
         Def: 10,
         Mdef: 3,
-        Speed: 50,
+        Speed: 60,
         Range: 500,
         Name: 'ARCHER',
         isCombat: true,

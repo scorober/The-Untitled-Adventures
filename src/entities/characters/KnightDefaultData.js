@@ -37,7 +37,7 @@ export default {
         Matk: 5,
         Def: 10,
         Mdef: 3,
-        Speed: 50,
+        Speed: 80,
         Range: 80,
         Name: 'KNIGHT',
         isCombat: true,

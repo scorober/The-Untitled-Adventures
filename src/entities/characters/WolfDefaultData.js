@@ -37,7 +37,7 @@ export default {
         Matk: 5,
         Def: 10,
         Mdef: 3,
-        Speed: 50,
+        Speed: 120,
         Range: 80,
         Name: 'WOLF',
         isCombat: true,

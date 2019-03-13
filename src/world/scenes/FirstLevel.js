@@ -125,7 +125,9 @@ export default class FirstLevel extends Scene {
         marriott.addComponent(new AttributeComponent(marriott, MarriottData.Attributes))
         marriott.addComponent(new CollisionComponent(marriott))
         marriott.addComponent(new MarriottInteractionComponent(marriott))
-        marriott.getComponent(MovementComponent).setFollowTarget(playerCharacter)
+        // marriott.getComponent(MovementComponent).setFollowTarget(playerCharacter)
+        marriott.getComponent(MarriottMovementComponent).handleSitting()
+
         return marriott
     }
 
@@ -268,6 +270,6 @@ export default class FirstLevel extends Scene {
     }
 
     enter(){
-        this.game.soundManager.playMusic(2)
+        // this.game.soundManager.playMusic(2)
     }
 }

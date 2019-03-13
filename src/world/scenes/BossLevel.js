@@ -11,6 +11,12 @@ import MarriottInteractionComponent from '../../entities/components/InteractionC
 import PlayerCharacterCombatComponent from '../../entities/components/PlayerCharacterCombatComponent.js'
 import EquippedItemsComponent from '../../entities/components/EquippedItemsComponent.js'
 import DefinedMap from '../DefinedMap.js'
+import Map from '../Map.js'
+import Random from '../../utils/Random.js'
+import ArcherData from '../../entities/characters/ArcherDefaultData.js'
+import EnemyInteractionComponent from '../../entities/components/InteractionComponent/EnemyInteractionComponent.js'
+import CombatComponent from '../../entities/components/CombatComponent.js'
+import EnemyBehaviorComponent from '../../entities/components/BehaviorComponent/EnemyBehaviorComponent.js'
 
 export default class BossLevel extends Scene {
     constructor(game) {
@@ -22,8 +28,10 @@ export default class BossLevel extends Scene {
         const playerCharacter = this.createPlayerCharacter(game, start)
         this.setPlayer(playerCharacter)
         this.addEntity(playerCharacter)
+        this.rng = new Random()
         this.setCamera(playerCharacter)
         this.createButtons(game, map)
+        this.createMobs(game)
     }
 
     createPlayerCharacter(game, start) {
@@ -37,6 +45,23 @@ export default class BossLevel extends Scene {
         pc.addComponent(new PlayerInputComponent(pc))
         pc.addComponent(new EquippedItemsComponent(pc))
         return pc
+    }
+
+    createMobs(game) {
+        const tiles = DEFINED_MAPS.Boss.centerTiles
+        console.log(tiles)
+        for (let i = 0; i < 6; i++) {
+            const r = this.rng.int(0, tiles.length - 1)
+            const archer = new Entity(game, Map.tileToWorldPosition(tiles[r]))
+            archer.addComponent(new AnimationComponent(archer, ArcherData.AnimationConfig))
+            archer.addComponent(new MovementComponent(archer, ArcherData.Attributes))
+            archer.addComponent(new AttributeComponent(archer, ArcherData.Attributes))
+            archer.addComponent(new CollisionComponent(archer))
+            archer.addComponent(new EnemyInteractionComponent(archer))
+            archer.addComponent(new CombatComponent(archer))
+            archer.addComponent(new EnemyBehaviorComponent(archer))
+            this.addEntity(archer)
+        }
     }
     /**
      * Updates this scene.
