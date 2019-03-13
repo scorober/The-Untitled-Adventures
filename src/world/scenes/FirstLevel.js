@@ -32,6 +32,8 @@ export default class FirstLevel extends Scene {
     constructor(game) {
         super(game, 1)
         this.name = 'level1'
+        this.spawnedMobs = 0
+        this.mobs = 0
         
         //Initialize a dungeon with options, possibly move to the scene superclass w/ parameters.
         const dungeon = new Dungeon({
@@ -239,6 +241,12 @@ export default class FirstLevel extends Scene {
         this.game.roomDisplay.timer -= this.game.clockTick
     }
 
+    updateSpawnerDisplay(spawned, mobs) {
+
+        this.spawnedMobs = spawned
+        this.mobs = mobs
+    }
+
     /**
      * Draw this scene.
      */
@@ -248,6 +256,16 @@ export default class FirstLevel extends Scene {
         this.drawEntities()
         this.drawMapTop()
         this.drawFog()
+
+        if (this.spawnedMobs > 0) {
+            const ctx = this.game.ctx
+            ctx.fillStyle = 'red'
+            ctx.font = '36px arcade'
+            ctx.textAlign = 'left'
+            ctx.textBaseline = 'top'
+            ctx.fillText('Spawned: ' + this.spawnedMobs.toString() + '/' + this.mobs, 30, 50)
+        }
+
         if (this.game.killDisplay.timer > 0) {
             this.game.ctx.font = '50px terminal'
             this.game.ctx.textAlign = 'center'

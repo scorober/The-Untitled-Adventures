@@ -181,11 +181,8 @@ export default class Map extends Entity {
             height: piece.size[1]
         }
 
-        
-        console.log(this.fog)
         const pos = this.alterPos(props.innerPos, 1, 1)
         const center = piece.global_pos(piece.get_center_pos())
-
 
         switch (piece.tag) {
             case ROOMS.Initial:
@@ -196,7 +193,7 @@ export default class Map extends Entity {
                 //SPAWNER ROOMS
                 this.createObject(this.map1, this.alterPos(center, -1, -1), MI.Rug)
                 this.createObject(this.map2,  this.alterPos(center, 0, -1), MI.ChestClosed)
-                console.log(piece.size)
+                this.createObject(this.map0, center, MI.ChestClosed)
                 this.spawners.push({
                     pos: new Vector(
                         center[0] * this.tileSize,

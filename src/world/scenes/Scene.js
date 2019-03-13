@@ -177,11 +177,15 @@ export default class Scene {
         }
     }
 
+    /**
+     * Draw the fog of war over everything else. All unopened rooms are covered by fog until 
+     * they are opened.
+     */
     drawFog() {
         this.map.fog.forEach((room) => {
             if (room.foggy) {
-                for (let i = room.pos[0]; i < room.pos[0] + room.width - 1; i++) {
-                    for (let j = room.pos[1]; j < room.pos[1] + room.height - 1; j++) {
+                for (let i = room.pos[0] - 1; i < room.pos[0] + room.width - 1; i++) {
+                    for (let j = room.pos[1] - 1; j < room.pos[1] + room.height - 1; j++) {
                         this.map.drawTile(i, j, 175)
                     }
                 }
