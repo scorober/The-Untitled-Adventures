@@ -186,13 +186,11 @@ export default class GameEngine {
             const Score = this.addKillScore(name)
             if (Score) {
                 scene.scores.push(Score)
-                this.killDisplay = this.setKillDisplay(Score.Score)
             }
         } else {
             const Score = this.addNonKill(name, scene)
             if (Score) {
                 scene.scores.push(Score)
-                this.roomDisplay = this.setKillDisplay(Score.Score)
             }
         }
     }
@@ -212,6 +210,7 @@ export default class GameEngine {
                     Score: Math.floor(400 * Math.sqrt(2)),
                     Type: 'E'
                 }
+                this.killDisplay = this.setKillDisplay(Score.Score)
                 break
             case 'MAGE':
                 Score = {
@@ -221,6 +220,7 @@ export default class GameEngine {
                     Score: Math.floor(700 * Math.sqrt(2)),
                     Type: 'E'
                 }
+                this.killDisplay = this.setKillDisplay(Score.Score)
                 break
             case 'ROBOT':
                 Score = {
@@ -230,6 +230,7 @@ export default class GameEngine {
                     Score: Math.floor(850 * Math.sqrt(2)),
                     Type: 'E'
                 }
+                this.killDisplay = this.setKillDisplay(Score.Score)
                 break
             case 'CHIEF':
                 Score = {
@@ -239,6 +240,7 @@ export default class GameEngine {
                     Score: Math.floor(430 * Math.sqrt(2)),
                     Type: 'E'
                 }
+                this.killDisplay = this.setKillDisplay(Score.Score)
                 break
             case 'KNIGHT':
                 Score = {
@@ -248,6 +250,7 @@ export default class GameEngine {
                     Score: Math.floor(480 * Math.sqrt(2)),
                     Type: 'E'
                 }
+                this.killDisplay = this.setKillDisplay(Score.Score)
                 break
             case 'WARRIOR':
                 Score = {
@@ -257,6 +260,7 @@ export default class GameEngine {
                     Score: Math.floor(550 * Math.sqrt(2)),
                     Type: 'E'
                 }
+                this.killDisplay = this.setKillDisplay(Score.Score)
                 break
             case 'WOLF':
                 Score = {
@@ -266,6 +270,7 @@ export default class GameEngine {
                     Score: Math.floor(440 * Math.sqrt(2)),
                     Type: 'E'
                 }
+                this.killDisplay = this.setKillDisplay(Score.Score)
                 break
             default:
                 return null
@@ -289,9 +294,10 @@ export default class GameEngine {
                     Time: Math.floor(this.timer.gameTime),
                     Duration: this.sceneManager.currentScene.currentRoomTimeLapse,
                     lvl: 1,
-                    Score: Math.floor(51000 * Math.sqrt(2) / Math.sqrt(this.sceneManager.currentScene.currentRoomTimeLapse)),
+                    Score: Math.floor(21000 * Math.sqrt(2) / Math.sqrt(this.sceneManager.currentScene.currentRoomTimeLapse)),
                     Type: 'C'
                 }
+                this.roomDisplay = this.setKillDisplay(Score.Score)
                 break
             case 'END':
                 Score = {
