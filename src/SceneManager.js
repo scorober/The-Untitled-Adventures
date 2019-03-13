@@ -29,13 +29,19 @@ export default class SceneManager {
         this.addScene(scores.name, scores)
         this.addScene(firstlevel.name, firstlevel)
         this.addScene(boss.name, boss)
-
+        this.guiScript = false
         this.currentScene = title
         // this.currentScene = boss
         // this.currentScene = firstlevel
     }
 
+    addGUIScript(guiScript) {
+        this.guiScript = guiScript
+    }
 
+    removeGUIScript() {
+        this.guiScript = false
+    }
 
 
     /**
@@ -73,6 +79,9 @@ export default class SceneManager {
      */
     draw() {
         this.currentScene.draw()
+        if (this.guiScript != false) {
+            this.guiScript()
+        }
     }
 
     /**

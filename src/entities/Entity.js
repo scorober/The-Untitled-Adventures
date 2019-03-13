@@ -51,6 +51,27 @@ export default class Entity {
     }
 
     /**
+     * Removes a component from this Entity
+     * @param {Component} component The component to remove from this Entity
+     * @returns {Boolean} whether the component could be removed.
+     */
+    removeComponent(type) {
+        let index = -1
+        for (let i = 0; i < this.components.length; i++) {
+            if (this.components[i] instanceof type) {
+                index = i
+                break
+            }
+        }
+        if (index > -1) {
+            this.components.splice(index, 1)
+            return true
+        } else {
+            return false
+        }
+    }
+
+    /**
      * Replaces an existing component in this Entity
      * @param {Component} component The component to replace in this Entity
      * @returns {Boolean} whether the component could be replaced
