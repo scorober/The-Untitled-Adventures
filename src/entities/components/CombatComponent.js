@@ -12,9 +12,8 @@ import ProjectileBehaviorComponent from './BehaviorComponent/ProjectileBehaviorC
 import CollisionComponent from './CollisionComponent.js'
 
 export default class CombatComponent extends Component {
-    constructor(entity, range) {
+    constructor(entity) {
         super(entity)
-        this.isRange = range
         this.attributeComponent = this.entity.getComponent(AttributeComponent)
         this.dmgTimer = 0
         this.combatTarget = false
@@ -45,7 +44,8 @@ export default class CombatComponent extends Component {
                 if (this.inRange() && this.timerCooled()) {
                     this.entity.getComponent(MovementComponent).halt()
                     this.entity.game.soundManager.playAttack(this.entity.UUID)
-                    this.meleeAttack()
+                    // this.doAttackAnimation()
+                    this.createProjectile()
                 }
             }
         }
@@ -73,14 +73,6 @@ export default class CombatComponent extends Component {
      */
     canAttack() {
         return this.hasCombatTarget() && this.inRange() && this.timerCooled() && this.notMoving()
-    }
-
-    checkRangeToTarget() {
-
-    }
-
-    rangeAttack() {
-
     }
 
     /**
@@ -301,12 +293,13 @@ export default class CombatComponent extends Component {
     }
 
     createProjectile() {
+        this.dmgTimer = 3
         const origin = this.getEffectOffsetPos()
-        const target = this.getTarget()
+        const target = Vector.vectorFromEntity(this.entity.game.sceneManager.currentScene.getPlayer())
         const proj = new Entity(this.entity.game, origin)
         const attributes = this.entity.getComponent(AttributeComponent)
 
-        if (this.entity.UUID.includes('ARCHER')) {
+        if (this.entity.UUID.includes('MAGE')) {
             proj.addComponent(new AnimationComponent(proj, MageEffectData.AnimationConfig))
             proj.addComponent(new MovementComponent(proj, MageEffectData.Attributes))
             proj.addComponent(new ProjectileBehaviorComponent(proj, target, false, this.entity))
@@ -314,7 +307,7 @@ export default class CombatComponent extends Component {
             proj.addComponent(new CollisionComponent(proj))
             proj.addComponent(new CombatComponent(proj))
         }
-        if (this.entity.UUID.includes('MAGE')) {
+        if (this.entity.UUID.includes('ARCHER')) {
             proj.addComponent(new AnimationComponent(proj, ArcherEffectData.AnimationConfig))
             proj.addComponent(new MovementComponent(proj, ArcherEffectData.Attributes))
             proj.addComponent(new ProjectileBehaviorComponent(proj, target, false, this.entity))
@@ -329,8 +322,7 @@ export default class CombatComponent extends Component {
      * Get the target based off mouse position.
      */
     getTarget() {
-        const pos = this.entity.game.inputManager.mousePosition
-        return this.entity.game.screenToWorld(pos)
+        return this
     }
 
     /**
