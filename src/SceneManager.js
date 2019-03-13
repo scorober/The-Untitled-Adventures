@@ -78,6 +78,7 @@ export default class SceneManager {
      * This function calls the draw function for the active scene
      */
     draw() {
+        this.currentScene.draw()
         if (this.guiScript != false && this.currentScene.isPlayable()) {
             this.guiScript()
         }
