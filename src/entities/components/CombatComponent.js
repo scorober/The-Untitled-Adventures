@@ -30,10 +30,10 @@ export default class CombatComponent extends Component {
         this.dmgTimer -= this.entity.game.clockTick
         this.damageDisplay.timer -= this.entity.game.clockTick
         if (this.checkDead()) {
-            if (this.entity.game.getCurrentScene().isPlayable()) {
-                this.entity.game.getCurrentScene().spawnReward(this.entity)
-                this.entity.game.removeEntityByRef(this.entity)
-            }
+            // if (this.entity.game.getCurrentScene().isPlayable()) {
+            //     this.entity.game.getCurrentScene().spawnReward(this.entity)
+            //     this.entity.game.removeEntityByRef(this.entity)
+            // }
 
         }
         if (this.hasCombatTarget()) {

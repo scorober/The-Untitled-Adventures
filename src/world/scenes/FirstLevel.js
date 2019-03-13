@@ -144,7 +144,7 @@ export default class FirstLevel extends Scene {
     }
 
     createPlayerCharacter(game, start) {
-        const pc = new Entity(game, start, PlayerCharacterData.Attributes)
+        const pc = new Entity(game, {x: start.x + 100, y: start.y}, PlayerCharacterData.Attributes)
         pc.addComponent(new AnimationComponent(pc, PlayerCharacterData.AnimationConfig))
         pc.addComponent(new AttributeComponent(pc, PlayerCharacterData.Attributes))
         pc.addComponent(new MovementComponent(pc, PlayerCharacterData.Attributes))

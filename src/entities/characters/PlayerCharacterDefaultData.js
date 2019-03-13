@@ -25,7 +25,7 @@ export default {
         Def: 25,
         Mdef: 25,
         Range: 128,
-        Speed: 500,
+        Speed: 180,
         Name: 'PLAYER',
         isCombat: true,
         isMelee: true
