@@ -415,7 +415,7 @@ export default class Map extends Entity {
                 } else {
                     const layeredTiles = [tile0, tile1, tile2]
                     const nonZeroTiles = []
-                    for (let i = 0; i < 3; i++) {
+              for (let i = 0; i < 3; i++) {
                         if (layeredTiles[i] !== 0) {
                             nonZeroTiles.push(this.mapValueToPathfindingValue(layeredTiles[i]))
                         }
