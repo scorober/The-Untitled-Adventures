@@ -32,7 +32,7 @@ export default class FirstLevel extends Scene {
     constructor(game) {
         super(game, 1)
         this.name = 'level1'
-
+        
         //Initialize a dungeon with options, possibly move to the scene superclass w/ parameters.
         const dungeon = new Dungeon({
             size: [2000, 2000],
@@ -235,6 +235,8 @@ export default class FirstLevel extends Scene {
         //here to reduce confusion, and to allow the order they are updated/rendered to be adjusted.
         this.updateMap()
         this.updateEntities()
+        this.game.killDisplay.timer -= this.game.clockTick
+        this.game.roomDisplay.timer -= this.game.clockTick
     }
 
     /**
@@ -245,6 +247,23 @@ export default class FirstLevel extends Scene {
         this.drawMap()
         this.drawEntities()
         this.drawMapTop()
+        if (this.game.killDisplay.timer > 0) {
+            this.game.ctx.font = '50px terminal'
+            this.game.ctx.textAlign = 'center'
+            const op = this.game.killDisplay.timer
+            const clr = 'rgba(255, 255, 255, ' + op + ')'
+            this.game.ctx.fillStyle = clr
+            this.game.ctx.fillText(this.game.killDisplay.value.toFixed(1), this.game.ctx.canvas.width / 2, this.game.ctx.canvas.height / 5 - (this.game.killDisplay.timer * -30))
+        }
+        if (this.game.roomDisplay.timer > 0) {
+            this.game.ctx.font = '50px terminal'
+            this.game.ctx.textAlign = 'center'
+            const op = this.game.roomDisplay.timer
+            const clr = 'rgba(255, 255, 255, ' + op + ')'
+            this.game.ctx.fillStyle = clr
+            this.game.ctx.fillText('ROOM CLEARED', this.game.ctx.canvas.width / 2, this.game.ctx.canvas.height / 5 - 100 - (this.game.roomDisplay.timer * -30))
+            this.game.ctx.fillText(this.game.roomDisplay.value.toFixed(1), this.game.ctx.canvas.width / 2, this.game.ctx.canvas.height / 5 - 50 -(this.game.roomDisplay.timer * -30))
+        }
     }
 
     enter(){

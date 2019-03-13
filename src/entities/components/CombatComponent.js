@@ -43,10 +43,11 @@ export default class CombatComponent extends Component {
             const pos = this.entity.game.worldToScreen(this.entity)
             ctx.font = '26px arcade'
             ctx.textAlign = 'center'
-            ctx.fillStyle = 'black'
-            ctx.fillText(this.damageDisplay.value.toFixed(1), pos.x - 1, pos.y - 64 - 1 - (this.damageDisplay.timer * -30))
-            ctx.fillStyle = this.damageDisplay.isMagic ? 'blue' : 'red'
-            ctx.fillText(this.damageDisplay.value.toFixed(1), pos.x - 1, pos.y - 64 - (this.damageDisplay.timer * -30))
+            const op = this.damageDisplay.timer > 1? 1:this.damageDisplay.timer
+            const clr1 = 'rgba(180,0,0,'+op+')'
+            const clr2 = 'rgba(0,0,180,'+op+')'
+            ctx.fillStyle = this.damageDisplay.isMagic ? clr2 : clr1
+            ctx.fillText(this.damageDisplay.value.toFixed(1), pos.x - 1, pos.y - 150 - (this.damageDisplay.timer * -10))
         }
     }
 
@@ -253,7 +254,7 @@ export default class CombatComponent extends Component {
     setDamageDisplay(value, isMagic) {
         return {
             value: value,
-            timer: 1,
+            timer: 2,
             isMagic: isMagic
         }
     }

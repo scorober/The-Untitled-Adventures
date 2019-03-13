@@ -310,4 +310,14 @@ export default class Scene {
     isPlayable() {
         return this.playable
     }
+
+    
+    setKillDisplay(value) {
+        console.log('there')
+        
+        return {
+            value: value,
+            timer: 2,
+        }
+    }
 }
