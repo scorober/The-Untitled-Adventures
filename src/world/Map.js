@@ -195,6 +195,7 @@ export default class Map extends Entity {
             case ROOMS.Any:
                 //SPAWNER ROOMS
                 this.createObject(this.map1, this.alterPos(center, -1, -1), MI.Rug)
+                this.createObject(this.map2,  this.alterPos(center, 0, -1), MI.ChestClosed)
                 console.log(piece.size)
                 this.spawners.push({
                     pos: new Vector(

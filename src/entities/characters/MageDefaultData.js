@@ -26,7 +26,7 @@ const yOffset = 20
 export default {
     // Attributes Component Configuration
     Attributes: {
-        HP: 15,
+        HP: 50,
         Mana: 30,
         Str: 5,
         Int: 10,

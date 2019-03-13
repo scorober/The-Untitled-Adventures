@@ -27,7 +27,7 @@ const impactSize = 244
 export default {
     // Attributes Component Configuration
     Attributes: {
-        HP: 20,
+        HP: 35,
         Mana: 10,
         Str: 5,
         Int: 5,
