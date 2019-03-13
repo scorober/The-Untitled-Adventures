@@ -24,6 +24,8 @@ import PlayerData from '../characters/PlayerCharacterDefaultData.js'
 import AttributeComponent from '../components/AttributeComponent.js'
 import TeleportData from '../effects/TeleportDefaultData.js'
 import TeleportBehaviorComponent from './BehaviorComponent/TeleportBehaviorComponent.js'
+import EquippedItemsComponent from './EquippedItemsComponent.js';
+import EquipmentComponent from './EquipmentComponent.js';
 
 export default class PlayerInputComponent extends Component {
     /**s
@@ -35,20 +37,23 @@ export default class PlayerInputComponent extends Component {
         this.coolDown = 0
         this.coolEnd = 400
         this.blocked = false
+        this.equipMenu = false
     }
 
     /**
      * Called each update cycle
      */
+    // eslint-disable-next-line complexity
     update() {
         if (!this.blocked) {
-            if (this.entity.game.inputManager.hasRightClick()) {
+            const inputMan = this.entity.game.inputManager
+            if (inputMan.hasRightClick()) {
                 this.handleRightClick()
             }
-            if (this.entity.game.inputManager.hasLeftClick()) {
+            if (inputMan.hasLeftClick()) {
                 this.handleLeftClick()
             }
-            if (this.entity.game.inputManager.downKeys[KEYS.KeyD]) {
+            if (inputMan.downKeys[KEYS.KeyD]) {
                 const direction = this.entity.getComponent(MovementComponent).direction
                 this.entity.getComponent(AnimationComponent).setDirectionalAnimation(direction, {
                     north: ANIMS.OversizeNorth,
@@ -57,6 +62,16 @@ export default class PlayerInputComponent extends Component {
                     west: ANIMS.OversizeWest
                 })
             }
+            if (inputMan.downKeys[KEYS.KeyI]) {
+                if (this.equipMenu == false) {
+                    this.enableEquipmentGUI()
+                    this.equipMenu = true
+                } else {
+                    this.disableEquipmentGUI()
+                    this.equipMenu = false
+                }
+            }
+            this.debounceTimer -= this.entity.game.clockTick
             if (this.coolDown >= this.coolEnd) {
                 this.checkCastingInput()
                 this.testSpells()
@@ -179,17 +194,50 @@ export default class PlayerInputComponent extends Component {
         }
     }
 
+    enableEquipmentGUI() {
+        const guiScript = () => {
+            const ctx = this.entity.game.ctx
+            const windowSize = new Vector(360, ctx.canvas.height - 60)
+            const windowStart = new Vector(ctx.canvas.width - (windowSize.x + 30), ctx.canvas.height - (windowSize.y + 30))
+
+            ctx.fillStyle = 'black'
+            ctx.fillRect(windowStart.x, windowStart.y, windowSize.x, windowSize.y)
+            ctx.fillStyle = 'white'
+            ctx.font = '14px verdana, sans-serif'
+
+            const yMargin = 130
+            const mouseoverXMargin = 60
+            const equips = this.entity.getComponent(EquippedItemsComponent).getAllEquipment()
+            const worldSpace = this.entity.game.screenToWorld(windowStart)
+            for (let i = 0; i < equips.length; i++) {
+                const equipment = equips[i].entity
+                equipment.x = worldSpace.x + 30
+                equipment.y = worldSpace.y + 70 + (i * yMargin)
+                equipment.getComponent(AnimationComponent).draw()
+                equipment.getComponent(EquipmentComponent).drawMouseover(new Vector(windowStart.x + mouseoverXMargin, windowStart.y + (i * yMargin)))
+            }
+        }
+        this.entity.game.sceneManager.addGUIScript(guiScript)
+
+    }
+
+    disableEquipmentGUI() {
+        this.entity.game.sceneManager.removeGUIScript()
+    }
+
     /**
      * Called each draw cycle
      */
-    draw() { }
+    draw() {
+
+    }
+
 
     /**
      * Calculates tile index position from click position and informs this Entity's MovementComponent
      * @param {Object} clickPos The click position to pathfind to.
      */
     handleMoveCommand(clickPos) {
-
         const cam = this.entity.game.sceneManager.currentScene.camera
         const tileSize = this.entity.game.sceneManager.currentScene.map.tileSize
         const targetTile = Map.worldToTilePosition(new Vector(
