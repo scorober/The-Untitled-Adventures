@@ -22,7 +22,8 @@ export default class EquipmentComponent extends InteractionComponent {
     draw() {
         super.draw()
         if (this.hovered) {
-            this.drawMouseover()
+            const mousePos = this.entity.game.inputManager.mousePosition
+            this.drawMouseover(mousePos)
         }
         
     }
@@ -32,27 +33,27 @@ export default class EquipmentComponent extends InteractionComponent {
         this.entity.removeFromWorld = true
     }
 
-    drawMouseover() {
-        const mousePos = this.entity.game.inputManager.mousePosition
+    drawMouseover(pos) {        
         const ctx = this.entity.game.ctx
         ctx.fillStyle = 'black'
+        ctx.textAlign = 'left'
         let yOffset = 20
         const ySpace = 15
-        ctx.fillRect(mousePos.x, mousePos.y, 240, 120)
+        ctx.fillRect(pos.x, pos.y, 240, 120)
         ctx.fillStyle = 'white'
         ctx.font = '14px verdana, sans-serif'
-        ctx.fillText(this.name, mousePos.x + 5, mousePos.y + yOffset)
+        ctx.fillText(this.name, pos.x + 5, pos.y + yOffset)
         ctx.font = '12px verdana, sans-serif'
         yOffset += ySpace
-        ctx.fillText('Type: ' + this.type, mousePos.x + 5, mousePos.y + yOffset)
+        ctx.fillText('Type: ' + this.type, pos.x + 5, pos.y + yOffset)
         yOffset += ySpace
-        ctx.fillText('Atk: ' + this.atk, mousePos.x + 5, mousePos.y + yOffset)
+        ctx.fillText('Atk: ' + this.atk, pos.x + 5, pos.y + yOffset)
         yOffset += ySpace
-        ctx.fillText('Def: ' + this.def, mousePos.x + 5, mousePos.y + yOffset)
+        ctx.fillText('Def: ' + this.def, pos.x + 5, pos.y + yOffset)
         yOffset += ySpace
-        ctx.fillText('Matk: ' + this.matk, mousePos.x + 5, mousePos.y + yOffset)
+        ctx.fillText('Matk: ' + this.matk, pos.x + 5, pos.y + yOffset)
         yOffset += ySpace
-        ctx.fillText('Mdef: ' + this.mdef, mousePos.x + 5, mousePos.y + yOffset)
+        ctx.fillText('Mdef: ' + this.mdef, pos.x + 5, pos.y + yOffset)
     }
 
     getMatk() {
