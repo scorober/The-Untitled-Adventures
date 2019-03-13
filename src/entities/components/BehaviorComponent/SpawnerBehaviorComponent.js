@@ -16,7 +16,7 @@ import CollisionComponent from '../CollisionComponent.js'
 import EnemyInteractionComponent from '../InteractionComponent/EnemyInteractionComponent.js'
 import CombatComponent from '../CombatComponent.js'
 import { STATES } from '../../../utils/Const.js'
-import EnemyBehaviorComponent from './EnemyBehaviorComponent.js';
+import EnemyBehaviorComponent from './EnemyBehaviorComponent.js'
 
 export default class SpawnComponentBehavior extends Component {
     /**

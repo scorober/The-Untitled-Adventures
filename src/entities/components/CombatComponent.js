@@ -44,7 +44,7 @@ export default class CombatComponent extends Component {
                 if (this.inRange() && this.timerCooled()) {
                     this.entity.getComponent(MovementComponent).halt()
                     this.entity.game.soundManager.playAttack(this.entity.UUID)
-                    // this.doAttackAnimation()
+                    this.doAttackAnimation()
                     this.createProjectile()
                 }
             }
