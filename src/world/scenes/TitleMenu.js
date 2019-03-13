@@ -58,11 +58,16 @@ export default class TitleMenuScene extends Scene {
             if(this.game.inputManager.downKeys[KEYS.Enter]){
                 switch (this.selectedItem) {
 
-                    case 2:{
-                        //switch to start game
-                        console.log('start game!')
-                        this.game.sceneManager.change('level1', null)
-                    }
+                    case 2:
+                        {
+                            //switch to start game
+                            console.log('start game!')
+                            this.game.sceneManager.change('level1', null)
+                        }
+                        break
+                    case 5:
+                        window.close()
+                        break
                 }
             }
 
