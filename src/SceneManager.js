@@ -90,19 +90,6 @@ export default class SceneManager {
         if(this.game.inputManager.downKeys[KEYS.Escape]
             || this.game.inputManager.downKeys[KEYS.KeyP]) {
             this.isPaused = !this.isPaused
-            //
-            //     if(this.isPaused){
-            //         //paused, so resume
-            //         //this.change(this.previous)
-            //     }else{
-            //         //not paused, pause
-            //         let params = {}
-            //         params.name = this.previous = this.currentScene.name
-            //         //TODO: make a draw stack and call both.
-            //         this.change('pause', params)
-            //     }
-            //     this.isPaused = !this.isPaused
-            // }
         }
     }
 
