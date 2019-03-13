@@ -32,7 +32,7 @@ export default class SceneManager {
         this.addScene(firstlevel.name, firstlevel)
         this.addScene(boss.name, boss)
         this.guiScript = false
-        this.currentScene = title
+        this.currentScene = boss
         this.pause = new PauseMenu(game)
         this.isPaused = false
         // this.currentScene = boss
