@@ -82,6 +82,7 @@ export default class BossLevel extends Scene {
         const player = this.getPlayer()
         console.log(Map.worldToTilePosition(new Vector(player.x, player.y), this.game.getTileSize()))
         // (20, 22)
+        for ()
         if (this.fireballTimer > this.fireballFreq) {
             const startPosition = Map.tileToWorldPosition(new Vector(20, 23), this.game.getTileSize())
             const endPosition = Map.tileToWorldPosition(new Vector(20, 26), this.game.getTileSize())
