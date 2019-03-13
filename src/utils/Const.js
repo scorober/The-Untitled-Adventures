@@ -262,10 +262,10 @@ export const KEYS = {
 export const SPAWNERS = {
     Mage: {
         mage: .60,
-        archer: 0,
+        archer: .2,
         robot: .1,
         warrior: 0,
-        chief: .2,
+        chief: 0,
         wolf: .05,
         knight: 0.05
 
@@ -288,15 +288,6 @@ export const SPAWNERS = {
         wolf: .1,
         knight: 0.1
     },
-    Chief: {
-        mage: 0,
-        archer: .15,
-        robot: 0,
-        warrior: .15,
-        chief: .6,
-        wolf: .05,
-        knight: 0.05
-    }
 }
 
 export const MAP_ITEMS = {
