@@ -69,8 +69,8 @@ export default class SpawnComponentBehavior extends Component {
                 this.addMob()
             }
             // Display mobs/total mobs or mo
-            this.scene.updateSpawnerDisplay(this.spawnedMobs, this.totalMobs)
-            // this.scene.updateSpawnwerDisplay(this.spawnedMobs, this.mobs.length)
+            // this.scene.updateSpawnerDisplay(this.spawnedMobs, this.totalMobs)
+            this.scene.updateSpawnerDisplay(this.spawnedMobs, this.mobs.length)
         }
     }
 
