@@ -45,6 +45,7 @@ export default class SpawnComponentBehavior extends Component {
         this.knights = 0
         this.room = room
         this.spawnedMobs = 0
+        this.totalMobs = 0
     }
 
 
@@ -67,17 +68,13 @@ export default class SpawnComponentBehavior extends Component {
             if (this.spawnTimer >= 250) {
                 this.addMob()
             }
+            // Display mobs/total mobs or mo
+            // this.scene.updateSpawnerDisplay(this.spawnedMobs, this.totalMobs)
+            this.scene.updateSpawnerDisplay(this.spawnedMobs, this.mobs.length)
         }
     }
 
-    draw() {
-        if(this.spawnedMobs > 0) {
-            const ctx = this.entity.game.ctx
-            ctx.fillStyle = 'red'
-            ctx.font = '36px arcade'
-            ctx.fillText('Spawned: ' + this.spawnedMobs.toString()+'/'+this.mobs.length, 30, 50)
-        }
-    }
+    draw() { }
 
     addMob() {
         if (this.mobs.length > 0) {
@@ -104,6 +101,7 @@ export default class SpawnComponentBehavior extends Component {
         this.warriors = Math.ceil(this.cfg.warrior * this.difficulty)
         const totalMobs = this.mages + this.archers + this.robots + this.warriors + this.knights + this.chiefs + this.wolves
         this.scene.addMobs(totalMobs)
+        this.totalMobs = totalMobs
     }
 
     /**

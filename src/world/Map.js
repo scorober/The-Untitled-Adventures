@@ -25,6 +25,8 @@ export default class Map extends Entity {
         this.scene = scene
         this.mapLayerLower = [] //Group all lower map layers together.
         this.rng = new Random()
+        this.fog = []
+        
 
         if (dungeon) {
             this.dungeon = dungeon
@@ -171,15 +173,27 @@ export default class Map extends Entity {
             levelType = LR.First
         }
 
-        const pos = this.alterPos(this.generateRoomProperties(piece).innerPos, 1, 1)
+        const props = this.generateRoomProperties(piece)
+        const fogObj = {
+            foggy: true,
+            pos: props.outerPos,
+            width: piece.size[0],
+            height: piece.size[1]
+        }
+
+        const pos = this.alterPos(props.innerPos, 1, 1)
         const center = piece.global_pos(piece.get_center_pos())
+
         switch (piece.tag) {
             case ROOMS.Initial:
+                fogObj.foggy = false
                 this.createRoomByLayout(pos, levelType.Initial)
                 break
             case ROOMS.Any:
                 //SPAWNER ROOMS
                 this.createObject(this.map1, this.alterPos(center, -1, -1), MI.Rug)
+                this.createObject(this.map2,  this.alterPos(center, 0, -1), MI.ChestClosed)
+                this.createObject(this.map0, center, MI.ChestClosed)
                 this.spawners.push({
                     pos: new Vector(
                         center[0] * this.tileSize,
@@ -216,6 +230,7 @@ export default class Map extends Entity {
                 this.createRoomByLayout(pos, levelType.Boss)
                 break
         }
+        this.fog.push(fogObj)
     }
 
     /**
@@ -263,7 +278,7 @@ export default class Map extends Entity {
                     this.createObject(this.map3, doorPos, MI.Door180Top)
                     tiles.push(this.alterPos(doorPos, 1, 0))
                     tiles.push(this.alterPos(doorPos, 2, 0))
-                    this.addExit(exit[2].id, piece.id, tiles)
+                    this.addExit(exit[2].id, piece.id, tiles,)
                 }
             } else {  //East and West
                 const transPos = this.alterPos(exitPos, -2, 0)
@@ -400,7 +415,7 @@ export default class Map extends Entity {
                 } else {
                     const layeredTiles = [tile0, tile1, tile2]
                     const nonZeroTiles = []
-                    for (let i = 0; i < 3; i++) {
+              for (let i = 0; i < 3; i++) {
                         if (layeredTiles[i] !== 0) {
                             nonZeroTiles.push(this.mapValueToPathfindingValue(layeredTiles[i]))
                         }
@@ -483,6 +498,9 @@ export default class Map extends Entity {
     }
 
 
+    clearRoomFog(id) {
+
+    }
     tileInView(r, c, centerTile, tilesWide, tilesTall) {
         return (c > centerTile.y - tilesTall / 2 &&
             c < centerTile.y + tilesTall / 2 &&

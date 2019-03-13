@@ -32,6 +32,8 @@ export default class FirstLevel extends Scene {
     constructor(game) {
         super(game, 1)
         this.name = 'level1'
+        this.spawnedMobs = 0
+        this.mobs = 0
         
         //Initialize a dungeon with options, possibly move to the scene superclass w/ parameters.
         const dungeon = new Dungeon({
@@ -45,8 +47,8 @@ export default class FirstLevel extends Scene {
                     position: [100, 100] //OPTIONAL pos of initial room 
                 },
                 any: {
-                    min_size: [15, 15],
-                    max_size: [20, 23],
+                    min_size: [12, 12],
+                    max_size: [16, 16],
                     max_exits: 4
                 },
                 corridor: { 
@@ -57,7 +59,7 @@ export default class FirstLevel extends Scene {
                 exit: {
                     min_size: [15, 15],
                     max_size: [20, 20],
-                    max_exits: 1
+                    max_exits: 4
                 },
                 treasure: {
                     min_size: [20, 16],
@@ -239,6 +241,12 @@ export default class FirstLevel extends Scene {
         this.game.roomDisplay.timer -= this.game.clockTick
     }
 
+    updateSpawnerDisplay(spawned, mobs) {
+
+        this.spawnedMobs = spawned
+        this.mobs = mobs
+    }
+
     /**
      * Draw this scene.
      */
@@ -247,6 +255,17 @@ export default class FirstLevel extends Scene {
         this.drawMap()
         this.drawEntities()
         this.drawMapTop()
+        this.drawFog()
+
+        if (this.spawnedMobs > 0) {
+            const ctx = this.game.ctx
+            ctx.fillStyle = 'red'
+            ctx.font = '36px arcade'
+            ctx.textAlign = 'left'
+            ctx.textBaseline = 'top'
+            ctx.fillText('Spawned: ' + this.spawnedMobs.toString() + '/' + this.mobs, 30, 50)
+        }
+
         if (this.game.killDisplay.timer > 0) {
             this.game.ctx.font = '50px terminal'
             this.game.ctx.textAlign = 'center'

@@ -29,7 +29,7 @@ const portraitY = 176
 export default {
     // Attributes Component Configuration
     Attributes: {
-        HP: 10,
+        HP: 15,
         Mana: 10,
         Str: 5,
         Int: 5,

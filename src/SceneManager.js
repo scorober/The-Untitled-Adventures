@@ -79,7 +79,7 @@ export default class SceneManager {
      */
     draw() {
         this.currentScene.draw()
-        if (this.guiScript != false) {
+        if (this.guiScript != false && this.currentScene.isPlayable()) {
             this.guiScript()
         }
     }
