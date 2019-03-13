@@ -177,6 +177,19 @@ export default class Scene {
         }
     }
 
+    drawFog() {
+        this.map.fog.forEach((room) => {
+            if (room.foggy) {
+                for (let i = room.pos[0]; i < room.pos[0] + room.width - 1; i++) {
+                    for (let j = room.pos[1]; j < room.pos[1] + room.height - 1; j++) {
+                        this.map.drawTile(i, j, 175)
+                    }
+                }
+            }
+
+        })
+    }
+
     /**
      * Sets the map for this scene
      *

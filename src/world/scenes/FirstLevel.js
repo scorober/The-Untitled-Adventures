@@ -45,8 +45,8 @@ export default class FirstLevel extends Scene {
                     position: [100, 100] //OPTIONAL pos of initial room 
                 },
                 any: {
-                    min_size: [15, 15],
-                    max_size: [20, 23],
+                    min_size: [12, 12],
+                    max_size: [16, 16],
                     max_exits: 4
                 },
                 corridor: { 
@@ -57,7 +57,7 @@ export default class FirstLevel extends Scene {
                 exit: {
                     min_size: [15, 15],
                     max_size: [20, 20],
-                    max_exits: 1
+                    max_exits: 4
                 },
                 treasure: {
                     min_size: [20, 16],
@@ -245,6 +245,7 @@ export default class FirstLevel extends Scene {
         this.drawMap()
         this.drawEntities()
         this.drawMapTop()
+        this.drawFog()
     }
 
     enter(){
