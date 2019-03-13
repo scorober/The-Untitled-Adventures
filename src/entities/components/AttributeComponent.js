@@ -45,5 +45,8 @@ const defaultAttributes = {
     Range: 0,
     Def: 0,
     Mdef: 0,
-    Name: 'ENTITY'
+    Name: 'ENTITY',
+    isCombat: false,
+    isMelee: true,
+    Los: 500
 }

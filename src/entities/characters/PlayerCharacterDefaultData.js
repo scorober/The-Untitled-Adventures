@@ -24,9 +24,11 @@ export default {
         Matk: 10,
         Def: 25,
         Mdef: 25,
+        Range: 128,
         Speed: 180,
         Name: 'PLAYER',
-        isCombat: true
+        isCombat: true,
+        isMelee: true
     },
     // Animation Component Configuration
     AnimationConfig: {

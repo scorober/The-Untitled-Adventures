@@ -35,8 +35,10 @@ export default {
         Def: 3,
         Mdef: 10,
         Speed: 50,
+        Range: 250,
         Name: 'MAGE',
         isCombat: true,
+        isMelee: false
     },
     // Animation Component Configuration
     AnimationConfig: {

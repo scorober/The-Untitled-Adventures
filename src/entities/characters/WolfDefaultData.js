@@ -38,8 +38,10 @@ export default {
         Def: 10,
         Mdef: 3,
         Speed: 50,
+        Range: 80,
         Name: 'WOLF',
         isCombat: true,
+        isMelee: true
     },
     // Animation Component Configuration
     AnimationConfig: {

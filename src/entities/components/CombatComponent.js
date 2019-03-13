@@ -2,9 +2,14 @@ import Component from './Component.js'
 import AttributeComponent from './AttributeComponent.js'
 import Vector from '../../utils/Vector.js'
 import AnimationComponent from './AnimationComponent.js'
-import { ANIMATIONS as ANIMS } from '../../utils/Const.js'
+import { ANIMATIONS as ANIMS, DIRECTIONS } from '../../utils/Const.js'
 import MovementComponent from './MovementComponent.js'
 import EquippedItemsComponent from './EquippedItemsComponent.js'
+import Entity from '../Entity.js'
+import ArcherEffectData from '../effects/ArcherEffectDefaultData.js'
+import MageEffectData from '../effects/MageEffectDefaultData.js'
+import ProjectileBehaviorComponent from './BehaviorComponent/ProjectileBehaviorComponent.js'
+import CollisionComponent from './CollisionComponent.js'
 
 export default class CombatComponent extends Component {
     constructor(entity) {
@@ -20,6 +25,7 @@ export default class CombatComponent extends Component {
      * Update's the entity's attack timer to mitigate time between attacks.
      * Checks if the entity is dead.
      */
+    // eslint-disable-next-line complexity
     update() {
         this.dmgTimer -= this.entity.game.clockTick
         this.damageDisplay.timer -= this.entity.game.clockTick
@@ -27,9 +33,21 @@ export default class CombatComponent extends Component {
             this.entity.game.getCurrentScene().spawnReward(this.entity)
             this.entity.game.removeEntityByRef(this.entity)
         }
-        if (this.hasCombatTarget() && this.inRange() && this.timerCooled() && this.notMoving()) {
-            this.entity.game.soundManager.playAttack(this.entity.UUID)
-            this.meleeAttack()
+        if (this.hasCombatTarget()) {
+            if (this.attributeComponent.isMelee) {
+                if (this.inRange() && this.timerCooled() && this.notMoving()) {
+                    this.entity.game.soundManager.playAttack(this.entity.UUID)
+                    this.meleeAttack()
+                }
+            }
+            if (!this.attributeComponent.isMelee) {
+                if (this.inRange() && this.timerCooled()) {
+                    this.entity.getComponent(MovementComponent).halt()
+                    this.entity.game.soundManager.playAttack(this.entity.UUID)
+                    this.doAttackAnimation()
+                    this.createProjectile()
+                }
+            }
         }
     }
 
@@ -51,11 +69,11 @@ export default class CombatComponent extends Component {
         }
     }
 
-
     /**
      * Checks if it is possible to execute a melee attack
      */
-    canMeleeAttack() {
+    canAttack() {
+        return this.hasCombatTarget() && this.inRange() && this.timerCooled() && this.notMoving()
     }
 
     /**
@@ -86,7 +104,7 @@ export default class CombatComponent extends Component {
      * @returns {boolean}
      */
     inRange() {
-        return Vector.vectorFromEntity(this.combatTarget).distance(Vector.vectorFromEntity(this.entity)) < 80
+        return Vector.vectorFromEntity(this.combatTarget).distance(Vector.vectorFromEntity(this.entity)) < this.attributeComponent.Range
     }
 
     /**
@@ -273,5 +291,63 @@ export default class CombatComponent extends Component {
             this.entity.game.sceneManager.change('scoredisplay')
             this.entity.game.sceneManager.currentScene.updateText()
         }
+    }
+
+    createProjectile() {
+        this.dmgTimer = 3
+        const origin = this.getEffectOffsetPos()
+        const target = Vector.vectorFromEntity(this.entity.game.sceneManager.currentScene.getPlayer())
+        const proj = new Entity(this.entity.game, origin)
+        const attributes = this.entity.getComponent(AttributeComponent)
+
+        if (this.entity.UUID.includes('MAGE')) {
+            proj.addComponent(new AnimationComponent(proj, MageEffectData.AnimationConfig))
+            proj.addComponent(new MovementComponent(proj, MageEffectData.Attributes))
+            proj.addComponent(new ProjectileBehaviorComponent(proj, target, false, this.entity))
+            proj.addComponent(new AttributeComponent(proj, attributes))
+            proj.addComponent(new CollisionComponent(proj))
+            proj.addComponent(new CombatComponent(proj))
+        }
+        if (this.entity.UUID.includes('ARCHER')) {
+            proj.addComponent(new AnimationComponent(proj, ArcherEffectData.AnimationConfig))
+            proj.addComponent(new MovementComponent(proj, ArcherEffectData.Attributes))
+            proj.addComponent(new ProjectileBehaviorComponent(proj, target, false, this.entity))
+            proj.addComponent(new AttributeComponent(proj, attributes))
+            proj.addComponent(new CollisionComponent(proj))
+            proj.addComponent(new CombatComponent(proj))
+        }
+        this.entity.game.sceneManager.currentScene.addEntity(proj)
+    }
+
+    /**
+     * Get the target based off mouse position.
+     */
+    getTarget() {
+        return this
+    }
+
+    /**
+     * Returns an offset off the caster for the spells animation to originate.
+     */
+    getEffectOffsetPos() {
+        const pos = new Vector(
+            this.entity.x,
+            this.entity.y
+        )
+        const direction = this.entity.getComponent(MovementComponent).direction
+        if (direction === DIRECTIONS.West) {
+            pos.x -= 20
+        } else if (direction === DIRECTIONS.East) {
+            pos.x += 20
+        } else if (direction === DIRECTIONS.North) {
+            pos.y -= 20
+        } else {
+            pos.y += 20
+        }
+        return pos
+    }
+
+    isAlly() {
+        return this.entity.UUID.includes('PLAYER')
     }
 }

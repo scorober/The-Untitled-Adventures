@@ -35,8 +35,10 @@ export default {
         Def: 10,
         Mdef: 3,
         Speed: 50,
+        Range: 500,
         Name: 'ARCHER',
         isCombat: true,
+        isMelee: false
     },
     // Animation Component Configuration
     AnimationConfig: {

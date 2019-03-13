@@ -80,7 +80,6 @@ export default class Scene {
      */
     addCollidableEntity(entity) {
         this.addEntity(entity)
-        entity.setCollidable()
         this.game.sceneManager.addCollidableEntity(entity)
     }
 

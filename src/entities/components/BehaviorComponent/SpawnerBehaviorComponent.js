@@ -16,6 +16,7 @@ import CollisionComponent from '../CollisionComponent.js'
 import EnemyInteractionComponent from '../InteractionComponent/EnemyInteractionComponent.js'
 import CombatComponent from '../CombatComponent.js'
 import { STATES } from '../../../utils/Const.js'
+import EnemyBehaviorComponent from './EnemyBehaviorComponent.js'
 
 export default class SpawnComponentBehavior extends Component {
     /**
@@ -123,6 +124,7 @@ export default class SpawnComponentBehavior extends Component {
             mage.addComponent(new CollisionComponent(mage))
             mage.addComponent(new EnemyInteractionComponent(mage))
             mage.addComponent(new CombatComponent(mage))
+            mage.addComponent(new EnemyBehaviorComponent(mage))
        
             this.mobs.push(mage)
         }
@@ -139,6 +141,7 @@ export default class SpawnComponentBehavior extends Component {
             archer.addComponent(new CollisionComponent(archer))
             archer.addComponent(new EnemyInteractionComponent(archer))
             archer.addComponent(new CombatComponent(archer))
+            archer.addComponent(new EnemyBehaviorComponent(archer))
             this.mobs.push(archer)
         }
         for (let i = 0; i < this.robots; i++) {
@@ -154,6 +157,7 @@ export default class SpawnComponentBehavior extends Component {
             robot.addComponent(new CollisionComponent(robot))
             robot.addComponent(new EnemyInteractionComponent(robot))
             robot.addComponent(new CombatComponent(robot))
+            robot.addComponent(new EnemyBehaviorComponent(robot))
             this.mobs.push(robot)
         }
 
@@ -170,6 +174,7 @@ export default class SpawnComponentBehavior extends Component {
             chief.addComponent(new CollisionComponent(chief))
             chief.addComponent(new EnemyInteractionComponent(chief))
             chief.addComponent(new CombatComponent(chief))
+            chief.addComponent(new EnemyBehaviorComponent(chief))
             this.mobs.push(chief)
         }
         
@@ -187,6 +192,7 @@ export default class SpawnComponentBehavior extends Component {
             wolf.addComponent(new CollisionComponent(wolf))
             wolf.addComponent(new EnemyInteractionComponent(wolf))
             wolf.addComponent(new CombatComponent(wolf))
+            wolf.addComponent(new EnemyBehaviorComponent(wolf))
             this.mobs.push(wolf)
         }
 
@@ -203,6 +209,7 @@ export default class SpawnComponentBehavior extends Component {
             knight.addComponent(new CollisionComponent(knight))
             knight.addComponent(new EnemyInteractionComponent(knight))
             knight.addComponent(new CombatComponent(knight))
+            knight.addComponent(new EnemyBehaviorComponent(knight))
             this.mobs.push(knight)
         }
 
@@ -220,6 +227,7 @@ export default class SpawnComponentBehavior extends Component {
             warrior.addComponent(new CollisionComponent(warrior))
             warrior.addComponent(new EnemyInteractionComponent(warrior))
             warrior.addComponent(new CombatComponent(warrior))
+            warrior.addComponent(new EnemyBehaviorComponent(warrior))
             this.mobs.push(warrior)
         }
 

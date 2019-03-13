@@ -74,7 +74,7 @@ export default class ProjectileBehavior extends Component {
         this.isImpact = true
         for(let i = 0; i < e.length; i++) { //apply AOE damage to all entities that got hit
             const next = e[i]
-            if(this.checkValidCollision(next)){
+            if(this.checkValidCollision(next)) {
                 if (next.getComponent(CombatComponent)) {
                     this.entity.getComponent(CombatComponent).magicAttack(next)
                 }
