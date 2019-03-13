@@ -16,6 +16,12 @@ export default class GameEngine {
         this.surfaceWidth = null
         this.surfaceHeight = null
         this.requestAnimFrame = this.getPlatformRAF().bind(window)
+        this.killDisplay = this.setKillDisplay(-1)
+        this.killDisplay.timer = 0
+        this.killPoints = 0
+        this.roomDisplay = this.setKillDisplay(-1)
+        this.roomDisplay.timer = 0
+        this.roomPoints = 0
     }
 
     /**
@@ -159,6 +165,12 @@ export default class GameEngine {
         return this.sceneManager.getCollidablesXYWorld(new Vector(pos.x, pos.y))
     }
 
+    setKillDisplay(value) {
+        return {
+            value: value,
+            timer: 2,
+        }
+    }
 
     /**
      * Creates score items and saves them into the score scene. Updates kill count or scene
@@ -172,10 +184,16 @@ export default class GameEngine {
         if (kill) {
             scene.killCount++
             const Score = this.addKillScore(name)
-            if (Score != null) scene.scores.push(Score)
+            if (Score) {
+                scene.scores.push(Score)
+                this.killDisplay = this.setKillDisplay(Score.Score)
+            }
         } else {
             const Score = this.addNonKill(name, scene)
-            if (Score != null) scene.scores.push(Score)
+            if (Score) {
+                scene.scores.push(Score)
+                this.roomDisplay = this.setKillDisplay(Score.Score)
+            }
         }
     }
 
@@ -271,7 +289,7 @@ export default class GameEngine {
                     Time: Math.floor(this.timer.gameTime),
                     Duration: this.sceneManager.currentScene.currentRoomTimeLapse,
                     lvl: 1,
-                    Score: Math.floor(1000 * Math.sqrt(2) / Math.sqrt(this.sceneManager.currentScene.currentRoomTimeLapse)),
+                    Score: Math.floor(51000 * Math.sqrt(2) / Math.sqrt(this.sceneManager.currentScene.currentRoomTimeLapse)),
                     Type: 'C'
                 }
                 break
@@ -281,7 +299,7 @@ export default class GameEngine {
                     Time: Math.floor(this.timer.gameTime),
                     Duration: this.timer.gameTime.toFixed(2),
                     lvl: 1,
-                    Score: Math.floor(1000 * Math.sqrt(2) / Math.sqrt(this.timer.gameTime)),
+                    Score: Math.floor(100000 * Math.sqrt(2) / Math.sqrt(this.timer.gameTime)),
                     Type: 'C'
                 }
                 scene.state++

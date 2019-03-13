@@ -16,11 +16,11 @@ const oversizedYOffset = 64
 export default {
     // Attributes Component Configuration
     Attributes: {
-        HP: 120,
+        HP: 1,
         Mana: 10,
         Str: 5,
         Int: 5,
-        Atk: 10,
+        Atk: 50,
         Matk: 10,
         Def: 25,
         Mdef: 25,
