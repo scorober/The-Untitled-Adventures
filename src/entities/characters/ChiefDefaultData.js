@@ -109,11 +109,11 @@ export default {
                 }
             },
             // Effect0 'burn effect'
-            [ANIMS.Effect0]: {
+            [ANIMS.Projectile]: {
                 frames: 11,
                 rate: AR.Impact,
                 options: {
-                    loop: false,
+                    loop: true,
                     width: impactSizeSm,
                     height: impactSizeSm,
                 }

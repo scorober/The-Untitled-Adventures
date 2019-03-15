@@ -24,8 +24,8 @@ import PlayerData from '../characters/PlayerCharacterDefaultData.js'
 import AttributeComponent from '../components/AttributeComponent.js'
 import TeleportData from '../effects/TeleportDefaultData.js'
 import TeleportBehaviorComponent from './BehaviorComponent/TeleportBehaviorComponent.js'
-import EquippedItemsComponent from './EquippedItemsComponent.js';
-import EquipmentComponent from './EquipmentComponent.js';
+import EquippedItemsComponent from './EquippedItemsComponent.js'
+import EquipmentComponent from './EquipmentComponent.js'
 
 export default class PlayerInputComponent extends Component {
     /**s

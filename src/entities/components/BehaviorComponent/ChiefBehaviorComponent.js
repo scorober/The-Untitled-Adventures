@@ -45,7 +45,7 @@ export default class ChiefBehaviorComponent extends Component {
     }
 
     summonWolves() {
-        // const pos = //get random tile from defined map!
+        const pos = this.getRandomTile(DM.centerTiles)
         const wolves = this.rng.ing(2, 5)
         for (let i = 0; i < wolves; i++) {
             const wolf = new Entity(this.entity.game, new Vector(
@@ -61,10 +61,9 @@ export default class ChiefBehaviorComponent extends Component {
 
     }
 
-    teleportOut() {
-        const tile = 
+    teleportOut() { 
         const origin = Vector.vectorFromEntity(this.entity)
-        const target = this.getTeleTarget(DM.outTiles)
+        const target = this.getRandomTile(DM.outTiles)
         const teleportEffect = new Entity(this.entity.game, origin)
         teleportEffect.addComponent(new AnimationComponent(teleportEffect, TeleportData.AnimationConfig))
         teleportEffect.addComponent(new TeleportBehaviorComponent(teleportEffect, this.entity, target))
@@ -73,7 +72,7 @@ export default class ChiefBehaviorComponent extends Component {
     
     teleportIn() {
         const origin = Vector.vectorFromEntity(this.entity)
-        const target = getTeleTarget(DM.centerTiles)
+        const target = this.getRandomTile(DM.centerTiles)
         const teleportEffect = new Entity(this.entity.game, origin)
         teleportEffect.addComponent(new AnimationComponent(teleportEffect, TeleportData.AnimationConfig))
         teleportEffect.addComponent(new TeleportBehaviorComponent(teleportEffect, this.entity, target))
@@ -87,7 +86,7 @@ export default class ChiefBehaviorComponent extends Component {
             (this.attributeComponent.hp < this.HPFull * .2 && this.teleports === 3)      
     }
 
-    getTeleTarget(tiles) {
+    getRandomTile(tiles) {
         const index =  this.rng.int(0, tiles.length)
         const tile =  tiles[index]
         return Map.tileToWorldPosition(tile, 64)
