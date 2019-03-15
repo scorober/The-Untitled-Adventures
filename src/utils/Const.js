@@ -14,7 +14,7 @@ export const ASSET_PATHS = {
     Chief: './assets/img/skele-chief-full.png',
     Wolf: './assets/img/wolf-full.png',
     Warrior: './assets/img/skele-warrior.png',
-
+    Pause : './assets/img/pauseGUI.png',
 
     ScottsChar: './assets/img/scotts-char.png',
     Fireball: './assets/img/fireball.png',

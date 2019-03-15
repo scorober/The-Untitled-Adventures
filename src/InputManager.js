@@ -91,7 +91,11 @@ export default class InputManager {
     }
 
     hasLeftClick() {
-        return this.newRightClick
+        return this.newRightClick //TODO: Ya, this is wrong and fixing it causes a bunch of errors in movement.
+    }
+    //This one is accurate, and was made for the classes that actually need this information
+    isLeftClick(){
+        return this.newLeftClick
     }
 
     getLeftClick() {
