@@ -11,6 +11,12 @@ import MarriottInteractionComponent from '../../entities/components/InteractionC
 import PlayerCharacterCombatComponent from '../../entities/components/PlayerCharacterCombatComponent.js'
 import EquippedItemsComponent from '../../entities/components/EquippedItemsComponent.js'
 import DefinedMap from '../DefinedMap.js'
+import ChiefData from '../../entities/characters/ChiefDefaultData.js'
+import EnemyInteractionComponent from '../../entities/components/InteractionComponent/EnemyInteractionComponent.js'
+import CombatComponent from '../../entities/components/CombatComponent.js'
+import EnemyBehaviorComponent from '../../entities/components/BehaviorComponent/EnemyBehaviorComponent.js'
+import Map from '../Map.js'
+import ChiefBehaviorComponent from '../../entities/components/BehaviorComponent/ChiefBehaviorComponent.js';
 
 export default class BossLevel extends Scene {
     constructor(game) {
@@ -19,7 +25,13 @@ export default class BossLevel extends Scene {
         const map = new DefinedMap(game, game.getAsset(ASSET_PATHS.Dungeon), 64 , 16, this, DEFINED_MAPS.Boss)
         this.setMap(map)
         const start = this.map.getStartPos()
+        //TEST START
+        // const start = Map.tileToWorldPosition({x: 110, y: 26}, 64)
+
+        
         const playerCharacter = this.createPlayerCharacter(game, start)
+        const chief = this.createChief(game, Map.tileToWorldPosition( {x: 122, y: 26}, 64 ))
+        this.addEntity(chief)
         this.setPlayer(playerCharacter)
         this.addEntity(playerCharacter)
         this.setCamera(playerCharacter)
@@ -37,6 +49,19 @@ export default class BossLevel extends Scene {
         pc.addComponent(new PlayerInputComponent(pc))
         pc.addComponent(new EquippedItemsComponent(pc))
         return pc
+    }
+
+    createChief(game, pos) {
+        const chief = new Entity(game, pos)
+        chief.addComponent(new AnimationComponent(chief, ChiefData.AnimationConfig))
+        chief.addComponent(new MovementComponent(chief, ChiefData.Attributes))
+        chief.addComponent(new AttributeComponent(chief, ChiefData.Attributes))
+        chief.addComponent(new CollisionComponent(chief))
+        chief.addComponent(new EnemyInteractionComponent(chief))
+        chief.addComponent(new CombatComponent(chief))
+        chief.addComponent(new EnemyBehaviorComponent(chief))
+        chief.addComponent(new ChiefBehaviorComponent(chief))
+        return chief
     }
     /**
      * Updates this scene.

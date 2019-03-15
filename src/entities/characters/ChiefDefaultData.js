@@ -30,16 +30,16 @@ const portraitY = 176
 export default {
     // Attributes Component Configuration
     Attributes: {
-        HP: 10,
+        HP: 100,
         Mana: 10,
         Str: 5,
         Int: 5,
         Atk: 10,
-        Matk: 5,
-        Def: 10,
-        Mdef: 3,
+        Matk: 30,
+        Def: 75,
+        Mdef: 45,
         Speed: 50,
-        Range: 300,
+        Range: 500,
         Name: 'CHIEF',
         isCombat: true,
         isMelee: false
@@ -109,11 +109,11 @@ export default {
                 }
             },
             // Effect0 'burn effect'
-            [ANIMS.Effect0]: {
+            [ANIMS.Projectile]: {
                 frames: 11,
                 rate: AR.Impact,
                 options: {
-                    loop: false,
+                    loop: true,
                     width: impactSizeSm,
                     height: impactSizeSm,
                 }

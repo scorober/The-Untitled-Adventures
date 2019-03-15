@@ -29,16 +29,16 @@ const portraitY = 176
 export default {
     // Attributes Component Configuration
     Attributes: {
-        HP: 70,
+        HP: 60,
         Mana: 10,
         Str: 5,
         Int: 5,
-        Atk: 10,
+        Atk: 12,
         Matk: 5,
         Def: 10,
-        Mdef: 3,
-        Speed: 50,
-        Range: 80,
+        Mdef: 5,
+        Speed: 110,
+        Range: 110,
         Name: 'WOLF',
         isCombat: true,
         isMelee: true
