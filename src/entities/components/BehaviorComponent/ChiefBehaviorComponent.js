@@ -13,6 +13,7 @@ import TeleportData from '../../effects/TeleportDefaultData.js'
 import TeleportBehaviorComponent from './TeleportBehaviorComponent.js'
 import { DEFINED_MAPS as DM } from '../../../utils/Const.js'
 import Map from '../../../world/Map.js'
+import EnemyBehaviorComponent from './EnemyBehaviorComponent.js';
 
 export default class ChiefBehaviorComponent extends Component {
     constructor(entity) {
@@ -22,32 +23,33 @@ export default class ChiefBehaviorComponent extends Component {
         this.HPFull = this.attributeComponent.HP
         this.fled = false
         this.coolDown = 0
-        this.coolEnd = 1000
+        this.coolEnd = 150
         this.rng = new Random()
-        this.scene = his.entity.game.sceneManager.currentScene
     }
 
 
     update() {
-        if (this.checkHP()) {
+        if (this.checkHP() && !this.fled) {
             this.teleports++
-            this.fled = 
+            this.fled = true
             this.teleportOut()
             this.summonWolves()
         }
         if (this.fled) {
-            this.coolDown + this.entity.game.clockTick * 200
+            this.coolDown += this.entity.game.clockTick * 10
         }
         if (this.coolDown > this.coolEnd) {
             this.teleportIn()
+            this.fled = false
             this.coolDown = 0
         }
     }
 
     summonWolves() {
-        const pos = this.getRandomTile(DM.centerTiles)
-        const wolves = this.rng.ing(2, 5)
+        
+        const wolves = this.rng.int(2, 5)
         for (let i = 0; i < wolves; i++) {
+            const pos = this.getRandomTile(DM.Boss.centerTiles)
             const wolf = new Entity(this.entity.game, new Vector(
                 pos.x, pos.y))
             wolf.addComponent(new AnimationComponent(wolf, WolfData.AnimationConfig))
@@ -56,39 +58,41 @@ export default class ChiefBehaviorComponent extends Component {
             wolf.addComponent(new CollisionComponent(wolf))
             wolf.addComponent(new EnemyInteractionComponent(wolf))
             wolf.addComponent(new CombatComponent(wolf))
-            this.scene.addEntity(wolf)
+            wolf.addComponent(new EnemyBehaviorComponent(wolf))
+            this.entity.game.sceneManager.currentScene.addEntity(wolf)
         }
 
     }
 
     teleportOut() { 
-        const origin = Vector.vectorFromEntity(this.entity)
-        const target = this.getRandomTile(DM.outTiles)
+        const origin = Vector.vectorFromEntity(this.entity)    
+        const target = this.getRandomTile(DM.Boss.outTiles)
         const teleportEffect = new Entity(this.entity.game, origin)
         teleportEffect.addComponent(new AnimationComponent(teleportEffect, TeleportData.AnimationConfig))
         teleportEffect.addComponent(new TeleportBehaviorComponent(teleportEffect, this.entity, target))
-        this.scene.addEntity(teleportEffect)
+        this.entity.game.sceneManager.currentScene.addEntity(teleportEffect)
     }
     
     teleportIn() {
         const origin = Vector.vectorFromEntity(this.entity)
-        const target = this.getRandomTile(DM.centerTiles)
+        const target =this.getRandomTile(DM.Boss.centerTiles)
         const teleportEffect = new Entity(this.entity.game, origin)
         teleportEffect.addComponent(new AnimationComponent(teleportEffect, TeleportData.AnimationConfig))
         teleportEffect.addComponent(new TeleportBehaviorComponent(teleportEffect, this.entity, target))
-        this.scene.addEntity(teleportEffect)
+        this.entity.game.sceneManager.currentScene.addEntity(teleportEffect)
     }
     // eslint-disable-next-line complexity
     checkHP() {
-        return (this.attributeComponent.hp < this.HPFull * .8 && this.teleports === 0) ||
-            (this.attributeComponent.hp < this.HPFull * .6 && this.teleports === 1) ||
-            (this.attributeComponent.hp < this.HPFull * .4 && this.teleports === 2) ||
-            (this.attributeComponent.hp < this.HPFull * .2 && this.teleports === 3)      
+        return (this.attributeComponent.HP < this.HPFull * .8 && this.teleports === 0) ||
+            (this.attributeComponent.HP < this.HPFull * .6 && this.teleports === 1) ||
+            (this.attributeComponent.HP < this.HPFull * .4 && this.teleports === 2) ||
+            (this.attributeComponent.HP < this.HPFull * .2 && this.teleports === 3)      
     }
 
     getRandomTile(tiles) {
         const index =  this.rng.int(0, tiles.length)
         const tile =  tiles[index]
-        return Map.tileToWorldPosition(tile, 64)
+        const retVal = Map.tileToWorldPosition({x: tile[0], y: tile[1]}, 64)
+        return retVal
     }
 }

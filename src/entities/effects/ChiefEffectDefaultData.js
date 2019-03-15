@@ -4,7 +4,9 @@ import {
     ASSET_PATHS
 } from '../../utils/Const.js'
 
-const yOffset = 80
+const yOffset = 0
+const impSize = 288
+const projSize = 96
 
 
 export default {
@@ -19,32 +21,29 @@ export default {
 
     AnimationConfig: {
         Scale: 1,
-        Spritesheet: ASSET_PATHS.MageEffects,
-        InitialAnimation: ANIMS.Effect0,
+        Spritesheet: ASSET_PATHS.ChiefEffect,
+        InitialAnimation: ANIMS.Projectile,
         AnimationRates: {
             [AR.Projectile]: .15,
-            [AR.Boost]: .15,
             [AR.Impact]: .13
         },
         AnimationData: {
             [ANIMS.Impact]: {
                 frames: 11,
                 rate: AR.Impact,
-                
                 options: {
-                    width: 192,
-                    height: 192,
+                    width: impSize,
+                    height: impSize,
                     maxFrames: 11,
-                    scale: .5,
-                    yOffset: yOffset,
+                    yOffset: 30,
                 }
             },
             [ANIMS.Projectile]: {
-                frames: 9,
+                frames: 7,
                 rate: AR.Projectile,
                 options: {
-                    width: 32,
-                    height: 32,
+                    width: projSize,
+                    height: projSize,
                     yOffset: yOffset
                 }
             },

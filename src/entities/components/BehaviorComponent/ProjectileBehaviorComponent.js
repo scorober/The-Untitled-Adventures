@@ -36,12 +36,6 @@ export default class ProjectileBehavior extends Component {
         }
         this.isImpact = false
 
-
-        //TODO: if (this is a fireball) { ... (q key)
-        //this.entity.game.soundManager.FIRECAST();
-        //elif arrow (e key)
-        //this.entity.game.soundManager.ARROWCAST();
-        //elif explosion spell thing (w key)
         this.entity.game.soundManager.ENERGYCAST()
     }
 
@@ -95,6 +89,6 @@ export default class ProjectileBehavior extends Component {
 
     checkCollidedTile() {
         const checkTile = Map.worldToTilePosition(this.entity, 64)
-        return this.entity.game.getWorld()[checkTile.y][checkTile.x] >= 100
+        return this.entity.game.getWorld()[checkTile.y][checkTile.x] >= 60
     }
 }

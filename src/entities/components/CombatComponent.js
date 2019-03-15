@@ -10,6 +10,7 @@ import ArcherEffectData from '../effects/ArcherEffectDefaultData.js'
 import MageEffectData from '../effects/MageEffectDefaultData.js'
 import ProjectileBehaviorComponent from './BehaviorComponent/ProjectileBehaviorComponent.js'
 import CollisionComponent from './CollisionComponent.js'
+import ChiefEffectData from '../effects/ChiefEffectDefaultData.js'
 
 export default class CombatComponent extends Component {
     constructor(entity) {
@@ -19,8 +20,12 @@ export default class CombatComponent extends Component {
         this.combatTarget = false
         this.damageDisplay = this.setDamageDisplay(-1, false)
         this.damageDisplay.timer = 0
+        this.statis = false
     }
 
+    setStasis(bool) {
+        this.statis = bool
+    }
     /**
      * Update's the entity's attack timer to mitigate time between attacks.
      * Checks if the entity is dead.
@@ -29,29 +34,32 @@ export default class CombatComponent extends Component {
     update() {
         this.dmgTimer -= this.entity.game.clockTick
         this.damageDisplay.timer -= this.entity.game.clockTick
-        if (this.checkDead()) {
-            if (this.entity.game.getCurrentScene().isPlayable()) {
-                this.entity.game.getCurrentScene().spawnReward(this.entity)
-                this.entity.game.removeEntityByRef(this.entity)
+        if (!this.statis) {
+            if (this.checkDead()) {
+                if (this.entity.game.getCurrentScene().isPlayable() && this.entity.game.getCurrentScene() === 'level1') {
+                    this.entity.game.getCurrentScene().spawnReward(this.entity)
+                    this.entity.game.removeEntityByRef(this.entity)
+                }
+    
             }
+            if (this.hasCombatTarget()) {
+                if (this.attributeComponent.isMelee) {
+                    if (this.inRange() && this.timerCooled() && this.notMoving()) {
+                        this.entity.game.soundManager.playAttack(this.entity.UUID)
+                        this.meleeAttack()
+                    }
+                }
+                if (!this.attributeComponent.isMelee) {
+                    if (this.inRange() && this.timerCooled()) {
+                        this.entity.getComponent(MovementComponent).halt()
+                        this.entity.game.soundManager.playAttack(this.entity.UUID)
+                        this.doAttackAnimation()
+                        this.createProjectile()
+                    }
+                }
+            }
+        }
 
-        }
-        if (this.hasCombatTarget()) {
-            if (this.attributeComponent.isMelee) {
-                if (this.inRange() && this.timerCooled() && this.notMoving()) {
-                    this.entity.game.soundManager.playAttack(this.entity.UUID)
-                    this.meleeAttack()
-                }
-            }
-            if (!this.attributeComponent.isMelee) {
-                if (this.inRange() && this.timerCooled()) {
-                    this.entity.getComponent(MovementComponent).halt()
-                    this.entity.game.soundManager.playAttack(this.entity.UUID)
-                    this.doAttackAnimation()
-                    this.createProjectile()
-                }
-            }
-        }
     }
 
     /**
@@ -313,6 +321,14 @@ export default class CombatComponent extends Component {
         }
         if (this.entity.UUID.includes('ARCHER')) {
             proj.addComponent(new AnimationComponent(proj, ArcherEffectData.AnimationConfig))
+            proj.addComponent(new MovementComponent(proj, ArcherEffectData.Attributes))
+            proj.addComponent(new ProjectileBehaviorComponent(proj, target, false, this.entity))
+            proj.addComponent(new AttributeComponent(proj, attributes))
+            proj.addComponent(new CollisionComponent(proj))
+            proj.addComponent(new CombatComponent(proj))
+        }
+        if (this.entity.UUID.includes('CHIEF')) {
+            proj.addComponent(new AnimationComponent(proj, ChiefEffectData.AnimationConfig))
             proj.addComponent(new MovementComponent(proj, ArcherEffectData.Attributes))
             proj.addComponent(new ProjectileBehaviorComponent(proj, target, false, this.entity))
             proj.addComponent(new AttributeComponent(proj, attributes))

@@ -10,7 +10,7 @@ export default class MovementComponent extends Component {
      * @param {Entity} entity A reference to the Entity this Component is attached to
      * @param {Object} attributesConfig Attributes configuration object for this character.
      */
-    constructor(entity, attributes) {
+    constructor(entity, attributes, walkable) {
         super(entity)
         this.direction = DIRECTIONS.East
         this.speed = attributes.Speed
@@ -21,19 +21,26 @@ export default class MovementComponent extends Component {
         this.followFunction = this.getTileBehind
         this.following = false
         this.moving = false
+        this.walkable = walkable ? walkable : 4
+        this.stasis = false
     }
 
+    setStasis(bool) {
+        this.stasis = bool
+    }
     /**
      * Called each update cycle
      */
     update() {
-  
-        if (this.path.length > 0) {
-            this.handlePathMovement()
+        if (!this.stasis) {
+            if (this.path.length > 0) {
+                this.handlePathMovement()
+            }
+            if (this.following) {
+                this.handleFollowing()
+            }
         }
-        if (this.following) {
-            this.handleFollowing()
-        }
+
     }
 
     /**

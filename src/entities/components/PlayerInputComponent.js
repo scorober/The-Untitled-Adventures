@@ -74,7 +74,6 @@ export default class PlayerInputComponent extends Component {
             this.debounceTimer -= this.entity.game.clockTick
             if (this.coolDown >= this.coolEnd) {
                 this.checkCastingInput()
-                this.testSpells()
             }
         }
         this.coolDown += this.entity.game.clockTick * 500
@@ -124,7 +123,7 @@ export default class PlayerInputComponent extends Component {
             const target = this.getTarget()
             const fireball = new Entity(this.entity.game, origin)
             fireball.addComponent(new AnimationComponent(fireball, FireballData.AnimationConfig))
-            fireball.addComponent(new MovementComponent(fireball, FireballData.Attributes))
+            fireball.addComponent(new MovementComponent(fireball, FireballData.Attributes, 60))
             fireball.addComponent(new ProjectileBehaviorComponent(fireball, target, true, this.entity))
             fireball.addComponent(new AttributeComponent(fireball, PlayerData.Attributes))
             fireball.addComponent(new CollisionComponent(fireball))
@@ -137,7 +136,7 @@ export default class PlayerInputComponent extends Component {
             const lightningEffect = new Entity(this.entity.game, origin)
             const target = this.getTarget()
             lightningEffect.addComponent(new AnimationComponent(lightningEffect, LightningData.AnimationConfig))
-            lightningEffect.addComponent(new MovementComponent(lightningEffect, LightningData.Attributes))
+            lightningEffect.addComponent(new MovementComponent(lightningEffect, LightningData.Attributes, 60))
             lightningEffect.addComponent(new LightningBehaviorComponent(lightningEffect, target))
             this.entity.game.sceneManager.currentScene.addEntity(lightningEffect)
             this.coolDown = 0
@@ -160,38 +159,6 @@ export default class PlayerInputComponent extends Component {
             this.coolDown = 0
         }
 
-    }
-
-    /**
-     * Mapped all the current effects to player input keys for testing.
-     */
-    testSpells() {
-        if (this.entity.game.inputManager.downKeys[KEYS.KeyW]) {
-            const origin = this.getEffectOffsetPos()
-            const target = this.getTarget()
-            const mageEffect = new Entity(this.entity.game, origin)
-            mageEffect.addComponent(new AnimationComponent(mageEffect, MageEffectData.AnimationConfig))
-            mageEffect.addComponent(new MovementComponent(mageEffect, MageEffectData.Attributes))
-            mageEffect.addComponent(new ProjectileBehaviorComponent(mageEffect, target, false, this.entity))
-            mageEffect.addComponent(new AttributeComponent(mageEffect, PlayerData.Attributes))
-            mageEffect.addComponent(new CollisionComponent(mageEffect))
-            mageEffect.addComponent(new CombatComponent(mageEffect))
-            this.entity.game.sceneManager.currentScene.addEntity(mageEffect)
-            this.coolDown = 0
-        }
-        if (this.entity.game.inputManager.downKeys[KEYS.KeyE]) {
-            const origin = this.getEffectOffsetPos()
-            const target = this.getTarget()
-            const archerEffect = new Entity(this.entity.game, origin)
-            archerEffect.addComponent(new AnimationComponent(archerEffect, ArcherEffectData.AnimationConfig))
-            archerEffect.addComponent(new MovementComponent(archerEffect, ArcherEffectData.Attributes))
-            archerEffect.addComponent(new ProjectileBehaviorComponent(archerEffect, target, false, this.entity))
-            archerEffect.addComponent(new AttributeComponent(archerEffect, PlayerData.Attributes))
-            archerEffect.addComponent(new CollisionComponent(archerEffect))
-            archerEffect.addComponent(new CombatComponent(archerEffect))
-            this.entity.game.sceneManager.currentScene.addEntity(archerEffect)
-            this.coolDown = 0
-        }
     }
 
     enableEquipmentGUI() {

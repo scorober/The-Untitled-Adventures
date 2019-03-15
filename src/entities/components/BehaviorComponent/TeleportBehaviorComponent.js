@@ -4,6 +4,7 @@ import { ANIMATIONS as ANIMS } from '../../../utils/Const.js'
 import Vector from '../../../utils/Vector.js'
 import Map from '../../../world/Map.js'
 import MovementComponent from '../MovementComponent.js'
+import CombatComponent from '../CombatComponent.js'
 import PlayerInputComponent from '../PlayerInputComponent.js'
 
 export default class TeleportBehaviorComponent extends Component {
@@ -12,6 +13,12 @@ export default class TeleportBehaviorComponent extends Component {
         this.targetEntity = targetEntity
         this.target = target
         this.targetEntity.getComponent(MovementComponent).halt()
+        this.targetEntity.getComponent(MovementComponent).setStasis(true)
+        const combatComponent = this.targetEntity.getComponent(CombatComponent)
+        if (combatComponent) {
+            combatComponent.unsetCombatTarget()
+            combatComponent.setStasis(true)
+        }
         this.setStasis(true)
         if (!this.checkValidTarget()) {
             this.target = Vector.vectorFromEntity(targetEntity)
@@ -32,6 +39,13 @@ export default class TeleportBehaviorComponent extends Component {
                 this.targetEntity.y = this.target.y
                 this.setStasis(false)
                 this.entity.removeFromWorld = true
+                const combatComponent = this.targetEntity.getComponent(CombatComponent)
+                if (combatComponent) {
+                    combatComponent.unsetCombatTarget()
+                    combatComponent.setStasis(false)
+                }
+                this.targetEntity.getComponent(MovementComponent).halt()
+                this.targetEntity.getComponent(MovementComponent).setStasis(false)
             })
         })
     }
@@ -44,6 +58,8 @@ export default class TeleportBehaviorComponent extends Component {
         if (this.targetEntity.UUID.includes('PLAYER')) {
             this.targetEntity.getComponent(PlayerInputComponent).setBlocked(bool)
         }
+
+
         this.targetEntity.getComponent(AnimationComponent).getCurrentAnimation().setDraw(!bool)
     }
     
