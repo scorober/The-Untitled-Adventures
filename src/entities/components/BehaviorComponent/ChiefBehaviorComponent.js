@@ -1,5 +1,5 @@
 import Component from '../Component.js'
-import Vector from '../../utils/Vector.js'
+import Vector from '../../../utils/Vector.js'
 import AttributeComponent from '../AttributeComponent.js'
 import Random from '../../../utils/Random.js'
 import WolfData from '../../characters/WolfDefaultData.js'
@@ -9,6 +9,10 @@ import Entity from '../../Entity.js'
 import CollisionComponent from '../CollisionComponent.js'
 import EnemyInteractionComponent from '../InteractionComponent/EnemyInteractionComponent.js'
 import CombatComponent from '../CombatComponent.js'
+import TeleportData from '../../effects/TeleportDefaultData.js'
+import TeleportBehaviorComponent from './TeleportBehaviorComponent.js'
+import { DEFINED_MAPS as DM } from '../../../utils/Const.js'
+import Map from '../../../world/Map.js'
 
 export default class ChiefBehaviorComponent extends Component {
     constructor(entity) {
@@ -20,6 +24,7 @@ export default class ChiefBehaviorComponent extends Component {
         this.coolDown = 0
         this.coolEnd = 1000
         this.rng = new Random()
+        this.scene = his.entity.game.sceneManager.currentScene
     }
 
 
@@ -40,32 +45,51 @@ export default class ChiefBehaviorComponent extends Component {
     }
 
     summonWolves() {
-        const wolf = new Entity(this.entity.game, new Vector(
-            this.entity.x + Math.cos(angle) * r,
-            this.entity.y + Math.sin(angle) * r
-        ))
-        wolf.addComponent(new AnimationComponent(wolf, WolfData.AnimationConfig))
-        wolf.addComponent(new MovementComponent(wolf, WolfData.Attributes))
-        wolf.addComponent(new AttributeComponent(wolf, WolfData.Attributes))
-        wolf.addComponent(new CollisionComponent(wolf))
-        wolf.addComponent(new EnemyInteractionComponent(wolf))
-        wolf.addComponent(new CombatComponent(wolf))
+        // const pos = //get random tile from defined map!
+        const wolves = this.rng.ing(2, 5)
+        for (let i = 0; i < wolves; i++) {
+            const wolf = new Entity(this.entity.game, new Vector(
+                pos.x, pos.y))
+            wolf.addComponent(new AnimationComponent(wolf, WolfData.AnimationConfig))
+            wolf.addComponent(new MovementComponent(wolf, WolfData.Attributes))
+            wolf.addComponent(new AttributeComponent(wolf, WolfData.Attributes))
+            wolf.addComponent(new CollisionComponent(wolf))
+            wolf.addComponent(new EnemyInteractionComponent(wolf))
+            wolf.addComponent(new CombatComponent(wolf))
+            this.scene.addEntity(wolf)
+        }
+
     }
 
     teleportOut() {
-
+        const tile = 
+        const origin = Vector.vectorFromEntity(this.entity)
+        const target = this.getTeleTarget(DM.outTiles)
+        const teleportEffect = new Entity(this.entity.game, origin)
+        teleportEffect.addComponent(new AnimationComponent(teleportEffect, TeleportData.AnimationConfig))
+        teleportEffect.addComponent(new TeleportBehaviorComponent(teleportEffect, this.entity, target))
+        this.scene.addEntity(teleportEffect)
     }
     
     teleportIn() {
-
+        const origin = Vector.vectorFromEntity(this.entity)
+        const target = getTeleTarget(DM.centerTiles)
+        const teleportEffect = new Entity(this.entity.game, origin)
+        teleportEffect.addComponent(new AnimationComponent(teleportEffect, TeleportData.AnimationConfig))
+        teleportEffect.addComponent(new TeleportBehaviorComponent(teleportEffect, this.entity, target))
+        this.scene.addEntity(teleportEffect)
     }
     // eslint-disable-next-line complexity
     checkHP() {
         return (this.attributeComponent.hp < this.HPFull * .8 && this.teleports === 0) ||
             (this.attributeComponent.hp < this.HPFull * .6 && this.teleports === 1) ||
             (this.attributeComponent.hp < this.HPFull * .4 && this.teleports === 2) ||
-            (this.attributeComponent.hp < this.HPFull * .2 && this.teleports === 3)
+            (this.attributeComponent.hp < this.HPFull * .2 && this.teleports === 3)      
+    }
 
-
+    getTeleTarget(tiles) {
+        const index =  this.rng.int(0, tiles.length)
+        const tile =  tiles[index]
+        return Map.tileToWorldPosition(tile, 64)
     }
 }
