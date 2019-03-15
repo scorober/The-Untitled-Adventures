@@ -80,7 +80,6 @@ export default class Scene {
      */
     addCollidableEntity(entity) {
         this.addEntity(entity)
-        entity.setCollidable()
         this.game.sceneManager.addCollidableEntity(entity)
     }
 
@@ -176,6 +175,23 @@ export default class Scene {
             const entity = entities[i]
             entity.draw()
         }
+    }
+
+    /**
+     * Draw the fog of war over everything else. All unopened rooms are covered by fog until 
+     * they are opened.
+     */
+    drawFog() {
+        this.map.fog.forEach((room) => {
+            if (room.foggy) {
+                for (let i = room.pos[0] - 1; i < room.pos[0] + room.width - 1; i++) {
+                    for (let j = room.pos[1] - 1; j < room.pos[1] + room.height - 1; j++) {
+                        this.map.drawTile(i, j, 175)
+                    }
+                }
+            }
+
+        })
     }
 
     /**

@@ -16,7 +16,7 @@ const oversizedYOffset = 64
 export default {
     // Attributes Component Configuration
     Attributes: {
-        HP: 120,
+        HP: 200,
         Mana: 10,
         Str: 5,
         Int: 5,
@@ -24,9 +24,11 @@ export default {
         Matk: 10,
         Def: 25,
         Mdef: 25,
+        Range: 128,
         Speed: 180,
         Name: 'PLAYER',
-        isCombat: true
+        isCombat: true,
+        isMelee: true
     },
     // Animation Component Configuration
     AnimationConfig: {

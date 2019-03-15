@@ -39,8 +39,10 @@ export default {
         Def: 10,
         Mdef: 3,
         Speed: 50,
+        Range: 300,
         Name: 'CHIEF',
         isCombat: true,
+        isMelee: false
     },
     // Animation Component Configuration
     AnimationConfig: {

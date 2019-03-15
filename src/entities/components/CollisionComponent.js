@@ -75,7 +75,6 @@ export default class CollisionComponent extends Component {
                 return (distX < width && distY < height)
             }
         }
-
     }
 
     /**
@@ -110,6 +109,5 @@ export default class CollisionComponent extends Component {
             return (distX < this.width && distY < this.height)
         }
     }
-
 
 }

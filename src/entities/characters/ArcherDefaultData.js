@@ -26,7 +26,7 @@ const yOffset = 20
 export default {
     // Attributes Component Configuration
     Attributes: {
-        HP: 10,
+        HP: 50,
         Mana: 10,
         Str: 5,
         Int: 5,
@@ -35,8 +35,10 @@ export default {
         Def: 10,
         Mdef: 3,
         Speed: 50,
+        Range: 500,
         Name: 'ARCHER',
         isCombat: true,
+        isMelee: false
     },
     // Animation Component Configuration
     AnimationConfig: {

@@ -26,7 +26,7 @@ const yOffset = 20
 export default {
     // Attributes Component Configuration
     Attributes: {
-        HP: 15,
+        HP: 50,
         Mana: 30,
         Str: 5,
         Int: 10,
@@ -35,8 +35,10 @@ export default {
         Def: 3,
         Mdef: 10,
         Speed: 50,
+        Range: 250,
         Name: 'MAGE',
         isCombat: true,
+        isMelee: false
     },
     // Animation Component Configuration
     AnimationConfig: {

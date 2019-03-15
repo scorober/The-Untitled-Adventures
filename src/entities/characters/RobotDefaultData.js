@@ -27,7 +27,7 @@ const impactSize = 244
 export default {
     // Attributes Component Configuration
     Attributes: {
-        HP: 20,
+        HP: 35,
         Mana: 10,
         Str: 5,
         Int: 5,
@@ -36,8 +36,10 @@ export default {
         Def: 10,
         Mdef: 3,
         Speed: 50,
+        Range: 80,
         Name: 'ROBOT',
         isCombat: true,
+        isMelee: true
     },
     // Animation Component Configuration
     AnimationConfig: {

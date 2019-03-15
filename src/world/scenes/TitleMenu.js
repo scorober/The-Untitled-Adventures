@@ -63,7 +63,6 @@ export default class TitleMenuScene extends Scene {
                         console.log('start game!')
                         this.game.sceneManager.change('level1', null)
                     }
-
                 }
             }
 
