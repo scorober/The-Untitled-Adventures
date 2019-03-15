@@ -7,6 +7,7 @@ import { HitCircle, CollisionLayer } from './utils/Collision.js'
 import CollisionComponent from './entities/components/CollisionComponent.js'
 import ScoreDisplayScene from './world/scenes/Scores.js'
 import BossLevel from './world/scenes/BossLevel.js'
+import {PauseMenu} from './world/scenes/pause.js'
 import Vector from './utils/Vector.js'
 
 export default class SceneManager {
