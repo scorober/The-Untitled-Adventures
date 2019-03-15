@@ -151,7 +151,7 @@ export default class PlayerInputComponent extends Component {
             this.coolDown = 0
         }
         if (this.entity.game.inputManager.downKeys[KEYS.KeyY]) {
-            const origin = this.getEffectOffsetPos()
+            const origin = Vector.vectorFromEntity(this.entity)
             const target = this.getTarget()
             const teleportEffect = new Entity(this.entity.game, origin)
             teleportEffect.addComponent(new AnimationComponent(teleportEffect, TeleportData.AnimationConfig))
