@@ -11,27 +11,22 @@ export default class TitleMenuScene extends Scene {
         this.ctx = game.ctx
         this.isMusicPlaying = false
 
-        const sheet = game.getAsset(ASSET_PATHS.TitleAnimation)
-        const background = new Animation(sheet, 960, 540, 50, 1, 0.1, 50, true, 1)
+         const sheet = game.getAsset(ASSET_PATHS.TitleAnimation)
+         this.background = new titleanim(sheet, 960, 540, 50, 1, 0.1, 50, true, 1)
 
-        //Adding draw function
-        background.draw = function (game) {
-            background.drawFrame(game, -550, -200)
-        }
-
-
-        this.setBackground(background) //Because it is just a menu, setting an animation as background
 
         this.selectedItem = 0
         this.drawSpeedBuffer = 0
+        this.x = 0
+        this.y = 0
 
         this.text = [
-            {TIME: 1.5, TEXT: 'THE UNTITLED ADVENTURES OF', W: this.ctx.canvas.width / 2, H: this.ctx.canvas.height / 2 - 150, COLOR: 'red', FONT: '40px arcade'},
-            {TIME: 2, TEXT: 'DR. MARRIOTT', W: this.ctx.canvas.width / 2, H: this.ctx.canvas.height / 2 - 100, COLOR: 'red', FONT: '40px arcade'},
-            {TIME: 3, TEXT: 'START', W: this.ctx.canvas.width / 2, H: this.ctx.canvas.height / 2 , COLOR: 'red', FONT: '30px arcade'},
-            {TIME: 3.4, TEXT: 'OPTIONS', W: this.ctx.canvas.width / 2, H: this.ctx.canvas.height / 2 + 50, COLOR: 'red', FONT: '30px arcade'},
-            {TIME: 3.8, TEXT: 'HIGH SCORE', W: this.ctx.canvas.width / 2, H: this.ctx.canvas.height / 2 + 100, COLOR: 'red', FONT: '30px arcade'},
-            {TIME: 4.2, TEXT: 'EXIT', W: this.ctx.canvas.width / 2, H: this.ctx.canvas.height / 2 + 150, COLOR: 'red', FONT: '30px arcade'}
+            {TIME: 1.5, TEXT: 'DR. MARIOTT\'s', W: this.ctx.canvas.width / 2, H: this.ctx.canvas.height / 2 - 280, COLOR: 'red', FONT: '40px arcade'},
+            {TIME: 2, TEXT: 'DEADLY SIMULATOR', W: this.ctx.canvas.width / 2, H: this.ctx.canvas.height / 2 - 220, COLOR: 'red', FONT: '40px arcade'},
+            {TIME: 3, TEXT: 'START', W: this.ctx.canvas.width / 2, H: this.ctx.canvas.height / 2 + 120, COLOR: 'red', FONT: '32px arcade'},
+            {TIME: 3.4, TEXT: 'OPTIONS', W: this.ctx.canvas.width / 2, H: this.ctx.canvas.height / 2 + 160, COLOR: 'grey', FONT: '32px arcade'},
+            {TIME: 3.8, TEXT: 'HIGH SCORE', W: this.ctx.canvas.width / 2, H: this.ctx.canvas.height / 2 + 190, COLOR: 'grey', FONT: '32px arcade'},
+            {TIME: 4.2, TEXT: 'EXIT', W: this.ctx.canvas.width / 2, H: this.ctx.canvas.height / 2 + 220, COLOR: 'grey', FONT: '32px arcade'}
         ]
 
     }
@@ -51,7 +46,7 @@ export default class TitleMenuScene extends Scene {
         this.updateMap(tick)
 
         //wait until all words are displayed to get input
-        if(this.timeElapsed > 4){
+        if(this.timeElapsed > 4.5){
             if(!this.isMusicPlaying){this.playMusic()}
             if (this.selectedItem===0){this.selectedItem=2}//enable first option if not yet enabled
 
@@ -74,14 +69,14 @@ export default class TitleMenuScene extends Scene {
             if(this.game.inputManager.downKeys[KEYS.ArrowUp] ||
                 this.game.inputManager.downKeys[KEYS.KeyW]){
 
-                this.text[this.selectedItem].COLOR = 'red' //reset color
+                this.text[this.selectedItem].COLOR = 'grey' //reset color
                 if(this.selectedItem === 2){this.selectedItem =  5}else{this.selectedItem--}
             }
 
             else if(this.game.inputManager.downKeys[KEYS.ArrowDown] ||
                 this.game.inputManager.downKeys[KEYS.KeyS]){
 
-                this.text[this.selectedItem].COLOR = 'red' //reset color
+                this.text[this.selectedItem].COLOR = (this.selectedItem === 2) ? 'red' : 'grey' //reset color
                 if(this.selectedItem === 5){this.selectedItem =  2}else{this.selectedItem++}
 
             }
@@ -94,7 +89,7 @@ export default class TitleMenuScene extends Scene {
 
     draw(){
         super.draw()
-        super.drawBackground(this.game)
+        this.background.drawFrame(this.game, this.x, this.y)
 
         this.ctx.textAlign = 'center'
 
@@ -110,4 +105,63 @@ export default class TitleMenuScene extends Scene {
     }
 
 
+}
+
+
+class titleanim {
+    constructor(
+        spriteSheet,
+        frameWidth,
+        frameHeight,
+        sheetWidth,
+        row,
+        frameDuration,
+        frames,
+        loop,
+        scale
+    ) {
+        this.spriteSheet = spriteSheet
+        this.frameWidth = frameWidth
+        this.frameHeight = frameHeight
+        this.sheetWidth = sheetWidth
+        this.row = row
+        this.frameDuration = frameDuration
+        this.frames = frames
+        this.loop = loop
+        this.scale = scale
+        this.elapsedTime = 0
+        this.totalTime = frameDuration * frames
+    }
+
+    drawFrame(game, x, y) {
+        this.elapsedTime += game.clockTick
+        if (this.isDone()) {
+            if (this.loop) this.elapsedTime = 0
+            else this.elapsedTime -= game.clockTick
+        }
+        const frame = this.currentFrame()
+        let xindex = 0
+        let yindex = 0
+        xindex = frame % this.sheetWidth
+        yindex = this.frameHeight * (this.row - 1)
+        game.ctx.drawImage(
+            this.spriteSheet,
+            xindex * this.frameWidth,
+            yindex, // source from sheet
+            this.frameWidth,
+            this.frameHeight,
+            (x + this.frameWidth / 2) ,
+            (y + this.frameHeight / 2) ,
+            this.frameWidth * this.scale,
+            this.frameHeight * this.scale
+        )
+    }
+
+    currentFrame() {
+        return Math.floor(this.elapsedTime / this.frameDuration)
+    }
+
+    isDone() {
+        return this.elapsedTime >= this.totalTime
+    }
 }

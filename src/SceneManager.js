@@ -7,6 +7,8 @@ import { HitCircle, CollisionLayer } from './utils/Collision.js'
 import CollisionComponent from './entities/components/CollisionComponent.js'
 import ScoreDisplayScene from './world/scenes/Scores.js'
 import BossLevel from './world/scenes/BossLevel.js'
+import {PauseMenu} from './world/scenes/pause.js'
+import {KEYS} from './utils/Const.js'
 import Vector from './utils/Vector.js'
 
 export default class SceneManager {
@@ -31,6 +33,8 @@ export default class SceneManager {
         this.addScene(boss.name, boss)
         this.guiScript = false
         this.currentScene = title
+        this.pause = new PauseMenu(game)
+        this.isPaused = false
         // this.currentScene = boss
         // this.currentScene = firstlevel
     }
@@ -38,6 +42,14 @@ export default class SceneManager {
     addGUIScript(guiScript) {
         this.guiScript = guiScript
     }
+    /**
+     * Rebuilds the levels and replaces the old ones to allow for new levels to be made.
+     */
+    rebuildLevels(){
+        const firstlevel = new FirstLevel(this.game)
+        this.addScene(firstlevel.name, firstlevel)
+    }
+
 
     removeGUIScript() {
         this.guiScript = false
@@ -71,7 +83,27 @@ export default class SceneManager {
      * Calls update func for active scene
      */
     update() {
-        this.currentScene.update()
+        this.checkPause()
+        if(this.isPaused)
+            this.pause.update()
+        else
+            this.currentScene.update()
+    }
+
+    /**
+     * Checks if the escape, or p keys were pressed, and pauses or resumes the game as necessary.
+     */
+    checkPause(){
+        if(this.game.inputManager.downKeys[KEYS.Escape]
+            || this.game.inputManager.downKeys[KEYS.KeyP]) {
+            this.isPaused = !this.isPaused
+        }
+    }
+
+    quitGame(){
+        this.isPaused = false
+        this.change('titlemenu')
+        this.rebuildLevels()
     }
 
     /**
@@ -81,6 +113,9 @@ export default class SceneManager {
         this.currentScene.draw()
         if (this.guiScript != false && this.currentScene.isPlayable()) {
             this.guiScript()
+        }
+        if(this.isPaused){
+            this.pause.draw()
         }
     }
 
