@@ -6,7 +6,7 @@ import { ANIMATIONS as ANIMS } from '../../../utils/Const.js'
 import CombatComponent from '../CombatComponent.js'
 import Map from '../../../world/Map.js'
 
-export default class ProjectileBehavior extends Component {
+export default class ProjectileBehaviorComponent extends Component {
     /**
      * This component moves a projectile and switches animations.
      * Projectiles can have 3 stages. (Initial, Projectile, and Impact)
@@ -66,9 +66,11 @@ export default class ProjectileBehavior extends Component {
         this.animComp.setAnimation(ANIMS.Impact, cb)
         const e = this.entity.game.getEntityByXYInWorld(this.v)
         this.isImpact = true
-        for(let i = 0; i < e.length; i++) { //apply AOE damage to all entities that got hit
+        for (let i = 0; i < e.length; i++) { //apply AOE damage to all entities that got hit
             const next = e[i]
+            console.log(next.UUID)
             if(this.checkValidCollision(next)) {
+                console.log('valid collision')
                 if (next.getComponent(CombatComponent)) {
                     this.entity.getComponent(CombatComponent).magicAttack(next)
                 }
@@ -83,12 +85,16 @@ export default class ProjectileBehavior extends Component {
      * @param {Entity} entity Entity being collided with. 
      */
     checkValidCollision(entity) {
-        return entity.UUID !== this.caster.UUID && entity.UUID !== this.entity.UUID &&
-            !entity.getComponent(ProjectileBehavior)
+        const notCaster = entity.UUID !== this.caster.UUID
+        const notProjectile = entity.UUID !== this.entity.UUID
+        const notProjectile2 = entity.getComponent(ProjectileBehaviorComponent) === false
+        return notCaster && notProjectile && notProjectile2
     }
 
     checkCollidedTile() {
         const checkTile = Map.worldToTilePosition(this.entity, 64)
-        return this.entity.game.getWorld()[checkTile.y][checkTile.x] >= 60
+        const playerTile = Map.worldToTilePosition(this.entity.game.getCurrentScene().getPlayer(), 64)
+        const playerInTile = Vector.equals(checkTile, playerTile)
+        return this.entity.game.getWorld()[checkTile.y][checkTile.x] >= 60 || playerInTile
     }
 }
