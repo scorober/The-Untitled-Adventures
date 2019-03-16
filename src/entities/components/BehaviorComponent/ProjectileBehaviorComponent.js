@@ -66,7 +66,7 @@ export default class ProjectileBehavior extends Component {
         this.animComp.setAnimation(ANIMS.Impact, cb)
         const e = this.entity.game.getEntityByXYInWorld(this.v)
         this.isImpact = true
-        for(let i = 0; i < e.length; i++) { //apply AOE damage to all entities that got hit
+        for (let i = 0; i < e.length; i++) { //apply AOE damage to all entities that got hit
             const next = e[i]
             if(this.checkValidCollision(next)) {
                 if (next.getComponent(CombatComponent)) {
@@ -83,8 +83,9 @@ export default class ProjectileBehavior extends Component {
      * @param {Entity} entity Entity being collided with. 
      */
     checkValidCollision(entity) {
-        return entity.UUID !== this.caster.UUID && entity.UUID !== this.entity.UUID &&
-            !entity.getComponent(ProjectileBehavior)
+        return entity.UUID !== this.caster.UUID &&
+            entity.UUID !== this.entity.UUID &&
+            entity.getComponent(ProjectileBehavior) === false
     }
 
     checkCollidedTile() {
