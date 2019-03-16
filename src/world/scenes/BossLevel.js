@@ -12,7 +12,6 @@ import PlayerCharacterCombatComponent from '../../entities/components/PlayerChar
 import EquippedItemsComponent from '../../entities/components/EquippedItemsComponent.js'
 import ProjectileBehaviorComponent from '../../entities/components/BehaviorComponent/ProjectileBehaviorComponent.js'
 import DefinedMap from '../DefinedMap.js'
-<<<<<<< HEAD
 import ChiefData from '../../entities/characters/ChiefDefaultData.js'
 import EnemyInteractionComponent from '../../entities/components/InteractionComponent/EnemyInteractionComponent.js'
 import CombatComponent from '../../entities/components/CombatComponent.js'
@@ -22,14 +21,6 @@ import ChiefBehaviorComponent from '../../entities/components/BehaviorComponent/
 import Vector from '../../utils/Vector.js'
 import FireballData from '../../entities/effects/FireballDefaultData.js'
 import MageDefaultData from '../../entities/characters/MageDefaultData.js'
-=======
-import Vector from '../../utils/Vector.js'
-import Map from '../../world/Map.js'
-import CombatComponent from '../../entities/components/CombatComponent.js'
-import FireballData from '../../entities/effects/FireballDefaultData.js'
-import MageDefaultData from '../../entities/characters/MageDefaultData.js'
-import EnemyInteractionComponent from '../../entities/components/InteractionComponent/EnemyInteractionComponent.js';
->>>>>>> fe09e22f72282257f2020bf1ef15f57710d0919e
 
 export default class BossLevel extends Scene {
     constructor(game) {
@@ -51,11 +42,7 @@ export default class BossLevel extends Scene {
         this.createButtons(game, map)
         this.mage = this.createMage()
         this.fireballTimer = 0
-<<<<<<< HEAD
         this.fireballFreq = 4
-=======
-        this.fireballFreq = 2.3
->>>>>>> fe09e22f72282257f2020bf1ef15f57710d0919e
     }
 
     createPlayerCharacter(game, start) {
@@ -71,7 +58,6 @@ export default class BossLevel extends Scene {
         return pc
     }
 
-<<<<<<< HEAD
     createChief(game, pos) {
         const chief = new Entity(game, pos)
         chief.addComponent(new AnimationComponent(chief, ChiefData.AnimationConfig))
@@ -84,8 +70,6 @@ export default class BossLevel extends Scene {
         chief.addComponent(new ChiefBehaviorComponent(chief))
         return chief
     }
-=======
->>>>>>> fe09e22f72282257f2020bf1ef15f57710d0919e
     createMage() {
         const mage = new Entity(this.game, new Vector(0, 0))
         mage.addComponent(new AnimationComponent(mage, MageDefaultData.AnimationConfig))
