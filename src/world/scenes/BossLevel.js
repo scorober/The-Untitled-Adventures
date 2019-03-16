@@ -42,7 +42,7 @@ export default class BossLevel extends Scene {
         this.createButtons(game, map)
         this.mage = this.createMage()
         this.fireballTimer = 0
-        this.fireballFreq = 2.3
+        this.fireballFreq = 4
     }
 
     createPlayerCharacter(game, start) {
@@ -87,7 +87,7 @@ export default class BossLevel extends Scene {
         fireball.addComponent(new MovementComponent(fireball, FireballData.Attributes))
         fireball.getComponent(MovementComponent).setSpeed(80)
         fireball.addComponent(new ProjectileBehaviorComponent(fireball, target, true, this.mage))
-        fireball.addComponent(new AttributeComponent(fireball, PlayerCharacterData.Attributes))
+        fireball.addComponent(new AttributeComponent(fireball, MageDefaultData.Attributes))
         fireball.addComponent(new CollisionComponent(fireball))
         fireball.addComponent(new CombatComponent(fireball))
         this.addEntity(fireball)
@@ -101,14 +101,16 @@ export default class BossLevel extends Scene {
         this.updateMap()
         this.updateEntities()
         const player = this.getPlayer()
-        console.log(Map.worldToTilePosition(new Vector(player.x, player.y), this.game.getTileSize()))
+        //console.log(Map.worldToTilePosition(new Vector(player.x, player.y), this.game.getTileSize()))
         // (20, 22)
 
         if (this.fireballTimer > this.fireballFreq) {
-            const startPosition = Map.tileToWorldPosition(new Vector(20, 23), this.game.getTileSize())
-            const endPosition = Map.tileToWorldPosition(new Vector(20, 26), this.game.getTileSize())
-            this.createFireball(startPosition, endPosition)
-            this.fireballTimer = 0
+            for (let i = 0; i < 10; i++) {
+                const startPosition = Map.tileToWorldPosition(new Vector(20 + (i * 4), 23), this.game.getTileSize())
+                const endPosition = Map.tileToWorldPosition(new Vector(20 + (i * 4), 26), this.game.getTileSize())
+                this.createFireball(startPosition, endPosition)
+                this.fireballTimer = 0
+            }
         }
         this.fireballTimer += this.game.clockTick
     }
